@@ -1,0 +1,34 @@
+<md-card class="example-card">
+  <a routerLink="/" routerLinkActive="active"><img src="../src/WildFyre.png" alt="WildFyre"></a>
+  <md-card-content>
+    <div class="alert alert-info">
+      Welcome to the WildFyre Beta Client!<br />
+      Try not to get burned
+    </div>
+    <h2>Login</h2>
+    <form name="form" (ngSubmit)="f.form.valid && login()" #f="ngForm" novalidate>
+      <div class="form" [ngClass]="{ 'has-error': f.submitted && !username.valid }">
+        <md-input-container>
+          <input mdInput placeholder="Username" type="text" name="username" [(ngModel)]="model.username" #username="ngModel" required />
+        </md-input-container>
+        <div *ngIf="f.submitted && !username.valid" class="help-block">Username is required</div>
+      </div>
+
+      <div class="form" [ngClass]="{ 'has-error': f.submitted && !password.valid }">
+        <md-input-container>
+          <input mdInput placeholder="Password" type="password" name="password" [(ngModel)]="model.password" #password="ngModel" required />
+        </md-input-container>
+        <div *ngIf="f.submitted && !password.valid" class="help-block">Password is required</div>
+      </div>
+
+      <div class="form-group">
+        <button md-raised-button color="accent" [disabled]="loading"><b>Login</b></button>
+        <br>
+        <md-spinner *ngIf="loading"></md-spinner>
+        </div>
+
+      <div *ngIf="error" class="alert alert-danger">{{error}}</div>
+    </form>
+    Don't have an account? Register <a routerLink="/register" routerLinkActive="active">Here</a>
+  </md-card-content>
+</md-card>

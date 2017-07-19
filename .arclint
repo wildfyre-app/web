@@ -25,7 +25,7 @@
       "type": "tslint",
       "include": "(\\.ts$)",
       "exclude": ["(test.*.ts$)", "(\\.spec.ts$)"],
-      "flags" : ["--project", "WildFyre/tslint.json"]
+      "flags" : ["--project", "tslint.json"]
     }
   }
 }

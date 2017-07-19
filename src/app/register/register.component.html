@@ -1,0 +1,43 @@
+<md-card class="example-card">
+  <md-card-content>
+    <a routerLink="/" routerLinkActive="active"><img src="../src/WildFyre.png" alt="WildFyre"></a>
+    <div class="alert alert-info">
+      Usernames must use Letters, Digits and @/./+/-/_ only.<br>
+      Passwords must contain at least 8 characters and be alphanumeric (At least 1 letter and 1 number)
+    </div>
+    <h2>Register</h2>
+    <form name="form" id="signup-form" (ngSubmit)="f.form.valid && register()" #f="ngForm" novalidate>
+      <div class="form" [ngClass]="{ 'has-error': f.submitted && !username.valid }">
+        <md-input-container>
+          <input mdInput placeholder="Username" type="text" name="username" [(ngModel)]="model.username" #username="ngModel" required />
+        </md-input-container>
+        <div *ngIf="f.submitted && !username.valid" class="help-block">Username is required</div>
+      </div>
+
+      <div class="form" [ngClass]="{ 'has-error': f.submitted && !password.valid }">
+        <md-input-container>
+          <input mdInput placeholder="Email" type="email" name="email" [(ngModel)]="model.email" #email="ngModel" required />
+        </md-input-container>
+        <div *ngIf="f.submitted && !email.valid" class="help-block">Email is required</div>
+      </div>
+
+      <div class="form" [ngClass]="{ 'has-error': f.submitted && !password.valid }">
+        <md-input-container>
+          <input mdInput placeholder="Password" type="password" name="password" [(ngModel)]="model.password" #password="ngModel" required />
+        </md-input-container>
+        <div *ngIf="f.submitted && !password.valid" class="help-block">Password is required</div>
+      </div>
+
+      <div id="captcha">
+        <re-captcha (captchaResponse)="setCaptchaResponse($event)" site_key="6LcXViIUAAAAABZF263l-SJh3rZAe95Sx2LPN-Dc"></re-captcha>
+      </div>
+      <br>
+      <div class="form">
+        <button md-raised-button color="accent" [disabled]="loading">Register</button>
+        <md-spinner *ngIf="loading"></md-spinner>
+      </div>
+      <div *ngIf="error" class="alert alert-danger">{{error}}</div>
+      If nothing happens after submitting, you did something wrong.
+    </form>
+  </md-card-content>
+</md-card>

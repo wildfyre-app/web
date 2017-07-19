@@ -1,0 +1,10 @@
+<nav id="navB" md-tab-nav-bar aria-label="Navigation links">
+  <a md-tab-link
+    *ngFor="let routeLink of routeLinks; let i = index"
+    [routerLink]="routeLink.link"
+    [active]="activeLinkIndex === i"
+    (click)="activeLinkIndex = i">
+    {{routeLink.label}}
+  </a>
+</nav>
+<router-outlet></router-outlet>

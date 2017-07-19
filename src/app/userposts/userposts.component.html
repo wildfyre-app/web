@@ -1,0 +1,16 @@
+<md-card class="example-card">
+  <label>My Fun Posts</label>
+  <div *ngFor="let post of funPosts">
+    <form name="Go to Post" (click)="goto('fun', post.id)">
+      <button md-button>{{post.text}} | {{post.created}}</button>
+    </form>
+  </div>
+  <hr>
+
+  <label>My Information Posts</label>
+  <div *ngFor="let post of infoPosts">
+    <form name="Go to Post 2" (click)="goto('information', post.id)">
+    <button md-button>{{post.text}} | {{post.created}}</button>
+    </form>
+  </div>
+</md-card>
