@@ -1,0 +1,34 @@
+<md-card class="example-card">
+  <md-card>
+  <form name="Back" (click)="back()">
+    <button md-button><i class="material-icons">arrow_back</i></button>
+  </form>
+
+  <md-card-content>
+    <h2>{{post?.text}}</h2>
+  </md-card-content>
+  <md-card-header>
+    <small><i><a routerLink="/user/{{post?.author?.user}}" routerLinkActive="active">{{post?.author?.name}}</a> | {{post?.created}}</i></small>
+  </md-card-header>
+</md-card>
+  <hr>
+  <md-list>
+    <div *ngFor="let comment of post?.comments">
+      <md-card class="comment-card">
+        <md-card-content>
+          {{comment.text}}
+        </md-card-content>
+
+        <md-card-header><small><i><a routerLink="/user/{{comment.author.user}}" routerLinkActive="active">{{comment.author.name}}</a>  | {{comment.created}}</i></small></md-card-header>
+      </md-card>
+    </div>
+  </md-list>
+
+  <form name="form" (ngSubmit)="f.form.valid && postComment()" #f="ngForm" novalidate>
+    <md-input-container>
+      <input name="comment" [(ngModel)]="model.comment" #comment="ngModel" mdInput placeholder="Post a Comment">
+    </md-input-container>
+    <button md-raised-button color="accent" [disabled]="loading"><b>Comment</b></button>
+  </form>
+
+</md-card>

@@ -10,6 +10,7 @@ export class CreatePostComponent {
   model: any = {};
   color = 'warn';
   checked: boolean;
+  loading: boolean;
 
   constructor(
     private areaService: AreaService,
@@ -31,9 +32,9 @@ export class CreatePostComponent {
     }
   }
 
-  createPost() {
+  createCard() {
     const text = {
-      'text': this.model.post
+      'text': this.model.card
     };
 
     this.httpService.POST('/areas/' + this.areaService.currentAreaName  + '/', text)

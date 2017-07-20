@@ -1,7 +1,5 @@
-import { Injectable } from '@angular/core';
 import {Author, Comment} from './index';
 
-@Injectable()
 export class Post {
   constructor(
     public id: number,

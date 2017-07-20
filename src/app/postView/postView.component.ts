@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Response } from '@angular/http';
 import { FormsModule } from '@angular/forms';
@@ -6,13 +6,14 @@ import { Post, Area } from '../_models/index';
 import { PostService, AreaService, HttpService} from '../_services/index';
 
 @Component({
-  templateUrl: 'cardView.component.html',
+  templateUrl: 'postView.component.html',
 })
-export class CardViewComponent implements OnInit {
+export class PostViewComponent implements OnInit {
   post: Post;
   model: any = {};
   color = 'warn';
   checked: boolean;
+  loading: boolean;
   editName: string;
   private sub: any;
 

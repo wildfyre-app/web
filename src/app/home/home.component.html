@@ -7,12 +7,12 @@
         </md-card-content>
 
         <md-card-header>
-          <small><i>{{post.author.name}} | {{post.created}}</i></small>
+          <small><i><a routerLink="/user/{{post.author.user}}" routerLinkActive="active">{{post.author.name}}</a> | {{post.created}}</i></small>
         </md-card-header>
-
 
       </md-card>
       <md-card-actions>
+        <b>Burn</b>
         <form name="Up Swipe" (click)="upSwipe()">
           <button md-raised-button color="accent"><i class="material-icons">arrow_upward</i></button>
         </form>
@@ -20,17 +20,18 @@
         <form name="Down Swipe" (click)="downSwipe()">
           <button md-raised-button color="accent"><i class="material-icons">arrow_downward</i></button>
         </form>
+        <b>Extingush</b>
       </md-card-actions>
       <hr>
 
       <md-list>
-        <div *ngFor="let comment of post.comments">
+        <div *ngFor="let comment of post?.comments">
           <md-card class="comment-card">
             <md-card-content>
               {{comment.text}}
             </md-card-content>
 
-            <md-card-header><small><i>{{comment.author.name}}  | {{comment.created}}</i></small></md-card-header>
+            <md-card-header><small><i><a routerLink="/user/{{comment.author.user}}" routerLinkActive="active">{{comment.author.name}}</a>  | {{comment.created}}</i></small></md-card-header>
           </md-card>
         </div>
       </md-list>
@@ -51,5 +52,6 @@
   class="example-margin"
   [color]="color"
   [checked]="checked"
-  (change)="onChange($event)">Information</md-slide-toggle>
+  (change)="onChange($event)">Information</md-slide-toggle><br>
+  Current Area Reputation: {{rep?.spread}}.{{rep?.reputation}}
 </div>

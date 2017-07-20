@@ -4,7 +4,7 @@ import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import { HttpService } from './index';
-import { Area } from '../_models/index';
+import { Area, Reputation } from '../_models/index';
 
 @Injectable()
 export class AreaService {
@@ -21,6 +21,10 @@ export class AreaService {
   getAreas(): Observable<Area[]> {
     // get areas from api
     return this.httpService.GET('/areas/')
+      .map((response: Response) => response.json());
+  }
+  getAreaRep(area: string): Observable<Reputation> {
+    return this.httpService.GET('/areas/' + area + '/rep/')
       .map((response: Response) => response.json());
   }
 }

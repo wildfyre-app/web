@@ -31,13 +31,13 @@ export class RegisterComponent implements OnInit {
       .subscribe(result => {
         if (result === true) {
           this.error = 'Registration Successful';
-          this.router.navigate(['/login']);
+          this.router.navigate(['/register/success']);
         } else {
           this.error = 'Registration Failed, you did something wrong';
         }
     });
   }
-  setCaptchaResponse() {
+  setCaptchaResponse(res: any) {
     this.token = this.captcha.getResponse();
   }
 }

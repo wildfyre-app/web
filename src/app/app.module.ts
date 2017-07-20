@@ -15,14 +15,16 @@ import { LoginComponent } from './login/index';
 import { HomeComponent } from './home/index';
 import { ProfileComponent } from './profile/index';
 import { CreatePostComponent } from './createPost/index';
-import { UserPostsComponent } from './userposts/index';
+import { UserPostsComponent } from './userPosts/index';
 import { RegisterComponent } from './register/index';
 import { NotificationComponent } from './notification/index';
 import { NavBarComponent } from './navBar/index';
-import { CardViewComponent } from './cardView/index';
+import { PostViewComponent } from './postView/index';
 import { ReCaptchaModule } from 'angular2-recaptcha';
 import { MaterialModule } from '@angular/material';
 import { Component404Component } from './404component/index';
+import { RegisterSuccessComponent } from './registerSuccess/index';
+import { ProfileViewComponent } from './profileView/index';
 
 @NgModule({
     imports: [
@@ -51,8 +53,10 @@ import { Component404Component } from './404component/index';
         RegisterComponent,
         NotificationComponent,
         NavBarComponent,
-        CardViewComponent,
-        Component404Component
+        PostViewComponent,
+        Component404Component,
+        RegisterSuccessComponent,
+        ProfileViewComponent
     ],
     providers: [
         AuthenticationService,

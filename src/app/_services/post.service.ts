@@ -4,7 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/mergeMap';
 import { AreaService, HttpService} from './index';
-import { Post, Area} from '../_models/index';
+import { Post, Area } from '../_models/index';
 
 @Injectable()
 export class PostService {

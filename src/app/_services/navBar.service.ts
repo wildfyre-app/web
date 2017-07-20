@@ -18,7 +18,7 @@ export class NavBarService {
     this.activeIndex = 1;
   } else if (s === '/') {
     this.activeIndex = 2;
-  } else if (s === '/cards') {
+  } else if (s === '/posts') {
     this.activeIndex = 3;
   } else if (s === '/post') {
 

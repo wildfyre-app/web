@@ -32,7 +32,9 @@ export class HttpService {
 }
 
   POST(passedUrl: string, body: any): Observable<any> {
-    // get POST from api
+    // POST to api
+    body = JSON.stringify(body);
+
     return this.http.post(this.apiURL + passedUrl, body, this.options)
     .catch((error: any) => {
       if (error.status !== 201 || error.status !== 200) {
@@ -49,5 +51,18 @@ export class HttpService {
         return Observable.throw(new Error(error.status));
       }
   });
+  }
+
+  PATCH(passedUrl: string, body: any): Observable<any> {
+    // PATCH to api
+    body = JSON.stringify(body);
+
+    return this.http.patch(this.apiURL + passedUrl, body, this.options)
+    .catch((error: any) => {
+      if (error.status !== 201 || error.status !== 200) {
+        return Observable.throw(new Error(error.status));
+      }
+  });
+
   }
 }

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Response } from '@angular/http';
 import { FormsModule } from '@angular/forms';
-import { Post, Area } from '../_models/index';
+import { Post, Area, Reputation } from '../_models/index';
 import { PostService, AreaService, HttpService} from '../_services/index';
 
 @Component({
@@ -10,6 +10,7 @@ import { PostService, AreaService, HttpService} from '../_services/index';
 export class HomeComponent implements OnInit {
   posts: Post[] = [];
   areas: Area[] = [];
+  rep: Reputation;
   model: any = {};
   color = 'accent';
   checked: boolean;
@@ -33,6 +34,10 @@ export class HomeComponent implements OnInit {
     this.areaService.getAreas()
       .subscribe(area => {
         this.areas = area;
+    });
+    this.areaService.getAreaRep(this.areaService.currentAreaName)
+      .subscribe(reputation => {
+        this.rep = reputation;
     });
   }
 
@@ -72,11 +77,11 @@ export class HomeComponent implements OnInit {
       'text': this.model.comment
     };
 
-    const body = JSON.stringify(text);
-    this.httpService.POST('/areas/' + this.areaService.currentAreaName  + '/' + this.posts[0].id + '/', body)
+    this.httpService.POST('/areas/' + this.areaService.currentAreaName  + '/' + this.posts[0].id + '/', text)
       .subscribe(
         data => console.log('Someone said something in the forest, but did anyone hear it?'));
     this.model.comment = '';
     this.ngOnInit();
   }
+
 }

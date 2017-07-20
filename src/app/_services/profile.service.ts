@@ -16,4 +16,14 @@ export class ProfileService {
     return this.httpService.GET('/users/')
       .map((response: Response) => response.json());
   }
+  setBio(text: any) {
+    this.httpService.PATCH('/users/', text)
+      .subscribe(
+        data => console.log('You leveled up some stats'));
+  }
+  getUser(id: string): Observable<Author> {
+    return this.httpService.GET('/users/' + id)
+      .map((response: Response) => response.json());
+  }
+
 }

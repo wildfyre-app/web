@@ -1,7 +1,28 @@
 <md-card class="example-card">
-  <p>Your Name: {{author?.name}}</p>
-  <p>Your ID: {{author?.user}}</p>
-  <p>Your Avatar: {{author?.avatar}}</p>
-  <p>Your Bio: {{author?.bio}}</p>
-  <p>Are you currently banned: {{author?.banned}}</p>
+  <md-card>
+    <md-card-content>
+      <h2>{{author?.name}}</h2>
+    </md-card-content>
+    <div class="box" *ngIf="showEditButton">
+      <button md-button id="editIcon" type="button" (click)="editProfile()"><i class="material-icons">edit</i></button>
+      <p>Bio: {{author?.bio}}</p>
+    </div>
+    <div class="box" *ngIf="active">
+      <button md-button id="clearIcon"(click)="cancelEditProfile()"><i class="material-icons">clear</i></button>
+      <button md-button id="checkIcon" (click)="submitEditProfile()"><i class="material-icons">check</i></button>
+      <form name="form" (ngSubmit)="f.form.valid && submitEditProfile()" #f="ngForm" novalidate>
+        <div class="form-group">
+          <md-input-container>
+            Bio: <textarea mdInput rows="4" cols="80" type="text" class="form-control" name="bio" [(ngModel)]="model.bio" #bio="ngModel" value=author?.bio></textarea>
+          </md-input-container>
+          </div>
+      </form>
+
+  </div>
+    <p>{{author?.avatar}}</p>
+    <div class="box" *ngIf="banned">
+    <p>You are currently banned</p>
+  </div>
+  </md-card>
+  <div id="userID">ID: {{author?.user}}</div>
 </md-card>

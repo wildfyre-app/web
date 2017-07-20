@@ -39,7 +39,7 @@ md-card#404page.mat-card {-
 .mat-card-actions {
   float: right;
   position: absolute;
-  top: 8%;
+  top: 3%;
   right: 5%;
 }
 
@@ -47,7 +47,7 @@ md-card#404page.mat-card {-
   text-align: center;
 }
 
-img {
+.logo {
   display: block;
   margin: auto;
   width: 20%;
@@ -94,4 +94,11 @@ md-spinner {
 }
 .content {
   margin-right: 15%;
+}
+#userID {
+  float: right;
+  color: #eceff1;
+}
+#editIcon, #clearIcon, #checkIcon {
+  float: right;
 }

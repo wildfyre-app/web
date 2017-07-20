@@ -1,0 +1,16 @@
+<md-card class="example-card">
+  <md-card>
+  <form name="Back" (click)="back()">
+    <button md-button><i class="material-icons">arrow_back</i></button>
+  </form>
+    <md-card-content>
+      <h2>{{author?.name}}</h2>
+    </md-card-content>
+    <p>Bio: {{author?.bio}}</p>
+    <p>{{author?.avatar}}</p>
+    <div class="box" *ngIf="banned">
+    <p>You are currently banned</p>
+  </div>
+</md-card>
+<div id="userID">ID: {{author?.user}}</div>
+</md-card>
