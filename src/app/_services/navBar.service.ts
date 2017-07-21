@@ -20,7 +20,7 @@ export class NavBarService {
     this.activeIndex = 2;
   } else if (s === '/posts') {
     this.activeIndex = 3;
-  } else if (s === '/post') {
+  } else if (s === '/create') {
 
     this.activeIndex = 4;
   }

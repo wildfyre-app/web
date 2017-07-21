@@ -25,8 +25,7 @@ export class NavBarComponent {
       {label: 'Notifications', link: '/notifications/', index: '1'},
       {label: 'Home', link: '', index: '2'},
       {label: 'My Posts', link: '/posts/', index: '3'},
-      {label: 'Create a Post', link: '/create/', index: '4'},
-      {label: 'Logout', link: '/login/', index: '5'},
+      {label: 'Create a Post', link: '/create/', index: '4'}
     ];
   }
 }

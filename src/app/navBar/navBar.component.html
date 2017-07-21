@@ -6,5 +6,7 @@
     (click)="activeLinkIndex = i">
     {{routeLink.label}}
   </a>
+  <!-- Reload page to clear old user data -->
+  <a md-tab-link href="/login">Logout</a>
 </nav>
 <router-outlet></router-outlet>

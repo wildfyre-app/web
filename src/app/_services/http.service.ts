@@ -8,34 +8,41 @@ import 'rxjs/add/operator/catch';
 
 @Injectable()
 export class HttpService {
-  public token = '';
   private apiURL: string;
-  private headers = new Headers();
-  private options: RequestOptions;
-    constructor(
+
+  constructor(
     private http: Http,
-    private authenticationService: AuthenticationService) {
+    private authenticationService: AuthenticationService
+  ) {
     this.apiURL = 'https://api.wildfyre.net';
     if (isDevMode()) {
       this.apiURL = 'http://localhost:8000';
     }
+  }
 
-    if (this.authenticationService.token != null) {
-      this.headers.append('Authorization', 'token ' + this.authenticationService.token);
+  getOptions(headers?: Headers|null): RequestOptions {
+    headers = headers || new Headers();
+
+    // Set Content-Type to JSON if not alread set
+    if (!headers.has('Content-Type')) {
+      headers.append('Content-Type', 'application/json');
     }
 
-    this.headers.append('Content-Type', 'application/json');
+    // Add Token if available
+    if (this.authenticationService.token != null) {
+      headers.append('Authorization', 'Token ' + this.authenticationService.token);
+    }
 
-    this.options = new RequestOptions({
-      headers: this.headers
+    return new RequestOptions({
+      headers: headers
     });
-}
+  }
 
   POST(passedUrl: string, body: any): Observable<any> {
     // POST to api
     body = JSON.stringify(body);
 
-    return this.http.post(this.apiURL + passedUrl, body, this.options)
+    return this.http.post(this.apiURL + passedUrl, body, this.getOptions())
     .catch((error: any) => {
       if (error.status !== 201 || error.status !== 200) {
         return Observable.throw(new Error(error.status));
@@ -45,7 +52,7 @@ export class HttpService {
 
   GET(passedUrl: string): Observable<any> {
     // get GET from api
-    return this.http.get(this.apiURL + passedUrl, this.options)
+    return this.http.get(this.apiURL + passedUrl, this.getOptions())
     .catch((error: any) => {
       if (error.status !== 201 || error.status !== 200 ) {
         return Observable.throw(new Error(error.status));
@@ -57,7 +64,7 @@ export class HttpService {
     // PATCH to api
     body = JSON.stringify(body);
 
-    return this.http.patch(this.apiURL + passedUrl, body, this.options)
+    return this.http.patch(this.apiURL + passedUrl, body, this.getOptions())
     .catch((error: any) => {
       if (error.status !== 201 || error.status !== 200) {
         return Observable.throw(new Error(error.status));
