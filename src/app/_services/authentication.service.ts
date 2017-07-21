@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers, Response, RequestOptions } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
+import { isDevMode } from '@angular/core';
 import 'rxjs/add/operator/map';
 
 @Injectable()
 export class AuthenticationService {
   public token: string;
+  private apiURL: string;
 
   constructor(
     private http: Http
@@ -13,12 +15,16 @@ export class AuthenticationService {
     // set token if saved in local storage
     const currentUser = JSON.parse(localStorage.getItem('currentUser'));
     this.token = currentUser && currentUser.token;
+    this.apiURL = 'https://api.wildfyre.net';
+    if (isDevMode()) {
+      this.apiURL = 'http://localhost:8000';
+    }
   }
 
   login(username: string, password: string): Observable<boolean> {
     const options = new RequestOptions({headers: new Headers({'Content-Type': 'application/json'})});
 
-    return this.http.post('http://localhost:8000/account/auth/', JSON.stringify({ username: username, password: password }), options)
+    return this.http.post(this.apiURL + '/account/auth/', JSON.stringify({ username: username, password: password }), options)
       .map((response: Response) => {
         // login successful if there's a token in the response
         const token = response.json() && response.json().token;
