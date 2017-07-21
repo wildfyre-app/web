@@ -15,13 +15,9 @@ export class PostService {
     private httpService: HttpService
   ) { }
 
-  getOwnPosts(): Observable<Post[]> {
-    // subscribe until the area is available
-    return this.areaService.getAreas().mergeMap(area => {
-      // use the area to get the response
-      return this.httpService.GET('/areas/' + area[this.areaService.currentArea].name + '/')
-        .map((response: Response) => response.json());
-    });
+  getPosts(): Observable<Post[]> {
+    return this.httpService.GET('/areas/' + this.areaService.currentAreaName + '/')
+      .map((response: Response) => response.json());
   }
 
   getPost(areaID: string, postID: string): Observable<Post> {
