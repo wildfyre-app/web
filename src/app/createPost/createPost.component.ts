@@ -22,11 +22,9 @@ export class CreatePostComponent {
 
   onChange(value) {
     if (value.checked === true) {
-      this.areaService.currentArea = 1;
       this.areaService.isAreaChecked = true;
       this.areaService.currentAreaName = 'information';
     } else {
-      this.areaService.currentArea = 0;
       this.areaService.isAreaChecked = false;
       this.areaService.currentAreaName = 'fun';
     }

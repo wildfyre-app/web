@@ -43,11 +43,9 @@ export class HomeComponent implements OnInit {
 
   onChange(value) {
     if (value.checked === true) {
-      this.areaService.currentArea = 1;
       this.areaService.isAreaChecked = true;
       this.areaService.currentAreaName = 'information';
     } else {
-      this.areaService.currentArea = 0;
       this.areaService.isAreaChecked = false;
       this.areaService.currentAreaName = 'fun';
     }
@@ -56,7 +54,7 @@ export class HomeComponent implements OnInit {
 
   upSwipe() {
     // Increase post spread
-    this.httpService.POST('/areas/' + this.areas[this.areaService.currentArea].name  +
+    this.httpService.POST('/areas/' + this.areaService.currentAreaName  +
       '/' + this.posts[0].id + '/spread/1/', JSON.stringify({}))
       .subscribe(
         data => console.log('Burning more wood'));
@@ -65,7 +63,7 @@ export class HomeComponent implements OnInit {
 
   downSwipe() {
     // Increase post spread
-    this.httpService.POST('/areas/' + this.areas[this.areaService.currentArea].name  +
+    this.httpService.POST('/areas/' + this.areaService.currentAreaName  +
       '/' + this.posts[0].id + '/spread/0/', JSON.stringify({}))
       .subscribe(
         data => console.log('The air seemingly grew colder'));

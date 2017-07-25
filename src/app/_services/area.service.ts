@@ -10,7 +10,6 @@ import { Area, Reputation } from '../_models/index';
 export class AreaService {
   public areas: Observable<Area[]>;
   public subject: Subject<Area[]> = new Subject();
-  public currentArea = 0;
   public isAreaChecked = false;
   public currentAreaName = 'fun';
 
