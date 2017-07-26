@@ -7,6 +7,12 @@
     </div>
     <h2>Login</h2>
     <form name="form" (ngSubmit)="f.form.valid && login()" #f="ngForm" novalidate>
+      <div *ngIf="errors && errors.non_field_errors" class="alert alert-danger">
+        <ul *ngFor="let err of errors.non_field_errors">
+          <li>{{err}}</li>
+        </ul>
+      </div>
+
       <div class="form" [ngClass]="{ 'has-error': f.submitted && !username.valid }">
         <md-input-container>
           <input mdInput placeholder="Username" type="text" name="username" [(ngModel)]="model.username" #username="ngModel" required />
@@ -26,8 +32,6 @@
         <br>
         <md-spinner *ngIf="loading"></md-spinner>
         </div>
-
-      <div *ngIf="error" class="alert alert-danger">{{error}}</div>
     </form>
     Don't have an account? Register <a routerLink="/register" routerLinkActive="active">Here</a>
   </md-card-content>

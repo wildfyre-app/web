@@ -2,6 +2,7 @@
 import { Router } from '@angular/router';
 
 import { AuthenticationService } from '../_services/index';
+import { AuthError } from '../_models';
 
 @Component({
   templateUrl: 'login.component.html'
@@ -9,7 +10,7 @@ import { AuthenticationService } from '../_services/index';
 export class LoginComponent implements OnInit {
   model: any = {};
   loading = false;
-  error = '';
+  errors: AuthError;
 
   constructor(
     private router: Router,
@@ -27,10 +28,10 @@ export class LoginComponent implements OnInit {
     this.loading = true;
     this.authenticationService.login(this.model.username, this.model.password)
       .subscribe(result => {
-        if (result === true) {
+        if (!result.getError()) {
           this.router.navigate(['/']);
         } else {
-          this.error = 'Username or password is incorrect';
+          this.errors = result.getError();
           this.loading = false;
         }
     });

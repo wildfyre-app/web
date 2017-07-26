@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { AreaService, NavBarService } from '../_services/index';
+import { NavBarService } from '../_services/index';
 
 @Component({
   selector: 'app-nav-bar',
@@ -13,13 +13,13 @@ export class NavBarComponent {
 
   constructor(
     private router: Router,
-    private areaService: AreaService,
     private navBarService: NavBarService
   ) {
     router.events.subscribe((url: any) => {
       this.navBarService.setActiveIndex(url.url);
       this.activeLinkIndex = this.navBarService.getActiveIndex();
-  });
+    });
+
     this.routeLinks = [
       {label: 'Profile', link: '/profile/', index: '0'},
       {label: 'Notifications', link: '/notifications/', index: '1'},

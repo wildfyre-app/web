@@ -74,6 +74,10 @@ a {
   color: #b54710;
 }
 
+ul {
+  list-style: none;
+}
+
 .mat-raised-button:hover {
   background-color: #4f5b62;
   z-index:1000;

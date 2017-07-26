@@ -10,4 +10,21 @@ export class Post {
     public text: string,
     public comments: Comment[]
   ) { }
+
+  getError(): PostError {
+    return null;
+  }
+}
+
+export class PostError extends Post {
+  constructor(
+    public non_field_errors?: string[],
+    public _text?: string[]
+  ) {
+    super(null, null, null, null, null, null, null);
+  }
+
+  getError(): PostError {
+    return this;
+  }
 }

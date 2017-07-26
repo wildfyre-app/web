@@ -7,37 +7,65 @@
     </div>
     <h2>Register</h2>
     <form name="form" id="signup-form" (ngSubmit)="f.form.valid && register()" #f="ngForm" novalidate>
-      <div class="form" [ngClass]="{ 'has-error': f.submitted && !username.valid }">
+
+      <div *ngIf="errors && errors.non_field_errors" class="alert alert-danger">
+        <ul *ngFor="let err of errors.non_field_errors">
+          <li>{{err}}</li>
+        </ul>
+      </div>
+
+
+      <div class="form" [ngClass]="{ 'has-error': f.submitted && (!username.valid || (errors && errors._username)) }">
         <md-input-container>
           <input mdInput placeholder="Username" type="text" name="username" [(ngModel)]="model.username" #username="ngModel" required />
         </md-input-container>
         <div *ngIf="f.submitted && !username.valid" class="help-block">Username is required</div>
+        <div *ngIf="errors && errors._username" class="help-block">
+          <ul *ngFor="let err of errors._username">
+            <li>{{err}}</li>
+          </ul>
+        </div>
       </div>
 
-      <div class="form" [ngClass]="{ 'has-error': f.submitted && !password.valid }">
+      <div class="form" [ngClass]="{ 'has-error': f.submitted && (!email.valid || (errors && errors._email)) }">
         <md-input-container>
           <input mdInput placeholder="Email" type="email" name="email" [(ngModel)]="model.email" #email="ngModel" required />
         </md-input-container>
         <div *ngIf="f.submitted && !email.valid" class="help-block">Email is required</div>
+        <div *ngIf="errors && errors._email" class="help-block">
+          <ul *ngFor="let err of errors._email">
+            <li>{{err}}</li>
+          </ul>
+        </div>
       </div>
 
-      <div class="form" [ngClass]="{ 'has-error': f.submitted && !password.valid }">
+      <div class="form" [ngClass]="{ 'has-error': f.submitted && (!password.valid || (errors && errors._password)) }">
         <md-input-container>
           <input mdInput placeholder="Password" type="password" name="password" [(ngModel)]="model.password" #password="ngModel" required />
         </md-input-container>
         <div *ngIf="f.submitted && !password.valid" class="help-block">Password is required</div>
+        <div *ngIf="errors && errors._password" class="help-block">
+          <ul *ngFor="let err of errors._password">
+            <li>{{err}}</li>
+          </ul>
+        </div>
       </div>
 
       <div id="captcha">
         <re-captcha (captchaResponse)="setCaptchaResponse($event)" site_key="6LcXViIUAAAAABZF263l-SJh3rZAe95Sx2LPN-Dc"></re-captcha>
+        <div *ngIf="errors && errors._captcha" class="help-block has-error">
+          <ul *ngFor="let err of errors._captcha">
+            <li>{{err}}</li>
+          </ul>
+        </div>
       </div>
       <br>
       <div class="form">
         <button md-raised-button color="accent" [disabled]="loading">Register</button>
         <md-spinner *ngIf="loading"></md-spinner>
       </div>
-      <div *ngIf="error" class="alert alert-danger">{{error}}</div>
-      If nothing happens after submitting, you did something wrong.
+
+      Already have an account? Log In <a routerLink="/login" routerLinkActive="active">Here</a>
     </form>
   </md-card-content>
 </md-card>

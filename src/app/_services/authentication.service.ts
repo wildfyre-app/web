@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers, Response, RequestOptions } from '@angular/http';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { isDevMode } from '@angular/core';
+import { Auth, AuthError } from '../_models';
 import 'rxjs/add/operator/map';
 
 @Injectable()
@@ -21,27 +22,28 @@ export class AuthenticationService {
     }
   }
 
-  login(username: string, password: string): Observable<boolean> {
+  login(username: string, password: string): Observable<Auth> {
     const options = new RequestOptions({headers: new Headers({'Content-Type': 'application/json'})});
 
     return this.http.post(this.apiURL + '/account/auth/', JSON.stringify({ username: username, password: password }), options)
       .map((response: Response) => {
-        // login successful if there's a token in the response
-        const token = response.json() && response.json().token;
+        // set token property
+        this.token = response.json().token;
+        // store username and token in local storage to keep user logged in between page refreshes
+        localStorage.setItem('currentUser', JSON.stringify({ username: username, token: this.token }));
 
-        if (token) {
-          // set token property
-          this.token = token;
-          // store username and token in local storage to keep user logged in between page refreshes
-          localStorage.setItem('currentUser', JSON.stringify({ username: username, token: token }));
-          // return true to indicate successful login
-          return true;
-
-        } else {
-          // return false to indicate failed login
-          return false;
-        }
-    });
+        return new Auth();
+      })
+      .catch((error) => {
+        const body = JSON.parse(error._body);
+        return Observable.of(
+          new AuthError(
+            body.non_field_errors || null,
+            body.username || null,
+            body.password || null
+          )
+        );
+      });
   }
 
   logout(): void {

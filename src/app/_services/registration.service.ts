@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Response } from '@angular/http';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { HttpService} from './index';
-import 'rxjs/add/operator/map';
+import { Registration, RegistrationError } from '../_models';
 
 @Injectable()
 export class RegistrationService {
@@ -12,18 +12,29 @@ export class RegistrationService {
     private httpService: HttpService
   ) { }
 
-  register(username: string, email: string, password: string, captchaResponse: String): Observable<boolean> {
-    const text = {
+  register(username: string, email: string, password: string, captchaResponse: String): Observable<Registration> {
+    const body = {
       'username': username,
       'email': email,
       'password': password,
       'captcha': captchaResponse
     };
 
-    return this.httpService.POST('/account/register/', text)
+    return this.httpService.POST('/account/register/', body)
       .map((response: Response) => {
         // Registration successful
-        return true;
+        return new Registration();
+      })
+      .catch((error) => {
+        return Observable.of(
+          new RegistrationError(
+            JSON.parse(error._body).non_field_errors,
+            JSON.parse(error._body).username,
+            JSON.parse(error._body).email,
+            JSON.parse(error._body).password,
+            JSON.parse(error._body).captcha
+          )
+        );
       });
   }
 }

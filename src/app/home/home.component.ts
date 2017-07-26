@@ -1,15 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { Response } from '@angular/http';
 import { FormsModule } from '@angular/forms';
-import { Post, Area, Reputation } from '../_models/index';
-import { PostService, AreaService, HttpService} from '../_services/index';
+import { Post, Area, Reputation } from '../_models';
+import { PostService, AreaService } from '../_services';
 
 @Component({
   templateUrl: 'home.component.html',
 })
 export class HomeComponent implements OnInit {
-  posts: Post[] = [];
-  areas: Area[] = [];
+  post: Post;
   rep: Reputation;
   model: any = {};
   color = 'accent';
@@ -17,31 +16,24 @@ export class HomeComponent implements OnInit {
 
   constructor(
     private postService: PostService,
-    private areaService: AreaService,
-    private httpService: HttpService
+    private areaService: AreaService
   ) {
     this.checked = this.areaService.isAreaChecked;
-  }
 
-  ngOnInit() {
-    document.getElementById('navB').style.display = '';
-    // get posts from secure api end point
-    this.postService.getPosts()
-      .subscribe(post => {
-        this.posts =  post;
-    });
-
-    this.areaService.getAreas()
-      .subscribe(area => {
-        this.areas = area;
-    });
     this.areaService.getAreaRep(this.areaService.currentAreaName)
       .subscribe(reputation => {
         this.rep = reputation;
     });
   }
 
-  onChange(value) {
+  ngOnInit() {
+    document.getElementById('navB').style.display = '';
+
+    this.postService.getNextPost(this.areaService.currentAreaName)
+      .subscribe((post: Post) => { this.post = post; });
+  }
+
+  onChange(value: any) {
     if (value.checked === true) {
       this.areaService.isAreaChecked = true;
       this.areaService.currentAreaName = 'information';
@@ -52,34 +44,22 @@ export class HomeComponent implements OnInit {
     this.ngOnInit();
   }
 
-  upSwipe() {
-    // Increase post spread
-    this.httpService.POST('/areas/' + this.areaService.currentAreaName  +
-      '/' + this.posts[0].id + '/spread/1/', JSON.stringify({}))
-      .subscribe(
-        data => console.log('Burning more wood'));
-    this.ngOnInit();
-  }
+  spread(spread: boolean) {
+    this.postService.spread(
+      this.areaService.currentAreaName,
+      this.post, spread);
 
-  downSwipe() {
-    // Increase post spread
-    this.httpService.POST('/areas/' + this.areaService.currentAreaName  +
-      '/' + this.posts[0].id + '/spread/0/', JSON.stringify({}))
-      .subscribe(
-        data => console.log('The air seemingly grew colder'));
+    this.post = null;  // Avoids last post staying long on slow connection
     this.ngOnInit();
   }
 
   postComment() {
-    const text = {
-      'text': this.model.comment
-    };
+    this.postService.comment(
+      this.areaService.currentAreaName,
+      this.post, this.model.comment
+    ).subscribe();
 
-    this.httpService.POST('/areas/' + this.areaService.currentAreaName  + '/' + this.posts[0].id + '/', text)
-      .subscribe(
-        data => console.log('Someone said something in the forest, but did anyone hear it?'));
     this.model.comment = '';
-    this.ngOnInit();
   }
 
 }

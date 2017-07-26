@@ -2,13 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Response } from '@angular/http';
 import { FormsModule } from '@angular/forms';
-import { Post, Area } from '../_models/index';
-import { PostService, AreaService, HttpService} from '../_services/index';
+import { Post, Area } from '../_models';
+import { PostService, AreaService, HttpService} from '../_services';
 
 @Component({
   templateUrl: 'postView.component.html',
 })
 export class PostViewComponent implements OnInit {
+  area: string;
   post: Post;
   model: any = {};
   color = 'warn';
@@ -32,14 +33,9 @@ export class PostViewComponent implements OnInit {
     this.sub = this.route
       .params
       .subscribe(params => {
-        const area = params['area'];
-        const id = params['id'];
+        this.area = params['area'];
 
-        if (area !== 'fun') {
-          this.areaService.currentAreaName = 'information';
-        }
-        // get post from secure api end point
-        this.postService.getPost(area, id)
+        this.postService.getPost(this.area, params['id'])
           .subscribe(post => {
             this.post =  post;
         });
@@ -47,14 +43,8 @@ export class PostViewComponent implements OnInit {
   }
 
   postComment() {
-    const text = {
-      'text': this.model.comment
-    };
-    this.httpService.POST('/areas/' + this.areaService.currentAreaName  + '/' + this.post.id + '/', text)
-      .subscribe(
-        data => console.log('Someone said something in the forest, but did anyone hear it?'));
+    this.postService.comment(this.area, this.post, this.model.comment).subscribe();
     this.model.comment = '';
-    this.ngOnInit();
   }
 
   back() {

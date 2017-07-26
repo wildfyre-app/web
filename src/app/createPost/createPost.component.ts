@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { Author } from '../_models/index';
-import { AreaService, HttpService } from '../_services/index';
+import { AreaService, PostService } from '../_services';
 import { Router } from '@angular/router';
+import { PostError } from '../_models';
 
 @Component({
   templateUrl: 'createPost.component.html'
@@ -11,16 +12,17 @@ export class CreatePostComponent {
   color = 'warn';
   checked: boolean;
   loading: boolean;
+  errors: PostError;
 
   constructor(
     private areaService: AreaService,
-    private httpService: HttpService,
+    private postService: PostService,
     private router: Router
   ) {
     this.checked = this.areaService.isAreaChecked;
   }
 
-  onChange(value) {
+  onChange(value: any) {
     if (value.checked === true) {
       this.areaService.isAreaChecked = true;
       this.areaService.currentAreaName = 'information';
@@ -30,15 +32,17 @@ export class CreatePostComponent {
     }
   }
 
-  createCard() {
-    const text = {
-      'text': this.model.card
-    };
-
-    this.httpService.POST('/areas/' + this.areaService.currentAreaName  + '/', text)
-      .subscribe(
-        data => console.log('A bright light emerges'));
-    this.model.post = '';
-    this.router.navigateByUrl('');
+  createPost() {
+    this.loading = true;
+    this.postService.createPost(this.areaService.currentAreaName, this.model.card)
+      .subscribe(result => {
+        if (!result.getError()) {
+          this.model.post = '';
+          this.router.navigate(['']);
+        } else {
+          this.errors = result.getError();
+          this.loading = false;
+        }
+      });
   }
 }

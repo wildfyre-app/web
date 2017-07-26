@@ -12,6 +12,7 @@ export class ProfileComponent implements OnInit {
   active: boolean;
   showEditButton: boolean;
   banned: boolean;
+
   constructor(
     private router: Router,
     private profileService: ProfileService
