@@ -62,7 +62,7 @@ export class PostService {
   }
 
   getPost(areaID: string, postID: string): Observable<Post> {
-    return this.httpService.GET('/areas/' + areaID + '/' + postID)
+    return this.httpService.GET('/areas/' + areaID + '/' + postID + '/')
       .map((response: Response) => response.json());
   }
 
