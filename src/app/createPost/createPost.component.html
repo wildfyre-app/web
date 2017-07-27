@@ -1,6 +1,5 @@
 <md-card class="example-card">
   <md-card>
-  <form name="form" (ngSubmit)="f.form.valid && createPost()" #f="ngForm" novalidate>
     <div *ngIf="errors && errors.non_field_errors" class="alert alert-danger">
       <ul *ngFor="let err of errors.non_field_errors">
         <li>{{err}}</li>
@@ -9,7 +8,7 @@
 
     <div class="form-group">
       <md-input-container>
-        <textarea mdInput rows="4" cols="80" type="text" class="form-control" name="post" [(ngModel)]="model.card" #comment="ngModel" ></textarea>
+        <textarea mdInput rows="4" cols="80" type="text" name="post" [(ngModel)]="model.card" #comment="ngModel" ></textarea>
       </md-input-container>
       <div *ngIf="errors && errors._text" class="help-block">
         <ul *ngFor="let err of errors._text">
@@ -17,10 +16,9 @@
         </ul>
       </div>
       <br>
-      <button md-raised-button margin-right="10%" margin-left="10%" color="accent" [disabled]="loading"><b>Create</b></button>
+      <button md-raised-button (click)="createPost()" color="accent" [disabled]="loading"><b>Create</b></button>
       <md-spinner *ngIf="loading"></md-spinner>
     </div>
-  </form>
   </md-card>
 </md-card>
 

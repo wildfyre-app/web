@@ -26,6 +26,7 @@ import { MaterialModule } from '@angular/material';
 import { Component404Component } from './404component';
 import { RegisterSuccessComponent } from './registerSuccess';
 import { ProfileViewComponent } from './profileView';
+import { ClipboardModule } from 'ngx-clipboard';
 
 @NgModule({
     imports: [
@@ -43,6 +44,7 @@ import { ProfileViewComponent } from './profileView';
         [MdListModule],
         [MdSlideToggleModule],
         [ReCaptchaModule],
+        [ClipboardModule],
 
         Angulartics2Module.forRoot([ Angulartics2Piwik ])
     ],

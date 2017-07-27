@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Response } from '@angular/http';
-import { FormsModule } from '@angular/forms';
 import { Post, Area, Reputation } from '../_models';
 import { PostService, AreaService } from '../_services';
 
@@ -13,6 +12,8 @@ export class HomeComponent implements OnInit {
   model: any = {};
   color = 'warn';
   checked: boolean;
+  isCopied = false;
+  text = 'https://client.wildfyre.net/';
 
   constructor(
     private postService: PostService,
@@ -30,7 +31,10 @@ export class HomeComponent implements OnInit {
     document.getElementById('navB').style.display = '';
 
     this.postService.getNextPost(this.areaService.currentAreaName)
-      .subscribe((post: Post) => { this.post = post; });
+      .subscribe((post: Post) => {
+        this.post = post;
+        this.text = 'https://client.wildfyre.net/areas/' + this.areaService.currentAreaName + '/' + post.id;
+      });
   }
 
   onChange(value: any) {

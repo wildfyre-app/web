@@ -2,17 +2,13 @@
   <md-card>
   <label>My Fun Posts</label>
   <div *ngFor="let post of funPosts">
-    <form name="Go to Post" (click)="goto('fun', post.id)">
-      <button md-button>{{post.text}} | {{post.created}}</button>
-    </form>
+      <button type="submit" md-raised-button (click)="goto('fun', post.id)">{{post.text}} <br> {{post.created}}</button>
   </div>
   <hr>
 
   <label>My Information Posts</label>
   <div *ngFor="let post of infoPosts">
-    <form name="Go to Post 2" (click)="goto('information', post.id)">
-    <button md-button>{{post.text}} | {{post.created}}</button>
-    </form>
+    <button type="submit" md-raised-button (click)="goto('information', post.id)">{{post.text}} <br> {{post.created}}</button>
   </div>
   </md-card>
 </md-card>

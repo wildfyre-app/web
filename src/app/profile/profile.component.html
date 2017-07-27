@@ -10,13 +10,11 @@
     <div class="box" *ngIf="active">
       <button md-button id="clearIcon"(click)="cancelEditProfile()"><i class="material-icons">clear</i></button>
       <button md-button id="checkIcon" (click)="submitEditProfile()"><i class="material-icons">check</i></button>
-      <form name="form" (ngSubmit)="f.form.valid && submitEditProfile()" #f="ngForm" novalidate>
         <div class="form-group">
           <md-input-container>
             Bio: <textarea mdInput rows="4" cols="80" type="text" class="form-control" name="bio" [(ngModel)]="model.bio" #bio="ngModel" value=author?.bio></textarea>
           </md-input-container>
           </div>
-      </form>
 
   </div>
     <p>{{author?.avatar}}</p>

@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Response } from '@angular/http';
-import { FormsModule } from '@angular/forms';
 import { Post, Area } from '../_models';
 import { PostService, AreaService, HttpService} from '../_services';
 
@@ -17,6 +16,8 @@ export class PostViewComponent implements OnInit {
   loading: boolean;
   editName: string;
   private sub: any;
+  isCopied = false;
+  text = 'https://client.wildfyre.net/';
 
   constructor(
     private postService: PostService,
@@ -38,6 +39,7 @@ export class PostViewComponent implements OnInit {
         this.postService.getPost(this.area, params['id'])
           .subscribe(post => {
             this.post =  post;
+            this.text = 'https://client.wildfyre.net/areas/' + this.areaService.currentAreaName + '/' + post.id;
         });
     });
   }
