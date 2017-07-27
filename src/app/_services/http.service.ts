@@ -67,6 +67,12 @@ export class HttpService {
     let action = 'Close';
     let onAction: Function;
 
+    if (!navigator.onLine) {
+      const snackBarRef = this.snackBar.open('Your internet appears to be down', action, {
+        duration: 20000
+      });
+    }
+
     switch (error.status) {
       // 4xx Client errors
       case 401:

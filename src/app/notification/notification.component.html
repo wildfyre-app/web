@@ -1,7 +1,9 @@
 <md-card class="example-card">
+  <md-card>
   <div *ngFor="let notification of notifications">
     <md-card-content>
         <button md-button (click)="goto(notification.area, notification.post)">{{notification.area}} | {{notification.post}} | {{notification.comment}} | {{notification.created}}</button>
     </md-card-content>
   </div>
+  </md-card>
 </md-card>

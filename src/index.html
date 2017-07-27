@@ -5,7 +5,10 @@
   <title>WildFyre Beta Client</title>
   <base href="/" />
   <meta name="viewport" content="width=device-width, initial-scale=1">
-
+  <!-- Theme color -->
+  <meta name="theme-color" content="#ed763e" />
+  <!-- Progressive web app manifest -->
+  <link rel="manifest" href="assets/manifest.json">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <!-- bootstrap css -->
   <link href="//netdna.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" />
@@ -27,7 +30,17 @@
     })();
   </script>
   <!-- End Piwik Code -->
-
+  <script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/service-worker.js').then(function(registration) {
+      // Registration was successful
+      console.log('ServiceWorker registration successful with scope: ', registration.scope);
+    }).catch(function(err) {
+      // registration failed :(
+      console.log('ServiceWorker registration failed: ', err);
+    });
+  }
+</script>
 </head>
 <body>
   <app-component>Loading...</app-component>

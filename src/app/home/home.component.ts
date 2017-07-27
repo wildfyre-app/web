@@ -11,7 +11,7 @@ export class HomeComponent implements OnInit {
   post: Post;
   rep: Reputation;
   model: any = {};
-  color = 'accent';
+  color = 'warn';
   checked: boolean;
 
   constructor(
