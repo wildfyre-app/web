@@ -8,8 +8,17 @@
   <md-card-header>
     <small><i><a routerLink="/user/{{post?.author?.user}}" routerLinkActive="active">{{post?.author?.name}}</a> | {{post?.created}}</i></small>
   </md-card-header>
+  <div class="postEditing">
   <button class="linkingButtons" md-button [class.btn-success]= "isCopied" type="button" ngxClipboard [cbContent]="text" (cbOnSuccess)="isCopied = true"><i class="material-icons">link</i></button>
   <input class="hideMeClass"type="text" [(ngModel)]="text">
+  <div *ngIf="!post?.subscribed">
+    <button md-button (click)="subscribe(true)"><i class="material-icons">turned_in_not</i></button>
+  </div>
+  <div *ngIf="post?.subscribed">
+    <button md-button (click)="subscribe(false)"><i class="material-icons">turned_in</i></button>
+  </div>
+</div>
+
 </md-card>
   <hr>
     <md-input-container>

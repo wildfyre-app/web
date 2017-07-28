@@ -99,10 +99,11 @@ export class PostService {
       this.spreading[area] = [];
     }
     this.spreading[area].push(post.id);
-
-    const sSpread = spread ? '1' : '0';
+    const body = {
+      'spread': spread
+    };
     this.httpService.POST('/areas/' + area +
-      '/' + post.id + '/spread/' + sSpread + '/', {})
+      '/' + post.id + '/spread/', body)
         .subscribe(() => {
           setTimeout(() => {  // Wait a secound because of network latency
             this.spreading[area].splice(this.spreading[area].indexOf(post.id), 1);
@@ -146,5 +147,38 @@ export class PostService {
   getInformationPosts(): Observable<Post[]> {
     return this.httpService.GET('/areas/information/own/')
       .map((response: Response) => response.json());
+  }
+
+  subscribe(area: string, _post: Post, s: boolean): Observable<Post> {
+    _post.subscribed = s;
+
+    const body = {
+      'subscribed': s
+    };
+
+    return this.httpService.PUT('/areas/' + area + '/' + _post.id + '/subscribe/', body)
+      .map((response: Response) => {
+        const post = new Post(
+          response.json().id,
+          response.json().author,
+          response.json().subscribed,
+          response.json().created,
+          response.json().active,
+          response.json().text,
+          response.json().comments,
+        );
+        if (s) {
+          console.log('You started following someone in the woods');
+        } else {
+          console.log('You left someone in the woods');
+        }
+        return post;
+      })
+      .catch((err) => {
+        return Observable.of(new PostError(
+          JSON.parse(err._body).non_field_errors,
+          JSON.parse(err._body).text
+        ));
+      });
   }
 }

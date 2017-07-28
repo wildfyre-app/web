@@ -3,12 +3,13 @@
   <label>My Fun Posts</label>
   <div *ngFor="let post of funPosts">
       <button type="submit" md-raised-button (click)="goto('fun', post.id)">{{post.text}} <br> {{post.created}}</button>
+      <hr>
   </div>
-  <hr>
 
   <label>My Information Posts</label>
   <div *ngFor="let post of infoPosts">
     <button type="submit" md-raised-button (click)="goto('information', post.id)">{{post.text}} <br> {{post.created}}</button>
+    <hr>
   </div>
   </md-card>
 </md-card>

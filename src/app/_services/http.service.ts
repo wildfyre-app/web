@@ -61,6 +61,13 @@ export class HttpService {
     return this.http.patch(this.apiURL + passedUrl, body, this.getOptions())
       .catch((error: any) => this.handleError(error));
   }
+  PUT(passedUrl: string, body: any): Observable<any> {
+    // PUT to api
+    body = JSON.stringify(body);
+
+    return this.http.put(this.apiURL + passedUrl, body, this.getOptions())
+      .catch((error: any) => this.handleError(error));
+  }
 
   private handleError(error: any): Observable<any> {
     let message: string;

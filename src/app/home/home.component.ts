@@ -66,4 +66,12 @@ export class HomeComponent implements OnInit {
     this.model.comment = '';
   }
 
+  subscribe(s: boolean) {
+    this.postService.subscribe(
+      this.areaService.currentAreaName,
+      this.post,
+      s
+    ).subscribe();
+  }
+
 }

@@ -39,6 +39,7 @@ export class PostViewComponent implements OnInit {
         this.postService.getPost(this.area, params['id'])
           .subscribe(post => {
             this.post =  post;
+            this.post.subscribed = post.subscribed;
             this.text = 'https://client.wildfyre.net/areas/' + this.areaService.currentAreaName + '/' + post.id;
         });
     });
@@ -51,5 +52,12 @@ export class PostViewComponent implements OnInit {
 
   back() {
     this.router.navigateByUrl('');
+  }
+  subscribe(s: boolean) {
+    this.postService.subscribe(
+      this.areaService.currentAreaName,
+      this.post,
+      s
+    ).subscribe();
   }
 }

@@ -15,7 +15,7 @@ span {
    margin: 0 auto;
 }
 
-h1 {
+h1, h2 {
   text-align: center;
 }
 
@@ -129,4 +129,10 @@ button[type="submit"]:hover {
     white-space: normal;
     width: 100%;
     color: white;
+}
+
+.postEditing {
+  position: absolute;
+    left: 80%;
+    top: 120%;
 }
