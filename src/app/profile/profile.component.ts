@@ -27,24 +27,33 @@ export class ProfileComponent implements OnInit {
       .subscribe(author => {
         this.author = author;
         this.banned = this.author.banned;
+        this.model.bio = this.author.bio;
+        this.author.bio = this.model.bio;
     });
   }
+
   editProfile() {
     this.active = true;
     this.showEditButton = false;
   }
+
   cancelEditProfile() {
     this.active = false;
     this.showEditButton = true;
   }
+
   submitEditProfile() {
     const text = {
       'bio': this.model.bio
     };
-    this.profileService.setBio(text);
+
+    this.profileService.setBio(
+      this.author,
+      text
+    ).subscribe();
+
     this.active = false;
     this.showEditButton = true;
-    this.model.bio = '';
     this.ngOnInit();
   }
 }
