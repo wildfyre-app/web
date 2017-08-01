@@ -3,7 +3,7 @@
     <button md-button (click)="back()"><i class="material-icons">arrow_back</i></button>
 
   <md-card-content>
-    <span class="mainText">{{post?.text}}</span>
+    <span class="mainText"><pre>{{post?.text}}</pre></span>
   </md-card-content>
   <md-card-header>
     <small><i><a routerLink="/user/{{post?.author?.user}}" routerLinkActive="active">{{post?.author?.name}}</a> | {{post?.created}}</i></small>
@@ -18,19 +18,18 @@
     <button md-button (click)="subscribe(false)"><i class="material-icons">turned_in</i></button>
   </div>
 </div>
-
 </md-card>
-  <hr>
     <md-input-container>
-      <input name="comment" [(ngModel)]="model.comment" #comment="ngModel" mdInput placeholder="Post a Comment" autocomplete="off">
+      <textarea mdInput name="comment" rows="3" cols="40" type="text" name="post" [(ngModel)]="model.comment" #comment="ngModel" placeholder="Post a Comment"></textarea>
     </md-input-container>
+    <br>
     <button md-raised-button color="accent" [disabled]="loading" (click)="postComment()"><b>Comment</b></button>
 
   <md-list>
     <div *ngFor="let comment of post?.comments">
       <md-card class="comment-card">
         <md-card-content>
-          {{comment.text}}
+          <pre>{{comment.text}}</pre>
         </md-card-content>
 
         <md-card-header><small><i><a routerLink="/user/{{comment.author.user}}" routerLinkActive="active">{{comment.author.name}}</a>  | {{comment.created}}</i></small></md-card-header>

@@ -5,7 +5,8 @@
     </md-card-content>
     <div class="box" *ngIf="showEditButton">
       <button md-button id="editIcon" type="button" (click)="editProfile()"><i class="material-icons">edit</i></button>
-      <p>Bio: {{author?.bio}}</p>
+      Bio: <pre>{{author?.bio}}</pre>
+
     </div>
     <div class="box" *ngIf="active">
       <button md-button id="clearIcon"(click)="cancelEditProfile()"><i class="material-icons">clear</i></button>

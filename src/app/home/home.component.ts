@@ -74,4 +74,12 @@ export class HomeComponent implements OnInit {
     ).subscribe();
   }
 
+  subscribe(s: boolean) {
+    this.postService.subscribe(
+      this.areaService.currentAreaName,
+      this.post,
+      s
+    ).subscribe();
+  }
+
 }
