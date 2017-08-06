@@ -31,7 +31,9 @@ export class PostService {
             obj.created,
             obj.active,
             obj.text,
-            obj.comments
+            obj.comments.sort((a: Comment, b: Comment) => {
+              return new Date(b.created).getTime() - new Date(a.created).getTime();
+            })
           ));
         });
 
@@ -141,12 +143,16 @@ export class PostService {
 
   getFunPosts(): Observable<Post[]> {
     return this.httpService.GET('/areas/fun/own/')
-      .map((response: Response) => response.json());
+      .map((response: Response) => response.json().sort((a: Post, b: Post) => {
+        return new Date(a.created).getTime() - new Date(b.created).getTime();
+      }));
   }
 
   getInformationPosts(): Observable<Post[]> {
     return this.httpService.GET('/areas/information/own/')
-      .map((response: Response) => response.json());
+      .map((response: Response) => response.json().sort((a: Post, b: Post) => {
+        return new Date(a.created).getTime() - new Date(a.created).getTime();
+      }));
   }
 
   subscribe(area: string, _post: Post, s: boolean): Observable<Post> {
