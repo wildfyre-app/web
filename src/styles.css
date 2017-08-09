@@ -150,3 +150,10 @@ pre {
     border-radius: 0px;
     white-space: pre-wrap;       /* Since CSS 2.1 */
 }
+
+.deleteButtons {
+  float: right;
+  zoom: 0.7;
+  height: 100px;
+  width: 100px;
+}

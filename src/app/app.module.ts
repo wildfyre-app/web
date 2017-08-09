@@ -11,7 +11,7 @@ import { AppComponent } from './app.component';
 import { routing } from './app.routing';
 import { AuthGuard } from './_guards';
 import { AuthenticationService, HttpService, AreaService, PostService,
-  ProfileService, RegistrationService, NotificationService, NavBarService } from './_services';
+  ProfileService, RegistrationService, NotificationService, NavBarService, CommentService } from './_services';
 import { LoginComponent } from './login';
 import { HomeComponent } from './home';
 import { ProfileComponent } from './profile';
@@ -72,7 +72,8 @@ import { ClipboardModule } from 'ngx-clipboard';
         ProfileService,
         RegistrationService,
         NotificationService,
-        NavBarService
+        NavBarService,
+        CommentService
     ],
     bootstrap: [AppComponent]
 })

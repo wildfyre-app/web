@@ -68,6 +68,11 @@ export class HttpService {
     return this.http.put(this.apiURL + passedUrl, body, this.getOptions())
       .catch((error: any) => this.handleError(error));
   }
+  DELETE(passedUrl: string): Observable<void> {
+    // DELETE to api
+    return this.http.delete(this.apiURL + passedUrl, this.getOptions())
+      .catch((error: any) => this.handleError(error));
+  }
 
   private handleError(error: any): Observable<any> {
     let message: string;

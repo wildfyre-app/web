@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Response } from '@angular/http';
-import { Post, Area, Reputation } from '../_models';
-import { PostService, AreaService } from '../_services';
+import { Post, Area, Reputation, Author, Comment } from '../_models';
+import { PostService, AreaService, ProfileService, CommentService } from '../_services';
 
 @Component({
   templateUrl: 'home.component.html',
@@ -14,12 +14,20 @@ export class HomeComponent implements OnInit {
   checked: boolean;
   isCopied = false;
   text = 'https://client.wildfyre.net/';
+  userID: number;
 
   constructor(
     private postService: PostService,
-    private areaService: AreaService
+    private areaService: AreaService,
+    private profileService: ProfileService,
+    private commentService: CommentService
   ) {
     this.checked = this.areaService.isAreaChecked;
+
+    this.profileService.getSelf()
+      .subscribe( (author: Author) => {
+        this.userID = author.user;
+      });
   }
 
   ngOnInit() {
@@ -76,6 +84,10 @@ export class HomeComponent implements OnInit {
       this.post,
       s
     ).subscribe();
+  }
+
+  deleteComment(c: Comment) {
+    this.commentService.deleteComment(this.areaService.currentAreaName, this.post, c);
   }
 
 }

@@ -105,6 +105,8 @@ export class PostService {
   }
 
   comment(area: string, post: Post, text: string): Observable<Comment> {
+    post.subscribed = true;
+
     const body = {
       'text': text
     };

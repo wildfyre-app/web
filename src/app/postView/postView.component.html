@@ -28,6 +28,7 @@
   <md-list>
     <div *ngFor="let comment of post?.comments">
       <md-card class="comment-card">
+        <div *ngIf="comment.author?.user == userID" class="deleteButtons"><button md-button color="warn" (click)="deleteComment(comment)"><i class="material-icons">delete</i></button></div>
         <md-card-content>
           <pre>{{comment.text}}</pre>
         </md-card-content>
