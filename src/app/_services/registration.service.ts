@@ -23,7 +23,7 @@ export class RegistrationService {
     return this.httpService.POST('/account/register/', body)
       .map((response: Response) => {
         // Registration successful
-        return new Registration();
+        return Registration.parse(response.json());
       })
       .catch((error) => {
         return Observable.of(

@@ -1,4 +1,8 @@
 export class Registration {
+  static parse(obj: any) {
+    return new Registration();
+  }
+
   getError(): RegistrationError {
     return null;
   }

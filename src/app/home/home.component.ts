@@ -20,11 +20,6 @@ export class HomeComponent implements OnInit {
     private areaService: AreaService
   ) {
     this.checked = this.areaService.isAreaChecked;
-
-    this.areaService.getAreaRep(this.areaService.currentAreaName)
-      .subscribe(reputation => {
-        this.rep = reputation;
-    });
   }
 
   ngOnInit() {
@@ -33,7 +28,16 @@ export class HomeComponent implements OnInit {
     this.postService.getNextPost(this.areaService.currentAreaName)
       .subscribe((post: Post) => {
         this.post = post;
-        this.text = 'https://client.wildfyre.net/areas/' + this.areaService.currentAreaName + '/' + post.id;
+        if (post) {
+          this.text = 'https://client.wildfyre.net/areas/' + this.areaService.currentAreaName + '/' + post.id;
+        } else {
+          this.text = 'https://client.wildfyre.net';
+        }
+      });
+
+    this.areaService.getAreaRep(this.areaService.currentAreaName)
+      .subscribe(reputation => {
+        this.rep = reputation;
       });
   }
 

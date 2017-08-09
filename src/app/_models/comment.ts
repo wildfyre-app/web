@@ -1,12 +1,25 @@
 import {Author} from './index';
 
 export class Comment {
+  public created: Date;
+
+  static parse(obj: any) {
+    return new Comment(
+      obj.id,
+      obj.author,
+      obj.created,
+      obj.text
+    );
+  }
+
   constructor(
     public id: number,
     public author: Author,
-    public created: string,
+    created: string,
     public text: string
-  ) { }
+  ) {
+    this.created = new Date(created);
+  }
 
   getError(): CommentError {
     return null;

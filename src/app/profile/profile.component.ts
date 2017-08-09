@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Author } from '../_models/index';
 import { ProfileService } from '../_services/index';
 
@@ -9,51 +9,44 @@ import { ProfileService } from '../_services/index';
 export class ProfileComponent implements OnInit {
   model: any = {};
   author: Author;
-  active: boolean;
-  showEditButton: boolean;
-  banned: boolean;
+  edit: boolean;
+  self: boolean;
 
   constructor(
+    private route: ActivatedRoute,
     private router: Router,
     private profileService: ProfileService
   ) {
-    this.active = false;
-    this.showEditButton = true;
+    this.edit = false;
    }
 
   ngOnInit() {
-    // get posts from secure api end point
-    this.profileService.getSelf()
-      .subscribe(author => {
-        this.author = author;
-        this.banned = this.author.banned;
-        this.model.bio = this.author.bio;
-        this.author.bio = this.model.bio;
+    this.route.params.subscribe((parms) => {
+      if (parms['id']) {
+        this.profileService.getUser(parms['id']).subscribe((user: Author) => {
+          this.self = false;
+          this.author = user;
+        });
+      } else {
+        this.profileService.getSelf().subscribe((self: Author) => {
+          this.author = self;
+          this.model.bio = this.author.bio;
+          this.self = true;
+        });
+      }
     });
   }
 
   editProfile() {
-    this.active = true;
-    this.showEditButton = false;
+    this.edit = true;
   }
 
   cancelEditProfile() {
-    this.active = false;
-    this.showEditButton = true;
+    this.edit = false;
   }
 
   submitEditProfile() {
-    const text = {
-      'bio': this.model.bio
-    };
-
-    this.profileService.setBio(
-      this.author,
-      text
-    ).subscribe();
-
-    this.active = false;
-    this.showEditButton = true;
-    this.ngOnInit();
+    this.profileService.setBio(this.author, this.model.bio).subscribe();
+    this.edit = false;
   }
 }

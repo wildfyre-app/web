@@ -32,7 +32,7 @@ export class AuthenticationService {
         // store username and token in local storage to keep user logged in between page refreshes
         localStorage.setItem('currentUser', JSON.stringify({ username: username, token: this.token }));
 
-        return new Auth();
+        return Auth.parse(response.json());
       })
       .catch((error) => {
         const body = JSON.parse(error._body);

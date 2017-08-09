@@ -1,4 +1,14 @@
 export class Author {
+  static parse(obj: any) {
+    return new Author(
+      obj.user,
+      obj.name,
+      obj.avatar,
+      obj.bio,
+      obj.banned
+    );
+  }
+
   constructor(
     public user: number,
     public name: string,

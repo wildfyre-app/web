@@ -9,12 +9,18 @@ import { Post, PostError, Comment, CommentError, Area } from '../_models';
 @Injectable()
 export class PostService {
   private posts: { [area: string]: Post[]; } = { };
-  private spreading: { [area: string]: number[]; } = { };
+  private used: { [area: string]: number[]; } = { };
   private lowStack: { [area: string]: boolean; } = { }; // low stack on server
 
   constructor(
     private httpService: HttpService
   ) { }
+
+  private use(area: string, post: Post) {
+    if (!this.used[area]) { this.used[area] = []; }
+    this.used[area].push(post.id);
+    this.posts[area].splice(this.posts[area].indexOf(post), 1);
+  }
 
   getPosts(area: string): Observable<Post[]> {
     return this.httpService.GET('/areas/' + area + '/')
@@ -22,19 +28,8 @@ export class PostService {
         const posts: Post[] = [];
 
         response.json().forEach((obj: any) => {
-          if (this.spreading[area] && obj.id in this.spreading[area]) { return; }
-
-          posts.push(new Post(
-            obj.id,
-            obj.author,
-            obj.subscribed,
-            obj.created,
-            obj.active,
-            obj.text,
-            obj.comments.sort((a: Comment, b: Comment) => {
-              return new Date(b.created).getTime() - new Date(a.created).getTime();
-            })
-          ));
+          if (this.used[area] && obj.id in this.used[area]) { return; }
+          posts.push(Post.parse(obj));
         });
 
         // check stack size
@@ -48,10 +43,14 @@ export class PostService {
 
   getNextPost(area: string): Observable<Post> {
     if (!(area in this.posts) || this.posts[area].length === 0) {
-      // Update stock and return first post
+      // Update stack and return first post
       return this.getPosts(area)
         .map((posts: Post[]) => {
-          return (posts.length > 0) ? posts[0] : null;
+          if (posts.length === 0) { return null; }
+
+          const post = posts[0];
+          this.use(area, post);
+          return post;
         });
     } else {
       if (this.posts[area].length < 3 && !this.lowStack[area]) {
@@ -59,13 +58,17 @@ export class PostService {
         this.getPosts(area).subscribe();
       }
 
-      return Observable.of(this.posts[area][0]);
+      const post = this.posts[area][0];
+      this.use(area, post);
+      return Observable.of(post);
     }
   }
 
   getPost(areaID: string, postID: string): Observable<Post> {
     return this.httpService.GET('/areas/' + areaID + '/' + postID + '/')
-      .map((response: Response) => response.json());
+      .map((response: Response) => {
+        return Post.parse(response.json());
+      });
   }
 
   createPost(area: string, text: string): Observable<Post> {
@@ -76,43 +79,29 @@ export class PostService {
     return this.httpService.POST(
       '/areas/' + area + '/', body)
       .map((response: Response) => {
-        return new Post(
-          response.json().id || null,
-          response.json().author || null,
-          response.json().subscribed || null,
-          response.json().created || null,
-          response.json().active || null,
-          response.json().text || null,
-          response.json().comments || null
-        );
+        return Post.parse(response.json());
       })
       .catch((error) => {
         return Observable.of(new PostError(
-          JSON.parse(error._body).non_field_errors || null,
-          JSON.parse(error._body).username || null
+          JSON.parse(error._body).non_field_errors,
+          JSON.parse(error._body).username
         ));
       });
 
   }
 
   spread(area: string, post: Post, spread: boolean): void {
-    // Save this, to filter out when updating stack cache
-    if (!this.spreading[area]) {
-      this.spreading[area] = [];
-    }
-    this.spreading[area].push(post.id);
     const body = {
       'spread': spread
     };
     this.httpService.POST('/areas/' + area +
       '/' + post.id + '/spread/', body)
         .subscribe(() => {
-          setTimeout(() => {  // Wait a secound because of network latency
-            this.spreading[area].splice(this.spreading[area].indexOf(post.id), 1);
-          }, 1000);
+          setTimeout(() => {  // Wait five secound because of network latency
+            // Cleanup used array
+            this.used[area].splice(this.used[area].indexOf(post.id), 1);
+          }, 5000);
         });
-
-    this.posts[area].splice(this.posts[area].indexOf(post), 1);
   }
 
   comment(area: string, post: Post, text: string): Observable<Comment> {
@@ -122,15 +111,9 @@ export class PostService {
 
     return this.httpService.POST('/areas/' + area + '/' + post.id + '/', body)
       .map((response: Response) => {
-        const comment = new Comment(
-          response.json().id,
-          response.json().author,
-          response.json().created,
-          response.json().text
-        );
+        const comment = Comment.parse(response.json());
 
         post.comments.push(comment);
-
         return comment;
       })
       .catch((err) => {
@@ -141,50 +124,31 @@ export class PostService {
       });
   }
 
-  getFunPosts(): Observable<Post[]> {
+  getOwnPosts(area: string): Observable<Post[]> {
     return this.httpService.GET('/areas/fun/own/')
-      .map((response: Response) => response.json().sort((a: Post, b: Post) => {
-        return new Date(a.created).getTime() - new Date(b.created).getTime();
-      }));
+      .map((response: Response) => {
+        const posts: Post[] = [];
+        response.json().forEach((post: any) => {
+          posts.push(post);
+        });
+        return posts;
+      });
   }
 
-  getInformationPosts(): Observable<Post[]> {
-    return this.httpService.GET('/areas/information/own/')
-      .map((response: Response) => response.json().sort((a: Post, b: Post) => {
-        return new Date(a.created).getTime() - new Date(a.created).getTime();
-      }));
-  }
-
-  subscribe(area: string, _post: Post, s: boolean): Observable<Post> {
-    _post.subscribed = s;
+  subscribe(area: string, post: Post, subscribe: boolean): Observable<void> {
+    post.subscribed = subscribe;
 
     const body = {
-      'subscribed': s
+      'subscribed': subscribe
     };
 
-    return this.httpService.PUT('/areas/' + area + '/' + _post.id + '/subscribe/', body)
+    return this.httpService.PUT('/areas/' + area + '/' + post.id + '/subscribe/', body)
       .map((response: Response) => {
-        const post = new Post(
-          response.json().id,
-          response.json().author,
-          response.json().subscribed,
-          response.json().created,
-          response.json().active,
-          response.json().text,
-          response.json().comments,
-        );
-        if (s) {
+        if (subscribe) {
           console.log('You started following someone in the woods');
         } else {
           console.log('You left someone in the woods');
         }
-        return post;
-      })
-      .catch((err) => {
-        return Observable.of(new PostError(
-          JSON.parse(err._body).non_field_errors,
-          JSON.parse(err._body).text
-        ));
       });
   }
 }

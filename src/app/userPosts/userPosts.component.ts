@@ -18,14 +18,14 @@ export class UserPostsComponent implements OnInit {
 
   ngOnInit() {
     // get posts from secure api end point
-    this.postService.getFunPosts()
-      .subscribe(post1 => {
-        this.funPosts = post1;
+    this.postService.getOwnPosts('fun')
+      .subscribe(posts => {
+        this.funPosts = posts;
     });
 
-    this.postService.getInformationPosts()
-      .subscribe(post2 => {
-        this.infoPosts = post2;
+    this.postService.getOwnPosts('information')
+      .subscribe(posts => {
+        this.infoPosts = posts;
     });
   }
 

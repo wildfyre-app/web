@@ -1,4 +1,8 @@
 export class Auth {
+  static parse(obj: any) {
+    return new Auth();
+  }
+
   getError(): AuthError {
     return null;
   }

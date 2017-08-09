@@ -14,8 +14,12 @@ export class NotificationService {
   getNotifications(): Observable<Notification[]> {
     // get notifications from api
     return this.httpService.GET('/areas/notification/')
-      .map((response: Response) => response.json().sort((a: Notification, b: Notification) => {
-        return new Date(a.created).getTime() - new Date(b.created).getTime();
-      }));
+      .map((response: Response) => {
+        const notifications: Notification[] = [];
+        response.json().forEach((notification: any) => {
+          notifications.push(Notification.parse(notification));
+        });
+        return notifications;
+      });
   }
 }

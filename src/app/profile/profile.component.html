@@ -3,25 +3,25 @@
     <md-card-content>
       <h2>{{author?.name}}</h2>
     </md-card-content>
-    <div class="box" *ngIf="showEditButton">
-      <button md-button id="editIcon" type="button" (click)="editProfile()"><i class="material-icons">edit</i></button>
+    <img *ngIf="author?.avatar" [src]="author?.avatar" alt="Avatar of {{author?.name}}" height="73" width="73" />
+    <br/>
+    <div class="box" *ngIf="!edit">
+      <button *ngIf="self" md-button id="editIcon" type="button" (click)="editProfile()"><i class="material-icons">edit</i></button>
       Bio: <pre>{{author?.bio}}</pre>
-
     </div>
-    <div class="box" *ngIf="active">
+    <div class="box" *ngIf="edit">
       <button md-button id="clearIcon"(click)="cancelEditProfile()"><i class="material-icons">clear</i></button>
       <button md-button id="checkIcon" (click)="submitEditProfile()"><i class="material-icons">check</i></button>
-        <div class="form-group">
-          <md-input-container>
-            Bio: <textarea mdInput rows="4" cols="80" type="text" class="form-control" name="bio" [(ngModel)]="model.bio" #bio="ngModel" value=author?.bio></textarea>
-          </md-input-container>
-          </div>
+      <div class="form-group">
+        <md-input-container>
+          Bio: <textarea mdInput rows="4" cols="80" type="text" class="form-control" name="bio" [(ngModel)]="model.bio" #bio="ngModel" value=author?.bio></textarea>
+        </md-input-container>
+      </div>
+    </div>
 
-  </div>
-    <p>{{author?.avatar}}</p>
-    <div class="box" *ngIf="banned">
-    <p>You are currently banned</p>
-  </div>
+    <div class="box" *ngIf="author?.banned">
+      <p>You are currently banned</p>
+    </div>
   </md-card>
   <div id="userID">ID: {{author?.user}}</div>
 </md-card>
