@@ -21,6 +21,8 @@ export class LoginComponent implements OnInit {
     // reset login status
     this.authenticationService.logout();
     document.getElementById('navB').style.display = 'none';
+    document.getElementById('navBMobile').style.display = 'none';
+
     console.log('Turning up the heat');
   }
 

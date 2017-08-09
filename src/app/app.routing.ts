@@ -24,7 +24,7 @@ const appRoutes: Routes = [
   { path: 'register/success', component: RegisterSuccessComponent },
   { path: 'areas/:area/:id', component: PostViewComponent },
   { path: 'user/:id', component: ProfileViewComponent },
-  // otherwise redirect to home
+  // otherwise redirect to 404
   { path: '**', component: Component404Component }
 ];
 

@@ -32,6 +32,7 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
     document.getElementById('navB').style.display = '';
+    document.getElementById('navBMobile').style.display = '';
 
     this.postService.getNextPost(this.areaService.currentAreaName)
       .subscribe((post: Post) => {
