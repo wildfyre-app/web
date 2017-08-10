@@ -127,7 +127,7 @@ export class PostService {
   }
 
   getOwnPosts(area: string): Observable<Post[]> {
-    return this.httpService.GET('/areas/fun/own/')
+    return this.httpService.GET('/areas/' + area + '/own/')
       .map((response: Response) => {
         const posts: Post[] = [];
         response.json().forEach((post: any) => {
