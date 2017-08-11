@@ -74,4 +74,10 @@ export class PostViewComponent implements OnInit {
   deleteComment(c: Comment) {
     this.commentService.deleteComment(this.areaService.currentAreaName, this.post, c);
   }
+
+  deletePost() {
+    this.postService.deletePost(this.areaService.currentAreaName, this.post);
+    this.router.navigateByUrl('');
+  }
+
 }

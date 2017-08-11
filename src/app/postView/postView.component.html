@@ -1,7 +1,7 @@
 <md-card class="example-card">
   <md-card>
     <button md-button (click)="back()"><i class="material-icons">arrow_back</i></button>
-
+    <div *ngIf="post?.author?.user == userID" class="deleteButtons"><button md-button color="warn" (click)="deletePost()"><i class="material-icons">delete</i></button></div>
   <md-card-content>
     <span class="mainText"><pre>{{post?.text}}</pre></span>
   </md-card-content>

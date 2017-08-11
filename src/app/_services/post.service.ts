@@ -153,4 +153,9 @@ export class PostService {
         }
       });
   }
+
+  deletePost(area: string, post: Post) {
+    this.httpService.DELETE('/areas/' + area + '/' + post.id + '/')
+      .subscribe();
+  }
 }
