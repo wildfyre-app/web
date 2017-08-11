@@ -3,6 +3,7 @@ import { Response } from '@angular/http';
 import { Observable } from 'rxjs';
 import { HttpService } from './http.service';
 import { Author, AuthorError } from '../_models/author';
+import { Account, AccountError } from '../_models/account';
 
 @Injectable()
 export class ProfileService {
@@ -24,6 +25,13 @@ export class ProfileService {
     }
   }
 
+  getAccount(): Observable<Account> {
+    return this.httpService.GET('/account/')
+      .map((response: Response) => {
+        return Account.parse(response.json());
+      });
+  }
+
   getUser(id: string): Observable<Author> {
     return this.httpService.GET('/users/' + id)
       .map((response: Response) => {
@@ -37,6 +45,7 @@ export class ProfileService {
     const body = {
       bio: bio
     };
+
     return this.httpService.PATCH('/users/', body)
       .map((response: Response) => {
         console.log('You leveled up some stats');
@@ -49,4 +58,42 @@ export class ProfileService {
         ));
       });
   }
+
+  setEmail(email: any): Observable<Account> {
+    const body = {
+      email: email
+    };
+
+    return this.httpService.PATCH('/account/', body)
+      .map((response: Response) => {
+        console.log('You have mail!');
+
+        return Account.parse(response.json());
+      }).catch((err) => {
+        return Observable.of(new AccountError(
+          JSON.parse(err._body).non_field_errors,
+          JSON.parse(err._body).text
+        ));
+      });
+  }
+
+  setPassword(password: any): Observable<Account> {
+    const body = {
+      password: password
+    };
+
+    return this.httpService.PATCH('/account/', body)
+      .map((response: Response) => {
+        console.log('You have been securely encryptified');
+
+        return Account.parse(response.json());
+      }).catch((err) => {
+        return Observable.of(new AccountError(
+          JSON.parse(err._body).non_field_errors,
+          JSON.parse(err._body).text
+        ));
+      });
+  }
+
+
 }

@@ -87,8 +87,9 @@ ul {
   color: #ffffff;
   background-color: #4f5b62;
   border-color: #000a12;
-  margin-left: 30%;
-  margin-right: 30%;
+  width: 100%;
+  text-align: center;
+  margin: 0 auto;
 }
 
 .comment-card {
@@ -143,6 +144,12 @@ ul {
   margin: auto;
   width: 40%;
 }
+
+#clearIcon, #checkIcon {
+  float: right;
+  zoom: 0.5;
+}
+
 
 .mainText {
   font-size: 110%;
@@ -212,6 +219,10 @@ ul {
   color: #eceff1;
 }
 
+button.mat-simple-snackbar-action {
+    color: white;
+}
+
 @media (max-width: 640px) {
     /*applied if browser window width is less than or equal to 600px*/
     .icons {
@@ -242,4 +253,8 @@ ul {
     #navBMobile {
         display: none;
     }
+}
+
+.mat-icon-button {
+  float: right;
 }
