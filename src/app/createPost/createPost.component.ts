@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
-import { Author } from '../_models/index';
-import { AreaService, PostService } from '../_services';
+import { Author } from '../_models/author';
+import { PostService } from '../_services/post.service';
+import { AreaService } from '../_services/area.service';
+
 import { Router } from '@angular/router';
-import { PostError } from '../_models';
+import { PostError } from '../_models/post';
 
 @Component({
   templateUrl: 'createPost.component.html'

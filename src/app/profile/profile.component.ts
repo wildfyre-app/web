@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Author } from '../_models/index';
-import { ProfileService } from '../_services/index';
+import { Author } from '../_models/author';
+import { ProfileService } from '../_services/profile.service';
 
 @Component({
   templateUrl: 'profile.component.html'

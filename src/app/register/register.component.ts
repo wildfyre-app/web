@@ -2,8 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ViewChild } from '@angular/core';
 import { ReCaptchaComponent } from 'angular2-recaptcha';
-import { AuthenticationService, RegistrationService } from '../_services/index';
-import { RegistrationError } from '../_models';
+import { AuthenticationService } from '../_services/authentication.service';
+import { RegistrationService } from '../_services/registration.service';
+import { RegistrationError } from '../_models/registration';
 
 @Component({
   templateUrl: 'register.component.html'

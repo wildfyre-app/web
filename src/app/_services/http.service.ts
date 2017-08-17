@@ -40,17 +40,21 @@ export class HttpService {
     });
   }
 
-  POST(passedUrl: string, body: any): Observable<any> {
-    // POST to api
-    body = JSON.stringify(body);
-
-    return this.http.post(this.apiURL + passedUrl, body, this.getOptions())
+  DELETE(passedUrl: string): Observable<void> {
+    // DELETE to api
+    return this.http.delete(this.apiURL + passedUrl, this.getOptions())
       .catch((error: any) => this.handleError(error));
   }
 
   GET(passedUrl: string): Observable<any> {
     // get GET from api
     return this.http.get(this.apiURL + passedUrl, this.getOptions())
+      .catch((error: any) => this.handleError(error));
+  }
+
+  OPTIONS(passedUrl: string): Observable<any> {
+    // OPTIONS to api
+    return this.http.options(this.apiURL + passedUrl, this.getOptions())
       .catch((error: any) => this.handleError(error));
   }
 
@@ -61,16 +65,20 @@ export class HttpService {
     return this.http.patch(this.apiURL + passedUrl, body, this.getOptions())
       .catch((error: any) => this.handleError(error));
   }
+
+  POST(passedUrl: string, body: any): Observable<any> {
+    // POST to api
+    body = JSON.stringify(body);
+
+    return this.http.post(this.apiURL + passedUrl, body, this.getOptions())
+      .catch((error: any) => this.handleError(error));
+  }
+
   PUT(passedUrl: string, body: any): Observable<any> {
     // PUT to api
     body = JSON.stringify(body);
 
     return this.http.put(this.apiURL + passedUrl, body, this.getOptions())
-      .catch((error: any) => this.handleError(error));
-  }
-  DELETE(passedUrl: string): Observable<void> {
-    // DELETE to api
-    return this.http.delete(this.apiURL + passedUrl, this.getOptions())
       .catch((error: any) => this.handleError(error));
   }
 

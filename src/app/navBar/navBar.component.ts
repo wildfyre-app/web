@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { NavBarService } from '../_services/index';
+import { NavBarService } from '../_services/navBar.service';
 
 @Component({
   selector: 'app-nav-bar',

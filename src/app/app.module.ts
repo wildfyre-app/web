@@ -5,13 +5,22 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { Angulartics2Module, Angulartics2Piwik } from 'angulartics2';
 import {MdButtonModule, MdCheckboxModule, MdTabsModule, MdCardModule,
-  MdMenuModule, MdInputModule, MdListModule, MdSlideToggleModule} from '@angular/material';
+  MdMenuModule, MdInputModule, MdListModule, MdSlideToggleModule, MdDialogModule, MdRadioModule} from '@angular/material';
 import 'hammerjs';
 import { AppComponent } from './app.component';
 import { routing } from './app.routing';
 import { AuthGuard } from './_guards';
-import { AuthenticationService, HttpService, AreaService, PostService,
-  ProfileService, RegistrationService, NotificationService, NavBarService, CommentService } from './_services';
+import { ReasonService } from './_services/reason.service';
+import { AuthenticationService } from './_services/authentication.service';
+import { HttpService } from './_services/http.service';
+import { AreaService } from './_services/area.service';
+import { CommentService } from './_services/comment.service';
+import { FlagService, FlagDialogComponent } from './_services/flag.service';
+import { NavBarService } from './_services/navBar.service';
+import { NotificationService } from './_services/notification.service';
+import { PostService } from './_services/post.service';
+import { ProfileService } from './_services/profile.service';
+import { RegistrationService } from './_services/registration.service';
 import { LoginComponent } from './login';
 import { HomeComponent } from './home';
 import { ProfileComponent } from './profile';
@@ -36,16 +45,19 @@ import { MarkdownToHtmlModule } from 'ng2-markdown-to-html';
         HttpModule,
         routing,
         MaterialModule,
-        [BrowserAnimationsModule],
-        [MdButtonModule, MdCheckboxModule],
-        [MdTabsModule],
-        [MdCardModule],
-        [MdMenuModule],
-        [MdInputModule],
-        [MdListModule],
-        [MdSlideToggleModule],
-        [ReCaptchaModule],
-        [ClipboardModule],
+        BrowserAnimationsModule,
+        MdDialogModule,
+        MdButtonModule,
+        MdCheckboxModule,
+        MdTabsModule,
+        MdCardModule,
+        MdMenuModule,
+        MdInputModule,
+        MdListModule,
+        MdRadioModule,
+        MdSlideToggleModule,
+        ReCaptchaModule,
+        ClipboardModule,
 
         MarkdownToHtmlModule.forRoot(),
         Angulartics2Module.forRoot([ Angulartics2Piwik ])
@@ -63,19 +75,25 @@ import { MarkdownToHtmlModule } from 'ng2-markdown-to-html';
         PostViewComponent,
         Component404Component,
         RegisterSuccessComponent,
-        ProfileViewComponent
+        ProfileViewComponent,
+        FlagDialogComponent
     ],
     providers: [
         AuthenticationService,
         HttpService,
-        AuthGuard,
         AreaService,
+        AuthGuard,
+        CommentService,
+        FlagService,
+        ReasonService,
         PostService,
         ProfileService,
         RegistrationService,
-        NotificationService,
         NavBarService,
-        CommentService
+        NotificationService
+    ],
+    entryComponents: [
+      FlagDialogComponent
     ],
     bootstrap: [AppComponent]
 })

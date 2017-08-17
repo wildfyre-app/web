@@ -1,4 +1,5 @@
-import {Author, Comment} from './';
+import { Author } from './author';
+import { Comment } from './comment';
 
 export class Post {
   public created: Date;

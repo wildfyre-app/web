@@ -3,8 +3,11 @@ import { Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/mergeMap';
-import { AreaService, HttpService } from '.';
-import { Post, PostError, Comment, CommentError, Area } from '../_models';
+import { HttpService } from './http.service';
+import { AreaService } from './area.service';
+import { Post, PostError } from '../_models/post';
+import { Comment, CommentError } from '../_models/comment';
+import { Area } from '../_models/area';
 
 @Injectable()
 export class PostService {

@@ -1,9 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Response } from '@angular/http';
-import { Subject } from 'rxjs/Subject';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/map';
-import { HttpService } from './index';
 
 @Injectable()
 export class NavBarService {

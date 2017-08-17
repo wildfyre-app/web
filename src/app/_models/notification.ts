@@ -1,4 +1,4 @@
-import {Post} from './';
+import {Post} from './post';
 
 export class Notification {
   static parse(obj: any) {

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Notification } from '../_models';
-import { NotificationService } from '../_services';
+import { Notification } from '../_models/notification';
+import { NotificationService } from '../_services/notification.service';
 
 @Component({
   templateUrl: 'notification.component.html'

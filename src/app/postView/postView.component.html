@@ -1,24 +1,32 @@
 <md-card class="example-card">
   <md-card>
     <button md-button (click)="back()"><i class="material-icons">arrow_back</i></button>
-    <div *ngIf="post?.author?.user == userID" class="deleteButtons"><button md-button color="warn" (click)="deletePost()"><i class="material-icons">delete</i></button></div>
-  <md-card-content>
-    <span class="mainText"><div markdown-to-html [data]="post?.text"></div></span>
-  </md-card-content>
-  <md-card-header>
-    <small><i><a routerLink="/user/{{post?.author?.user}}" routerLinkActive="active">{{post?.author?.name}}</a> | {{post?.created}}</i></small>
-  </md-card-header>
-  <div class="postEditing">
-  <button class="linkingButtons" md-button [class.btn-success]= "isCopied" type="button" ngxClipboard [cbContent]="text" (cbOnSuccess)="isCopied = true"><i class="material-icons">link</i></button>
-  <input class="hideMeClass"type="text" [(ngModel)]="text">
-  <div *ngIf="!post?.subscribed">
-    <button md-button (click)="subscribe(true)"><i class="material-icons">turned_in_not</i></button>
-  </div>
-  <div *ngIf="post?.subscribed">
-    <button md-button (click)="subscribe(false)"><i class="material-icons">turned_in</i></button>
-  </div>
-</div>
-</md-card>
+    <md-card-content>
+      <span class="mainText"><div markdown-to-html [data]="post?.text"></div></span>
+    </md-card-content>
+    <md-card-header>
+      <small><i><a routerLink="/user/{{post?.author?.user}}" routerLinkActive="active">{{post?.author?.name}}</a> | {{post?.created}}</i></small>
+    </md-card-header>
+    <div class="postEditing">
+
+
+    <div *ngIf="!post?.subscribed">
+      <button md-button (click)="subscribe(true)"><i class="material-icons">turned_in_not</i></button>
+    </div>
+    <div *ngIf="post?.subscribed">
+      <button md-button (click)="subscribe(false)"><i class="material-icons">turned_in</i></button>
+    </div>
+
+    <button md-icon-button [mdMenuTriggerFor]="appMenu"><i class="material-icons">more_vert</i></button>
+      <md-menu #appMenu="mdMenu">
+        <input class="hideMeClass" type="text" [(ngModel)]="text">
+        <button md-menu-item [class.btn-success]="isCopied" type="button" ngxClipboard [cbContent]="text" (cbOnSuccess)="isCopied = true"><md-icon>link</md-icon>Copy Link</button>
+        <button *ngIf="post?.author?.user == userID" md-menu-item color="warn" (click)="deletePost()"><md-icon>delete</md-icon>Delete Post</button>
+        <button *ngIf="!(post?.author?.user == userID)" md-menu-item (click)="openDialog(post, null, typeOfReport.Post)"><md-icon>flag</md-icon>Flag Post</button>
+      </md-menu>
+    </div>
+    <br>
+  </md-card>
     <md-input-container>
       <textarea mdInput name="comment" rows="3" cols="40" type="text" name="post" [(ngModel)]="model.comment" #comment="ngModel" placeholder="Post a Comment"></textarea>
     </md-input-container>
@@ -28,12 +36,18 @@
   <md-list>
     <div *ngFor="let comment of post?.comments">
       <md-card class="comment-card">
-        <div *ngIf="comment.author?.user == userID" class="deleteButtons"><button md-button color="warn" (click)="deleteComment(comment)"><i class="material-icons">delete</i></button></div>
+        <div class="commentEditing">
+        <button md-icon-button [mdMenuTriggerFor]="appMenu"><i class="material-icons">more_vert</i></button>
+          <md-menu #appMenu="mdMenu">
+            <button *ngIf="comment.author?.user == userID" md-menu-item color="warn" (click)="deleteComment(comment)"><md-icon>delete</md-icon>Delete Comment</button>
+            <button *ngIf="!(comment.author?.user == userID)" md-menu-item (click)="openDialog(post, comment, typeOfReport.Comment)"><md-icon>flag</md-icon>Flag Comment</button>
+          </md-menu>
+        </div>
         <md-card-content>
           <div markdown-to-html [data]="comment.text"></div>
         </md-card-content>
 
-        <md-card-header><small><i><a routerLink="/user/{{comment.author.user}}" routerLinkActive="active">{{comment.author.name}}</a>  | {{comment.created}}</i></small></md-card-header>
+        <md-card-header><small class="dateText"><i><a routerLink="/user/{{comment.author.user}}" routerLinkActive="active">{{comment.author.name}}</a>  | {{comment.created}}</i></small></md-card-header>
       </md-card>
     </div>
   </md-list>

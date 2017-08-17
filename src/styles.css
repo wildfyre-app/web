@@ -1,136 +1,12 @@
 /* You can add global styles to this file, and also import other style files */
 
-.help-block {
-  font-size: 12px;
-}
-
-.alert.alert-info {
-  width: 100%;
-  margin: auto;
-  text-align: center;
-}
-
-.mainText {
-  font-size: 200%;
-  text-align: center;
-  margin: 0 auto;
-}
-
-span {
-  display: block;
-   height: 100%;
-   margin: 0 auto;
-}
-
-h1, h2 {
-  text-align: center;
-}
-
-.example-card {
-  margin-top: 5%;
-  margin-bottom: 5%;
-  margin-right: 5%;
-  margin-left: 5%;
-  word-wrap: break-word;
-  background-color: #ed763e;
-}
-
-md-card#404page.mat-card {-
-  margin-top: 1%;
-  margin-bottom: 1%;
-  margin-right: 1%;
-  margin-left: 1%;
-}
-
-.comment-card {
-  margin-top: 1%;
-  margin-bottom: 1%;
-  margin-right: 1%;
-  margin-left: 1%;
-}
-
-.mat-tab-links {
-  text-align: center;
+a {
+  color: #b54710;
 }
 
 a.mat-tab-link {
     min-width: 16%;
     color: black;
-}
-
-.form, .form-group {
-  text-align: center;
-}
-
-.logo {
-  display: block;
-  margin: auto;
-  width: 40%;
-}
-
-.alert-info {
-  color: #ffffff;
-  background-color: #4f5b62;
-  border-color: #000a12;
-  margin-left: 30%;
-  margin-right: 30%;
-}
-
-#captcha {
-  margin: 0 auto;
-  width: 304px;
-}
-
-#toggle {
-  text-align: center;
-}
-
-a {
-  color: #b54710;
-}
-
-ul {
-  list-style: none;
-}
-
-.mat-raised-button:hover {
-  background-color: #4f5b62;
-  z-index:1000;
-  box-shadow:rgba(0, 0, 0, 0.3) 0 16px 16px 0;
-  -webkit-box-shadow:rgba(0, 0, 0, 0.3) 0 16px 16px 0;
-  -moz-box-shadow:rgba(0, 0, 0, 0.3) 0 16px 16px 0;
-}
-
-.example-card.mat-card {
-  background-color: #EEEEEE;
-}
-
-.mat-button {
-  word-wrap: break-word;
-}
-
-md-spinner {
-  margin:0 auto;
-}
-
-#userID {
-  float: right;
-  color: #eceff1;
-}
-
-#editIcon, #clearIcon, #checkIcon {
-  float: right;
-}
-
-.hideMeClass {
-  display: none;
-}
-
- .spreadButtons {
-   display: flex;
-  justify-content: center;
-  width: 49%;
-  text-align: center;
 }
 
 button[type="submit"] {
@@ -144,16 +20,24 @@ button[type="submit"]:hover {
     color: white;
 }
 
-.postEditing {
-  display: flex;
+div.mat-slide-toggle-bar {
+  z-index: -1;
 }
 
-p {
+h1, h2 {
+  text-align: center;
+}
+
+img {
+  height: 50%;
+  width: 50%;
+}
+
+markdown-to-html {
     display: block;
     font-family: Arial, Helvetica, sans-serif;
     padding: 1px;
     margin: 0 0 0px;
-    font-size: 17px;
     line-height: 1;
     color: black;
     word-break: break-word;
@@ -168,9 +52,58 @@ markdown-to-html.p {
   overflow: hidden;
 }
 
-img {
-  height: 100%;
+md-card#404page.mat-card {-
+  margin-top: 1%;
+  margin-bottom: 1%;
+  margin-right: 1%;
+  margin-left: 1%;
+}
+
+md-spinner {
+  margin:0 auto;
+}
+
+p {
+  font-size: 100%;
+}
+
+span {
+  display: block;
+   height: 100%;
+   margin: 0 auto;
+}
+
+ul {
+  list-style: none;
+}
+
+.alert.alert-info {
   width: 100%;
+  margin: auto;
+  text-align: center;
+}
+
+.alert-info {
+  color: #ffffff;
+  background-color: #4f5b62;
+  border-color: #000a12;
+  margin-left: 30%;
+  margin-right: 30%;
+}
+
+.comment-card {
+  margin-top: 1%;
+  margin-bottom: 1%;
+  margin-right: 1%;
+  margin-left: 1%;
+}
+
+.commentEditing {
+  float: right;
+}
+
+.dateText {
+  font-size: 80%;
 }
 
 .deleteButtons {
@@ -180,8 +113,88 @@ img {
   width: 100px;
 }
 
+.example-card {
+  margin-top: 5%;
+  margin-bottom: 5%;
+  margin-right: 5%;
+  margin-left: 5%;
+  word-wrap: break-word;
+  background-color: #ed763e;
+}
+
+.example-card.mat-card {
+  background-color: #EEEEEE;
+}
+
+.form, .form-group {
+  text-align: center;
+}
+
+.help-block {
+  font-size: 12px;
+}
+
+.hideMeClass {
+  display: none;
+}
+
+.logo {
+  display: block;
+  margin: auto;
+  width: 40%;
+}
+
+.mainText {
+  font-size: 110%;
+  text-align: center;
+  margin: 0 auto;
+}
+
+.mat-button {
+  word-wrap: break-word;
+}
+
+.mat-raised-button:hover {
+  background-color: #4f5b62;
+  z-index:1000;
+  box-shadow:rgba(0, 0, 0, 0.3) 0 16px 16px 0;
+}
+
+.mat-tab-links {
+  text-align: center;
+}
+
+.mobileButtons {
+  color: white;
+}
+
 .notifCount {
   float: left;
+}
+
+.postEditing {
+  display: flex;
+  float: right;
+}
+
+.radio-group {
+  display: grid;
+}
+
+.spreadButtons {
+  display: flex;
+  justify-content: center;
+  width: 49%;
+  text-align: center;
+}
+
+#captcha {
+  margin: 0 auto;
+  width: 304px;
+}
+
+#checkIcon, #clearIcon, #editIcon {
+  float: right;
 }
 
 #mobileNav {
@@ -190,12 +203,22 @@ img {
   background-color: #263238;
 }
 
-.mobileButtons {
-  color: white;
+#toggle {
+  text-align: center;
+}
+
+#userID {
+  float: right;
+  color: #eceff1;
 }
 
 @media (max-width: 640px) {
     /*applied if browser window width is less than or equal to 600px*/
+    .icons {
+      height: 5%;
+      width: 5%;
+    }
+
     #navB {
         display: none;
     }
@@ -205,23 +228,18 @@ img {
       bottom: -1px;
       width: 100%;
       float: left;
-      z-index: 100000000000;
-    }
-
-    .icons {
-      height: 5%;
-      width: 5%;
+      z-index: 1;
     }
 }
 
 @media (min-width: 641px) {
     /*applied if browser window width is greater than 600px*/
-    #navBMobile {
-        display: none;
-    }
-
     .icons {
       height: 2%;
       width: 2%;
+    }
+
+    #navBMobile {
+        display: none;
     }
 }

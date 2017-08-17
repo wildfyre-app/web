@@ -1,4 +1,4 @@
-import {Author} from './index';
+import {Author} from './author';
 
 export class Comment {
   public created: Date;

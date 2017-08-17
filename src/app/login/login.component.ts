@@ -1,8 +1,7 @@
 ﻿import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-
-import { AuthenticationService } from '../_services/index';
-import { AuthError } from '../_models';
+import { AuthenticationService } from '../_services/authentication.service';
+import { AuthError } from '../_models/auth';
 
 @Component({
   templateUrl: 'login.component.html'

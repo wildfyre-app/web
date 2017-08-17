@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Response } from '@angular/http';
 import { Observable } from 'rxjs';
-import { HttpService } from '.';
-import { Area, Reputation } from '../_models';
+import { HttpService } from './http.service';
+import { Area } from '../_models/area';
+import { Reputation } from '../_models/reputation';
 
 @Injectable()
 export class AreaService {

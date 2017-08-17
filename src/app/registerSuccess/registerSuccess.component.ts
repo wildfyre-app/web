@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthenticationService, RegistrationService } from '../_services/index';
+import { AuthenticationService } from '../_services/authentication.service';
+import { RegistrationService } from '../_services/registration.service';
 
 @Component({
   templateUrl: 'registerSuccess.component.html'

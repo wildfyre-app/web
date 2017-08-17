@@ -1,8 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Response } from '@angular/http';
-import { Post, Area, Author, Comment } from '../_models';
-import { PostService, AreaService, HttpService, ProfileService, CommentService} from '../_services';
+import { Post } from '../_models/post';
+import { Area } from '../_models/area';
+import { Author } from '../_models/author';
+import { Comment } from '../_models/comment';
+import { HttpService } from '../_services/http.service';
+import { AreaService } from '../_services/area.service';
+import { CommentService } from '../_services/comment.service';
+import { FlagService } from '../_services/flag.service';
+import { PostService } from '../_services/post.service';
+import { ProfileService } from '../_services/profile.service';
 
 @Component({
   templateUrl: 'postView.component.html',
@@ -19,6 +27,8 @@ export class PostViewComponent implements OnInit {
   isCopied = false;
   text = 'https://client.wildfyre.net/';
   userID: number;
+  private typeOfReport = TypeOfReport;
+
 
   constructor(
     private postService: PostService,
@@ -27,13 +37,19 @@ export class PostViewComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private profileService: ProfileService,
-    private commentService: CommentService
+    private commentService: CommentService,
+    private flagService: FlagService
   ) {
     this.checked = this.areaService.isAreaChecked;
   }
 
   ngOnInit() {
     document.getElementById('navB').style.display = 'none';
+
+    let currentUrlArea: string = this.router.url;
+    currentUrlArea = currentUrlArea.replace(currentUrlArea.substring(0, 7), '');
+    currentUrlArea = currentUrlArea.substring(0, currentUrlArea.indexOf('/'));
+    this.areaService.currentAreaName = currentUrlArea;
 
     this.profileService.getSelf()
       .subscribe( (author: Author) => {
@@ -52,6 +68,20 @@ export class PostViewComponent implements OnInit {
             this.text = 'https://client.wildfyre.net/areas/' + this.areaService.currentAreaName + '/' + post.id;
         });
     });
+  }
+
+  openDialog(post: Post, comment: Comment, typeOfFlagReport: TypeOfReport) {
+    this.flagService.currentComment = comment;
+    this.flagService.currentPost = post;
+
+    switch (typeOfFlagReport) {
+      case TypeOfReport.Post:
+        this.flagService.openDialog(TypeOfReport.Post);
+        break;
+      case TypeOfReport.Comment:
+        this.flagService.openDialog(TypeOfReport.Comment);
+        break;
+    }
   }
 
   postComment() {
@@ -79,5 +109,9 @@ export class PostViewComponent implements OnInit {
     this.postService.deletePost(this.areaService.currentAreaName, this.post);
     this.router.navigateByUrl('');
   }
+}
 
+enum TypeOfReport {
+  Post,
+  Comment
 }

@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Response } from '@angular/http';
 import { Observable } from 'rxjs';
-import { HttpService } from './index';
-import { Author, AuthorError } from '../_models/index';
+import { HttpService } from './http.service';
+import { Author, AuthorError } from '../_models/author';
 
 @Injectable()
 export class ProfileService {
