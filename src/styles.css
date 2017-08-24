@@ -157,3 +157,7 @@ pre {
   height: 100px;
   width: 100px;
 }
+
+.notifCount {
+  float: left;
+}

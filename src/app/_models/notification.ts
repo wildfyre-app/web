@@ -1,18 +1,18 @@
+import {Post} from './';
+
 export class Notification {
   static parse(obj: any) {
     return new Notification(
       obj.area,
       obj.post,
-      obj.comment,
-      obj.created
+      obj.comments,
     );
   }
 
   constructor(
     public area: string,
-    public post: number,
-    public comment: number,
-    public created: string
+    public post: Post,
+    public comments: number[]
   ) { }
 
   getError(): null {

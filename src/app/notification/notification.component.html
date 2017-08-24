@@ -1,10 +1,12 @@
 <md-card class="example-card">
-  <md-card>
   <div *ngFor="let notification of notifications">
-    <md-card-content>
-      <button type="submit" md-raised-button (click)="goto(notification.area, notification.post)">{{notification.area}} | {{notification.post}} | {{notification.comment}} | {{notification.created}}</button>
-      <hr>
-    </md-card-content>
+    <button type="submit" md-raised-button (click)="goto(notification.area, notification.post.id)">
+      <div class="notifCount">
+        <h2>{{notification.comments.length}}</h2>
+      </div>
+      {{notification.post.text | slice:0:31}}<ng-container *ngIf="notification.post.text.length > 32">…</ng-container>
+      <br>
+      –{{notification.post.author.name}}
+    </button>
   </div>
-  </md-card>
 </md-card>
