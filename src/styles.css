@@ -148,7 +148,7 @@ button[type="submit"]:hover {
   display: flex;
 }
 
-pre {
+markdown {
     display: block;
     font-family: Arial, Helvetica, sans-serif;
     padding: 1px;

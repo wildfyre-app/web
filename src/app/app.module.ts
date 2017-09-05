@@ -27,6 +27,7 @@ import { Component404Component } from './404component';
 import { RegisterSuccessComponent } from './registerSuccess';
 import { ProfileViewComponent } from './profileView';
 import { ClipboardModule } from 'ngx-clipboard';
+import { MarkdownModule } from 'angular2-markdown';
 
 @NgModule({
     imports: [
@@ -46,6 +47,7 @@ import { ClipboardModule } from 'ngx-clipboard';
         [ReCaptchaModule],
         [ClipboardModule],
 
+        MarkdownModule.forRoot(),
         Angulartics2Module.forRoot([ Angulartics2Piwik ])
     ],
     declarations: [
