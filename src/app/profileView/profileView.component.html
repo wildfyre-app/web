@@ -1,16 +1,14 @@
 <md-card class="example-card">
-  <div *ngIf="author">
   <md-card>
     <button md-button (click)="back()"><i class="material-icons">arrow_back</i></button>
     <md-card-content>
       <h2>{{author?.name}}</h2>
     </md-card-content>
-    Bio: <markdown>{{author?.bio}}</markdown>
+    Bio: <pre>{{author?.bio}}</pre>
     <p>{{author?.avatar}}</p>
     <div class="box" *ngIf="banned">
     <p>You are currently banned</p>
   </div>
 </md-card>
-</div>
 <div id="userID">ID: {{author?.user}}</div>
 </md-card>

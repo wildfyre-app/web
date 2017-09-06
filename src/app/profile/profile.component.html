@@ -7,7 +7,7 @@
     <br/>
     <div class="box" *ngIf="!edit">
       <button *ngIf="self" md-button id="editIcon" type="button" (click)="editProfile()"><i class="material-icons">edit</i></button>
-      Bio: <markdown>{{author?.bio}}</markdown>
+      Bio: <pre>{{author?.bio}}</pre>
     </div>
     <div class="box" *ngIf="edit">
       <button md-button id="clearIcon"(click)="cancelEditProfile()"><i class="material-icons">clear</i></button>

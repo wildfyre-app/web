@@ -3,7 +3,6 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Response } from '@angular/http';
 import { Post, Area, Author, Comment } from '../_models';
 import { PostService, AreaService, HttpService, ProfileService, CommentService} from '../_services';
-import { MarkdownModule } from 'angular2-markdown';
 
 @Component({
   templateUrl: 'postView.component.html',

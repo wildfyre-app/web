@@ -1,10 +1,9 @@
 <md-card class="example-card">
-  <div *ngIf="post">
   <md-card>
     <button md-button (click)="back()"><i class="material-icons">arrow_back</i></button>
     <div *ngIf="post?.author?.user == userID" class="deleteButtons"><button md-button color="warn" (click)="deletePost()"><i class="material-icons">delete</i></button></div>
   <md-card-content>
-    <span class="mainText"><markdown>{{post?.text}}</markdown></span>
+    <span class="mainText"><pre>{{post?.text}}</pre></span>
   </md-card-content>
   <md-card-header>
     <small><i><a routerLink="/user/{{post?.author?.user}}" routerLinkActive="active">{{post?.author?.name}}</a> | {{post?.created}}</i></small>
@@ -31,12 +30,11 @@
       <md-card class="comment-card">
         <div *ngIf="comment.author?.user == userID" class="deleteButtons"><button md-button color="warn" (click)="deleteComment(comment)"><i class="material-icons">delete</i></button></div>
         <md-card-content>
-          <markdown>{{comment.text}}</markdown>
+          <pre>{{comment.text}}</pre>
         </md-card-content>
 
         <md-card-header><small><i><a routerLink="/user/{{comment.author.user}}" routerLinkActive="active">{{comment.author.name}}</a>  | {{comment.created}}</i></small></md-card-header>
       </md-card>
     </div>
   </md-list>
-  </div>
 </md-card>
