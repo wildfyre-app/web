@@ -148,7 +148,7 @@ button[type="submit"]:hover {
   display: flex;
 }
 
-markdown-to-html {
+p {
     display: block;
     font-family: Arial, Helvetica, sans-serif;
     padding: 1px;
@@ -169,8 +169,8 @@ markdown-to-html.p {
 }
 
 img {
-  height: 50%;
-  width: 50%;
+  height: 100%;
+  width: 100%;
 }
 
 .deleteButtons {
