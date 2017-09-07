@@ -4,7 +4,7 @@
     <button class="spreadButtons" (click)="spread(true)" md-raised-button color="primary"><font color="#000000"><b>Ignite</b></font></button>
     <md-card class="content">
       <md-card-content>
-        <span class="mainText"><pre>{{post.text}}</pre></span>
+        <span class="mainText"><div markdown-to-html [data]="post.text"></div></span>
       </md-card-content>
 
       <md-card-header>
@@ -33,7 +33,7 @@
         <md-card class="comment-card">
           <div *ngIf="comment.author?.user == userID" class="deleteButtons"><button md-button color="warn" (click)="deleteComment(comment)"><i class="material-icons">delete</i></button></div>
           <md-card-content>
-            <pre>{{comment.text}}</pre>
+            <div markdown-to-html [data]="comment.text"></div>
           </md-card-content>
 
           <md-card-header><small><i><a routerLink="/user/{{comment.author.user}}" routerLinkActive="active">{{comment.author.name}}</a>  | {{comment.created}}</i></small></md-card-header>

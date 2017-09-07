@@ -13,7 +13,9 @@
     "target": "es5",
     "module": "es6",
     "baseUrl": "",
-    "types": []
+    "types": [
+      "prismjs"
+    ]
   },
   "exclude": [
     "test.ts",

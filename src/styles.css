@@ -148,7 +148,7 @@ button[type="submit"]:hover {
   display: flex;
 }
 
-pre {
+markdown-to-html {
     display: block;
     font-family: Arial, Helvetica, sans-serif;
     padding: 1px;
@@ -162,6 +162,15 @@ pre {
     border: 0px solid #ccc;
     border-radius: 0px;
     white-space: pre-wrap;       /* Since CSS 2.1 */
+}
+
+markdown-to-html.p {
+  overflow: hidden;
+}
+
+img {
+  height: 50%;
+  width: 50%;
 }
 
 .deleteButtons {
@@ -190,6 +199,7 @@ pre {
     #navB {
         display: none;
     }
+
     #navBMobile {
       position: fixed;
       bottom: -1px;
@@ -197,11 +207,21 @@ pre {
       float: left;
       z-index: 100000000000;
     }
+
+    .icons {
+      height: 5%;
+      width: 5%;
+    }
 }
 
 @media (min-width: 641px) {
     /*applied if browser window width is greater than 600px*/
     #navBMobile {
         display: none;
+    }
+
+    .icons {
+      height: 2%;
+      width: 2%;
     }
 }
