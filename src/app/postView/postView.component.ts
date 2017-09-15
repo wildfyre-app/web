@@ -11,6 +11,8 @@ import { CommentService } from '../_services/comment.service';
 import { FlagService } from '../_services/flag.service';
 import { PostService } from '../_services/post.service';
 import { ProfileService } from '../_services/profile.service';
+import { RouteService } from '../_services/route.service';
+import { AuthenticationService } from '../_services/authentication.service';
 
 @Component({
   templateUrl: 'postView.component.html',
@@ -34,17 +36,22 @@ export class PostViewComponent implements OnInit {
     private postService: PostService,
     private areaService: AreaService,
     private httpService: HttpService,
+    private routeService: RouteService,
     private route: ActivatedRoute,
     private router: Router,
     private profileService: ProfileService,
     private commentService: CommentService,
-    private flagService: FlagService
+    private flagService: FlagService,
+    private authenticationService: AuthenticationService
   ) {
     this.checked = this.areaService.isAreaChecked;
   }
 
   ngOnInit() {
-    document.getElementById('navB').style.display = 'none';
+    if (!this.authenticationService.token) {
+      document.getElementById('navB').style.display = 'none';
+      document.getElementById('navBMobile').style.display = 'none';
+    }
 
     let currentUrlArea: string = this.router.url;
     currentUrlArea = currentUrlArea.replace(currentUrlArea.substring(0, 7), '');
@@ -89,8 +96,17 @@ export class PostViewComponent implements OnInit {
     this.model.comment = '';
   }
 
+  gotoUser(user: string) {
+    this.routeService.addNextRoute(this.router.url);
+    this.router.navigateByUrl('/user/' + user);
+  }
+
   back() {
-    this.router.navigateByUrl('');
+    if (this.routeService.routes.length === 0) {
+      this.router.navigateByUrl('');
+    } else {
+      this.router.navigateByUrl(this.routeService.getNextRoute());
+    }
   }
 
   subscribe(s: boolean) {

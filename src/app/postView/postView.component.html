@@ -5,7 +5,7 @@
       <span class="mainText"><div markdown-to-html [data]="post?.text"></div></span>
     </md-card-content>
     <md-card-header>
-      <small><i><a routerLink="/user/{{post?.author?.user}}" routerLinkActive="active">{{post?.author?.name}}</a> | {{post?.created}}</i></small>
+      <small><i><a (click)="gotoUser(post?.author?.user)" routerLinkActive="active">{{post?.author?.name}}</a> | {{post?.created}}</i></small>
     </md-card-header>
     <div class="postEditing">
 
@@ -47,7 +47,7 @@
           <div markdown-to-html [data]="comment.text"></div>
         </md-card-content>
 
-        <md-card-header><small class="dateText"><i><a routerLink="/user/{{comment.author.user}}" routerLinkActive="active">{{comment.author.name}}</a>  | {{comment.created}}</i></small></md-card-header>
+        <md-card-header><small class="dateText"><i><a (click)="gotoUser(comment.author.user)" routerLinkActive="active">{{comment.author.name}}</a>  | {{comment.created}}</i></small></md-card-header>
       </md-card>
     </div>
   </md-list>

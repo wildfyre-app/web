@@ -1,4 +1,5 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Response } from '@angular/http';
 import { Post } from '../_models/post';
 import { Area } from '../_models/area';
@@ -10,6 +11,7 @@ import { CommentService } from '../_services/comment.service';
 import { FlagService } from '../_services/flag.service';
 import { PostService } from '../_services/post.service';
 import { ProfileService } from '../_services/profile.service';
+import { RouteService } from '../_services/route.service';
 
 @Component({
   templateUrl: 'home.component.html',
@@ -31,7 +33,10 @@ export class HomeComponent implements OnInit {
     private profileService: ProfileService,
     private commentService: CommentService,
     private cdRef: ChangeDetectorRef,
-    private flagService: FlagService
+    private flagService: FlagService,
+    private route: ActivatedRoute,
+    private router: Router,
+    private routeService: RouteService
   ) {
     this.checked = this.areaService.isAreaChecked;
 
@@ -42,6 +47,7 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.cdRef.detectChanges();
     document.getElementById('navB').style.display = '';
     document.getElementById('navBMobile').style.display = '';
 
@@ -144,6 +150,12 @@ export class HomeComponent implements OnInit {
       this.post,
       c
     );
+  }
+
+
+  gotoUser(user: string) {
+    this.routeService.addNextRoute(this.router.url);
+    this.router.navigateByUrl('/user/' + user);
   }
 }
 

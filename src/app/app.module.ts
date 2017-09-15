@@ -21,6 +21,7 @@ import { NotificationService } from './_services/notification.service';
 import { PostService } from './_services/post.service';
 import { ProfileService } from './_services/profile.service';
 import { RegistrationService } from './_services/registration.service';
+import { RouteService } from './_services/route.service';
 import { LoginComponent } from './login';
 import { HomeComponent } from './home';
 import { ProfileComponent } from './profile';
@@ -90,11 +91,11 @@ import { MarkdownToHtmlModule } from 'ng2-markdown-to-html';
         ProfileService,
         RegistrationService,
         NavBarService,
-        NotificationService
+        NotificationService,
+        RouteService
     ],
     entryComponents: [
-      FlagDialogComponent
-    ],
+      FlagDialogComponent    ],
     bootstrap: [AppComponent]
 })
 export class AppModule { }
