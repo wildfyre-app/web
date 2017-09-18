@@ -33,7 +33,7 @@
         <textarea mdInput name="comment" rows="3" cols="40" type="text" name="post" [(ngModel)]="model.comment" #comment="ngModel" placeholder="Post a Comment"></textarea>
       </md-input-container>
       <br>
-      <button md-raised-button color="accent" [disabled]="loading" (click)="postComment()"><b>Comment</b></button>
+      <button class="wideButtons" md-raised-button color="accent" [disabled]="loading" (click)="postComment()"><b>Comment</b></button>
 
     <md-list>
       <div *ngFor="let comment of post?.comments">

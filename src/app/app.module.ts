@@ -25,7 +25,7 @@ import { RouteService } from './_services/route.service';
 import { LoginComponent } from './login';
 import { HomeComponent } from './home';
 import { ProfileComponent } from './profile';
-import { CreatePostComponent } from './createPost';
+import { CreatePostComponent, PictureDialogComponent, YouTubeDialogComponent } from './createPost';
 import { UserPostsComponent } from './userPosts';
 import { RegisterComponent } from './register';
 import { NotificationComponent } from './notification';
@@ -77,7 +77,9 @@ import { MarkedPipe } from './marked.pipe';
         RegisterSuccessComponent,
         ProfileViewComponent,
         FlagDialogComponent,
-        MarkedPipe
+        MarkedPipe,
+        PictureDialogComponent,
+        YouTubeDialogComponent
     ],
     providers: [
         AuthenticationService,
@@ -95,7 +97,10 @@ import { MarkedPipe } from './marked.pipe';
         RouteService
     ],
     entryComponents: [
-      FlagDialogComponent    ],
+      FlagDialogComponent,
+      PictureDialogComponent,
+      YouTubeDialogComponent
+    ],
     bootstrap: [AppComponent]
 })
 export class AppModule { }
