@@ -13,11 +13,11 @@
     <br/>
 
     <div class="box" *ngIf="!bioEdit">
-    Bio: <div markdown-to-html [data]="author?.bio"></div>
+    Bio: <span [innerHTML]="author?.bio | marked"></span>
     </div><br>
 
     <div class="box" *ngIf="!emailEdit">
-    Email: <div markdown-to-html [data]="account?.email"></div>
+    Email: <span [innerHTML]="account?.email | marked"></span>
     </div>
 
     <br>

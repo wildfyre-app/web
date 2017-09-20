@@ -4,7 +4,7 @@
     <button class="spreadButtons" (click)="spread(true)" md-raised-button color="primary"><font color="#000000"><b>Ignite</b></font></button>
     <md-card class="content">
       <md-card-content>
-        <span class="mainText"><div markdown-to-html [data]="post.text"></div></span>
+        <span class="mainText" [innerHTML]="post.text | marked"></span>
       </md-card-content>
 
       <md-card-header>
@@ -45,9 +45,7 @@
               <button *ngIf="!(comment.author?.user == userID)" md-menu-item (click)="openDialog(post, comment, typeOfReport.Comment)"><md-icon>flag</md-icon>Flag Comment</button>
             </md-menu>
           </div>
-          <md-card-content>
-            <div markdown-to-html [data]="comment.text"></div>
-          </md-card-content>
+          <md-card-content [innerHTML]="comment.text | marked"></md-card-content>
           <md-card-header><small><i><a class="dateText" (click)="gotoUser(comment.author.user)" routerLinkActive="active">{{comment.author.name}}</a>  | {{comment.created}}</i></small></md-card-header>
         </md-card>
       </div>

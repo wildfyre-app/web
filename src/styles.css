@@ -33,25 +33,6 @@ img {
   width: 50%;
 }
 
-markdown-to-html {
-    display: block;
-    font-family: Arial, Helvetica, sans-serif;
-    padding: 1px;
-    margin: 0 0 0px;
-    line-height: 1;
-    color: black;
-    word-break: break-word;
-    word-wrap: break-word;
-    background-color: white;
-    border: 0px solid #ccc;
-    border-radius: 0px;
-    white-space: pre-wrap;       /* Since CSS 2.1 */
-}
-
-markdown-to-html.p {
-  overflow: hidden;
-}
-
 md-card#404page.mat-card {-
   margin-top: 1%;
   margin-bottom: 1%;
@@ -173,6 +154,25 @@ ul {
 
 .mobileButtons {
   color: white;
+}
+
+.markdown {
+    display: block;
+    font-family: Arial, Helvetica, sans-serif;
+    padding: 1px;
+    margin: 0 0 0px;
+    line-height: 1;
+    color: black;
+    word-break: break-word;
+    word-wrap: break-word;
+    background-color: white;
+    border: 0px solid #ccc;
+    border-radius: 0px;
+    white-space: pre-wrap;       /* Since CSS 2.1 */
+}
+
+.markdown.p {
+  overflow: hidden;
 }
 
 .notifCount {

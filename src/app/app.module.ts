@@ -37,7 +37,7 @@ import { Component404Component } from './404component';
 import { RegisterSuccessComponent } from './registerSuccess';
 import { ProfileViewComponent } from './profileView';
 import { ClipboardModule } from 'ngx-clipboard';
-import { MarkdownToHtmlModule } from 'ng2-markdown-to-html';
+import { MarkedPipe } from './marked.pipe';
 
 @NgModule({
     imports: [
@@ -60,7 +60,6 @@ import { MarkdownToHtmlModule } from 'ng2-markdown-to-html';
         ReCaptchaModule,
         ClipboardModule,
 
-        MarkdownToHtmlModule.forRoot(),
         Angulartics2Module.forRoot([ Angulartics2Piwik ])
     ],
     declarations: [
@@ -77,7 +76,8 @@ import { MarkdownToHtmlModule } from 'ng2-markdown-to-html';
         Component404Component,
         RegisterSuccessComponent,
         ProfileViewComponent,
-        FlagDialogComponent
+        FlagDialogComponent,
+        MarkedPipe
     ],
     providers: [
         AuthenticationService,
