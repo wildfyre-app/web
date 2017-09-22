@@ -1,7 +1,12 @@
 <md-card class="example-card">
+  <div *ngIf="post.id !== 0">
+  <button class="spreadButtons" (click)="spread(false)" md-raised-button color="accent"><b>Extinguish</b></button>
+  <button class="spreadButtons" (click)="spread(true)" md-raised-button color="primary"><font color="#000000"><b>Ignite</b></font></button>
+  </div>
+  <div *ngIf="post.id === 0">
+    <button class="refreshButton" md-button (click)="ngOnInit()">Refresh <i class="material-icons">refresh</i></button>
+  </div>
   <div *ngIf="post">
-    <button class="spreadButtons" (click)="spread(false)" md-raised-button color="accent"><b>Extinguish</b></button>
-    <button class="spreadButtons" (click)="spread(true)" md-raised-button color="primary"><font color="#000000"><b>Ignite</b></font></button>
     <md-card class="content">
       <md-card-content>
         <span class="mainText" [innerHTML]="post.text | marked"></span>

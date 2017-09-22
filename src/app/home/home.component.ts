@@ -18,10 +18,13 @@ import { RouteService } from '../_services/route.service';
 })
 export class HomeComponent implements OnInit {
   private typeOfReport = TypeOfReport;
+  systemAuthor: Author = new Author(375, 'WildFyre', '', '', false);
+  fakePost: Post = new Post(0, this.systemAuthor, false,
+    Date(), false, 'No more posts in this area, try creating one?', []);
   checked: boolean;
   isCopied = false;
   model: any = {};
-  post: Post;
+  post: Post = this.fakePost;
   rep: Reputation;
   text = 'https://client.wildfyre.net/';
   userID: number;
@@ -51,12 +54,17 @@ export class HomeComponent implements OnInit {
     document.getElementById('navBMobile').style.display = '';
 
     this.postService.getNextPost(this.areaService.currentAreaName)
-      .subscribe((post: Post) => {
-        this.post = post;
-        if (post) {
-          this.text = 'https://client.wildfyre.net/areas/' + this.areaService.currentAreaName + '/' + post.id;
+      .subscribe(nextPost => {
+        if (nextPost) {
+          this.text = 'https://client.wildfyre.net/areas/' + this.areaService.currentAreaName + '/' + nextPost.id;
+          this.post = nextPost;
+          this.cdRef.detectChanges();
         } else {
           this.text = 'https://client.wildfyre.net';
+          this.fakePost = new Post(0, this.systemAuthor, false,
+            Date(), false, 'No more posts in this area, try creating one?', []);
+          this.post = this.fakePost;
+          this.cdRef.detectChanges();
         }
       });
 
@@ -80,6 +88,7 @@ export class HomeComponent implements OnInit {
   }
 
   onChange(value: any) {
+    this.cdRef.detectChanges();
     if (value.checked === true) {
       this.areaService.isAreaChecked = true;
       this.areaService.currentAreaName = 'information';
@@ -89,13 +98,17 @@ export class HomeComponent implements OnInit {
     }
 
     this.postService.getNextPost(this.areaService.currentAreaName)
-      .subscribe((post: Post) => {
-        this.post = post;
-        this.cdRef.detectChanges();
-        if (post) {
-          this.text = 'https://client.wildfyre.net/areas/' + this.areaService.currentAreaName + '/' + post.id;
+      .subscribe(nextPost => {
+        if (nextPost) {
+          this.text = 'https://client.wildfyre.net/areas/' + this.areaService.currentAreaName + '/' + nextPost.id;
+          this.post = nextPost;
+          this.cdRef.detectChanges();
         } else {
           this.text = 'https://client.wildfyre.net';
+          this.fakePost = new Post(0, this.systemAuthor, false,
+            Date(), false, 'No more posts in this area, try creating one?', []);
+          this.post = this.fakePost;
+          this.cdRef.detectChanges();
         }
       });
 
@@ -129,21 +142,25 @@ export class HomeComponent implements OnInit {
   }
 
   spread(spread: boolean) {
+    this.cdRef.detectChanges();
     this.postService.spread(
       this.areaService.currentAreaName,
       this.post,
       spread
     );
 
-    this.post = null;  // Avoids last post staying long on slow connection
-
     this.postService.getNextPost(this.areaService.currentAreaName)
-      .subscribe((post: Post) => {
-        this.post = post;
-        if (post) {
-          this.text = 'https://client.wildfyre.net/areas/' + this.areaService.currentAreaName + '/' + post.id;
+      .subscribe(nextPost => {
+        if (nextPost) {
+          this.text = 'https://client.wildfyre.net/areas/' + this.areaService.currentAreaName + '/' + nextPost.id;
+          this.post = nextPost;
+          this.cdRef.detectChanges();
         } else {
           this.text = 'https://client.wildfyre.net';
+          this.fakePost = new Post(0, this.systemAuthor, false,
+            Date(), false, 'No more posts in this area, try creating one?', []);
+          this.post = this.fakePost;
+          this.cdRef.detectChanges();
         }
       });
   }

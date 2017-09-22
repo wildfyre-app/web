@@ -11,18 +11,48 @@ import { HttpService } from './http.service';
 
 @Injectable()
 export class PostService {
-  private lowStack: { [area: string]: boolean; } = { }; // low stack on server
-  private posts: { [area: string]: Post[]; } = { };
-  private used: { [area: string]: number[]; } = { };
+  private queuedPosts: { [area: string]: Post[]; } = {};
+  private used: { [area: string]: number[]; } = {};
 
   constructor(
     private httpService: HttpService
   ) { }
 
-  private use(area: string, post: Post) {
-    if (!this.used[area]) { this.used[area] = []; }
-    this.used[area].push(post.id);
-    this.posts[area].splice(this.posts[area].indexOf(post), 1);
+  getNextPost(area: string): Observable<Post> {
+    if (!this.used[area]) {
+      this.used[area] = [];
+    }
+
+    if (!this.queuedPosts[area]) {
+      this.queuedPosts[area] = [];
+    }
+
+    if (this.queuedPosts[area].length !== 0) {
+      // Update stack and return first post
+      const nextPost: Post = this.queuedPosts[area].pop();
+
+      if (this.queuedPosts[area].length < 3) {
+        this.getPosts(area)
+          .subscribe();
+      }
+
+      if (this.used[area].indexOf(nextPost.id) === -1) {
+        this.used[area].push(nextPost.id);
+        return Observable.of(nextPost);
+      } else {
+        return this.getNextPost(area);
+      }
+    } else {
+      // Update queue
+      return this.getPosts(area)
+        .flatMap(result => {
+        if (result !== null) {
+          return this.getNextPost(area);
+        } else {
+          return Observable.of(null);
+        }
+      });
+    }
   }
 
   comment(area: string, post: Post, text: string): Observable<Comment> {
@@ -62,36 +92,12 @@ export class PostService {
           JSON.parse(error._body).non_field_errors,
           JSON.parse(error._body).username
         ));
-      });
-
+});
   }
 
   deletePost(area: string, post: Post) {
     this.httpService.DELETE('/areas/' + area + '/' + post.id + '/')
       .subscribe();
-  }
-
-  getNextPost(area: string): Observable<Post> {
-    if (!(area in this.posts) || this.posts[area].length === 0) {
-      // Update stack and return first post
-      return this.getPosts(area)
-        .map((posts: Post[]) => {
-          if (posts.length === 0) { return null; }
-
-          const post = posts[0];
-          this.use(area, post);
-          return post;
-        });
-    } else {
-      if (this.posts[area].length < 3 && !this.lowStack[area]) {
-        // Stack is low. Update posts but still return form cache
-        this.getPosts(area).subscribe();
-      }
-
-      const post = this.posts[area][0];
-      this.use(area, post);
-      return Observable.of(post);
-    }
   }
 
   getOwnPosts(area: string): Observable<Post[]> {
@@ -112,24 +118,25 @@ export class PostService {
       });
   }
 
-  getPosts(area: string): Observable<Post[]> {
+  private getPosts(area: string): Observable<Post[]> {
     return this.httpService.GET('/areas/' + area + '/')
       .map((response: Response) => {
+
         const posts: Post[] = [];
 
         response.json().forEach((obj: any) => {
-          if (this.used[area] && obj.id in this.used[area]) { return; }
           posts.push(Post.parse(obj));
         });
 
-        // check stack size
-        this.lowStack[area] = posts.length < 5;
-
-        // cache
-        this.posts[area] = posts;
-        return posts;
+        // Cache
+        if (posts.length !== 0) {
+          this.queuedPosts[area] = posts;
+          return posts;
+        } else {
+          return null;
+        }
       });
-  }
+    }
 
   spread(area: string, post: Post, spread: boolean): void {
     const body = {
@@ -137,12 +144,7 @@ export class PostService {
     };
     this.httpService.POST('/areas/' + area +
       '/' + post.id + '/spread/', body)
-        .subscribe(() => {
-          setTimeout(() => {  // Wait five secound because of network latency
-            // Cleanup used array
-            this.used[area].splice(this.used[area].indexOf(post.id), 1);
-          }, 5000);
-        });
+        .subscribe();
   }
 
   subscribe(area: string, post: Post, subscribe: boolean): Observable<void> {
