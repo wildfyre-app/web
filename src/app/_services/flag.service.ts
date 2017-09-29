@@ -1,12 +1,12 @@
 import { Injectable, Component, Inject } from '@angular/core';
-import { Choice } from '../_models/choice';
-import { Post } from '../_models/post';
-import { Comment } from '../_models/comment';
-import { MdSnackBar, MdDialog, MdDialogRef } from '@angular/material';
-import { HttpService } from './http.service';
-import { ReasonService } from './reason.service';
-import { AreaService } from './area.service';
 import { MD_DIALOG_DATA } from '@angular/material';
+import { MdSnackBar, MdDialog, MdDialogRef } from '@angular/material';
+import { AreaService } from './area.service';
+import { Choice } from '../_models/choice';
+import { Comment } from '../_models/comment';
+import { HttpService } from './http.service';
+import { Post } from '../_models/post';
+import { ReasonService } from './reason.service';
 
 @Injectable()
 export class FlagService {
@@ -14,10 +14,10 @@ export class FlagService {
   public currentPost: Post;
 
   constructor(
-    private httpService: HttpService,
-    private reasonService: ReasonService,
+    private dialog: MdDialog,
     private snackBar: MdSnackBar,
-    private dialog: MdDialog
+    private httpService: HttpService,
+    private reasonService: ReasonService
   ) { }
 
   openDialog(typeOfFlagReport: TypeOfReport) {

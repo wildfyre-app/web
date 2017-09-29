@@ -7,10 +7,9 @@ import { NavBarService } from '../_services/navBar.service';
   templateUrl: 'navBar.component.html'
 })
 export class NavBarComponent {
-  routeLinks: any[];
+  activeLinkIndex: number;
   mobileRouteLinks: any[];
-  activeLinkIndex = this.navBarService.getActiveIndex(); ;
-  visible = true;
+  routeLinks: any[];
 
   constructor(
     private router: Router,

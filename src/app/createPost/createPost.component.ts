@@ -1,26 +1,25 @@
 import { Component } from '@angular/core';
 import { MdDialog, MdDialogRef } from '@angular/material';
-import { Author } from '../_models/author';
-import { PostService } from '../_services/post.service';
-import { AreaService } from '../_services/area.service';
 import { Router } from '@angular/router';
+import { Author } from '../_models/author';
 import { PostError } from '../_models/post';
+import { AreaService } from '../_services/area.service';
+import { PostService } from '../_services/post.service';
 
 @Component({
   templateUrl: 'createPost.component.html'
 })
 export class CreatePostComponent {
-  model: any = {};
-  color = 'warn';
   checked: boolean;
-  loading: boolean;
   errors: PostError;
+  loading: boolean;
+  model: any = {};
 
   constructor(
-    private areaService: AreaService,
-    private postService: PostService,
+    private dialog: MdDialog,
     private router: Router,
-    private dialog: MdDialog
+    private areaService: AreaService,
+    private postService: PostService
   ) {
     this.checked = this.areaService.isAreaChecked;
     this.model.card = '';
@@ -57,43 +56,18 @@ export class CreatePostComponent {
       });
   }
 
-  addBold() {
-    this.addLineBreak('**Example**');
-  }
-
-  addItalics() {
-    this.addLineBreak('_Example_');
-  }
-
-  addStrikethrough() {
-    this.addLineBreak('~~Example~~');
-  }
-
-  addUnorderedList() {
-    this.addLineBreak('* Unordered list can use asterisks\n- Or minuses\n+ Or pluses');
-  }
-
-  addOrderedList() {
-    this.addLineBreak('1. First ordered item\n2. Another item\n  * Unordered sub-list.');
-  }
-
   addBlockQoutes() {
     this.addLineBreak('> Blockquote example\n> This line is part of the same quote.\n\nQuote break.\n\n>'
     + ' This is a very long line that will still be quoted properly when it wraps. You can *put* **Markdown** into a blockquote.');
   }
 
+  addBold() {
+    this.addLineBreak('**Example**');
+  }
+
   addCode() {
     this.addLineBreak('Inline `code` has `back-ticks around` it.\n```javascript\n'
     + 'var s = "JavaScript syntax highlighting";\nalert(s);\n```');
-  }
-
-  addTable() {
-    this.addLineBreak('| Tables        | Are           | Cool  |\n| ------------- |:-------------:| -----:|\n'
-    + '| col 3 is      | right-aligned | $1600 |\n| col 2 is      | centered      |   $12 |\n| zebra stripes | are neat      |    $1 |');
-  }
-
-  addHorizontalRule() {
-    this.addLineBreak('---\n');
   }
 
   addHeader(num: number) {
@@ -122,6 +96,31 @@ export class CreatePostComponent {
       this.addLineBreak('###### h6\n');
       break;
       }
+  }
+
+  addHorizontalRule() {
+    this.addLineBreak('---\n');
+  }
+
+  addItalics() {
+    this.addLineBreak('_Example_');
+  }
+
+  addOrderedList() {
+    this.addLineBreak('1. First ordered item\n2. Another item\n  * Unordered sub-list.');
+  }
+
+  addStrikethrough() {
+    this.addLineBreak('~~Example~~');
+  }
+
+  addTable() {
+    this.addLineBreak('| Tables        | Are           | Cool  |\n| ------------- |:-------------:| -----:|\n'
+    + '| col 3 is      | right-aligned | $1600 |\n| col 2 is      | centered      |   $12 |\n| zebra stripes | are neat      |    $1 |');
+  }
+
+  addUnorderedList() {
+    this.addLineBreak('* Unordered list can use asterisks\n- Or minuses\n+ Or pluses');
   }
 
   openPictureDialog() {

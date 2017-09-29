@@ -6,9 +6,9 @@
     </md-card-content>
     Bio: <span [innerHTML]="author?.bio | marked"></span>
     <p>{{author?.avatar}}</p>
-    <div class="box" *ngIf="banned">
-    <p>You are currently banned</p>
-  </div>
-</md-card>
-<div id="userID">ID: {{author?.user}}</div>
+    <div class="box" *ngIf="author?.banned">
+      <p>You are currently banned</p>
+    </div>
+  </md-card>
+  <div id="userID">ID: {{author?.user}}</div>
 </md-card>

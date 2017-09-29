@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
-import { HttpService } from './http.service';
 import { Notification } from '../_models/notification';
+import { HttpService } from './http.service';
 
 @Injectable()
 export class NotificationService {

@@ -10,7 +10,7 @@
       <h2>{{author?.name}}</h2>
     </md-card-content>
     <img *ngIf="author?.avatar" [src]="author?.avatar" alt="Avatar of {{author?.name}}" height="73" width="73" />
-    <br/>
+    <br>
 
     <div class="box" *ngIf="!bioEdit">
     Bio: <span [innerHTML]="author?.bio | marked"></span>
@@ -47,80 +47,77 @@
         </md-input-container>
       </div>
 
-        <div class="form">
-          <button md-raised-button color="accent" (click)="submitEditEmail()" [disabled]="loading">Send Email</button>
-          <md-spinner *ngIf="loading"></md-spinner>
-        </div>
-
+      <div class="form">
+        <button md-raised-button color="accent" (click)="submitEditEmail()" [disabled]="loading">Send Email</button>
+        <md-spinner *ngIf="loading"></md-spinner>
+      </div>
       <br>
     </md-card>
     <br>
     </div>
 
     <div class="box" *ngIf="passwordEdit">
-    <md-card>
-    <button md-button id="clearIcon"(click)="cancelEditPassword()"><i class="material-icons">clear</i></button>
-    <br>
-    <div class="alert alert-info">
-      Passwords must contain at least 8 characters and be alphanumeric (At least 1 letter and 1 number)
-    </div>
-    <div *ngIf="errors && errors._text" class="help-block">
-      <ul *ngFor="let err of errors._text">
-        <li>{{err}}</li>
-      </ul>
-    </div>
-    <form name="form" id="change-password-form" (ngSubmit)="f.form.valid && submitEditPassword()" #f="ngForm" novalidate>
-
-      <div *ngIf="errors && errors.non_field_errors" class="alert alert-danger">
-        <ul *ngFor="let err of errors.non_field_errors">
-          <li>{{err}}</li>
-        </ul>
-      </div>
-
-      <div class="form" [ngClass]="{ 'has-error': f.submitted && (!oldPassword.valid || (errors && errors._oldPassword)) }">
-        <md-input-container>
-          <input mdInput placeholder="Old Password" type="password" name="oldPassword" [(ngModel)]="model.oldPassword" #oldPassword="ngModel" required />
-        </md-input-container>
-        <div *ngIf="f.submitted && !oldPassword.valid" class="help-block">Password is required</div>
-        <div *ngIf="errors && errors._oldPassword" class="help-block">
-          <ul *ngFor="let err of errors._oldPassword">
+      <md-card>
+        <button md-button id="clearIcon"(click)="cancelEditPassword()"><i class="material-icons">clear</i></button>
+        <br>
+        <div class="alert alert-info">
+          Passwords must contain at least 8 characters and be alphanumeric (At least 1 letter and 1 number)
+        </div>
+        <div *ngIf="errors && errors._text" class="help-block">
+          <ul *ngFor="let err of errors._text">
             <li>{{err}}</li>
           </ul>
         </div>
-      </div>
+        <form name="form" id="change-password-form" (ngSubmit)="f.form.valid && submitEditPassword()" #f="ngForm" novalidate>
+          <div *ngIf="errors && errors.non_field_errors" class="alert alert-danger">
+            <ul *ngFor="let err of errors.non_field_errors">
+              <li>{{err}}</li>
+            </ul>
+          </div>
 
-      <div class="form" [ngClass]="{ 'has-error': f.submitted && (!newPassword1.valid || (errors && errors._newPassword1)) }">
-        <md-input-container>
-          <input mdInput placeholder="New Password" type="password" name="newPassword1" [(ngModel)]="model.newPassword1" #newPassword1="ngModel" required />
-        </md-input-container>
-        <div *ngIf="f.submitted && !newPassword1.valid" class="help-block">Password is required</div>
-        <div *ngIf="errors && errors._newPassword1" class="help-block">
-          <ul *ngFor="let err of errors._newPassword1">
-            <li>{{err}}</li>
-          </ul>
-        </div>
-      </div>
+          <div class="form" [ngClass]="{ 'has-error': f.submitted && (!oldPassword.valid || (errors && errors._oldPassword)) }">
+            <md-input-container>
+              <input mdInput placeholder="Old Password" type="password" name="oldPassword" [(ngModel)]="model.oldPassword" #oldPassword="ngModel" required />
+            </md-input-container>
+            <div *ngIf="f.submitted && !oldPassword.valid" class="help-block">Password is required</div>
+            <div *ngIf="errors && errors._oldPassword" class="help-block">
+              <ul *ngFor="let err of errors._oldPassword">
+                <li>{{err}}</li>
+              </ul>
+            </div>
+          </div>
 
-      <div class="form" [ngClass]="{ 'has-error': f.submitted && (!newPassword2.valid || (errors && errors._newPassword2)) }">
-        <md-input-container>
-          <input mdInput placeholder="New Password (repeat)" type="password" name="newPassword2" [(ngModel)]="model.newPassword2" #newPassword2="ngModel" required />
-        </md-input-container>
-        <div *ngIf="f.submitted && !newPassword2.valid" class="help-block">Password is required</div>
-        <div *ngIf="errors && errors._newPassword2" class="help-block">
-          <ul *ngFor="let err of errors._newPassword2">
-            <li>{{err}}</li>
-          </ul>
-        </div>
-      </div>
+          <div class="form" [ngClass]="{ 'has-error': f.submitted && (!newPassword1.valid || (errors && errors._newPassword1)) }">
+            <md-input-container>
+              <input mdInput placeholder="New Password" type="password" name="newPassword1" [(ngModel)]="model.newPassword1" #newPassword1="ngModel" required />
+            </md-input-container>
+            <div *ngIf="f.submitted && !newPassword1.valid" class="help-block">Password is required</div>
+            <div *ngIf="errors && errors._newPassword1" class="help-block">
+              <ul *ngFor="let err of errors._newPassword1">
+                <li>{{err}}</li>
+              </ul>
+            </div>
+          </div>
 
-      <br>
-      <div class="form">
-        <button md-raised-button color="accent" [disabled]="loading">Change Password</button>
-        <md-spinner *ngIf="loading"></md-spinner>
-      </div>
+          <div class="form" [ngClass]="{ 'has-error': f.submitted && (!newPassword2.valid || (errors && errors._newPassword2)) }">
+            <md-input-container>
+              <input mdInput placeholder="New Password (repeat)" type="password" name="newPassword2" [(ngModel)]="model.newPassword2" #newPassword2="ngModel" required />
+            </md-input-container>
+            <div *ngIf="f.submitted && !newPassword2.valid" class="help-block">Password is required</div>
+            <div *ngIf="errors && errors._newPassword2" class="help-block">
+              <ul *ngFor="let err of errors._newPassword2">
+                <li>{{err}}</li>
+              </ul>
+            </div>
+          </div>
 
-    </form>
-    </md-card>
+          <br>
+          <div class="form">
+            <button md-raised-button color="accent" [disabled]="loading">Change Password</button>
+            <md-spinner *ngIf="loading"></md-spinner>
+          </div>
+        </form>
+      </md-card>
     </div>
 
     <div class="box" *ngIf="author?.banned">

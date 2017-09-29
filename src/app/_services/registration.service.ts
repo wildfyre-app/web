@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Response } from '@angular/http';
 import { Observable } from 'rxjs';
-import { HttpService } from './http.service';
+import { Response } from '@angular/http';
 import { Registration, RegistrationError } from '../_models/registration';
+import { HttpService } from './http.service';
 
 @Injectable()
 export class RegistrationService {

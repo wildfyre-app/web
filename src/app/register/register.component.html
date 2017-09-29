@@ -7,13 +7,11 @@
     </div>
     <h2>Register</h2>
     <form name="form" id="signup-form" (ngSubmit)="f.form.valid && register()" #f="ngForm" novalidate>
-
       <div *ngIf="errors && errors.non_field_errors" class="alert alert-danger">
         <ul *ngFor="let err of errors.non_field_errors">
           <li>{{err}}</li>
         </ul>
       </div>
-
 
       <div class="form" [ngClass]="{ 'has-error': f.submitted && (!username.valid || (errors && errors._username)) }">
         <md-input-container>

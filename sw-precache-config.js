@@ -11,5 +11,5 @@ module.exports = {
   runtimeCaching: [{
   urlPattern: /api\.wildfyre\.net/,
   handler: 'networkFirst'
-}]
+  }]
 };

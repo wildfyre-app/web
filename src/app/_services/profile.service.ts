@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Response } from '@angular/http';
 import { Observable } from 'rxjs';
-import { HttpService } from './http.service';
-import { Author, AuthorError } from '../_models/author';
 import { Account, AccountError } from '../_models/account';
+import { Author, AuthorError } from '../_models/author';
+import { HttpService } from './http.service';
 
 @Injectable()
 export class ProfileService {
@@ -12,6 +12,13 @@ export class ProfileService {
   constructor(
     private httpService: HttpService
   ) {}
+
+  getAccount(): Observable<Account> {
+    return this.httpService.GET('/account/')
+      .map((response: Response) => {
+        return Account.parse(response.json());
+      });
+  }
 
   getSelf(): Observable<Author> {
     if (this.self) {
@@ -23,13 +30,6 @@ export class ProfileService {
           return this.self;
         });
     }
-  }
-
-  getAccount(): Observable<Account> {
-    return this.httpService.GET('/account/')
-      .map((response: Response) => {
-        return Account.parse(response.json());
-      });
   }
 
   getUser(id: string): Observable<Author> {
@@ -94,6 +94,4 @@ export class ProfileService {
         ));
       });
   }
-
-
 }

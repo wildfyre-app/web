@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Response } from '@angular/http';
 import { Observable } from 'rxjs';
-import { HttpService } from './http.service';
 import { Comment } from '../_models/comment';
 import { Area } from '../_models/area';
 import { Reputation } from '../_models/reputation';
 import { Post } from '../_models/post';
+import { HttpService } from './http.service';
 
 @Injectable()
 export class CommentService {

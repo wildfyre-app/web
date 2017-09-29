@@ -1,9 +1,9 @@
-import { Injectable } from '@angular/core';
 import { Http, Headers, RequestOptions, Response } from '@angular/http';
-import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Injectable } from '@angular/core';
 import { isDevMode } from '@angular/core';
 import { MdSnackBar } from '@angular/material';
+import { Observable } from 'rxjs';
+import { Router } from '@angular/router';
 import { AuthenticationService } from './authentication.service';
 
 @Injectable()
@@ -21,25 +21,7 @@ export class HttpService {
       this.apiURL = 'http://localhost:8000';
     }
   }
-
-  getOptions(headers?: Headers|null): RequestOptions {
-    headers = headers || new Headers();
-
-    // Set Content-Type to JSON if not alread set
-    if (!headers.has('Content-Type')) {
-      headers.append('Content-Type', 'application/json');
-    }
-
-    // Add Token if available
-    if (this.authenticationService.token != null) {
-      headers.append('Authorization', 'Token ' + this.authenticationService.token);
-    }
-
-    return new RequestOptions({
-      headers: headers
-    });
-  }
-
+  // HTTP Requests
   DELETE(passedUrl: string): Observable<void> {
     // DELETE to api
     return this.http.delete(this.apiURL + passedUrl, this.getOptions())
@@ -82,6 +64,7 @@ export class HttpService {
       .catch((error: any) => this.handleError(error));
   }
 
+  // Handling methods
   private handleError(error: any): Observable<any> {
     let message: string;
     let action = 'Close';
@@ -151,5 +134,23 @@ export class HttpService {
 
     // Throw the Observable for the request
     return Observable.throw(error);
+  }
+
+  getOptions(headers?: Headers|null): RequestOptions {
+    headers = headers || new Headers();
+
+    // Set Content-Type to JSON if not alread set
+    if (!headers.has('Content-Type')) {
+      headers.append('Content-Type', 'application/json');
+    }
+
+    // Add Token if available
+    if (this.authenticationService.token != null) {
+      headers.append('Authorization', 'Token ' + this.authenticationService.token);
+    }
+
+    return new RequestOptions({
+      headers: headers
+    });
   }
 }

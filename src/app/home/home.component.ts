@@ -17,25 +17,25 @@ import { RouteService } from '../_services/route.service';
   templateUrl: 'home.component.html',
 })
 export class HomeComponent implements OnInit {
+  private typeOfReport = TypeOfReport;
+  checked: boolean;
+  color = 'warn';
+  isCopied = false;
+  model: any = {};
   post: Post;
   rep: Reputation;
-  model: any = {};
-  color = 'warn';
-  checked: boolean;
-  isCopied = false;
   text = 'https://client.wildfyre.net/';
   userID: number;
-  private typeOfReport = TypeOfReport;
 
   constructor(
-    private postService: PostService,
-    private areaService: AreaService,
-    private profileService: ProfileService,
-    private commentService: CommentService,
     private cdRef: ChangeDetectorRef,
-    private flagService: FlagService,
     private route: ActivatedRoute,
     private router: Router,
+    private areaService: AreaService,
+    private commentService: CommentService,
+    private flagService: FlagService,
+    private postService: PostService,
+    private profileService: ProfileService,
     private routeService: RouteService
   ) {
     this.checked = this.areaService.isAreaChecked;
@@ -67,18 +67,17 @@ export class HomeComponent implements OnInit {
       });
   }
 
-  openDialog(post: Post, comment: Comment, typeOfFlagReport: TypeOfReport) {
-    this.flagService.currentComment = comment;
-    this.flagService.currentPost = post;
+  deleteComment(c: Comment) {
+    this.commentService.deleteComment(
+      this.areaService.currentAreaName,
+      this.post,
+      c
+    );
+  }
 
-    switch (typeOfFlagReport) {
-      case TypeOfReport.Post:
-        this.flagService.openDialog(TypeOfReport.Post);
-        break;
-      case TypeOfReport.Comment:
-        this.flagService.openDialog(TypeOfReport.Comment);
-        break;
-    }
+  gotoUser(user: string) {
+    this.routeService.addNextRoute(this.router.url);
+    this.router.navigateByUrl('/user/' + user);
   }
 
   onChange(value: any) {
@@ -107,6 +106,29 @@ export class HomeComponent implements OnInit {
       });
   }
 
+  openDialog(post: Post, comment: Comment, typeOfFlagReport: TypeOfReport) {
+    this.flagService.currentComment = comment;
+    this.flagService.currentPost = post;
+
+    switch (typeOfFlagReport) {
+      case TypeOfReport.Post:
+        this.flagService.openDialog(TypeOfReport.Post);
+        break;
+      case TypeOfReport.Comment:
+        this.flagService.openDialog(TypeOfReport.Comment);
+        break;
+    }
+  }
+
+  postComment() {
+    this.postService.comment(
+      this.areaService.currentAreaName,
+      this.post, this.model.comment
+    ).subscribe();
+
+    this.model.comment = '';
+  }
+
   spread(spread: boolean) {
     this.postService.spread(
       this.areaService.currentAreaName,
@@ -127,35 +149,12 @@ export class HomeComponent implements OnInit {
       });
   }
 
-  postComment() {
-    this.postService.comment(
-      this.areaService.currentAreaName,
-      this.post, this.model.comment
-    ).subscribe();
-
-    this.model.comment = '';
-  }
-
   subscribe(s: boolean) {
     this.postService.subscribe(
       this.areaService.currentAreaName,
       this.post,
       s
     ).subscribe();
-  }
-
-  deleteComment(c: Comment) {
-    this.commentService.deleteComment(
-      this.areaService.currentAreaName,
-      this.post,
-      c
-    );
-  }
-
-
-  gotoUser(user: string) {
-    this.routeService.addNextRoute(this.router.url);
-    this.router.navigateByUrl('/user/' + user);
   }
 }
 

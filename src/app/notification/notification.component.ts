@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 import { Notification } from '../_models/notification';
 import { NotificationService } from '../_services/notification.service';
 import { RouteService } from '../_services/route.service';
@@ -9,11 +9,11 @@ import { RouteService } from '../_services/route.service';
 })
 export class NotificationComponent implements OnInit {
   notifications: Notification[] = [];
+
   constructor(
+    private router: Router,
     private notificationService: NotificationService,
-    private routeService: RouteService,
-    private route: ActivatedRoute,
-    private router: Router
+    private routeService: RouteService
   ) { }
 
   ngOnInit() {

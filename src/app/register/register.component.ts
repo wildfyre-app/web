@@ -1,20 +1,20 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ViewChild } from '@angular/core';
-import { ReCaptchaComponent } from 'angular2-recaptcha';
+import { RegistrationError } from '../_models/registration';
 import { AuthenticationService } from '../_services/authentication.service';
 import { RegistrationService } from '../_services/registration.service';
-import { RegistrationError } from '../_models/registration';
+import { ReCaptchaComponent } from 'angular2-recaptcha';
 
 @Component({
   templateUrl: 'register.component.html'
 })
 export class RegisterComponent implements OnInit {
   @ViewChild(ReCaptchaComponent) captcha: ReCaptchaComponent;
-  model: any = {};
-  loading = false;
-  token: any;
   errors: RegistrationError;
+  loading = false;
+  model: any = {};
+  token: any;
 
   constructor(
     private router: Router,
@@ -23,7 +23,7 @@ export class RegisterComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    // reset login status
+    // Reset login status
     this.authenticationService.logout();
     document.getElementById('navB').style.display = 'none';
     document.getElementById('navBMobile').style.display = 'none';

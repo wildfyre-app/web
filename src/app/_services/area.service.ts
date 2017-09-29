@@ -8,25 +8,13 @@ import { Reputation } from '../_models/reputation';
 @Injectable()
 export class AreaService {
   public areas: Observable<Area[]>;
-  public isAreaChecked = false;
   public currentAreaName = 'fun';
+  public isAreaChecked = false;
   private reputation: { [area: string]: Reputation; } = { };
 
   public constructor(
     private httpService: HttpService
   ) { }
-
-  getAreas(): Observable<Area[]> {
-    // get areas from api
-    return this.httpService.GET('/areas/')
-      .map((response: Response) => {
-        const areas: Area[] = [];
-        response.json().forEach((area: any) => {
-            areas.push(Area.parse(area));
-        });
-        return areas;
-      });
-  }
 
   getAreaRep(area: string): Observable<Reputation> {
     if (this.reputation[area]) {
@@ -38,5 +26,17 @@ export class AreaService {
           return this.reputation[area];
         });
     }
+  }
+
+  getAreas(): Observable<Area[]> {
+    // get areas from api
+    return this.httpService.GET('/areas/')
+      .map((response: Response) => {
+        const areas: Area[] = [];
+        response.json().forEach((area: any) => {
+            areas.push(Area.parse(area));
+        });
+        return areas;
+      });
   }
 }

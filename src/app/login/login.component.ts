@@ -1,15 +1,15 @@
 ﻿import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthenticationService } from '../_services/authentication.service';
 import { AuthError } from '../_models/auth';
+import { AuthenticationService } from '../_services/authentication.service';
 
 @Component({
   templateUrl: 'login.component.html'
 })
 export class LoginComponent implements OnInit {
-  model: any = {};
-  loading = false;
   errors: AuthError;
+  loading = false;
+  model: any = {};
 
   constructor(
     private router: Router,
@@ -31,6 +31,7 @@ export class LoginComponent implements OnInit {
       .subscribe(result => {
         if (!result.getError()) {
           this.router.navigate(['/']);
+          this.loading = false;
         } else {
           this.errors = result.getError();
           this.loading = false;

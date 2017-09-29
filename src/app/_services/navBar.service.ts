@@ -8,18 +8,18 @@ export class NavBarService {
 
   setActiveIndex(s: string) {
     if (s === '/profile') {
-    this.activeIndex = 0;
-  } else if (s === '/notifications') {
-    this.activeIndex = 1;
-  } else if (s === '/') {
-    this.activeIndex = 2;
-  } else if (s === '/posts') {
-    this.activeIndex = 3;
-  } else if (s === '/create') {
+      this.activeIndex = 0;
+    } else if (s === '/notifications') {
+      this.activeIndex = 1;
+    } else if (s === '/') {
+      this.activeIndex = 2;
+    } else if (s === '/posts') {
+      this.activeIndex = 3;
+    } else if (s === '/create') {
+      this.activeIndex = 4;
+    }
+  }
 
-    this.activeIndex = 4;
-  }
-  }
   getActiveIndex(): number {
     return this.activeIndex;
   }

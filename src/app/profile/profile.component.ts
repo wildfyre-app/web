@@ -1,31 +1,31 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
-import { Author } from '../_models/author';
-import { Account } from '../_models/account';
-import { ProfileService } from '../_services/profile.service';
-import { AuthenticationService } from '../_services/authentication.service';
 import { MdSnackBar } from '@angular/material';
+import { Router, ActivatedRoute } from '@angular/router';
+import { Account } from '../_models/account';
+import { Author } from '../_models/author';
 import { PasswordError } from '../_models';
+import { AuthenticationService } from '../_services/authentication.service';
+import { ProfileService } from '../_services/profile.service';
 
 @Component({
   templateUrl: 'profile.component.html'
 })
 export class ProfileComponent implements OnInit {
-  model: any = {};
-  author: Author;
   account: Account;
+  author: Author;
   bioEdit: boolean;
   emailEdit: boolean;
+  errors: PasswordError;
+  model: any = {};
   passwordEdit: boolean;
   self: boolean;
-  errors: PasswordError;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private profileService: ProfileService,
+    public snackBar: MdSnackBar,
     private authenticationService: AuthenticationService,
-    public snackBar: MdSnackBar
+    private profileService: ProfileService
   ) { }
 
   ngOnInit() {

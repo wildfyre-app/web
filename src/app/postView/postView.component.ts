@@ -1,41 +1,35 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Response } from '@angular/http';
 import { Post } from '../_models/post';
-import { Area } from '../_models/area';
 import { Author } from '../_models/author';
 import { Comment } from '../_models/comment';
-import { HttpService } from '../_services/http.service';
 import { AreaService } from '../_services/area.service';
+import { AuthenticationService } from '../_services/authentication.service';
 import { CommentService } from '../_services/comment.service';
 import { FlagService } from '../_services/flag.service';
 import { PostService } from '../_services/post.service';
 import { ProfileService } from '../_services/profile.service';
 import { RouteService } from '../_services/route.service';
-import { AuthenticationService } from '../_services/authentication.service';
 
 @Component({
   templateUrl: 'postView.component.html',
 })
 export class PostViewComponent implements OnInit {
-  area: string;
-  post: Post;
-  model: any = {};
-  color = 'warn';
-  checked: boolean;
-  loading: boolean;
-  editName: string;
   private sub: any;
+  private typeOfReport = TypeOfReport;
+  area: string;
+  checked: boolean;
+  editName: string;
   isCopied = false;
+  loading: boolean;
+  model: any = {};
+  post: Post;
   text = 'https://client.wildfyre.net/';
   userID: number;
-  private typeOfReport = TypeOfReport;
-
 
   constructor(
     private postService: PostService,
     private areaService: AreaService,
-    private httpService: HttpService,
     private routeService: RouteService,
     private route: ActivatedRoute,
     private router: Router,

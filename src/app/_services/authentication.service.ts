@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
+import { isDevMode } from '@angular/core';
 import { Http, Headers, Response, RequestOptions } from '@angular/http';
 import { Observable } from 'rxjs';
-import { isDevMode } from '@angular/core';
-import { Auth, AuthError} from '../_models/auth';
 import 'rxjs/add/operator/map';
+import { Auth, AuthError} from '../_models/auth';
 
 @Injectable()
 export class AuthenticationService {
-  public token: string;
   private apiURL: string;
+  public token: string;
 
   constructor(
     private http: Http

@@ -33,7 +33,7 @@
     </div>
     <div class="form-group">
       <md-input-container>
-        <textarea id="createPostInput" mdInput rows="4" cols="80" type="text" name="card" [(ngModel)]="model.card" #comment="ngModel" ></textarea>
+        <textarea id="createPostInput" mdInput rows="4" cols="80" type="text" name="post" [(ngModel)]="model.card" #comment="ngModel" ></textarea>
       </md-input-container>
       <div *ngIf="errors && errors._text" class="help-block">
         <ul *ngFor="let err of errors._text">
