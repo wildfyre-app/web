@@ -19,7 +19,6 @@ import { RouteService } from '../_services/route.service';
 export class HomeComponent implements OnInit {
   private typeOfReport = TypeOfReport;
   checked: boolean;
-  color = 'warn';
   isCopied = false;
   model: any = {};
   post: Post;
