@@ -18,41 +18,24 @@ export class PostService {
     private httpService: HttpService
   ) { }
 
-  getNextPost(area: string): Observable<Post> {
-    if (!this.used[area]) {
-      this.used[area] = [];
-    }
+  private getPosts(area: string): Observable<Post[]> {
+    return this.httpService.GET('/areas/' + area + '/')
+      .map((response: Response) => {
 
-    if (!this.queuedPosts[area]) {
-      this.queuedPosts[area] = [];
-    }
+        const posts: Post[] = [];
 
-    if (this.queuedPosts[area].length !== 0) {
-      // Update stack and return first post
-      const nextPost: Post = this.queuedPosts[area].pop();
+        response.json().forEach((obj: any) => {
+          posts.push(Post.parse(obj));
+        });
 
-      if (this.queuedPosts[area].length < 3) {
-        this.getPosts(area)
-          .subscribe();
-      }
-
-      if (this.used[area].indexOf(nextPost.id) === -1) {
-        this.used[area].push(nextPost.id);
-        return Observable.of(nextPost);
-      } else {
-        return this.getNextPost(area);
-      }
-    } else {
-      // Update queue
-      return this.getPosts(area)
-        .flatMap(result => {
-        if (result !== null) {
-          return this.getNextPost(area);
+        // Cache
+        if (posts.length !== 0) {
+          this.queuedPosts[area] = posts;
+          return posts;
         } else {
-          return Observable.of(null);
+          return null;
         }
       });
-    }
   }
 
   comment(area: string, post: Post, text: string): Observable<Comment> {
@@ -92,12 +75,49 @@ export class PostService {
           JSON.parse(error._body).non_field_errors,
           JSON.parse(error._body).username
         ));
-});
+      });
   }
 
   deletePost(area: string, post: Post) {
     this.httpService.DELETE('/areas/' + area + '/' + post.id + '/')
       .subscribe();
+  }
+
+
+  getNextPost(area: string): Observable<Post> {
+    if (!this.used[area]) {
+      this.used[area] = [];
+    }
+
+    if (!this.queuedPosts[area]) {
+      this.queuedPosts[area] = [];
+    }
+
+    if (this.queuedPosts[area].length !== 0) {
+      // Update stack and return first post
+      const nextPost: Post = this.queuedPosts[area].pop();
+
+      if (this.queuedPosts[area].length < 3) {
+        this.getPosts(area)
+          .subscribe();
+      }
+
+      if (this.used[area].indexOf(nextPost.id) === -1) {
+        return Observable.of(nextPost);
+      } else {
+        return this.getNextPost(area);
+      }
+    } else {
+      // Update queue
+      return this.getPosts(area)
+        .flatMap(result => {
+        if (result !== null) {
+          return this.getNextPost(area);
+        } else {
+          return Observable.of(null);
+        }
+      });
+    }
   }
 
   getOwnPosts(area: string): Observable<Post[]> {
@@ -118,30 +138,13 @@ export class PostService {
       });
   }
 
-  private getPosts(area: string): Observable<Post[]> {
-    return this.httpService.GET('/areas/' + area + '/')
-      .map((response: Response) => {
-
-        const posts: Post[] = [];
-
-        response.json().forEach((obj: any) => {
-          posts.push(Post.parse(obj));
-        });
-
-        // Cache
-        if (posts.length !== 0) {
-          this.queuedPosts[area] = posts;
-          return posts;
-        } else {
-          return null;
-        }
-      });
-    }
-
   spread(area: string, post: Post, spread: boolean): void {
     const body = {
       'spread': spread
     };
+
+    this.used[area].push(post.id);
+
     this.httpService.POST('/areas/' + area +
       '/' + post.id + '/spread/', body)
         .subscribe();
