@@ -9,15 +9,13 @@ export class RegisterSuccessComponent implements OnInit {
   loading: boolean;
 
   constructor(
-    private authenticationService: AuthenticationService,
     private router: Router,
+    private authenticationService: AuthenticationService
   ) { }
 
   ngOnInit() {
     // Reset login status
     this.authenticationService.logout();
-    document.getElementById('navB').style.display = 'none';
-    document.getElementById('navBMobile').style.display = 'none';
   }
 
   letsGo() {

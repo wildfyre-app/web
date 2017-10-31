@@ -29,7 +29,6 @@ import { AuthenticationService } from './_services/authentication.service';
 import { CommentService } from './_services/comment.service';
 import { FlagService, FlagDialogComponent } from './_services/flag.service';
 import { HttpService } from './_services/http.service';
-import { NavBarService } from './_services/navBar.service';
 import { NotificationService } from './_services/notification.service';
 import { PostService } from './_services/post.service';
 import { ProfileService } from './_services/profile.service';
@@ -101,7 +100,6 @@ import { ReCaptchaModule } from 'angular2-recaptcha';
     CommentService,
     FlagService,
     HttpService,
-    NavBarService,
     NotificationService,
     PostService,
     ProfileService,

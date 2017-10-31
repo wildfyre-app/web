@@ -4,7 +4,7 @@
     <md-card-content>
       <h2>{{author?.name}}</h2>
     </md-card-content>
-    Bio: <span [innerHTML]="author?.bio | marked"></span>
+    Bio: <span id="bio" [innerHTML]="author?.bio | marked"></span>
     <p>{{author?.avatar}}</p>
     <div class="box" *ngIf="author?.banned">
       <p>You are currently banned</p>

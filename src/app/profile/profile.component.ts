@@ -29,32 +29,16 @@ export class ProfileComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.route.params.subscribe((parms) => {
-      if (parms['id']) {
-        this.profileService.getUser(parms['id']).subscribe((user: Author) => {
-          this.self = false;
-          this.author = user;
-        });
-      } else {
-        this.profileService.getSelf().subscribe((self: Author) => {
-          this.author = self;
-          this.model.bio = this.author.bio;
-          this.self = true;
-        });
-
-        this.profileService.getAccount().subscribe((self: Account) => {
-          this.account = self;
-          this.model.email = this.account.email;
-          this.self = true;
-        });
-
-      }
+    this.profileService.getSelf().subscribe((self: Author) => {
+      this.author = self;
+      this.model.bio = this.author.bio;
+      this.self = true;
     });
-  }
 
-  openSnackBar(message: string, action: string) {
-    this.snackBar.open(message, action, {
-      duration: 2000,
+    this.profileService.getAccount().subscribe((self: Account) => {
+      this.account = self;
+      this.model.email = this.account.email;
+      this.self = true;
     });
   }
 
@@ -62,17 +46,16 @@ export class ProfileComponent implements OnInit {
     this.bioEdit = true;
   }
 
-  cancelEditBio() {
-    this.bioEdit = false;
-  }
-
-  submitEditBio() {
-    this.profileService.setBio(this.author, this.model.bio).subscribe();
-    this.bioEdit = false;
-  }
-
   editEmail() {
     this.emailEdit = true;
+  }
+
+  editPassword() {
+    this.passwordEdit = true;
+  }
+
+  cancelEditBio() {
+    this.bioEdit = false;
   }
 
   cancelEditEmail() {
@@ -80,22 +63,28 @@ export class ProfileComponent implements OnInit {
     this.model.email = '';
   }
 
-  submitEditEmail() {
-    this.profileService.setEmail(this.model.email).subscribe();
-    const snackBarRef = this.snackBar.open('We just sent you a verification email, you must verify your email for it to be set', 'Close');
-    this.emailEdit = false;
-    this.model.email = '';
-  }
-
-  editPassword() {
-    this.passwordEdit = true;
-  }
-
   cancelEditPassword() {
     this.passwordEdit = false;
     this.model.oldPassword = '';
     this.model.newPassword1 = '';
     this.model.newPassword2 = '';
+  }
+
+  logout() {
+    this.authenticationService.logout();
+    this.router.navigateByUrl('/login');
+  }
+
+  submitEditBio() {
+    this.profileService.setBio(this.author, this.model.bio).subscribe();
+    this.bioEdit = false;
+  }
+
+  submitEditEmail() {
+    this.profileService.setEmail(this.model.email).subscribe();
+    const snackBarRef = this.snackBar.open('We just sent you a verification email, you must verify your email for it to be set', 'Close');
+    this.emailEdit = false;
+    this.model.email = '';
   }
 
   submitEditPassword() {

@@ -1,11 +1,11 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Response } from '@angular/http';
-import { Post } from '../_models/post';
 import { Area } from '../_models/area';
-import { Reputation } from '../_models/reputation';
 import { Author } from '../_models/author';
 import { Comment } from '../_models/comment';
+import { Post } from '../_models/post';
+import { Reputation } from '../_models/reputation';
 import { AreaService } from '../_services/area.service';
 import { CommentService } from '../_services/comment.service';
 import { FlagService } from '../_services/flag.service';
@@ -50,8 +50,6 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
     this.cdRef.detectChanges();
-    document.getElementById('navB').style.display = '';
-    document.getElementById('navBMobile').style.display = '';
 
     this.postService.getNextPost(this.areaService.currentAreaName)
       .subscribe(nextPost => {

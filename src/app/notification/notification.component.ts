@@ -17,8 +17,6 @@ export class NotificationComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    document.getElementById('navB').style.display = '';
-    document.getElementById('navBMobile').style.display = '';
     // get notifications from secure api end point
     this.notificationService.getNotifications()
       .subscribe(notification => {

@@ -5,7 +5,7 @@ a {
 }
 
 a.mat-tab-link {
-    min-width: 16%;
+    min-width: 20%;
     color: black;
 }
 
@@ -306,6 +306,7 @@ hr {
 
     #navB {
         display: none;
+        width: 100%
     }
 
     #navBMobile {
@@ -322,6 +323,16 @@ hr {
     .icons {
       height: 2%;
       width: 2%;
+    }
+
+    #navB {
+      position: fixed;
+      top: -1px;
+      width: 100%;
+      float: left;
+      z-index: 1;
+      background-color: white;
+      zoom: 0.85;
     }
 
     #navBMobile {

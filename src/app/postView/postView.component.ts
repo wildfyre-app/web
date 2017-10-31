@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Post } from '../_models/post';
 import { Author } from '../_models/author';
 import { Comment } from '../_models/comment';
+import { Post } from '../_models/post';
 import { AreaService } from '../_services/area.service';
 import { AuthenticationService } from '../_services/authentication.service';
 import { CommentService } from '../_services/comment.service';
@@ -28,25 +28,20 @@ export class PostViewComponent implements OnInit {
   userID: number;
 
   constructor(
-    private postService: PostService,
-    private areaService: AreaService,
-    private routeService: RouteService,
     private route: ActivatedRoute,
     private router: Router,
-    private profileService: ProfileService,
+    private areaService: AreaService,
+    private authenticationService: AuthenticationService,
     private commentService: CommentService,
     private flagService: FlagService,
-    private authenticationService: AuthenticationService
+    private postService: PostService,
+    private profileService: ProfileService,
+    private routeService: RouteService,
   ) {
     this.checked = this.areaService.isAreaChecked;
   }
 
   ngOnInit() {
-    if (!this.authenticationService.token) {
-      document.getElementById('navB').style.display = 'none';
-      document.getElementById('navBMobile').style.display = 'none';
-    }
-
     let currentUrlArea: string = this.router.url;
     currentUrlArea = currentUrlArea.replace(currentUrlArea.substring(0, 7), '');
     currentUrlArea = currentUrlArea.substring(0, currentUrlArea.indexOf('/'));

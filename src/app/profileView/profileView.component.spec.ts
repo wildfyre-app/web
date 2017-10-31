@@ -2,17 +2,13 @@ import { ComponentFixture, TestBed, async } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 import { Observable } from 'rxjs';
-
 import { ProfileViewComponent } from './profileView.component';
-
 import { Router, ActivatedRoute } from '@angular/router';
 import { AuthenticationService } from '../_services/authentication.service';
 import { ProfileService } from '../_services/profile.service';
 import { RouteService } from '../_services/route.service';
-
 import { MdCardModule } from '@angular/material';
 import { MarkedPipe } from '../_pipes/marked.pipe';
-
 import { Author } from '../_models/author';
 
 describe('ProfileViewComponent', () => {
@@ -26,24 +22,23 @@ describe('ProfileViewComponent', () => {
     let activatedRouteStub = {
       params: Observable.of({'id': 1})
     };
-    let routerStub = {}
+    let routerStub = {};
     let authenticationServiceStub = {
       token: "token"
     };
-    let profileServiceStub = {
+    const profileServiceStub = {
       getUser: (id: number) => {
         if (id != 1) {
           throw new Error("Requests for users other than with Id 1 not implemented");
         }
 
         return Observable.of(
-          new Author(1, "Test User", null, null, false)
+          new Author(1, "Test User", null, "test", false)
         );
       }
     };
 
-
-    let routeServiceStub = {}
+    let routeServiceStub = {};
 
     TestBed.configureTestingModule({
       declarations: [ ProfileViewComponent, MarkedPipe ],
@@ -52,7 +47,7 @@ describe('ProfileViewComponent', () => {
         { provide: Router, useValue: routerStub },
         { provide: AuthenticationService, useValue: authenticationServiceStub },
         { provide: ProfileService, useValue: profileServiceStub },
-        { provide: RouteService, useValue: routeServiceStub },
+        { provide: RouteService, useValue: routeServiceStub }
       ],
       imports: [ MdCardModule ],
     });
@@ -64,7 +59,7 @@ describe('ProfileViewComponent', () => {
     el = de.nativeElement;
   });
 
-  it('should set the autor name', async(() => {
+  it('should set the author name', async(() => {
     fixture.detectChanges();
 
     fixture.whenStable().then(() => {
@@ -73,4 +68,25 @@ describe('ProfileViewComponent', () => {
       expect(el.textContent).toBe("Test User");
     })
   }))
+
+  it('should set bio', async(() => {
+    fixture.detectChanges();
+
+    fixture.whenStable().then(() => {
+      fixture.detectChanges();
+
+      expect(fixture.debugElement.query(By.css('#bio')).nativeElement.textContent).toBe('test\n');
+    })
+  }))
+
+  it('should set id', async(() => {
+    fixture.detectChanges();
+
+    fixture.whenStable().then(() => {
+      fixture.detectChanges();
+
+      expect(fixture.debugElement.query(By.css('#userID')).nativeElement.textContent).toBe('ID: 1');
+    })
+  }))
+
 });

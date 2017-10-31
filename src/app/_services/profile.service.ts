@@ -8,16 +8,23 @@ import { HttpService } from './http.service';
 @Injectable()
 export class ProfileService {
   private self: Author;
+  private account: Account;
+  private userArray: Author[] = [];
 
   constructor(
     private httpService: HttpService
   ) {}
 
   getAccount(): Observable<Account> {
+    if (this.account) {
+      return Observable.of(this.account);
+    } else {
     return this.httpService.GET('/account/')
       .map((response: Response) => {
-        return Account.parse(response.json());
+        this.account = Account.parse(response.json()); // cache
+        return this.account;
       });
+    }
   }
 
   getSelf(): Observable<Author> {
@@ -33,10 +40,15 @@ export class ProfileService {
   }
 
   getUser(id: string): Observable<Author> {
+    if (this.userArray[Number(id)]) {
+      return Observable.of(this.userArray[Number(id)]);
+    } else {
     return this.httpService.GET('/users/' + id)
       .map((response: Response) => {
-        return Author.parse(response.json());
+        this.userArray[Number(id)] = Author.parse(response.json()); // cache
+        return this.userArray[Number(id)];
       });
+    }
   }
 
   setBio(author: Author, bio: any): Observable<Author> {

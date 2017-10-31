@@ -5,6 +5,7 @@
       <button md-menu-item (click)="editBio()"><md-icon>mode_edit</md-icon>Bio</button>
       <button md-menu-item (click)="editEmail()"><md-icon>mode_edit</md-icon>Email</button>
       <button md-menu-item (click)="editPassword()"><md-icon>mode_edit</md-icon>Password</button>
+      <button md-menu-item (click)="logout()"><md-icon>power_settings_new</md-icon>Logout</button>
     </md-menu>
     <md-card-content>
       <h2>{{author?.name}}</h2>
@@ -13,11 +14,11 @@
     <br>
 
     <div class="box" *ngIf="!bioEdit">
-    Bio: <span [innerHTML]="author?.bio | marked"></span>
+    Bio: <span id="bio" [innerHTML]="author?.bio | marked"></span>
     </div><br>
 
     <div class="box" *ngIf="!emailEdit">
-    Email: <span [innerHTML]="account?.email | marked"></span>
+    Email: <span id="email"><a href="mailto:{{account?.email}}">{{account?.email}}</a></span>
     </div>
 
     <br>

@@ -18,9 +18,6 @@ export class UserPostsComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    document.getElementById('navB').style.display = '';
-    document.getElementById('navBMobile').style.display = '';
-
     // get posts from secure api end point
     this.postService.getOwnPosts('fun')
       .subscribe(posts => {

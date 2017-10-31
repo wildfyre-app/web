@@ -4,7 +4,7 @@
       <div class="notifCount">
         <h2>{{notification.comments.length}}</h2>
       </div>
-      {{notification.post.text | slice:0:31}}<ng-container *ngIf="notification.post.text.length > 32">…</ng-container>
+      <div class="notifications">{{notification.post.text | slice:0:31}}</div><ng-container *ngIf="notification.post.text.length > 32">…</ng-container>
       <br>
       –{{notification.post.author.name}}
     </button>

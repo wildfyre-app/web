@@ -21,11 +21,6 @@ export class ProfileViewComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    if (!this.authenticationService.token) {
-      document.getElementById('navB').style.display = 'none';
-      document.getElementById('navBMobile').style.display = 'none';
-    }
-
     this.sub = this.route
       .params
       .subscribe(params => {

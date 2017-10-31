@@ -50,7 +50,7 @@
               <button *ngIf="!(comment.author?.user == userID)" md-menu-item (click)="openDialog(post, comment, typeOfReport.Comment)"><md-icon>flag</md-icon>Flag Comment</button>
             </md-menu>
           </div>
-          <md-card-content [innerHTML]="comment.text | marked"></md-card-content>
+          <md-card-content class="commentText" [innerHTML]="comment.text | marked"></md-card-content>
           <md-card-header><small><i><a class="dateText" (click)="gotoUser(comment.author.user)" routerLinkActive="active">{{comment.author.name}}</a>  | {{comment.created}}</i></small></md-card-header>
         </md-card>
       </div>
