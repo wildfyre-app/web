@@ -16,15 +16,16 @@
         <small><i><a (click)="gotoUser(post.author.user)" routerLinkActive="active">{{post.author.name}}</a> | {{post.created}}</i></small>
       </md-card-header>
       <div class="postEditing">
+        <ng-container *ngIf="post.id !== 0">
+          <div *ngIf="!post?.subscribed">
+            <button md-button (click)="subscribe(true)"><i class="material-icons">turned_in_not</i></button>
+          </div>
+          <div *ngIf="post?.subscribed">
+            <button md-button (click)="subscribe(false)"><i class="material-icons">turned_in</i></button>
+          </div>
+        </ng-container>
 
-        <div *ngIf="!post?.subscribed">
-          <button md-button (click)="subscribe(true)"><i class="material-icons">turned_in_not</i></button>
-        </div>
-        <div *ngIf="post?.subscribed">
-          <button md-button (click)="subscribe(false)"><i class="material-icons">turned_in</i></button>
-        </div>
-
-        <button md-icon-button [mdMenuTriggerFor]="appMenu"><i class="material-icons">more_vert</i></button>
+        <button *ngIf="post.id !== 0" md-icon-button [mdMenuTriggerFor]="appMenu"><i class="material-icons">more_vert</i></button>
         <md-menu #appMenu="mdMenu">
           <input class="hideMeClass" type="text" [(ngModel)]="text">
           <button md-menu-item [class.btn-success]="isCopied" type="button" ngxClipboard [cbContent]="text" (cbOnSuccess)="isCopied = true"><md-icon>link</md-icon>Copy Link</button>
@@ -34,11 +35,11 @@
       <br>
     </md-card>
 
-    <md-input-container>
+    <md-input-container *ngIf="post.id !== 0">
       <textarea mdInput name="comment" rows="3" cols="40" type="text" name="post" [(ngModel)]="model.comment" #comment="ngModel" placeholder="Post a Comment"></textarea>
     </md-input-container>
     <br>
-    <button class="wideButtons" md-raised-button color="accent" [disabled]="loading" (click)="postComment()"><b>Comment</b></button>
+    <button *ngIf="post.id !== 0" class="wideButtons" md-raised-button color="accent" [disabled]="loading" (click)="postComment()"><b>Comment</b></button>
 
     <md-list>
       <div *ngFor="let comment of post?.comments">
