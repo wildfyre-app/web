@@ -19,4 +19,8 @@ export class RouteService {
     this.deleteLastRoute();
     return route;
   }
+
+  resetRoutes() {
+    this.routes = [];
+  }
 }

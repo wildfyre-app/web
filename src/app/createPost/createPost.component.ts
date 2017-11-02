@@ -1,15 +1,16 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MdDialog, MdDialogRef, MdSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
 import { Author } from '../_models/author';
 import { PostError } from '../_models/post';
 import { AreaService } from '../_services/area.service';
 import { PostService } from '../_services/post.service';
+import { RouteService } from '../_services/route.service';
 
 @Component({
   templateUrl: 'createPost.component.html'
 })
-export class CreatePostComponent {
+export class CreatePostComponent implements OnInit {
   checked: boolean;
   errors: PostError;
   loading: boolean;
@@ -20,10 +21,15 @@ export class CreatePostComponent {
     private snackBar: MdSnackBar,
     private router: Router,
     private areaService: AreaService,
-    private postService: PostService
+    private postService: PostService,
+    private routeService: RouteService
   ) {
     this.checked = this.areaService.isAreaChecked;
     this.model.card = '';
+  }
+
+  ngOnInit() {
+    this.routeService.resetRoutes();
   }
 
   private addLineBreak(s: string) {

@@ -2,6 +2,7 @@
 import { Router } from '@angular/router';
 import { AuthError } from '../_models/auth';
 import { AuthenticationService } from '../_services/authentication.service';
+import { RouteService } from '../_services/route.service';
 
 @Component({
   templateUrl: 'login.component.html'
@@ -13,11 +14,13 @@ export class LoginComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private authenticationService: AuthenticationService
+    private authenticationService: AuthenticationService,
+    private routeService: RouteService
   ) { }
 
   ngOnInit() {
     // reset login status
+    this.routeService.resetRoutes();
     this.authenticationService.logout();
 
     console.log('Turning up the heat');

@@ -6,6 +6,7 @@ import { Author } from '../_models/author';
 import { PasswordError } from '../_models';
 import { AuthenticationService } from '../_services/authentication.service';
 import { ProfileService } from '../_services/profile.service';
+import { RouteService } from '../_services/route.service';
 
 @Component({
   templateUrl: 'profile.component.html'
@@ -25,14 +26,32 @@ export class ProfileComponent implements OnInit {
     private router: Router,
     public snackBar: MdSnackBar,
     private authenticationService: AuthenticationService,
-    private profileService: ProfileService
+    private profileService: ProfileService,
+    private routeService: RouteService
   ) { }
 
   ngOnInit() {
-    this.profileService.getSelf().subscribe((self: Author) => {
-      this.author = self;
-      this.model.bio = this.author.bio;
-      this.self = true;
+    this.routeService.resetRoutes();
+    this.route.params.subscribe((parms) => {
+      if (parms['id']) {
+        this.profileService.getUser(parms['id']).subscribe((user: Author) => {
+          this.self = false;
+          this.author = user;
+        });
+      } else {
+        this.profileService.getSelf().subscribe((self: Author) => {
+          this.author = self;
+          this.model.bio = this.author.bio;
+          this.self = true;
+        });
+
+        this.profileService.getAccount().subscribe((self: Account) => {
+          this.account = self;
+          this.model.email = this.account.email;
+          this.self = true;
+        });
+
+      }
     });
 
     this.profileService.getAccount().subscribe((self: Account) => {

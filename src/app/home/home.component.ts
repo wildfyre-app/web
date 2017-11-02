@@ -49,6 +49,7 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.routeService.resetRoutes();
     this.cdRef.detectChanges();
 
     this.postService.getNextPost(this.areaService.currentAreaName)

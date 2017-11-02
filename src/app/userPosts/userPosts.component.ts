@@ -18,6 +18,8 @@ export class UserPostsComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.routeService.resetRoutes();
+
     // get posts from secure api end point
     this.postService.getOwnPosts('fun')
       .subscribe(posts => {

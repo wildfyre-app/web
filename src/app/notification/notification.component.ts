@@ -17,6 +17,7 @@ export class NotificationComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.routeService.resetRoutes();
     // get notifications from secure api end point
     this.notificationService.getNotifications()
       .subscribe(notification => {
