@@ -143,12 +143,6 @@ span {
   display: none;
 }
 
-.logo {
-  display: block;
-  margin: auto;
-  width: 40%;
-}
-
 #clearIcon, #checkIcon {
   float: right;
   zoom: 0.5;
@@ -304,6 +298,12 @@ hr {
       width: 5%;
     }
 
+    .logo {
+      display: block;
+      margin: auto;
+      width: 40%;
+    }
+
     #navB {
         display: none;
         width: 100%
@@ -333,6 +333,11 @@ hr {
       z-index: 1;
       background-color: white;
       zoom: 0.85;
+    }
+    .logo {
+      display: block;
+      margin: auto;
+      width: 15%;
     }
 
     #navBMobile {

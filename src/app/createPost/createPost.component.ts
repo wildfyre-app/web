@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { MdDialog, MdDialogRef } from '@angular/material';
+import { MdDialog, MdDialogRef, MdSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
 import { Author } from '../_models/author';
 import { PostError } from '../_models/post';
@@ -17,6 +17,7 @@ export class CreatePostComponent {
 
   constructor(
     private dialog: MdDialog,
+    private snackBar: MdSnackBar,
     private router: Router,
     private areaService: AreaService,
     private postService: PostService
@@ -44,16 +45,23 @@ export class CreatePostComponent {
 
   createPost() {
     this.loading = true;
-    this.postService.createPost(this.areaService.currentAreaName, this.model.card)
-      .subscribe(result => {
-        if (!result.getError()) {
-          this.model.card = '';
-          this.router.navigate(['']);
-        } else {
-          this.errors = result.getError();
-          this.loading = false;
-        }
+    if (this.model.card !== '') {
+      this.postService.createPost(this.areaService.currentAreaName, this.model.card)
+        .subscribe(result => {
+          if (!result.getError()) {
+            this.model.card = '';
+            this.router.navigate(['']);
+          } else {
+            this.errors = result.getError();
+            this.loading = false;
+          }
+        });
+    } else {
+      this.loading = false;
+      const snackBarRef = this.snackBar.open('You did not input anything', 'Close', {
+        duration: 3000
       });
+    }
   }
 
   addBlockQoutes() {
