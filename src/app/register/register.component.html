@@ -49,6 +49,18 @@
         </div>
       </div>
 
+      <div class="form" [ngClass]="{ 'has-error': f.submitted && (!password2.valid || (errors && errors._password)) }">
+        <md-input-container>
+          <input mdInput placeholder="Password (repeat)" type="password" name="password2" [(ngModel)]="model.password2" #password2="ngModel" required />
+        </md-input-container>
+        <div *ngIf="f.submitted && !password2.valid" class="help-block">Second password is required</div>
+        <div *ngIf="errors && errors._password" class="help-block">
+          <ul *ngFor="let err of errors._password">
+            <li>{{err}}</li>
+          </ul>
+        </div>
+      </div>
+
       <div id="captcha">
         <re-captcha (captchaResponse)="setCaptchaResponse($event)" site_key="6LcXViIUAAAAABZF263l-SJh3rZAe95Sx2LPN-Dc"></re-captcha>
         <div *ngIf="errors && errors._captcha" class="help-block has-error">
