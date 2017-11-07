@@ -21,7 +21,7 @@ describe('LoginComponent', () => {
             login: () => ({
                 subscribe: () => {
                   return Observable.of(Auth.parse(new Response(new ResponseOptions({
-                    body: JSON.stringify({name: "Bob", surname : "Jones"})
+                    body: JSON.stringify({name: 'Bob', surname : 'Jones'})
                   }))));
                 }
             })

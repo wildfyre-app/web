@@ -1,0 +1,86 @@
+<md-card class="example-card">
+  <md-card-content>
+    <a routerLink="/" routerLinkActive="active"><img class="logo" src="https://static.wildfyre.net/wildfyre.png" alt="WildFyre"></a>
+    <h2>Recover</h2>
+    <md-accordion>
+      <md-expansion-panel hideToggle="true">
+        <md-expansion-panel-header>
+      <md-panel-title>
+        <b>Recover your Username</b>
+      </md-panel-title>
+      <md-panel-description>
+        <hr>
+        <md-icon>account_circle</md-icon>
+      </md-panel-description>
+    </md-expansion-panel-header>
+    <div class="alert alert-danger">
+      <h2>Warning!</h2>
+      Emails are case sensitive in this form
+    </div>
+    <md-input-container>
+      <input mdInput placeholder="Email" type="email" name="email" [(ngModel)]="model.email" #email="ngModel"/>
+    </md-input-container>
+    <div *ngIf="errors && errors._email" class="help-block has-error">
+      <ul *ngFor="let err of errors._email">
+        <li>{{err}}</li>
+      </ul>
+    </div>
+    <div class="captcha" style="transform:scale(0.80);transform-origin:0 0">
+      <re-captcha (captchaResponse)="setCaptchaResponse($event)" site_key="6LcXViIUAAAAABZF263l-SJh3rZAe95Sx2LPN-Dc"></re-captcha>
+      <div *ngIf="errors && errors._captcha" class="help-block has-error">
+        <ul *ngFor="let err of errors._captcha">
+          <li>{{err}}</li>
+        </ul>
+      </div>
+    </div>
+    <md-spinner *ngIf="loading"></md-spinner>
+    <md-action-row>
+      <button class="wideButtons" md-raised-button color="accent" [disabled]="loading" (click)="recoverUsername()">Submit</button>
+    </md-action-row>
+      </md-expansion-panel>
+      <md-expansion-panel hideToggle="true">
+    <md-expansion-panel-header>
+      <md-panel-title>
+        <b>Recover your Password</b>
+      </md-panel-title>
+      <md-panel-description>
+        <hr>
+        <md-icon>lock</md-icon>
+      </md-panel-description>
+    </md-expansion-panel-header>
+    <div class="alert alert-danger">
+      <h2>Warning!</h2>
+      Emails are case sensitive in this form
+    </div>
+    <md-input-container>
+      <input mdInput placeholder="Email" type="email" name="email2" [(ngModel)]="model.email2" #email2="ngModel"/>
+    </md-input-container>
+    <div *ngIf="errors && errors._email" class="help-block has-error">
+      <ul *ngFor="let err of errors._email">
+        <li>{{err}}</li>
+      </ul>
+    </div>
+    <md-input-container>
+      <input mdInput placeholder="Username"  type="text" name="username" [(ngModel)]="model.username" #username="ngModel"/>
+    </md-input-container>
+    <div *ngIf="errors && errors._username" class="help-block has-error">
+      <ul *ngFor="let err of errors._username">
+        <li>{{err}}</li>
+      </ul>
+    </div>
+    <div class="captcha" style="transform:scale(0.80);transform-origin:0 0">
+      <re-captcha (captchaResponse)="setCaptchaResponse($event)" site_key="6LcXViIUAAAAABZF263l-SJh3rZAe95Sx2LPN-Dc"></re-captcha>
+      <div *ngIf="errors && errors._captcha" class="help-block has-error">
+        <ul *ngFor="let err of errors._captcha">
+          <li>{{err}}</li>
+        </ul>
+      </div>
+    </div>
+    <md-spinner *ngIf="loading"></md-spinner>
+    <md-action-row>
+      <button class="wideButtons" md-raised-button color="accent" [disabled]="loading" (click)="recoverPassword()">Submit</button>
+    </md-action-row>
+  </md-expansion-panel>
+    </md-accordion>
+  </md-card-content>
+</md-card>

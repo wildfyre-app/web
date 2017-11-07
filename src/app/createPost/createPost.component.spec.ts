@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed, inject } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { MdDialog, MdMenuModule, MdSlideToggleModule } from '@angular/material';
+import { MdDialog, MdMenuModule, MdSlideToggleModule, MdSnackBarModule } from '@angular/material';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { AreaService } from '../_services/area.service';
@@ -53,7 +53,7 @@ describe('CreatePostComponent', () => {
                 { provide: PostService, useValue: postServiceStub },
                 { provide: MdDialogRef, useValue: mdDialogRefStub }
             ],
-            imports: [ MdMenuModule, MdSlideToggleModule, FormsModule ],
+            imports: [ MdMenuModule, MdSlideToggleModule, FormsModule, MdSnackBarModule ],
         });
         fixture = TestBed.createComponent(CreatePostComponent);
         comp = fixture.componentInstance;

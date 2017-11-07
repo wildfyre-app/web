@@ -1,5 +1,6 @@
-import { ComponentFixture, TestBed,inject } from '@angular/core/testing';
+import { ComponentFixture, TestBed, inject } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
+import { MdSnackBarModule } from '@angular/material';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthenticationService } from '../_services/authentication.service';
@@ -30,7 +31,7 @@ describe('RegisterComponent', () => {
                 { provide: AuthenticationService, useValue: authenticationServiceStub },
                 { provide: RegistrationService, useValue: registrationServiceStub }
             ],
-            imports: [ FormsModule ]
+            imports: [ FormsModule, MdSnackBarModule ]
         });
         fixture = TestBed.createComponent(RegisterComponent);
         comp = fixture.componentInstance;

@@ -8,7 +8,7 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
-import { Author } from '../_models/author'
+import { Author } from '../_models/author';
 import { Comment } from '../_models/comment';
 import { Post } from '../_models/post';
 import { MarkedPipe } from '../_pipes/marked.pipe';
@@ -42,7 +42,7 @@ describe('PostViewComponent', () => {
             currentAreaName: {}
         };
         const authenticationServiceStub = {
-            token: "token"
+            token: 'token'
         };
         const commentServiceStub = {
             deleteComment: () => ({})
@@ -56,10 +56,10 @@ describe('PostViewComponent', () => {
             getPost: () => {
               return Observable.of(
                 new Post(1,
-                  new Author(1, "test", null, "test", false), false, "2017-07-22T12:03:23.465373Z", false, "test",
+                  new Author(1, 'test', null, 'test', false), false, '2017-07-22T12:03:23.465373Z', false, 'test',
                     new Array<Comment>(
                       new Comment(1,
-                        new Author(1, "test", null, "test", false), "2017-07-22T12:03:23.465373Z", "test")))
+                        new Author(1, 'test', null, 'test', false), '2017-07-22T12:03:23.465373Z', 'test')))
                       );
             },
             comment: () => ({
@@ -73,7 +73,7 @@ describe('PostViewComponent', () => {
         const profileServiceStub = {
           getSelf: () => {
             return Observable.of(
-              new Author(1, "Test User", null, "test", false)
+              new Author(1, 'Test User', null, 'test', false)
             );
           }
         };
@@ -107,17 +107,17 @@ describe('PostViewComponent', () => {
 
       fixture.whenStable().then(() => {
         fixture.detectChanges();
-        expect(el.textContent).toBe("test\n");
-      })
-    }))
+        expect(el.textContent).toBe('test\n');
+      });
+    }));
 
     it('should set comment text', async(() => {
       fixture.detectChanges();
 
       fixture.whenStable().then(() => {
         fixture.detectChanges();
-        expect(fixture.debugElement.query(By.css('.commentText')).nativeElement.textContent).toBe("test\n");
-      })
-    }))
+        expect(fixture.debugElement.query(By.css('.commentText')).nativeElement.textContent).toBe('test\n');
+      });
+    }));
 
 });

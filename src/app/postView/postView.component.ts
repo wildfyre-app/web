@@ -15,7 +15,6 @@ import { RouteService } from '../_services/route.service';
   templateUrl: 'postView.component.html',
 })
 export class PostViewComponent implements OnInit {
-  private sub: any;
   private typeOfReport = TypeOfReport;
   area: string;
   checked: boolean;
@@ -52,7 +51,7 @@ export class PostViewComponent implements OnInit {
         this.userID = author.user;
       });
 
-    this.sub = this.route
+    this.route
       .params
       .subscribe(params => {
         this.area = params['area'];

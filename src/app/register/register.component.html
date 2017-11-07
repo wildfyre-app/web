@@ -74,8 +74,8 @@
         <button class="wideButtons" md-raised-button color="accent" [disabled]="loading">Register</button>
         <md-spinner *ngIf="loading"></md-spinner>
       </div>
-
-      Already have an account? Log In <a routerLink="/login" routerLinkActive="active">Here</a>
+      Can't login? <a routerLink="/recover" routerLinkActive="active">Recover it Here</a><br>
+      Don't have an account? <a routerLink="/register" routerLinkActive="active">Register Here</a>
     </form>
   </md-card-content>
 </md-card>

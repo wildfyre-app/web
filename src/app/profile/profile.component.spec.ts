@@ -28,27 +28,27 @@ describe('ProfileComponent', () => {
           params: Observable.of({'id': 1})
         };
         const authenticationServiceStub = {
-          token: "token"
+          token: 'token'
         };
 
         const profileServiceStub = {
           getUser: (id: number) => {
-            if (id != 1) {
-              throw new Error("Requests for users other than with Id 1 not implemented");
+            if (id !== 1) {
+              throw new Error('Requests for users other than with Id 1 not implemented');
             }
 
             return Observable.of(
-              new Author(1, "Test User", null, "test", false)
+              new Author(1, 'Test User', null, 'test', false)
             );
           },
             getSelf: () => {
               return Observable.of(
-                new Author(1, "Test User", null, "test", false)
+                new Author(1, 'Test User', null, 'test', false)
               );
             },
             getAccount: () => {
               return Observable.of(
-                new Account(1, "Test User", "test@test.com")
+                new Account(1, 'Test User', 'test@test.com')
               );
             },
             setBio: () => ({
@@ -85,9 +85,9 @@ describe('ProfileComponent', () => {
       fixture.whenStable().then(() => {
         fixture.detectChanges();
 
-        expect(el.textContent).toBe("Test User");
-      })
-    }))
+        expect(el.textContent).toBe('Test User');
+      });
+    }));
 
     it('should set bio', async(() => {
       fixture.detectChanges();
@@ -96,8 +96,8 @@ describe('ProfileComponent', () => {
         fixture.detectChanges();
 
         expect(fixture.debugElement.query(By.css('#bio')).nativeElement.textContent).toBe('test\n');
-      })
-    }))
+      });
+    }));
 
     it('should set id', async(() => {
       fixture.detectChanges();
@@ -106,8 +106,8 @@ describe('ProfileComponent', () => {
         fixture.detectChanges();
 
         expect(fixture.debugElement.query(By.css('#userID')).nativeElement.textContent).toBe('ID: 1');
-      })
-    }))
+      });
+    }));
 
     it('should set email', async(() => {
       fixture.detectChanges();
@@ -115,7 +115,7 @@ describe('ProfileComponent', () => {
       fixture.whenStable().then(() => {
         fixture.detectChanges();
         expect(fixture.debugElement.query(By.css('#email')).nativeElement.textContent).toBe('test@test.com');
-      })
-    }))
+      });
+    }));
 
 });

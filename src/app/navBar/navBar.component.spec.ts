@@ -19,7 +19,7 @@ describe('NavBarComponent', () => {
             }
         ];
         const authenticationServiceStub = {
-          token: "token"
+          token: 'token'
         };
         const routerStub = {
             events: Observable.of(''),
@@ -53,17 +53,17 @@ describe('NavBarComponent', () => {
 
       fixture.whenStable().then(() => {
         fixture.detectChanges();
-        expect(fixture.debugElement.query(By.css('#navBMobile')).nativeElement.style.display).toBe("");
-      })
-    }))
+        expect(fixture.debugElement.query(By.css('#navBMobile')).nativeElement.style.display).toBe('');
+      });
+    }));
 
     it('should set navB', async(() => {
       fixture.detectChanges();
 
       fixture.whenStable().then(() => {
         fixture.detectChanges();
-        expect(fixture.debugElement.query(By.css('#navB')).nativeElement.style.display).toBe("");
-      })
-    }))
+        expect(fixture.debugElement.query(By.css('#navB')).nativeElement.style.display).toBe('');
+      });
+    }));
 
 });

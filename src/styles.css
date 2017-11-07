@@ -90,6 +90,12 @@ span {
   margin: 0 auto;
 }
 
+.alert-danger {
+  width: 100%;
+  text-align: center;
+  margin: 0 auto;
+}
+
 .comment-card {
   margin-top: 1%;
   margin-bottom: 1%;

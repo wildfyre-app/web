@@ -7,7 +7,7 @@ import { MdMenuModule, MdSlideToggleModule } from '@angular/material';
 import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import { Author } from '../_models/author'
+import { Author } from '../_models/author';
 import { Comment } from '../_models/comment';
 import { Post } from '../_models/post';
 import { MarkedPipe } from '../_pipes/marked.pipe';
@@ -57,10 +57,10 @@ describe('HomeComponent', () => {
             getNextPost: () => {
               return Observable.of(
                 new Post(1,
-                  new Author(1, "test", null, "test", false), false, "2017-07-22T12:03:23.465373Z", false, "test",
+                  new Author(1, 'test', null, 'test', false), false, '2017-07-22T12:03:23.465373Z', false, 'test',
                     new Array<Comment>(
                       new Comment(1,
-                        new Author(1, "test", null, "test", false), "2017-07-22T12:03:23.465373Z", "test")))
+                        new Author(1, 'test', null, 'test', false), '2017-07-22T12:03:23.465373Z', 'test')))
                       );
             },
             comment: () => ({
@@ -108,17 +108,17 @@ describe('HomeComponent', () => {
 
       fixture.whenStable().then(() => {
         fixture.detectChanges();
-        expect(el.textContent).toBe("test\n");
-      })
-    }))
+        expect(el.textContent).toBe('test\n');
+      });
+    }));
 
     it('should set comment text', async(() => {
       fixture.detectChanges();
 
       fixture.whenStable().then(() => {
         fixture.detectChanges();
-        expect(fixture.debugElement.query(By.css('.commentText')).nativeElement.textContent).toBe("test\n");
-      })
-    }))
+        expect(fixture.debugElement.query(By.css('.commentText')).nativeElement.textContent).toBe('test\n');
+      });
+    }));
 
 });

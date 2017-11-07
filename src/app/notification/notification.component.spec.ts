@@ -4,7 +4,7 @@ import { NO_ERRORS_SCHEMA, Component } from '@angular/core';
 import { MdCardModule, MdTabsModule } from '@angular/material';
 import { Router, RouterModule } from '@angular/router';
 import { Observable } from 'rxjs';
-import { Author } from '../_models/author'
+import { Author } from '../_models/author';
 import { Comment } from '../_models/comment';
 import { Notification } from '../_models/notification';
 import { Post } from '../_models/post';
@@ -22,19 +22,19 @@ describe('NotificationComponent', () => {
           url: '/notifications'
         };
         const authenticationServiceStub = {
-            token: "token"
+            token: 'token'
         };
         const notificationServiceStub = {
             getNotifications: () => {
               return Observable.of(
                 new Array<Notification>(
-                  new Notification("fun",
+                  new Notification('fun',
                     new Post(1,
-                      new Author(1, "test", null, "test", false), false, "2017-07-22T12:03:23.465373Z", false, "test",
+                      new Author(1, 'test', null, 'test', false), false, '2017-07-22T12:03:23.465373Z', false, 'test',
                         new Array<Comment>(
                           new Comment(1,
-                            new Author(1, "test", null, "test", false), "2017-07-22T12:03:23.465373Z", "test"))),
-                              new Array<number>(1,2)))
+                            new Author(1, 'test', null, 'test', false), '2017-07-22T12:03:23.465373Z', 'test'))),
+                              new Array<number>(1, 2)))
               );
             }
         };
@@ -60,7 +60,7 @@ describe('NotificationComponent', () => {
 
       fixture.whenStable().then(() => {
         fixture.detectChanges();
-        expect(fixture.debugElement.query(By.css('.notifications')).nativeElement.textContent).toBe("test");
-      })
-    }))
+        expect(fixture.debugElement.query(By.css('.notifications')).nativeElement.textContent).toBe('test');
+      });
+    }));
 });

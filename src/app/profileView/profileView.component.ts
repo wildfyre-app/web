@@ -9,7 +9,6 @@ import { RouteService } from '../_services/route.service';
   templateUrl: 'profileView.component.html',
 })
 export class ProfileViewComponent implements OnInit {
-  private sub: any;
   author: Author;
 
   constructor(
@@ -21,7 +20,7 @@ export class ProfileViewComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.sub = this.route
+    this.route
       .params
       .subscribe(params => {
         const id = params['id'];

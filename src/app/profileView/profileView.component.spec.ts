@@ -19,26 +19,26 @@ describe('ProfileViewComponent', () => {
 
   beforeEach(() => {
     // stubs
-    let activatedRouteStub = {
+    const activatedRouteStub = {
       params: Observable.of({'id': 1})
     };
-    let routerStub = {};
-    let authenticationServiceStub = {
-      token: "token"
+    const routerStub = {};
+    const authenticationServiceStub = {
+      token: 'token'
     };
     const profileServiceStub = {
       getUser: (id: number) => {
-        if (id != 1) {
-          throw new Error("Requests for users other than with Id 1 not implemented");
+        if (id !== 1) {
+          throw new Error('Requests for users other than with Id 1 not implemented');
         }
 
         return Observable.of(
-          new Author(1, "Test User", null, "test", false)
+          new Author(1, 'Test User', null, 'test', false)
         );
       }
     };
 
-    let routeServiceStub = {};
+    const routeServiceStub = {};
 
     TestBed.configureTestingModule({
       declarations: [ ProfileViewComponent, MarkedPipe ],
@@ -65,9 +65,9 @@ describe('ProfileViewComponent', () => {
     fixture.whenStable().then(() => {
       fixture.detectChanges();
 
-      expect(el.textContent).toBe("Test User");
-    })
-  }))
+      expect(el.textContent).toBe('Test User');
+    });
+  }));
 
   it('should set bio', async(() => {
     fixture.detectChanges();
@@ -76,8 +76,8 @@ describe('ProfileViewComponent', () => {
       fixture.detectChanges();
 
       expect(fixture.debugElement.query(By.css('#bio')).nativeElement.textContent).toBe('test\n');
-    })
-  }))
+    });
+  }));
 
   it('should set id', async(() => {
     fixture.detectChanges();
@@ -86,7 +86,7 @@ describe('ProfileViewComponent', () => {
       fixture.detectChanges();
 
       expect(fixture.debugElement.query(By.css('#userID')).nativeElement.textContent).toBe('ID: 1');
-    })
-  }))
+    });
+  }));
 
 });
