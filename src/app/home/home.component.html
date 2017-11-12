@@ -7,14 +7,20 @@
     <button class="refreshButton" md-button (click)="ngOnInit()">Refresh <i class="material-icons">refresh</i></button>
   </div>
   <div *ngIf="post">
-    <md-card class="content">
-      <md-card-content>
-        <span class="mainText" [innerHTML]="post.text | marked"></span>
-      </md-card-content>
 
-      <md-card-header>
-        <small><i><a (click)="gotoUser(post.author.user)" routerLinkActive="active">{{post.author.name}}</a> | {{post.created}}</i></small>
-      </md-card-header>
+    <md-card class="content">
+        <span class="mainText" [innerHTML]="post.text | marked"></span>
+      <md-card (click)="gotoUser(post.author.user)" class="parentContainer1">
+      <div class="parentContainer">
+        <img class="pfp2" (click)="gotoUser(post.author.user)" *ngIf="post.author.avatar" [src]="post.author.avatar" alt="Avatar of {{post.author.name}}"/>
+        <img class="pfp2" (click)="gotoUser(post.author.user)" *ngIf="!post.author.avatar" src="/assets/logo.png" alt="Avatar of {{post.author.name}}"/>
+        <ng-container class="user">
+          <br>
+        <i><small><a routerLink="/user/{{post.author.user}}" class="dateText" (click)="gotoUser(post.author.user)" routerLinkActive="active">{{post.author.name}}</a><br> {{post.created}}</small></i>
+      </ng-container>
+      </div>
+    </md-card>
+
       <div class="postEditing">
         <ng-container *ngIf="post.id !== 0">
           <div *ngIf="!post?.subscribed">
@@ -51,8 +57,19 @@
               <button *ngIf="!(comment.author?.user == userID)" md-menu-item (click)="openDialog(post, comment, typeOfReport.Comment)"><md-icon>flag</md-icon>Flag Comment</button>
             </md-menu>
           </div>
-          <md-card-content class="commentText" [innerHTML]="comment.text | marked"></md-card-content>
-          <md-card-header><small><i><a class="dateText" (click)="gotoUser(comment.author.user)" routerLinkActive="active">{{comment.author.name}}</a>  | {{comment.created}}</i></small></md-card-header>
+          <div class="commentText" [innerHTML]="comment.text | marked"></div>
+
+          <md-card (click)="gotoUser(comment.author.user)" class="parentContainer1">
+          <div class="parentContainer">
+            <img class="pfp2" (click)="gotoUser(comment.author.user)" *ngIf="comment.author.avatar" [src]="comment.author.avatar" alt="Avatar of {{comment.author.name}}"/>
+            <img class="pfp2" (click)="gotoUser(comment.author.user)" *ngIf="!comment.author.avatar" src="/assets/logo.png" alt="Avatar of {{comment.author.name}}"/>
+            <ng-container class="user">
+              <br>
+            <i><small><a class="dateText" routerLink="/user/{{comment.author.user}}" (click)="gotoUser(comment.author.user)" routerLinkActive="active">{{comment.author.name}}</a><br> {{comment.created}}</small></i>
+          </ng-container>
+          </div>
+        </md-card>
+
         </md-card>
       </div>
     </md-list>

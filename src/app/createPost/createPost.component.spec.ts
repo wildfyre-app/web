@@ -10,6 +10,7 @@ import { MdDialogRef } from '@angular/material';
 import { CreatePostComponent } from './createPost.component';
 import { PictureDialogComponent } from './createPost.component';
 import { YouTubeDialogComponent } from './createPost.component';
+import { RouteService } from '../_services/route.service';
 import { MarkedPipe } from '../_pipes/marked.pipe';
 
 describe('CreatePostComponent', () => {
@@ -43,6 +44,9 @@ describe('CreatePostComponent', () => {
               return 's';
             }
         };
+        const routeServiceStub = {
+            addNextRoute: () => ({})
+        };
         TestBed.configureTestingModule({
             declarations: [ CreatePostComponent, PictureDialogComponent, YouTubeDialogComponent, MarkedPipe ],
             schemas: [ NO_ERRORS_SCHEMA ],
@@ -51,7 +55,8 @@ describe('CreatePostComponent', () => {
                 { provide: Router, useValue: routerStub },
                 { provide: AreaService, useValue: areaServiceStub },
                 { provide: PostService, useValue: postServiceStub },
-                { provide: MdDialogRef, useValue: mdDialogRefStub }
+                { provide: MdDialogRef, useValue: mdDialogRefStub },
+                { provide: RouteService, useValue: routeServiceStub }
             ],
             imports: [ MdMenuModule, MdSlideToggleModule, FormsModule, MdSnackBarModule ],
         });

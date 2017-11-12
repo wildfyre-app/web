@@ -55,7 +55,7 @@ describe('ProfileViewComponent', () => {
     fixture = TestBed.createComponent(ProfileViewComponent);
     comp = fixture.componentInstance;
 
-    de = fixture.debugElement.query(By.css('h2'));
+    de = fixture.debugElement.query(By.css('#name'));
     el = de.nativeElement;
   });
 

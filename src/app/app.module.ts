@@ -43,6 +43,7 @@ import { Routing } from './app.routing';
 import { Angulartics2Module, Angulartics2Piwik } from 'angulartics2';
 import { ClipboardModule } from 'ngx-clipboard';
 import 'hammerjs';
+import { ImageCropperModule } from 'ng2-img-cropper';
 import { MarkedPipe } from './_pipes/marked.pipe';
 import { ReCaptchaModule } from 'angular2-recaptcha';
 
@@ -57,6 +58,7 @@ import { ReCaptchaModule } from 'angular2-recaptcha';
     ClipboardModule,
     FormsModule,
     HttpModule,
+    ImageCropperModule,
     MaterialModule,
     MdButtonModule,
     MdCardModule,

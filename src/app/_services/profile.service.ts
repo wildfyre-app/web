@@ -3,6 +3,7 @@ import { Response } from '@angular/http';
 import { Observable } from 'rxjs';
 import { Account, AccountError } from '../_models/account';
 import { Author, AuthorError } from '../_models/author';
+import { Profile, ProfileError } from '../_models/profile';
 import { HttpService } from './http.service';
 
 @Injectable()
@@ -101,6 +102,22 @@ export class ProfileService {
         return Account.parse(response.json());
       }).catch((err) => {
         return Observable.of(new AccountError(
+          JSON.parse(err._body).non_field_errors,
+          JSON.parse(err._body).text
+        ));
+      });
+  }
+
+  setProfilePicture(image: any): Observable<Profile> {
+     const formData: FormData = new FormData();
+     formData.append('avatar', image, image.name);
+
+    return this.httpService.PUT_IMAGE('/users/', formData)
+      .map((response: Response) => {
+        console.log('You looked in the mirror and got frightened');
+        return Profile.parse(response.json());
+      }).catch((err) => {
+        return Observable.of(new ProfileError(
           JSON.parse(err._body).non_field_errors,
           JSON.parse(err._body).text
         ));

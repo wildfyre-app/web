@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Author } from '../_models/author';
 import { Comment } from '../_models/comment';
@@ -27,6 +27,7 @@ export class PostViewComponent implements OnInit {
   userID: number;
 
   constructor(
+    private cdRef: ChangeDetectorRef,
     private route: ActivatedRoute,
     private router: Router,
     private areaService: AreaService,
@@ -80,8 +81,10 @@ export class PostViewComponent implements OnInit {
   }
 
   postComment() {
+    this.cdRef.detectChanges();
     this.postService.comment(this.area, this.post, this.model.comment).subscribe();
     this.model.comment = '';
+    this.cdRef.detectChanges();
   }
 
   gotoUser(user: string) {

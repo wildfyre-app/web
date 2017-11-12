@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Auth} from '../_models/auth';
 import { AuthenticationService } from '../_services/authentication.service';
+import { RouteService } from '../_services/route.service';
 import { LoginComponent } from './login.component';
 
 describe('LoginComponent', () => {
@@ -26,12 +27,16 @@ describe('LoginComponent', () => {
                 }
             })
         };
+        const routeServiceStub = {
+            resetRoutes: () => ({})
+        };
         TestBed.configureTestingModule({
             declarations: [ LoginComponent ],
             schemas: [ NO_ERRORS_SCHEMA ],
             providers: [
                 { provide: Router, useValue: routerStub },
-                { provide: AuthenticationService, useValue: authenticationServiceStub }
+                { provide: AuthenticationService, useValue: authenticationServiceStub },
+                { provide: RouteService, useValue: routeServiceStub }
             ],
             imports: [ FormsModule ]
         });

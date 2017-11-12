@@ -64,6 +64,13 @@ export class HttpService {
       .catch((error: any) => this.handleError(error));
   }
 
+  PUT_IMAGE(passedUrl: string, body: any): Observable<any> {
+    // PUT to api
+
+    return this.http.put(this.apiURL + passedUrl, body, this.getOptionsForImage())
+      .catch((error: any) => this.handleError(error));
+  }
+
   // Handling methods
   private handleError(error: any): Observable<any> {
     let message: string;
@@ -139,10 +146,23 @@ export class HttpService {
   getOptions(headers?: Headers|null): RequestOptions {
     headers = headers || new Headers();
 
-    // Set Content-Type to JSON if not alread set
+    // Set Content-Type to JSON if not already set
     if (!headers.has('Content-Type')) {
       headers.append('Content-Type', 'application/json');
     }
+
+    // Add Token if available
+    if (this.authenticationService.token != null) {
+      headers.append('Authorization', 'Token ' + this.authenticationService.token);
+    }
+
+    return new RequestOptions({
+      headers: headers
+    });
+  }
+
+  getOptionsForImage(headers?: Headers|null): RequestOptions {
+    headers = headers || new Headers();
 
     // Add Token if available
     if (this.authenticationService.token != null) {

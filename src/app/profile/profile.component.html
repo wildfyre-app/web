@@ -1,27 +1,34 @@
 <md-card class="example-card">
   <md-card>
-    <button md-icon-button [mdMenuTriggerFor]="appMenu"><i class="material-icons">more_vert</i></button>
     <md-menu #appMenu="mdMenu">
+      <button md-menu-item (click)="viewProfile()"><md-icon>public</md-icon>View Public Profile</button>
       <button md-menu-item (click)="editBio()"><md-icon>mode_edit</md-icon>Bio</button>
       <button md-menu-item (click)="editEmail()"><md-icon>mode_edit</md-icon>Email</button>
       <button md-menu-item (click)="editPassword()"><md-icon>mode_edit</md-icon>Password</button>
+      <button md-menu-item (click)="editPicture()"><md-icon>mode_edit</md-icon>Profile Picture</button>
       <button md-menu-item (click)="logout()"><md-icon>power_settings_new</md-icon>Logout</button>
     </md-menu>
     <md-card-content>
-      <h2>{{author?.name}}</h2>
+      <md-card>
+        <button md-icon-button [mdMenuTriggerFor]="appMenu"><i class="material-icons">more_vert</i></button>
+        <a [href]="author?.avatar"><img class="pfp" *ngIf="author?.avatar" [src]="author?.avatar" alt="Avatar of {{author?.name}}"/></a>
+        <a href="/assets/logo.png"><img class="pfp" *ngIf="!author?.avatar" src="/assets/logo.png" alt="Avatar of {{author?.name}}"/></a>
+        <div class="parentContainer">
+          <div class="user">
+            <br>
+            <font id="name" size="5">{{author?.name}}</font><br>
+            <ng-container *ngIf="!emailEdit">
+              <span id="email"><a href="mailto:{{account?.email}}">{{account?.email}}</a></span>
+            </ng-container>
+          </div>
+        </div>
+      </md-card>
     </md-card-content>
-    <img *ngIf="author?.avatar" [src]="author?.avatar" alt="Avatar of {{author?.name}}" height="73" width="73" />
-    <br>
 
-    <div class="box" *ngIf="!bioEdit">
-    Bio: <span id="bio" [innerHTML]="author?.bio | marked"></span>
-    </div><br>
+    <ng-container class="box" *ngIf="!bioEdit">
+    <span id="bio" [innerHTML]="author?.bio | marked"></span>
+    </ng-container>
 
-    <div class="box" *ngIf="!emailEdit">
-    Email: <span id="email"><a href="mailto:{{account?.email}}">{{account?.email}}</a></span>
-    </div>
-
-    <br>
     <div class="box" *ngIf="bioEdit">
       <md-card>
         <button md-button id="clearIcon"(click)="cancelEditBio()"><i class="material-icons">clear</i></button>
@@ -31,7 +38,7 @@
         </md-input-container>
       </div>
       <div class="form">
-        <button md-raised-button color="accent" (click)="submitEditBio()" [disabled]="loading">Change Bio</button>
+        <button class="wideButtons" md-raised-button color="accent" (click)="submitEditBio()" [disabled]="loading">Change Bio</button>
         <md-spinner *ngIf="loading"></md-spinner>
       </div>
       <br>
@@ -49,7 +56,7 @@
       </div>
 
       <div class="form">
-        <button md-raised-button color="accent" (click)="submitEditEmail()" [disabled]="loading">Send Email</button>
+        <button class="wideButtons" md-raised-button color="accent" (click)="submitEditEmail()" [disabled]="loading">Send Email</button>
         <md-spinner *ngIf="loading"></md-spinner>
       </div>
       <br>
@@ -114,11 +121,27 @@
 
           <br>
           <div class="form">
-            <button md-raised-button color="accent" [disabled]="loading">Change Password</button>
+            <button class="wideButtons" md-raised-button color="accent" [disabled]="loading">Change Password</button>
             <md-spinner *ngIf="loading"></md-spinner>
           </div>
         </form>
       </md-card>
+    </div>
+
+    <div class="box" *ngIf="pictureEdit">
+      <md-card>
+        <button md-button id="clearIcon" (click)="cancelEditPicture()"><i class="material-icons">clear</i></button>
+        <img-cropper [image]="data" [settings]="cropperSettings" (onCrop)="cropped($event)"></img-cropper>
+         <span class="result" *ngIf="data.image">
+            <img [src]="data.image" [width]="croppedWidth" [height]="croppedHeight">
+        </span>
+        <div class="form">
+          <button class="wideButtons" md-raised-button color="accent" (click)="submitEditPicture()" [disabled]="loading">Update Profile Picture</button>
+          <md-spinner *ngIf="loading"></md-spinner>
+        </div>
+        <br>
+      </md-card>
+      <br>
     </div>
 
     <div class="box" *ngIf="author?.banned">

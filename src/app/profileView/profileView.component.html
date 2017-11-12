@@ -1,14 +1,19 @@
 <md-card class="example-card">
   <md-card>
     <button md-button (click)="back()"><i class="material-icons">arrow_back</i></button>
-    <md-card-content>
-      <h2>{{author?.name}}</h2>
-    </md-card-content>
-    Bio: <span id="bio" [innerHTML]="author?.bio | marked"></span>
-    <p>{{author?.avatar}}</p>
-    <div class="box" *ngIf="author?.banned">
-      <p>You are currently banned</p>
+    <md-card class="content">
+    <div class="alert alert-danger" *ngIf="author?.banned">
+      You are currently banned
+    </div>
+    <a [href]="author?.avatar"><img class="pfp" *ngIf="author?.avatar" [src]="author?.avatar" alt="Avatar of {{author?.name}}"/></a>
+    <a href="/assets/logo.png"><img class="pfp" *ngIf="!author?.avatar" src="/assets/logo.png" alt="Avatar of {{author?.name}}"/></a>
+    <div class="parentContainer">
+      <div class="user">
+        <font id="name" size="5">{{author?.name}}</font><br>
+      </div>
     </div>
   </md-card>
+  <span id="bio" [innerHTML]="author?.bio | marked"></span>
   <div id="userID">ID: {{author?.user}}</div>
+</md-card>
 </md-card>

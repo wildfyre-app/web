@@ -1,23 +1,26 @@
 <md-card class="example-card">
-  <md-card>
-    <button md-button (click)="back()"><i class="material-icons">arrow_back</i></button>
-    <md-card-content>
+    <md-card class="content">
+      <button md-button (click)="back()"><i class="material-icons">arrow_back</i></button>
       <span class="mainText" [innerHTML]="post?.text | marked"></span>
-    </md-card-content>
-    <md-card-header>
-      <small><i><a (click)="gotoUser(post?.author?.user)" routerLinkActive="active">{{post?.author?.name}}</a> | {{post?.created}}</i></small>
-    </md-card-header>
+      <md-card (click)="gotoUser(post?.author?.user)" class="parentContainer1">
+      <div class="parentContainer">
+        <img class="pfp2" (click)="gotoUser(post?.author?.user)" *ngIf="post?.author?.avatar" [src]="post?.author?.avatar" alt="Avatar of {{post?.author?.name}}"/>
+        <img class="pfp2" (click)="gotoUser(post?.author?.user)" *ngIf="!post?.author?.avatar" src="/assets/logo.png" alt="Avatar of {{post?.author?.name}}"/>
+        <ng-container class="user">
+          <br>
+        <i><small><a routerLink="/user/{{post?.author?.user}}" class="dateText" (click)="gotoUser(post?.author?.user)" routerLinkActive="active">{{post?.author?.name}}</a><br> {{post?.created}}</small></i>
+      </ng-container>
+      </div>
+    </md-card>
+
     <div class="postEditing">
-
-
-    <div *ngIf="!post?.subscribed">
-      <button md-button (click)="subscribe(true)"><i class="material-icons">turned_in_not</i></button>
-    </div>
-    <div *ngIf="post?.subscribed">
-      <button md-button (click)="subscribe(false)"><i class="material-icons">turned_in</i></button>
-    </div>
-
-    <button md-icon-button [mdMenuTriggerFor]="appMenu"><i class="material-icons">more_vert</i></button>
+      <div *ngIf="!post?.subscribed">
+        <button md-button (click)="subscribe(true)"><i class="material-icons">turned_in_not</i></button>
+      </div>
+      <div *ngIf="post?.subscribed">
+        <button md-button (click)="subscribe(false)"><i class="material-icons">turned_in</i></button>
+      </div>
+      <button md-icon-button [mdMenuTriggerFor]="appMenu"><i class="material-icons">more_vert</i></button>
       <md-menu #appMenu="mdMenu">
         <input class="hideMeClass" type="text" [(ngModel)]="text">
         <button md-menu-item [class.btn-success]="isCopied" type="button" ngxClipboard [cbContent]="text" (cbOnSuccess)="isCopied = true"><md-icon>link</md-icon>Copy Link</button>
@@ -43,9 +46,18 @@
             <button *ngIf="!(comment.author?.user == userID)" md-menu-item (click)="openDialog(post, comment, typeOfReport.Comment)"><md-icon>flag</md-icon>Flag Comment</button>
           </md-menu>
         </div>
-        <md-card-content class="commentText" [innerHTML]="comment.text | marked"></md-card-content>
+        <div class="commentText" [innerHTML]="comment.text | marked"></div>
 
-        <md-card-header><small class="dateText"><i><a (click)="gotoUser(comment.author.user)" routerLinkActive="active">{{comment.author.name}}</a>  | {{comment.created}}</i></small></md-card-header>
+        <md-card (click)="gotoUser(comment.author.user)" class="parentContainer1">
+        <div class="parentContainer">
+          <img class="pfp2" (click)="gotoUser(comment.author.user)" *ngIf="comment.author.avatar" [src]="comment.author.avatar" alt="Avatar of {{comment.author.name}}"/>
+          <img class="pfp2" (click)="gotoUser(comment.author.user)" *ngIf="!comment.author.avatar" src="/assets/logo.png" alt="Avatar of {{comment.author.name}}"/>
+          <ng-container class="user">
+            <br>
+          <i><small><a class="dateText" routerLink="/user/{{comment.author.user}}" (click)="gotoUser(comment.author.user)" routerLinkActive="active">{{comment.author.name}}</a><br> {{comment.created}}</small></i>
+        </ng-container>
+        </div>
+      </md-card>
       </md-card>
     </div>
   </md-list>

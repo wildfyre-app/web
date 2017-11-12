@@ -4,7 +4,7 @@ import { ComponentFixture, ComponentFixtureAutoDetect, TestBed, async } from '@a
 import { DebugElement } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MdMenuModule, MdSlideToggleModule } from '@angular/material';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Author } from '../_models/author';
@@ -95,7 +95,7 @@ describe('HomeComponent', () => {
                 { provide: RouteService, useValue: routeServiceStub },
                 { provide: ComponentFixtureAutoDetect, useValue: true }
             ],
-            imports: [ MdMenuModule, FormsModule, ClipboardModule, MdSlideToggleModule ]
+            imports: [ MdMenuModule, FormsModule, ClipboardModule, MdSlideToggleModule, RouterModule ]
         });
         fixture = TestBed.createComponent(HomeComponent);
         comp = fixture.componentInstance;

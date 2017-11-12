@@ -1,6 +1,5 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Response } from '@angular/http';
 import { Area } from '../_models/area';
 import { Author } from '../_models/author';
 import { Comment } from '../_models/comment';
@@ -83,7 +82,6 @@ export class HomeComponent implements OnInit {
 
   gotoUser(user: string) {
     this.routeService.addNextRoute(this.router.url);
-    this.router.navigateByUrl('/user/' + user);
   }
 
   onChange(value: any) {
@@ -132,11 +130,12 @@ export class HomeComponent implements OnInit {
   }
 
   postComment() {
+    this.cdRef.detectChanges();
     this.postService.comment(
       this.areaService.currentAreaName,
       this.post, this.model.comment
     ).subscribe();
-
+    this.cdRef.detectChanges();
     this.model.comment = '';
   }
 

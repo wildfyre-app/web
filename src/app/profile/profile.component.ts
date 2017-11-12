@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MdSnackBar } from '@angular/material';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Account } from '../_models/account';
@@ -7,18 +7,27 @@ import { PasswordError } from '../_models';
 import { AuthenticationService } from '../_services/authentication.service';
 import { ProfileService } from '../_services/profile.service';
 import { RouteService } from '../_services/route.service';
+import { ImageCropperComponent, CropperSettings, Bounds } from 'ng2-img-cropper';
 
 @Component({
   templateUrl: 'profile.component.html'
 })
 export class ProfileComponent implements OnInit {
+  @ViewChild('cropper', undefined) cropper: ImageCropperComponent;
   account: Account;
   author: Author;
   bioEdit: boolean;
+  croppedHeight: number;
+  croppedWidth: number;
+  cropperSettings: CropperSettings;
+  data: any;
   emailEdit: boolean;
   errors: PasswordError;
   model: any = {};
   passwordEdit: boolean;
+  pictureEdit: boolean;
+  profilePicture: any;
+  url: string;
   self: boolean;
 
   constructor(
@@ -28,7 +37,28 @@ export class ProfileComponent implements OnInit {
     private authenticationService: AuthenticationService,
     private profileService: ProfileService,
     private routeService: RouteService
-  ) { }
+  ) {
+  this.cropperSettings = new CropperSettings();
+  this.cropperSettings.width = 200;
+  this.cropperSettings.height = 200;
+
+  this.cropperSettings.croppedWidth = 200;
+  this.cropperSettings.croppedHeight = 200;
+
+  this.cropperSettings.canvasWidth = 200;
+  this.cropperSettings.canvasHeight = 200;
+
+  this.cropperSettings.minWidth = 10;
+  this.cropperSettings.minHeight = 10;
+
+  this.cropperSettings.rounded = false;
+  this.cropperSettings.keepAspect = true;
+
+  this.cropperSettings.cropperDrawSettings.strokeColor = 'rgb(191, 63, 127)';
+  this.cropperSettings.cropperDrawSettings.strokeWidth = 3;
+
+  this.data = {};
+   }
 
   ngOnInit() {
     this.routeService.resetRoutes();
@@ -61,18 +91,6 @@ export class ProfileComponent implements OnInit {
     });
   }
 
-  editBio() {
-    this.bioEdit = true;
-  }
-
-  editEmail() {
-    this.emailEdit = true;
-  }
-
-  editPassword() {
-    this.passwordEdit = true;
-  }
-
   cancelEditBio() {
     this.bioEdit = false;
   }
@@ -87,6 +105,61 @@ export class ProfileComponent implements OnInit {
     this.model.oldPassword = '';
     this.model.newPassword1 = '';
     this.model.newPassword2 = '';
+  }
+
+  cancelEditPicture() {
+    this.pictureEdit = false;
+  }
+
+  cropped(bounds: Bounds) {
+    this.croppedHeight = bounds.bottom - bounds.top;
+    this.croppedWidth = bounds.right - bounds.left;
+    if (this.data) {
+      // convert the data URL to a byte string
+      const byteString = atob(this.data.image.split(',')[1]);
+
+      // pull out the mime type from the data URL
+      const mimeString = this.data.image.split(',')[0].split(':')[1].split(';')[0];
+
+      // Convert to byte array
+      const ab = new ArrayBuffer(byteString.length);
+      const ia = new Uint8Array(ab);
+      for (let i = 0; i < byteString.length; i++) {
+          ia[i] = byteString.charCodeAt(i);
+      }
+
+      // Create a blob that looks like a file.
+      this.profilePicture = new Blob([ab], {'type': mimeString });
+      this.profilePicture['name'] = this.author.name + this.author.user;
+      switch (this.profilePicture.type) {
+        case 'image/jpeg':
+          this.profilePicture['name'] += '.jpg';
+        break;
+        case 'image/png':
+          this.profilePicture['name'] += '.png';
+        break;
+      }
+    } else {
+      const snackBarRef = this.snackBar.open('You did not select a valid image file', 'Close', {
+        duration: 3000
+      });
+    }
+  }
+
+  editBio() {
+    this.bioEdit = true;
+  }
+
+  editEmail() {
+    this.emailEdit = true;
+  }
+
+  editPassword() {
+    this.passwordEdit = true;
+  }
+
+  editPicture() {
+    this.pictureEdit = true;
   }
 
   logout() {
@@ -140,5 +213,30 @@ export class ProfileComponent implements OnInit {
           const snackBarRef = this.snackBar.open('This is not your current password', 'Close');
         }
     });
+    }
+
+    submitEditPicture() {
+      if (this.profilePicture) {
+      this.profileService.setProfilePicture(this.profilePicture)
+        .subscribe(result => {
+          if (!result.getError()) {
+          this.author.avatar = result.avatar;
+          this.pictureEdit = false;
+        } else {
+          const snackBarRef = this.snackBar.open('Your image file must be below 512KiB in size', 'Close', {
+            duration: 3000
+          });
+        }
+        });
+      } else {
+        const snackBarRef = this.snackBar.open('You did not select a valid image file', 'Close', {
+          duration: 3000
+        });
+      }
+    }
+
+    viewProfile() {
+      this.routeService.addNextRoute(this.router.url);
+      this.router.navigateByUrl('/user/' + this.author.user);
     }
   }

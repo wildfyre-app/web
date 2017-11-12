@@ -6,6 +6,7 @@ import { MaterialModule } from '@angular/material';
 import { MdSnackBar, MdMenuModule, MdCardModule } from '@angular/material';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 import { Observable } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { Author } from '../_models/author';
@@ -94,7 +95,8 @@ describe('PostViewComponent', () => {
                 { provide: ProfileService, useValue: profileServiceStub },
                 { provide: RouteService, useValue: routeServiceStub }
             ],
-            imports: [ MdMenuModule, MdCardModule, ClipboardModule, MaterialModule, FormsModule, BrowserAnimationsModule ],
+            imports: [ MdMenuModule, MdCardModule, ClipboardModule, MaterialModule,
+              FormsModule, BrowserAnimationsModule, RouterTestingModule ],
         });
         fixture = TestBed.createComponent(PostViewComponent);
         comp = fixture.componentInstance;

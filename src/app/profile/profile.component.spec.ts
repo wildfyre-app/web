@@ -7,11 +7,14 @@ import { MdSnackBar, MdMenuModule, MdCardModule } from '@angular/material';
 import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
+import { ProfileComponent } from './profile.component';
+import { Account } from '../_models/account';
+import { Author } from '../_models/author';
 import { AuthenticationService } from '../_services/authentication.service';
 import { ProfileService } from '../_services/profile.service';
-import { ProfileComponent } from './profile.component';
-import { Author } from '../_models/author';
-import { Account } from '../_models/account';
+import { RouteService } from '../_services/route.service';
+import { ImageCropperComponent, CropperSettings, Bounds } from 'ng2-img-cropper';
+
 
 describe('ProfileComponent', () => {
     let comp: ProfileComponent;
@@ -61,21 +64,25 @@ describe('ProfileComponent', () => {
                 subscribe: () => ({})
             })
         };
+        const routeServiceStub = {
+            addNextRoute: () => ({})
+        };
         TestBed.configureTestingModule({
-            declarations: [ ProfileComponent, MarkedPipe, NgModel, NgForm ],
+            declarations: [ ProfileComponent, MarkedPipe, NgModel, NgForm, ImageCropperComponent ],
             providers: [
                 { provide: MdSnackBar, useValue: mdSnackBarStub },
                 { provide: Router, useValue: routerStub },
                 { provide: ActivatedRoute, useValue: activatedRouteStub },
                 { provide: AuthenticationService, useValue: authenticationServiceStub },
                 { provide: ProfileService, useValue: profileServiceStub },
+                { provide: RouteService, useValue: routeServiceStub },
                 { provide: ComponentFixtureAutoDetect, useValue: true }
             ],
             imports: [ MdMenuModule, MdCardModule ],
         });
         fixture = TestBed.createComponent(ProfileComponent);
         comp = fixture.componentInstance;
-        de = fixture.debugElement.query(By.css('h2'));
+        de = fixture.debugElement.query(By.css('#name'));
         el = de.nativeElement;
     });
 
