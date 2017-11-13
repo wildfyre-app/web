@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MdSnackBar } from '@angular/material';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ViewChild } from '@angular/core';
-import { RecoverTransactionError } from '../_models/recoverTransaction';
+import { ResetError } from '../_models/reset';
 import { RegistrationService } from '../_services/registration.service';
 import { ReCaptchaComponent } from 'angular2-recaptcha';
 
@@ -11,7 +11,7 @@ import { ReCaptchaComponent } from 'angular2-recaptcha';
 })
 export class RecoverPasswordComponent implements OnInit {
   @ViewChild(ReCaptchaComponent) captcha: ReCaptchaComponent;
-  errors: RecoverTransactionError;
+  errors: ResetError;
   loading = false;
   model: any = {};
   token: any;
