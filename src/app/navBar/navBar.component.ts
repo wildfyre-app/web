@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthenticationService } from '../_services/authentication.service';
+import { NavBarService } from '../_services/navBar.service';
 
 @Component({
   selector: 'app-nav-bar',
@@ -14,7 +15,8 @@ export class NavBarComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private authenticationService: AuthenticationService
+    private authenticationService: AuthenticationService,
+    private navBarService: NavBarService
   ) {
     router.events.subscribe((url: any) => {
       if (this.authenticationService.token) {
@@ -22,6 +24,7 @@ export class NavBarComponent implements OnInit {
       } else {
         this.style = 'none';
       }
+
       this.setActiveIndex(url.url);
     });
 
@@ -45,6 +48,9 @@ export class NavBarComponent implements OnInit {
   ngOnInit() {
     if (this.authenticationService.token) {
       this.style = '';
+      this.navBarService.isVisibleSource.subscribe((isVisible: string) => {
+            this.style = isVisible;
+        });
     } else {
       this.style = 'none';
     }

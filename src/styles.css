@@ -31,7 +31,7 @@ canvas {
 }
 
 div.creationEditor {
-  zoom: 0.7;
+  zoom: 0.65;
 }
 
 div.mat-slide-toggle-bar {
@@ -189,6 +189,10 @@ span.result {
   text-align: center;
 }
 
+.mat-tab-link {
+  height: 50px;
+}
+
 .mobileButtons {
   color: white;
 }
@@ -275,8 +279,16 @@ span.result {
   zoom: 0.5;
 }
 
+#focusTouchZone {
+  position: fixed;
+  left: 0px;
+  bottom: 80px;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+}
+
 #mobileNav {
-  height: 40px;
   padding: 0%;
   background-color: #263238;
 }
@@ -292,6 +304,54 @@ span.result {
 
 @media (max-width: 640px) {
     /*applied if browser window width is less than or equal to 600px*/
+
+    button.extinguishButton.mat-raised-button.mat-accent {
+      position: fixed;
+      top: 0px;
+      left: 0px;
+      width: 50%;
+      z-index: 5;
+    }
+
+    button.igniteButton.mat-raised-button.mat-primary {
+      position: fixed;
+      right: 0px;
+      top: 0px;
+      width: 50%;
+      z-index: 5;
+    }
+
+    button#commentButton.mat-button.mat-accent {
+      position: fixed;
+      right: -1px;
+      bottom: 44px;
+      z-index: 3;
+      width: 27%;
+      background-color: #263238;
+      color: white;
+    }
+
+    button#editorButton.mat-button.mat-accent {
+      position: fixed;
+      right: -1px;
+      bottom: 80px;
+      z-index: 3;
+      width: 26%;
+      height: 41px;
+      background-color: #263238;
+      color: white;
+    }
+
+    .commentBox {
+      position: fixed;
+      left: 0px;
+      bottom: 45px;
+      z-index: 4;
+      border: 6px solid #263238;
+      width: 75%;
+      overflow-y: scroll;
+    }
+
     .icons {
       height: 5%;
       width: 5%;
@@ -310,8 +370,7 @@ span.result {
     }
 
     #navB {
-        display: none;
-        width: 100%
+      display: none;
     }
 
     #navBMobile {
@@ -325,6 +384,53 @@ span.result {
 
 @media (min-width: 641px) {
     /*applied if browser window width is greater than 600px*/
+
+    button.extinguishButton.mat-raised-button.mat-accent {
+      position: fixed;
+      top: 41px;
+      left: 0px;
+      width: 50%;
+      z-index: 5;
+    }
+
+    button.igniteButton.mat-raised-button.mat-primary {
+      position: fixed;
+      right: 0px;
+      top: 41px;
+      width: 50%;
+      z-index: 5;
+    }
+
+    button#commentButton.mat-button.mat-accent {
+      position: fixed;
+      right: -1px;
+      bottom: -1px;
+      z-index: 3;
+      width: 16%;
+      background-color: #263238;
+      color: white;
+    }
+
+    button#editorButton.mat-button.mat-accent {
+      position: fixed;
+      right: -1px;
+      bottom: 35px;
+      z-index: 3;
+      width: 16%;
+      height: 41px;
+      background-color: #263238;
+      color: white;
+    }
+
+    .commentBox {
+      position: fixed;
+      left: 0px;
+      bottom: 0px;
+      z-index: 4;
+      border: 6px solid #263238;
+      width: 85%;
+      overflow-y: scroll;
+    }
 
     .icons {
       height: 2%;

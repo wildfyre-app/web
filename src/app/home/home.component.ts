@@ -8,6 +8,7 @@ import { Reputation } from '../_models/reputation';
 import { AreaService } from '../_services/area.service';
 import { CommentService } from '../_services/comment.service';
 import { FlagService } from '../_services/flag.service';
+import { NavBarService } from '../_services/navBar.service';
 import { PostService } from '../_services/post.service';
 import { ProfileService } from '../_services/profile.service';
 import { RouteService } from '../_services/route.service';
@@ -18,13 +19,18 @@ import { RouteService } from '../_services/route.service';
 export class HomeComponent implements OnInit {
   private typeOfReport = TypeOfReport;
   systemAuthor: Author = new Author(375, 'WildFyre', '', '', false);
-  fakePost: Post = new Post(0, this.systemAuthor, false,
-    Date(), false, 'No more posts in this area, try creating one?', []);
+  fakePost: Post = new Post(0, this.systemAuthor, false, Date(), false,
+    'No more posts in this area, try creating one?', []);
   checked: boolean;
+  expanded = false;
   isCopied = false;
   model: any = {};
   post: Post = this.fakePost;
   rep: Reputation;
+  rowsExapanded = 1;
+  styleCommentBottom: string;
+  styleEditorBottom: string;
+  styleTextBottom: string;
   text = 'https://client.wildfyre.net/';
   userID: number;
 
@@ -35,11 +41,13 @@ export class HomeComponent implements OnInit {
     private areaService: AreaService,
     private commentService: CommentService,
     private flagService: FlagService,
+    private navBarService: NavBarService,
     private postService: PostService,
     private profileService: ProfileService,
     private routeService: RouteService
   ) {
     this.checked = this.areaService.isAreaChecked;
+    this.model.comment = '';
 
     this.profileService.getSelf()
       .subscribe( (author: Author) => {
@@ -50,6 +58,13 @@ export class HomeComponent implements OnInit {
   ngOnInit() {
     this.routeService.resetRoutes();
     this.cdRef.detectChanges();
+    if (window.screen.width > 600) {
+      this.styleTextBottom = '0px';
+      this.styleCommentBottom = '-1px';
+    } else {
+      this.styleTextBottom = '45px';
+      this.styleCommentBottom = '44px';
+    }
 
     this.postService.getNextPost(this.areaService.currentAreaName)
       .subscribe(nextPost => {
@@ -72,6 +87,43 @@ export class HomeComponent implements OnInit {
       });
   }
 
+  private addLineBreak(s: string) {
+    if (this.model.comment !== '') {
+      this.model.comment += '\n';
+    }
+    this.model.comment += s;
+  }
+
+  addBlockQoutes() {
+    this.addLineBreak('> Blockquote example');
+  }
+
+  addBold() {
+    this.addLineBreak('**Example**');
+  }
+
+  addItalics() {
+    this.addLineBreak('_Example_');
+  }
+
+  addStrikethrough() {
+    this.addLineBreak('~~Example~~');
+  }
+
+  contractBox() {
+    this.expanded = false;
+    this.rowsExapanded = 1;
+    this.navBarService.isVisibleSource.next('');
+
+    if (window.screen.width > 600) {
+      this.styleTextBottom = '0px';
+      this.styleCommentBottom = '-1px';
+    } else {
+      this.styleTextBottom = '45px';
+      this.styleCommentBottom = '44px';
+    }
+  }
+
   deleteComment(c: Comment) {
     this.commentService.deleteComment(
       this.areaService.currentAreaName,
@@ -80,11 +132,23 @@ export class HomeComponent implements OnInit {
     );
   }
 
+  expandBox() {
+    this.expanded = true;
+    this.rowsExapanded = 3;
+    this.navBarService.isVisibleSource.next('none');
+    this.styleTextBottom = '0px';
+    this.styleCommentBottom = '0px';
+    this.styleEditorBottom = '35px';
+  }
+
   gotoUser(user: string) {
     this.routeService.addNextRoute(this.router.url);
+    this.router.navigateByUrl('/user/' + user);
   }
 
   onChange(value: any) {
+    this.contractBox();
+
     this.cdRef.detectChanges();
     if (value.checked === true) {
       this.areaService.isAreaChecked = true;
@@ -116,6 +180,7 @@ export class HomeComponent implements OnInit {
   }
 
   openDialog(post: Post, comment: Comment, typeOfFlagReport: TypeOfReport) {
+    this.contractBox();
     this.flagService.currentComment = comment;
     this.flagService.currentPost = post;
 
@@ -136,10 +201,12 @@ export class HomeComponent implements OnInit {
       this.post, this.model.comment
     ).subscribe();
     this.cdRef.detectChanges();
+    this.contractBox();
     this.model.comment = '';
   }
 
   spread(spread: boolean) {
+    this.contractBox();
     this.cdRef.detectChanges();
     this.postService.spread(
       this.areaService.currentAreaName,

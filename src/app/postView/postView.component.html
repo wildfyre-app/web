@@ -30,11 +30,19 @@
     </div>
     <br>
   </md-card>
-    <md-input-container>
-      <textarea mdInput name="comment" rows="3" cols="40" type="text" name="post" [(ngModel)]="model.comment" #comment="ngModel" placeholder="Post a Comment"></textarea>
-    </md-input-container>
-    <br>
-    <button class="wideButtons" md-raised-button color="accent" [disabled]="loading" (click)="postComment()"><b>Comment</b></button>
+
+  <hr>
+  <div *ngIf="expanded" id="focusTouchZone" (click)="contractBox()"></div>
+  <textarea [style.bottom]="styleTextBottom" class="commentBox" (click)="expandBox()" name="comment" rows="{{rowsExapanded}}" cols="40" type="text" name="comment" [(ngModel)]="model.comment" #comment="ngModel" placeholder="Post a Comment"></textarea>
+  <button [style.bottom]="styleEditorBottom" *ngIf="expanded" id="editorButton"  md-button color="accent" [disabled]="loading" [mdMenuTriggerFor]="commentMenu"><i class="material-icons">mode_edit</i></button>
+  <button [style.bottom]="styleCommentBottom" id="commentButton" md-button color="accent" [disabled]="loading" (click)="postComment()"><b>Comment</b></button>
+
+  <md-menu #commentMenu="mdMenu">
+    <button md-menu-item (click)="addBold()"><i class="material-icons">format_bold</i> Bold</button>
+    <button md-menu-item (click)="addItalics()"><i class="material-icons">format_italic</i> Italic</button>
+    <button md-menu-item (click)="addStrikethrough()"><i class="material-icons">strikethrough_s</i> Strikethrough</button>
+    <button md-menu-item (click)="addBlockQoutes()"><i class="material-icons">format_quote</i> Quote</button>
+  </md-menu>
 
   <md-list>
     <div *ngFor="let comment of post?.comments">
@@ -48,13 +56,13 @@
         </div>
         <div class="commentText" [innerHTML]="comment.text | marked"></div>
 
-        <md-card (click)="gotoUser(comment.author.user)" class="parentContainer1">
+        <md-card (click)="gotoUser(comment.author?.user)" class="parentContainer1">
         <div class="parentContainer">
-          <img class="pfp2" (click)="gotoUser(comment.author.user)" *ngIf="comment.author.avatar" [src]="comment.author.avatar" alt="Avatar of {{comment.author.name}}"/>
-          <img class="pfp2" (click)="gotoUser(comment.author.user)" *ngIf="!comment.author.avatar" src="/assets/logo.png" alt="Avatar of {{comment.author.name}}"/>
+          <img class="pfp2" (click)="gotoUser(comment.author?.user)" *ngIf="comment.author?.avatar" [src]="comment.author?.avatar" alt="Avatar of {{comment.author?.name}}"/>
+          <img class="pfp2" (click)="gotoUser(comment.author?.user)" *ngIf="!comment.author?.avatar" src="/assets/logo.png" alt="Avatar of {{comment.author?.name}}"/>
           <ng-container class="user">
             <br>
-          <i><small><a class="dateText" routerLink="/user/{{comment.author.user}}" (click)="gotoUser(comment.author.user)" routerLinkActive="active">{{comment.author.name}}</a><br> {{comment.created}}</small></i>
+          <i><small><a class="dateText" routerLink="/user/{{comment.author?.user}}" (click)="gotoUser(comment.author?.user)" routerLinkActive="active">{{comment.author?.name}}</a><br> {{comment.created}}</small></i>
         </ng-container>
         </div>
       </md-card>

@@ -29,18 +29,18 @@
       <button md-button (click)="addHorizontalRule()"><i class="material-icons">remove</i></button>
       <button md-button (click)="openPictureDialog()"><i class="material-icons">insert_photo</i></button>
       <button md-button (click)="openYoutubeDialog()"><i class="material-icons">slideshow</i></button>
-
     </div>
+    <hr>
     <div class="form-group">
       <md-input-container>
-        <textarea id="createPostInput" mdInput rows="4" cols="80" type="text" name="post" [(ngModel)]="model.card" #comment="ngModel" ></textarea>
+        <textarea id="createPostInput" mdInput rows="7" cols="80" type="text" name="post" [(ngModel)]="model.card" #comment="ngModel" ></textarea>
       </md-input-container>
       <div *ngIf="errors && errors._text" class="help-block">
         <ul *ngFor="let err of errors._text">
           <li>{{err}}</li>
         </ul>
       </div>
-      <br>
+
       <button class="wideButtons" md-raised-button (click)="createPost()" color="accent" [disabled]="loading"><b>Create</b></button>
       <md-spinner *ngIf="loading"></md-spinner>
     </div>

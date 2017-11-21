@@ -1,3 +1,4 @@
+<ng-container (messageEvent)="receiveMessage($event)"></ng-container>
 <nav [style.display]="style" id="navB" md-tab-nav-bar aria-label="Navigation links">
   <a md-tab-link
     *ngFor="let routeLink of routeLinks; let i = index"
@@ -14,8 +15,7 @@
     *ngFor="let routeLink of mobileRouteLinks; let i = index"
     [routerLink]="routeLink.link"
     [active]="activeLinkIndex === i"
-    (click)="activeLinkIndex = i"
-    style="width:10%">
+    (click)="activeLinkIndex = i">
     <div class="mobileButtons" [innerHtml]="routeLink.label"></div>
   </a>
   </md-card>

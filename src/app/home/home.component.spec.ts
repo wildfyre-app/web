@@ -14,6 +14,7 @@ import { MarkedPipe } from '../_pipes/marked.pipe';
 import { AreaService } from '../_services/area.service';
 import { CommentService } from '../_services/comment.service';
 import { FlagService } from '../_services/flag.service';
+import { NavBarService } from '../_services/navBar.service';
 import { PostService } from '../_services/post.service';
 import { ProfileService } from '../_services/profile.service';
 import { RouteService } from '../_services/route.service';
@@ -38,6 +39,7 @@ describe('HomeComponent', () => {
         };
         const commentStub = {};
         const postStub = {};
+        const navBarServiceStub = {};
         const areaServiceStub = {
             isAreaChecked: {},
             currentAreaName: {},
@@ -90,6 +92,7 @@ describe('HomeComponent', () => {
                 { provide: AreaService, useValue: areaServiceStub },
                 { provide: CommentService, useValue: commentServiceStub },
                 { provide: FlagService, useValue: flagServiceStub },
+                { provide: NavBarService, useValue: navBarServiceStub },
                 { provide: PostService, useValue: postServiceStub },
                 { provide: ProfileService, useValue: profileServiceStub },
                 { provide: RouteService, useValue: routeServiceStub },

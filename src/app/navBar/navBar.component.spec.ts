@@ -6,6 +6,7 @@ import { MdTabsModule } from '@angular/material';
 import { Observable } from 'rxjs';
 import { NavBarComponent } from './navBar.component';
 import { AuthenticationService } from '../_services/authentication.service';
+import { NavBarService } from '../_services/navBar.service';
 
 describe('NavBarComponent', () => {
     let comp: NavBarComponent;
@@ -33,6 +34,7 @@ describe('NavBarComponent', () => {
         const activatedRouteStub = {
           params: Observable.of({'id': 1})
         };
+        const navBarServiceStub = {};
         TestBed.configureTestingModule({
             declarations: [ NavBarComponent ],
             providers: [
@@ -40,6 +42,7 @@ describe('NavBarComponent', () => {
                 { provide: ActivatedRoute, useValue: activatedRouteStub },
                 { provide: APP_BASE_HREF, useValue: '' },
                 { provide: AuthenticationService, useValue: authenticationServiceStub },
+                { provide: NavBarService, useValue: navBarServiceStub },
                 { provide: ComponentFixtureAutoDetect, useValue: true }
             ],
             imports: [ MdTabsModule, MdTabsModule, RouterModule.forRoot(routes) ],
