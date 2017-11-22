@@ -24,6 +24,7 @@ export class PostViewComponent implements OnInit {
   isCopied = false;
   loading: boolean;
   model: any = {};
+  parsedCommentArray: string[] = [];
   post: Post;
   rowsExapanded = 1;
   styleCommentBottom: string;
@@ -68,8 +69,7 @@ export class PostViewComponent implements OnInit {
         this.userID = author.user;
       });
 
-    this.route
-      .params
+    this.route.params
       .subscribe(params => {
         this.area = params['area'];
 
@@ -79,6 +79,18 @@ export class PostViewComponent implements OnInit {
             this.post.subscribed = post.subscribed;
             this.text = 'https://client.wildfyre.net/areas/' + this.areaService.currentAreaName + '/' + post.id;
         });
+
+        let commentIDArray = params['comments'];
+        commentIDArray = commentIDArray + '-';
+
+        if (commentIDArray) {
+          let checksum = 0;
+          while (commentIDArray.indexOf('-') !== -1) {
+            checksum += 1;
+            this.parsedCommentArray.push(commentIDArray.slice(0, commentIDArray.indexOf('-')));
+            commentIDArray = commentIDArray.slice(commentIDArray.indexOf('-') + 1, commentIDArray.length);
+          }
+        }
     });
   }
 
@@ -150,6 +162,10 @@ export class PostViewComponent implements OnInit {
     this.cdRef.detectChanges();
   }
 
+  getCommentLink(commentID: number) {
+    return 'https://client.wildfyre.net/areas/' + this.areaService.currentAreaName + '/' + this.post.id + '/' + commentID + '-1';
+  }
+
   gotoUser(user: string) {
     this.routeService.addNextRoute(this.router.url);
     this.router.navigateByUrl('/user/' + user);
@@ -178,6 +194,14 @@ export class PostViewComponent implements OnInit {
   deletePost() {
     this.postService.deletePost(this.areaService.currentAreaName, this.post);
     this.router.navigateByUrl('');
+  }
+
+  notificationIndication(commentID: number) {
+    if (this.parsedCommentArray.indexOf(commentID.toString()) !== -1) {
+      return '2px solid #ed763e';
+    } else {
+      return '';
+    }
   }
 }
 

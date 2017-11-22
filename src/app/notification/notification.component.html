@@ -1,6 +1,6 @@
 <md-card class="example-card">
   <div *ngFor="let notification of notifications">
-    <button type="submit" md-raised-button (click)="goto(notification.area, notification.post.id)">
+    <button type="submit" md-raised-button (click)="goto(notification.area, notification.post.id, notification.comments)">
       <div class="notifCount">
         <h2>{{notification.comments.length}}</h2>
       </div>

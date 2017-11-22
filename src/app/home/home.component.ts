@@ -141,6 +141,10 @@ export class HomeComponent implements OnInit {
     this.styleEditorBottom = '35px';
   }
 
+  getCommentLink(commentID: number) {
+    return 'https://client.wildfyre.net/areas/' + this.areaService.currentAreaName + '/' + this.post.id + '/' + commentID;
+  }
+
   gotoUser(user: string) {
     this.routeService.addNextRoute(this.router.url);
     this.router.navigateByUrl('/user/' + user);

@@ -25,8 +25,18 @@ export class NotificationComponent implements OnInit {
     });
   }
 
-  goto(areaID: string, postID: string) {
+  goto(areaID: string, postID: number, comments: number[] = []) {
+    let commentString = '';
+
+    for (let i = 0; i < comments.length; i++) {
+      if (i !== 0) {
+        commentString += '-';
+      }
+
+      commentString += comments[i];
+    }
+
     this.routeService.addNextRoute(this.router.url);
-    this.router.navigateByUrl('/areas/' + areaID + '/' + postID);
-  }
+    this.router.navigateByUrl('/areas/' + areaID + '/' + postID + '/' + commentString);
+}
 }

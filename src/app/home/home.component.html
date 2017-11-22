@@ -34,7 +34,7 @@
         <button *ngIf="post.id !== 0" md-icon-button [mdMenuTriggerFor]="appMenu"><i class="material-icons">more_vert</i></button>
         <md-menu #appMenu="mdMenu">
           <input class="hideMeClass" type="text" [(ngModel)]="text">
-          <button md-menu-item [class.btn-success]="isCopied" type="button" ngxClipboard [cbContent]="text" (cbOnSuccess)="isCopied = true"><md-icon>link</md-icon>Copy Link</button>
+          <button md-menu-item [class.btn-success]="isCopied" type="button" ngxClipboard [cbContent]="text" (cbOnSuccess)="isCopied = true"><md-icon>link</md-icon>Copy Link to Post</button>
           <button md-menu-item (click)="openDialog(post, null, typeOfReport.Post)"><md-icon>flag</md-icon>Flag Post</button>
         </md-menu>
       </div>
@@ -59,6 +59,7 @@
           <div class="commentEditing">
             <button md-icon-button [mdMenuTriggerFor]="appMenu"><i class="material-icons">more_vert</i></button>
             <md-menu #appMenu="mdMenu">
+              <button md-menu-item [class.btn-success]="isCopied" type="button" ngxClipboard [cbContent]="getCommentLink(comment.id)" (cbOnSuccess)="isCopied = true"><md-icon>link</md-icon>Copy Link to Comment</button>
               <button *ngIf="comment.author?.user == userID" md-menu-item color="warn" (click)="deleteComment(comment)"><md-icon>delete</md-icon>Delete Comment</button>
               <button *ngIf="!(comment.author?.user == userID)" md-menu-item (click)="openDialog(post, comment, typeOfReport.Comment)"><md-icon>flag</md-icon>Flag Comment</button>
             </md-menu>
