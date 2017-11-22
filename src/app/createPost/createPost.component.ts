@@ -156,8 +156,18 @@ export class CreatePostComponent implements OnInit {
     dialogRef.afterClosed()
       .subscribe(result => {
         if (result.url) {
-          result.url = result.url.replace('https://www.youtube.com/watch?v=', '');
-          result.url = result.url.replace('https://youtu.be/', '');
+          result.url = result.url.replace('https://', '');
+          result.url = result.url.replace('http://', '');
+          result.url = result.url.replace('www.', '');
+          result.url = result.url.replace('m.', '');
+          result.url = result.url.replace('youtube.com/watch?v=', '');
+          result.url = result.url.replace('youtu.be/', '');
+          result.url = result.url.replace('youtube.com/', '');
+
+          if (result.url.indexOf('?') !== -1) {
+            result.url = result.url.slice(0, result.url.indexOf('?'));
+          }
+
           if (this.model.card === undefined) {
             this.model.card = '[![' + result.altText + '](https://img.youtube.com/vi/'
             + result.url + '/0.jpg)](https://www.youtube.com/watch?v=' + result.url + ')\n';
