@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthenticationService } from '../_services/authentication.service';
 import { NavBarService } from '../_services/navBar.service';
@@ -14,6 +14,7 @@ export class NavBarComponent implements OnInit {
   style: string;
 
   constructor(
+    private cdRef: ChangeDetectorRef,
     private router: Router,
     private authenticationService: AuthenticationService,
     private navBarService: NavBarService
@@ -68,5 +69,6 @@ export class NavBarComponent implements OnInit {
     } else if (s === '/create') {
       this.activeLinkIndex = 4;
     }
+    this.cdRef.detectChanges();
   }
 }

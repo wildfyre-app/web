@@ -163,7 +163,7 @@ export class PostViewComponent implements OnInit {
   }
 
   getCommentLink(commentID: number) {
-    return 'https://client.wildfyre.net/areas/' + this.areaService.currentAreaName + '/' + this.post.id + '/' + commentID + '-1';
+    return 'https://client.wildfyre.net/areas/' + this.areaService.currentAreaName + '/' + this.post.id + '/' + commentID;
   }
 
   gotoUser(user: string) {

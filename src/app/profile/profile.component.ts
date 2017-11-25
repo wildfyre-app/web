@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, NgZone } from '@angular/core';
 import { MdSnackBar } from '@angular/material';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Account } from '../_models/account';
@@ -8,6 +8,7 @@ import { AuthenticationService } from '../_services/authentication.service';
 import { ProfileService } from '../_services/profile.service';
 import { RouteService } from '../_services/route.service';
 import { ImageCropperComponent, CropperSettings, Bounds } from 'ng2-img-cropper';
+import { BootController } from '../../boot-control';
 
 @Component({
   templateUrl: 'profile.component.html'
@@ -31,6 +32,7 @@ export class ProfileComponent implements OnInit {
   self: boolean;
 
   constructor(
+    private ngZone: NgZone,
     private route: ActivatedRoute,
     private router: Router,
     public snackBar: MdSnackBar,
@@ -164,6 +166,9 @@ export class ProfileComponent implements OnInit {
 
   logout() {
     this.authenticationService.logout();
+    // Triggers the reboot in main.ts
+    this.ngZone.runOutsideAngular(() => BootController.getbootControl().restart());
+
     this.router.navigateByUrl('/login');
   }
 

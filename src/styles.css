@@ -311,6 +311,7 @@ span.result {
       left: 0px;
       width: 50%;
       z-index: 5;
+      border-radius: 0 !important;
     }
 
     button.igniteButton.mat-raised-button.mat-primary {
@@ -319,6 +320,7 @@ span.result {
       top: 0px;
       width: 50%;
       z-index: 5;
+      border-radius: 0 !important;
     }
 
     button#commentButton.mat-button.mat-accent {
@@ -329,6 +331,7 @@ span.result {
       width: 27%;
       background-color: #263238;
       color: white;
+      border-radius: 0 !important;
     }
 
     button#editorButton.mat-button.mat-accent {
@@ -340,6 +343,7 @@ span.result {
       height: 41px;
       background-color: #263238;
       color: white;
+      border-radius: 0 !important;
     }
 
     .commentBox {
@@ -350,6 +354,8 @@ span.result {
       border: 6px solid #263238;
       width: 75%;
       overflow-y: scroll;
+      border-radius: 0 !important;
+      resize: none;
     }
 
     .icons {
@@ -391,6 +397,7 @@ span.result {
       left: 0px;
       width: 50%;
       z-index: 5;
+      border-radius: 0 !important;
     }
 
     button.igniteButton.mat-raised-button.mat-primary {
@@ -399,6 +406,7 @@ span.result {
       top: 41px;
       width: 50%;
       z-index: 5;
+      border-radius: 0 !important;
     }
 
     button#commentButton.mat-button.mat-accent {
@@ -407,19 +415,22 @@ span.result {
       bottom: -1px;
       z-index: 3;
       width: 16%;
+      height: 37px;
       background-color: #263238;
       color: white;
+      border-radius: 0 !important;
     }
 
     button#editorButton.mat-button.mat-accent {
       position: fixed;
       right: -1px;
-      bottom: 35px;
+      bottom: 3px;
       z-index: 3;
       width: 16%;
       height: 41px;
       background-color: #263238;
       color: white;
+      border-radius: 0 !important;
     }
 
     .commentBox {
@@ -430,6 +441,8 @@ span.result {
       border: 6px solid #263238;
       width: 85%;
       overflow-y: scroll;
+      border-radius: 0 !important;
+      resize: none;
     }
 
     .icons {
