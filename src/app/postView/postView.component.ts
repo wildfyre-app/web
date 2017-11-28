@@ -26,7 +26,7 @@ export class PostViewComponent implements OnInit {
   model: any = {};
   parsedCommentArray: string[] = [];
   post: Post;
-  rowsExapanded = 1;
+  rowsExapanded = 2;
   styleCommentBottom: string;
   styleEditorBottom: string;
   styleTextBottom: string;
@@ -119,7 +119,7 @@ export class PostViewComponent implements OnInit {
 
   contractBox() {
     this.expanded = false;
-    this.rowsExapanded = 1;
+    this.rowsExapanded = 2;
     this.navBarService.isVisibleSource.next('');
 
     if (window.screen.width > 600) {

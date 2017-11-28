@@ -43,7 +43,7 @@
     <hr>
     <div *ngIf="expanded" id="focusTouchZone" (click)="contractBox()"></div>
     <textarea [style.bottom]="styleTextBottom" *ngIf="post.id !== 0" class="commentBox" (click)="expandBox()" name="comment" rows="{{rowsExapanded}}" cols="40" type="text" name="comment" [(ngModel)]="model.comment" #comment="ngModel" placeholder="Post a Comment"></textarea>
-    <button [style.bottom]="styleEditorBottom" *ngIf="(post.id !== 0) && expanded" id="editorButton" (click)="$event.stopPropagation();" md-button color="accent" [disabled]="loading" [mdMenuTriggerFor]="commentMenu"><i class="material-icons">mode_edit</i></button>
+    <button [style.bottom]="styleEditorBottom" *ngIf="(post.id !== 0) && expanded" id="editorButton" (click)="$event.stopPropagation();" md-button color="accent" [disabled]="loading" [mdMenuTriggerFor]="commentMenu"><i class="material-icons">text_format</i></button>
     <button [style.bottom]="styleCommentBottom" *ngIf="post.id !== 0" id="commentButton" md-button color="accent" [disabled]="loading" (click)="postComment()"><b>Comment</b></button>
 
     <md-menu #commentMenu="mdMenu">

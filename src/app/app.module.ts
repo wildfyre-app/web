@@ -46,6 +46,7 @@ import { ClipboardModule } from 'ngx-clipboard';
 import 'hammerjs';
 import { ImageCropperModule } from 'ng2-img-cropper';
 import { MarkedPipe } from './_pipes/marked.pipe';
+import { MasonryModule } from 'angular2-masonry';
 import { ReCaptchaModule } from 'angular2-recaptcha';
 
 @NgModule({
@@ -60,6 +61,7 @@ import { ReCaptchaModule } from 'angular2-recaptcha';
     FormsModule,
     HttpModule,
     ImageCropperModule,
+    MasonryModule,
     MaterialModule,
     MdButtonModule,
     MdCardModule,

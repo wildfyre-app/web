@@ -1,4 +1,4 @@
-<nav [style.display]="style" id="navB" md-tab-nav-bar aria-label="Navigation links">
+<nav id="navB" md-tab-nav-bar aria-label="Navigation links">
   <a md-tab-link
     *ngFor="let routeLink of routeLinks; let i = index"
     [routerLink]="routeLink.link"
@@ -9,7 +9,6 @@
 </nav>
 
 <nav [style.display]="style" id="navBMobile" md-tab-nav-bar aria-label="Navigation links">
-  <md-card id="mobileNav">
   <a md-tab-link
     *ngFor="let routeLink of mobileRouteLinks; let i = index"
     [routerLink]="routeLink.link"
@@ -17,7 +16,6 @@
     (click)="activeLinkIndex = i">
     <div class="mobileButtons" [innerHtml]="routeLink.label"></div>
   </a>
-  </md-card>
 </nav>
 
 <router-outlet></router-outlet>

@@ -125,7 +125,10 @@ export class PostService {
       .map((response: Response) => {
         const posts: Post[] = [];
         response.json().forEach((post: any) => {
-          posts.push(post);
+          posts.push(Post.parse(post));
+        });
+        posts.sort((a: Post, b: Post) => {
+          return b.created.getTime() - a.created.getTime();
         });
         return posts;
       });

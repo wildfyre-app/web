@@ -1,15 +1,19 @@
 import { By } from '@angular/platform-browser';
 import { ComponentFixture, ComponentFixtureAutoDetect, TestBed, async } from '@angular/core/testing';
-import { MdCardModule } from '@angular/material';
+import { FormsModule } from '@angular/forms';
+import { MdCardModule, MdSlideToggleModule } from '@angular/material';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Author } from '../_models/author';
 import { Comment } from '../_models/comment';
 import { Post } from '../_models/post';
+import { MarkedPipe } from '../_pipes/marked.pipe';
+import { AreaService } from '../_services/area.service';
 import { AuthenticationService } from '../_services/authentication.service';
 import { PostService } from '../_services/post.service';
 import { RouteService } from '../_services/route.service';
 import { UserPostsComponent } from './userPosts.component';
+import { MasonryModule } from 'angular2-masonry';
 
 describe('UserPostsComponent', () => {
     let comp: UserPostsComponent;
@@ -35,18 +39,26 @@ describe('UserPostsComponent', () => {
                 );
             }
         };
+        const areaServiceStub = {
+            isAreaChecked: {},
+            currentAreaName: {},
+            getAreaRep: () => ({
+                subscribe: () => ({})
+            })
+        };
         const routeServiceStub = {};
 
         TestBed.configureTestingModule({
-            declarations: [ UserPostsComponent ],
+            declarations: [ UserPostsComponent, MarkedPipe ],
             providers: [
                 { provide: Router, useValue: routerStub },
+                { provide: AreaService, useValue: areaServiceStub },
                 { provide: AuthenticationService, useValue: authenticationServiceStub },
                 { provide: PostService, useValue: postServiceStub },
                 { provide: RouteService, useValue: routeServiceStub },
                 { provide: ComponentFixtureAutoDetect, useValue: true }
             ],
-            imports: [ MdCardModule ],
+            imports: [ MdCardModule, MdSlideToggleModule, FormsModule, MasonryModule ],
         });
         fixture = TestBed.createComponent(UserPostsComponent);
         comp = fixture.componentInstance;

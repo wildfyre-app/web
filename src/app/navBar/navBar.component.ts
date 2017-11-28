@@ -8,7 +8,7 @@ import { NavBarService } from '../_services/navBar.service';
   templateUrl: 'navBar.component.html'
 })
 export class NavBarComponent implements OnInit {
-  activeLinkIndex = 2;
+  activeLinkIndex = -1;
   mobileRouteLinks: any[];
   routeLinks: any[];
   style: string;

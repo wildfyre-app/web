@@ -4,11 +4,6 @@ a {
   color: #b54710;
 }
 
-a.mat-tab-link {
-    min-width: 20%;
-    color: black;
-}
-
 button[type="submit"] {
     white-space: normal;
     width: 100%;
@@ -35,7 +30,23 @@ div.creationEditor {
 }
 
 div.mat-slide-toggle-bar {
-  z-index: -1;
+  z-index: 2;
+}
+
+font span span blockquote p {
+  font-size: 12px;
+}
+
+font span span blockquote {
+  display: table;
+}
+
+font span span ol {
+  display: inline;
+}
+
+font span span ul {
+  display: table-footer-group;
 }
 
 h1, h2 {
@@ -54,6 +65,14 @@ img {
   width: 100%;
 }
 
+masonry {
+  width: 100%;
+}
+
+masonry.md-card.font.span.span.span {
+  font-size: 5px;
+}
+
 md-card#404page.mat-card {
   margin-top: 1%;
   margin-bottom: 1%;
@@ -69,6 +88,10 @@ md-input-container.mat-input-container {
 
 md-spinner {
   margin: 0 auto;
+}
+
+nav#navBMobile.mat-tab-nav-bar.mat-primary {
+  background-color: #263238;
 }
 
 p {
@@ -108,6 +131,11 @@ span.result {
   margin: 0 auto;
 }
 
+.brick {
+  width: 50%;
+  padding: 7px;
+}
+
 .comment-card {
   margin-top: 1%;
   margin-bottom: 1%;
@@ -117,6 +145,10 @@ span.result {
 
 .commentEditing {
   float: right;
+}
+
+.content {
+  border: 2px solid #ed763e;
 }
 
 .deleteButtons {
@@ -133,6 +165,7 @@ span.result {
   margin-left: 5%;
   word-wrap: break-word;
   background-color: #ed763e;
+  border: 2px solid #4f5b62;
 }
 
 .mat-raised-button:hover {
@@ -185,12 +218,12 @@ span.result {
   box-shadow: rgba(0, 0, 0, 0.3) 0 16px 16px 0;
 }
 
-.mat-tab-links {
-  text-align: center;
+.mat-tab-link {
+  width: 20%;
 }
 
-.mat-tab-link {
-  height: 50px;
+.mat-tab-links {
+  text-align: center;
 }
 
 .mobileButtons {
@@ -264,6 +297,10 @@ span.result {
   text-align: left;
 }
 
+.userPostsGrid {
+  border: 2px solid #ed763e;
+}
+
 .wideButtons {
   width: 100%;
   margin: 0 auto;
@@ -288,13 +325,9 @@ span.result {
   z-index: 2;
 }
 
-#mobileNav {
-  padding: 0%;
-  background-color: #263238;
-}
-
 #toggle {
   text-align: center;
+  z-index: 1;
 }
 
 #userID {
@@ -304,6 +337,11 @@ span.result {
 
 @media (max-width: 640px) {
     /*applied if browser window width is less than or equal to 600px*/
+
+    a.mat-tab-link {
+      width: 20%;
+      min-width: 20%;
+    }
 
     button.extinguishButton.mat-raised-button.mat-accent {
       position: fixed;
@@ -329,32 +367,34 @@ span.result {
       bottom: 44px;
       z-index: 3;
       width: 27%;
+      height: 57px;
+      padding-top: 10px;
       background-color: #263238;
       color: white;
-      border-radius: 0 !important;
+      border-top-right-radius: 10px;
     }
 
     button#editorButton.mat-button.mat-accent {
       position: fixed;
       right: -1px;
       bottom: 80px;
-      z-index: 3;
+      z-index: 4;
       width: 26%;
       height: 41px;
       background-color: #263238;
       color: white;
-      border-radius: 0 !important;
+      border-top-right-radius: 10px;
     }
 
     .commentBox {
       position: fixed;
       left: 0px;
       bottom: 45px;
-      z-index: 4;
+      z-index: 5;
       border: 6px solid #263238;
       width: 75%;
       overflow-y: scroll;
-      border-radius: 0 !important;
+      border-top-left-radius: 10px;
       resize: none;
     }
 
@@ -384,7 +424,7 @@ span.result {
       bottom: -1px;
       width: 100%;
       float: left;
-      z-index: 1;
+      z-index: 5;
     }
 }
 
@@ -415,33 +455,34 @@ span.result {
       bottom: -1px;
       z-index: 3;
       width: 16%;
-      height: 37px;
+      height: 57px;
+      padding-top: 10px;
       background-color: #263238;
       color: white;
-      border-radius: 0 !important;
+      border-top-right-radius: 10px;
     }
 
     button#editorButton.mat-button.mat-accent {
       position: fixed;
       right: -1px;
       bottom: 3px;
-      z-index: 3;
+      z-index: 4;
       width: 16%;
       height: 41px;
       background-color: #263238;
       color: white;
-      border-radius: 0 !important;
+      border-top-right-radius: 10px;
     }
 
     .commentBox {
       position: fixed;
       left: 0px;
       bottom: 0px;
-      z-index: 4;
+      z-index: 5;
       border: 6px solid #263238;
       width: 85%;
       overflow-y: scroll;
-      border-radius: 0 !important;
+      border-top-left-radius: 10px;
       resize: none;
     }
 
@@ -472,7 +513,7 @@ span.result {
       top: -1px;
       width: 100%;
       float: left;
-      z-index: 1;
+      z-index: 5;
       background-color: white;
       zoom: 0.85;
     }

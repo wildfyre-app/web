@@ -27,7 +27,7 @@ export class HomeComponent implements OnInit {
   model: any = {};
   post: Post = this.fakePost;
   rep: Reputation;
-  rowsExapanded = 1;
+  rowsExapanded = 2;
   styleCommentBottom: string;
   styleEditorBottom: string;
   styleTextBottom: string;
@@ -112,7 +112,7 @@ export class HomeComponent implements OnInit {
 
   contractBox() {
     this.expanded = false;
-    this.rowsExapanded = 1;
+    this.rowsExapanded = 2;
     this.navBarService.isVisibleSource.next('');
 
     if (window.screen.width > 600) {
