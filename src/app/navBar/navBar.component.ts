@@ -1,29 +1,42 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Router } from '@angular/router';
+import { Notification } from '../_models/notification';
 import { AuthenticationService } from '../_services/authentication.service';
 import { NavBarService } from '../_services/navBar.service';
+import { NotificationService } from '../_services/notification.service';
 
 @Component({
   selector: 'app-nav-bar',
   templateUrl: 'navBar.component.html'
 })
 export class NavBarComponent implements OnInit {
-  activeLinkIndex = -1;
+  activeLinkIndex = 2;
   mobileRouteLinks: any[];
+  notifications: Notification[] = [];
+  notificationLength: number;
   routeLinks: any[];
-  style: string;
+  styleDesktop: string;
+  styleMobile: string;
 
   constructor(
     private cdRef: ChangeDetectorRef,
     private router: Router,
     private authenticationService: AuthenticationService,
+    private notificationService: NotificationService,
     private navBarService: NavBarService
   ) {
     router.events.subscribe((url: any) => {
       if (this.authenticationService.token) {
-        this.style = '';
+        this.notificationService.getNotifications()
+          .subscribe(notifications => {
+            this.navBarService.notifications.next(notifications);
+            this.cdRef.detectChanges();
+        });
+        this.styleMobile = '';
+        this.styleDesktop = '';
       } else {
-        this.style = 'none';
+        this.styleMobile = 'none';
+        this.styleDesktop = 'none';
       }
 
       this.setActiveIndex(url.url);
@@ -47,13 +60,32 @@ export class NavBarComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.navBarService.notifications
+      .subscribe((notifications: Notification[]) => {
+        this.notifications = notifications;
+        this.cdRef.detectChanges();
+    });
+
     if (this.authenticationService.token) {
-      this.style = '';
-      this.navBarService.isVisibleSource.subscribe((isVisible: string) => {
-            this.style = isVisible;
-        });
+      this.styleMobile = '';
+      this.navBarService.isVisibleSource
+        .subscribe((isVisible: string) => {
+          this.styleMobile = isVisible;
+      });
     } else {
-      this.style = 'none';
+      this.styleMobile = 'none';
+    }
+  }
+
+  getNotificationLength(nLength: number) {
+    if (nLength.toString().length === 4) {
+      return nLength.toString().slice(0, 1) + 'K';
+    } else if (nLength.toString().length === 5) {
+      return nLength.toString().slice(0, 2) + 'K';
+    } else if (nLength.toString().length >= 6) {
+      return '\u221E';
+    } else {
+      return nLength.toString();
     }
   }
 

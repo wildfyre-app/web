@@ -14,6 +14,7 @@ import { CreatePostComponent, PictureDialogComponent, YouTubeDialogComponent } f
 import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './login/login.component';
 import { NavBarComponent } from './navBar/navBar.component';
+import { NotificationArchiveComponent } from './notificationArchive/notificationArchive.component';
 import { NotificationComponent } from './notification/notification.component';
 import { PostViewComponent } from './postView/postView.component';
 import { ProfileComponent } from './profile/profile.component';
@@ -23,6 +24,9 @@ import { RecoverPasswordComponent } from './recoverPassword/recoverPassword.comp
 import { RegisterComponent } from './register/register.component';
 import { RegisterSuccessComponent } from './registerSuccess/registerSuccess.component';
 import { UserPostsComponent } from './userPosts/userPosts.component';
+
+// Core Pipes
+import { MarkedPipe } from './_pipes/marked.pipe';
 
 // Core Services
 import { AreaService } from './_services/area.service';
@@ -45,7 +49,6 @@ import { Angulartics2Module, Angulartics2Piwik } from 'angulartics2';
 import { ClipboardModule } from 'ngx-clipboard';
 import 'hammerjs';
 import { ImageCropperModule } from 'ng2-img-cropper';
-import { MarkedPipe } from './_pipes/marked.pipe';
 import { MasonryModule } from 'angular2-masonry';
 import { ReCaptchaModule } from 'angular2-recaptcha';
 
@@ -81,10 +84,10 @@ import { ReCaptchaModule } from 'angular2-recaptcha';
     AppComponent,
     Component404Component,
     CreatePostComponent,
-    FlagDialogComponent,
     HomeComponent,
     LoginComponent,
     NavBarComponent,
+    NotificationArchiveComponent,
     NotificationComponent,
     PostViewComponent,
     ProfileComponent,
@@ -95,12 +98,13 @@ import { ReCaptchaModule } from 'angular2-recaptcha';
     RegisterSuccessComponent,
     UserPostsComponent,
 
-    // Pipes
-    MarkedPipe,
-
     // Dialogs
+    FlagDialogComponent,
     PictureDialogComponent,
-    YouTubeDialogComponent
+    YouTubeDialogComponent,
+
+    // Pipes
+    MarkedPipe
     ],
   providers: [
     AreaService,

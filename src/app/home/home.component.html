@@ -3,12 +3,12 @@
 <br><br>
 
 <md-card class="example-card">
-  <div *ngIf="post.id === 0">
+  <div *ngIf="(post.id === 0) && !loading">
     <button class="refreshButton" md-button (click)="ngOnInit()">Refresh <i class="material-icons">refresh</i></button>
   </div>
   <div *ngIf="post">
-
-    <md-card class="content">
+    <md-spinner *ngIf="loading"></md-spinner>
+    <md-card *ngIf="!loading" class="content">
         <span class="mainText" [innerHTML]="post.text | marked"></span>
       <md-card (click)="gotoUser(post.author.user)" class="parentContainer1">
       <div class="parentContainer">

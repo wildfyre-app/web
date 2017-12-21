@@ -1,16 +1,17 @@
 import { Component, OnInit, NgModule, ChangeDetectorRef } from '@angular/core';
 import { Router } from '@angular/router';
+import { Notification } from '../_models/notification';
 import { Post } from '../_models/post';
 import { AreaService } from '../_services/area.service';
-import { PostService } from '../_services/post.service';
+import { NotificationService } from '../_services/notification.service';
 import { RouteService } from '../_services/route.service';
 import { MasonryOptions } from 'angular2-masonry';
 
 @Component({
   selector: 'user-posts',
-  templateUrl: 'userPosts.component.html'
+  templateUrl: 'notificationArchive.component.html'
 })
-export class UserPostsComponent implements OnInit {
+export class NotificationArchiveComponent implements OnInit {
   backupFunPosts: Post[] = [];
   backupInfoPosts: Post[] = [];
   checked: boolean;
@@ -27,7 +28,7 @@ export class UserPostsComponent implements OnInit {
     private cdRef: ChangeDetectorRef,
     private router: Router,
     private areaService: AreaService,
-    private postService: PostService,
+    private notificationService: NotificationService,
     private routeService: RouteService
   ) {
     this.checked = this.areaService.isAreaChecked;
@@ -96,11 +97,8 @@ export class UserPostsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.cdRef.detectChanges();
-    this.routeService.resetRoutes();
-
     // get posts from secure api end point
-    this.postService.getOwnPosts('fun', false)
+    this.notificationService.getArchive('fun')
       .subscribe(posts => {
         // Removes binding to original 'posts' variable
         const noMarkdownPosts = JSON.parse(JSON.stringify(posts));
@@ -114,7 +112,7 @@ export class UserPostsComponent implements OnInit {
         }
     });
 
-    this.postService.getOwnPosts('information', false)
+    this.notificationService.getArchive('information')
       .subscribe(posts => {
         // Removes binding to original 'posts' variable
         const noMarkdownPosts = JSON.parse(JSON.stringify(posts));
@@ -127,6 +125,14 @@ export class UserPostsComponent implements OnInit {
           this.backupInfoPosts[i].text = this.removeMarkdown(this.backupInfoPosts[i].text);
         }
     });
+  }
+
+  back() {
+    if (this.routeService.routes.length === 0) {
+      this.router.navigateByUrl('');
+    } else {
+      this.router.navigateByUrl(this.routeService.getNextRoute());
+    }
   }
 
   goto(areaID: string, postID: string) {

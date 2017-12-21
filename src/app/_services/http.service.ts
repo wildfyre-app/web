@@ -42,31 +42,24 @@ export class HttpService {
 
   PATCH(passedUrl: string, body: any): Observable<any> {
     // PATCH to api
-    body = JSON.stringify(body);
-
-    return this.http.patch(this.apiURL + passedUrl, body, this.getOptions())
+    return this.http.patch(this.apiURL + passedUrl, JSON.stringify(body), this.getOptions())
       .catch((error: any) => this.handleError(error));
   }
 
   POST(passedUrl: string, body: any): Observable<any> {
     // POST to api
-    body = JSON.stringify(body);
-
-    return this.http.post(this.apiURL + passedUrl, body, this.getOptions())
+    return this.http.post(this.apiURL + passedUrl, JSON.stringify(body), this.getOptions())
       .catch((error: any) => this.handleError(error));
   }
 
   PUT(passedUrl: string, body: any): Observable<any> {
     // PUT to api
-    body = JSON.stringify(body);
-
-    return this.http.put(this.apiURL + passedUrl, body, this.getOptions())
+    return this.http.put(this.apiURL + passedUrl, JSON.stringify(body), this.getOptions())
       .catch((error: any) => this.handleError(error));
   }
 
   PUT_IMAGE(passedUrl: string, body: any): Observable<any> {
     // PUT to api
-
     return this.http.put(this.apiURL + passedUrl, body, this.getOptionsForImage())
       .catch((error: any) => this.handleError(error));
   }

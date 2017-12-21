@@ -1,22 +1,25 @@
 import { By } from '@angular/platform-browser';
 import { ComponentFixture,  ComponentFixtureAutoDetect, TestBed, async } from '@angular/core/testing';
+import { FormsModule } from '@angular/forms';
 import { NO_ERRORS_SCHEMA, Component } from '@angular/core';
-import { MdCardModule, MdTabsModule } from '@angular/material';
+import { MdCardModule, MdTabsModule, MdSlideToggleModule } from '@angular/material';
 import { Router, RouterModule } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Author } from '../_models/author';
 import { Comment } from '../_models/comment';
 import { Notification } from '../_models/notification';
 import { Post } from '../_models/post';
+import { MarkedPipe } from '../_pipes/marked.pipe';
+import { AreaService } from '../_services/area.service';
 import { AuthenticationService } from '../_services/authentication.service';
 import { NotificationService } from '../_services/notification.service';
 import { RouteService } from '../_services/route.service';
-import { NavBarService } from '../_services/navBar.service';
-import { NotificationComponent } from './notification.component';
+import { NotificationArchiveComponent } from './notificationArchive.component';
+import { MasonryModule } from 'angular2-masonry';
 
-describe('NotificationComponent', () => {
-    let comp: NotificationComponent;
-    let fixture: ComponentFixture<NotificationComponent>;
+describe('NotificationArchiveComponent', () => {
+    let comp: NotificationArchiveComponent;
+    let fixture: ComponentFixture<NotificationArchiveComponent>;
 
     beforeEach(() => {
         const routerStub = {
@@ -25,7 +28,13 @@ describe('NotificationComponent', () => {
         const authenticationServiceStub = {
             token: 'token'
         };
-        const navBarServiceStub = {};
+        const areaServiceStub = {
+            isAreaChecked: {},
+            currentAreaName: {},
+            getAreaRep: () => ({
+                subscribe: () => ({})
+            })
+        };
         const notificationServiceStub = {
             getNotifications: () => {
               return Observable.of(
@@ -43,18 +52,18 @@ describe('NotificationComponent', () => {
         const routeServiceStub = {};
 
         TestBed.configureTestingModule({
-            declarations: [ NotificationComponent ],
+            declarations: [ NotificationArchiveComponent, MarkedPipe ],
             providers: [
                 { provide: Router, useValue: routerStub },
+                { provide: AreaService, useValue: areaServiceStub },
                 { provide: AuthenticationService, useValue: authenticationServiceStub },
-                { provide: NavBarService, useValue: navBarServiceStub },
                 { provide: NotificationService, useValue: notificationServiceStub },
                 { provide: RouteService, useValue: routeServiceStub },
                 { provide: ComponentFixtureAutoDetect, useValue: true }
             ],
-            imports: [ MdCardModule, RouterModule, MdTabsModule ],
+            imports: [ MdCardModule, RouterModule, MdTabsModule, MdSlideToggleModule, FormsModule, MasonryModule ],
         }).compileComponents();
-        fixture = TestBed.createComponent(NotificationComponent);
+        fixture = TestBed.createComponent(NotificationArchiveComponent);
         comp = fixture.componentInstance;
     });
 

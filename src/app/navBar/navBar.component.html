@@ -1,20 +1,22 @@
-<nav id="navB" md-tab-nav-bar aria-label="Navigation links">
+<nav [style.display]="styleDesktop" id="navB" md-tab-nav-bar aria-label="Navigation links">
   <a md-tab-link
     *ngFor="let routeLink of routeLinks; let i = index"
     [routerLink]="routeLink.link"
     [active]="activeLinkIndex === i"
     (click)="activeLinkIndex = i">
     {{routeLink.label}}
+    <div class="numberCircle" *ngIf="(i === 1) && notifications.length !== 0">{{getNotificationLength(notifications.length)}}</div>
   </a>
 </nav>
 
-<nav [style.display]="style" id="navBMobile" md-tab-nav-bar aria-label="Navigation links">
+<nav [style.display]="styleMobile" id="navBMobile" md-tab-nav-bar aria-label="Navigation links">
   <a md-tab-link
     *ngFor="let routeLink of mobileRouteLinks; let i = index"
     [routerLink]="routeLink.link"
     [active]="activeLinkIndex === i"
     (click)="activeLinkIndex = i">
     <div class="mobileButtons" [innerHtml]="routeLink.label"></div>
+    <div class="numberCircle" *ngIf="(i === 1) && notifications.length !== 0">{{getNotificationLength(notifications.length)}}</div>
   </a>
 </nav>
 

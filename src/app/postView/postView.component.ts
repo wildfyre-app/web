@@ -73,12 +73,20 @@ export class PostViewComponent implements OnInit {
       .subscribe(params => {
         this.area = params['area'];
 
-        this.postService.getPost(this.area, params['id'])
-          .subscribe(post => {
-            this.post =  post;
-            this.post.subscribed = post.subscribed;
-            this.text = 'https://client.wildfyre.net/areas/' + this.areaService.currentAreaName + '/' + post.id;
-        });
+        if (this.postService.userPosts[this.area]) {
+          for (let i = 0; i < this.postService.userPosts[this.area].length; i++) {
+            if (this.postService.userPosts[this.area][i].id === params['id']) {
+              this.post = this.postService.userPosts[this.area][i];
+            }
+          }
+        } else {
+          this.postService.getPost(this.area, params['id'])
+            .subscribe(post => {
+              this.post =  post;
+              this.post.subscribed = post.subscribed;
+              this.text = 'https://client.wildfyre.net/areas/' + this.areaService.currentAreaName + '/' + post.id;
+          });
+        }
 
         let commentIDArray = params['comments'];
         commentIDArray = commentIDArray + '-';
@@ -117,6 +125,14 @@ export class PostViewComponent implements OnInit {
     this.addLineBreak('~~Example~~');
   }
 
+  back() {
+    if (this.routeService.routes.length === 0) {
+      this.router.navigateByUrl('');
+    } else {
+      this.router.navigateByUrl(this.routeService.getNextRoute());
+    }
+  }
+
   contractBox() {
     this.expanded = false;
     this.rowsExapanded = 2;
@@ -131,6 +147,15 @@ export class PostViewComponent implements OnInit {
     }
   }
 
+  deleteComment(c: Comment) {
+    this.commentService.deleteComment(this.areaService.currentAreaName, this.post, c);
+  }
+
+  deletePost() {
+    this.postService.deletePost(this.areaService.currentAreaName, this.post);
+    this.router.navigateByUrl('');
+  }
+
   expandBox() {
     this.expanded = true;
     this.rowsExapanded = 3;
@@ -138,6 +163,23 @@ export class PostViewComponent implements OnInit {
     this.styleTextBottom = '0px';
     this.styleCommentBottom = '0px';
     this.styleEditorBottom = '35px';
+  }
+
+  getCommentLink(commentID: number) {
+    return 'https://client.wildfyre.net/areas/' + this.areaService.currentAreaName + '/' + this.post.id + '/' + commentID;
+  }
+
+  gotoUser(user: string) {
+    this.routeService.addNextRoute(this.router.url);
+    this.router.navigateByUrl('/user/' + user);
+  }
+
+  notificationIndication(commentID: number) {
+    if (this.parsedCommentArray.indexOf(commentID.toString()) !== -1) {
+      return '2px solid #ed763e';
+    } else {
+      return '';
+    }
   }
 
   openDialog(post: Post, comment: Comment, typeOfFlagReport: TypeOfReport) {
@@ -162,46 +204,12 @@ export class PostViewComponent implements OnInit {
     this.cdRef.detectChanges();
   }
 
-  getCommentLink(commentID: number) {
-    return 'https://client.wildfyre.net/areas/' + this.areaService.currentAreaName + '/' + this.post.id + '/' + commentID;
-  }
-
-  gotoUser(user: string) {
-    this.routeService.addNextRoute(this.router.url);
-    this.router.navigateByUrl('/user/' + user);
-  }
-
-  back() {
-    if (this.routeService.routes.length === 0) {
-      this.router.navigateByUrl('');
-    } else {
-      this.router.navigateByUrl(this.routeService.getNextRoute());
-    }
-  }
-
   subscribe(s: boolean) {
     this.postService.subscribe(
       this.areaService.currentAreaName,
       this.post,
       s
     ).subscribe();
-  }
-
-  deleteComment(c: Comment) {
-    this.commentService.deleteComment(this.areaService.currentAreaName, this.post, c);
-  }
-
-  deletePost() {
-    this.postService.deletePost(this.areaService.currentAreaName, this.post);
-    this.router.navigateByUrl('');
-  }
-
-  notificationIndication(commentID: number) {
-    if (this.parsedCommentArray.indexOf(commentID.toString()) !== -1) {
-      return '2px solid #ed763e';
-    } else {
-      return '';
-    }
   }
 }
 

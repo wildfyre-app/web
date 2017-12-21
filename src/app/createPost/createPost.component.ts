@@ -56,6 +56,7 @@ export class CreatePostComponent implements OnInit {
         .subscribe(result => {
           if (!result.getError()) {
             this.model.card = '';
+            this.postService.getOwnPosts(this.areaService.currentAreaName, true).subscribe();
             this.router.navigate(['']);
           } else {
             this.errors = result.getError();

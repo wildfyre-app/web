@@ -3,6 +3,7 @@ import { Component404Component } from './404component/404.component';
 import { CreatePostComponent } from './createPost/createPost.component';
 import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './login/login.component';
+import { NotificationArchiveComponent } from './notificationArchive/notificationArchive.component';
 import { NotificationComponent } from './notification/notification.component';
 import { RecoverComponent } from './recover/recover.component';
 import { RecoverPasswordComponent } from './recoverPassword/recoverPassword.component';
@@ -21,6 +22,7 @@ const appRoutes: Routes = [
   { path: 'create', component: CreatePostComponent, canActivate: [AuthGuard] },
   { path: 'login', component: LoginComponent },
   { path: 'notifications', component: NotificationComponent, canActivate: [AuthGuard] },
+  { path: 'notifications/archive', component: NotificationArchiveComponent, canActivate: [AuthGuard] },
   { path: 'posts', component: UserPostsComponent, canActivate: [AuthGuard] },
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
   { path: 'recover', component: RecoverComponent },

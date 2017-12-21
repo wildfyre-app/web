@@ -1,4 +1,11 @@
 <md-card class="example-card">
+  <button id="archive" md-button (click)="loadArchive()"><i class="material-icons">folder</i> Archive</button>
+  <md-spinner *ngIf="loading"></md-spinner>
+  <button *ngIf="(notifications.length === 0) && !loading" class="refreshButton" md-button (click)="ngOnInit()">Refresh <i class="material-icons">refresh</i></button>
+  <button *ngIf="(notifications.length !== 0) && !loading" class="refreshButton" md-button (click)="deleteNotifications()">Delete all Notifications <i class="material-icons">delete</i></button>
+  <md-card class="centerText" *ngIf="(notifications.length === 0) && !loading">
+      No more notifications, try engaging more?
+  </md-card>
   <div *ngFor="let notification of notifications">
     <button type="submit" md-raised-button (click)="goto(notification.area, notification.post.id, notification.comments)">
       <div class="notifCount">

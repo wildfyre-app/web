@@ -9,6 +9,7 @@ import { AreaService } from '../_services/area.service';
 import { CommentService } from '../_services/comment.service';
 import { FlagService } from '../_services/flag.service';
 import { NavBarService } from '../_services/navBar.service';
+import { NotificationService } from '../_services/notification.service';
 import { PostService } from '../_services/post.service';
 import { ProfileService } from '../_services/profile.service';
 import { RouteService } from '../_services/route.service';
@@ -24,6 +25,7 @@ export class HomeComponent implements OnInit {
   checked: boolean;
   expanded = false;
   isCopied = false;
+  loading = true;
   model: any = {};
   post: Post = this.fakePost;
   rep: Reputation;
@@ -42,6 +44,7 @@ export class HomeComponent implements OnInit {
     private commentService: CommentService,
     private flagService: FlagService,
     private navBarService: NavBarService,
+    private notificationService: NotificationService,
     private postService: PostService,
     private profileService: ProfileService,
     private routeService: RouteService
@@ -52,12 +55,13 @@ export class HomeComponent implements OnInit {
     this.profileService.getSelf()
       .subscribe( (author: Author) => {
         this.userID = author.user;
-      });
+    });
   }
 
   ngOnInit() {
     this.routeService.resetRoutes();
     this.cdRef.detectChanges();
+    this.loading = true;
     if (window.screen.width > 600) {
       this.styleTextBottom = '0px';
       this.styleCommentBottom = '-1px';
@@ -71,12 +75,14 @@ export class HomeComponent implements OnInit {
         if (nextPost) {
           this.text = 'https://client.wildfyre.net/areas/' + this.areaService.currentAreaName + '/' + nextPost.id;
           this.post = nextPost;
+          this.loading = false;
           this.cdRef.detectChanges();
         } else {
           this.text = 'https://client.wildfyre.net';
           this.fakePost = new Post(0, this.systemAuthor, false,
             Date(), false, 'No more posts in this area, try creating one?', []);
           this.post = this.fakePost;
+          this.loading = false;
           this.cdRef.detectChanges();
         }
       });
@@ -152,6 +158,7 @@ export class HomeComponent implements OnInit {
 
   onChange(value: any) {
     this.contractBox();
+    this.loading = true;
 
     this.cdRef.detectChanges();
     if (value.checked === true) {
@@ -167,12 +174,14 @@ export class HomeComponent implements OnInit {
         if (nextPost) {
           this.text = 'https://client.wildfyre.net/areas/' + this.areaService.currentAreaName + '/' + nextPost.id;
           this.post = nextPost;
+          this.loading = false;
           this.cdRef.detectChanges();
         } else {
           this.text = 'https://client.wildfyre.net';
           this.fakePost = new Post(0, this.systemAuthor, false,
             Date(), false, 'No more posts in this area, try creating one?', []);
           this.post = this.fakePost;
+          this.loading = false;
           this.cdRef.detectChanges();
         }
       });
@@ -210,6 +219,7 @@ export class HomeComponent implements OnInit {
   }
 
   spread(spread: boolean) {
+    this.loading = true;
     this.contractBox();
     this.cdRef.detectChanges();
     this.postService.spread(
@@ -223,12 +233,14 @@ export class HomeComponent implements OnInit {
         if (nextPost) {
           this.text = 'https://client.wildfyre.net/areas/' + this.areaService.currentAreaName + '/' + nextPost.id;
           this.post = nextPost;
+          this.loading = false;
           this.cdRef.detectChanges();
         } else {
           this.text = 'https://client.wildfyre.net';
           this.fakePost = new Post(0, this.systemAuthor, false,
             Date(), false, 'No more posts in this area, try creating one?', []);
           this.post = this.fakePost;
+          this.loading = false;
           this.cdRef.detectChanges();
         }
       });

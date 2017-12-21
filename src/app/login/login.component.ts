@@ -2,6 +2,8 @@
 import { Router } from '@angular/router';
 import { AuthError } from '../_models/auth';
 import { AuthenticationService } from '../_services/authentication.service';
+import { NavBarService } from '../_services/navBar.service';
+import { NotificationService } from '../_services/notification.service';
 import { RouteService } from '../_services/route.service';
 
 @Component({
@@ -15,6 +17,8 @@ export class LoginComponent implements OnInit {
   constructor(
     private router: Router,
     private authenticationService: AuthenticationService,
+    private navBarService: NavBarService,
+    private notificationService: NotificationService,
     private routeService: RouteService
   ) { }
 
@@ -31,6 +35,10 @@ export class LoginComponent implements OnInit {
     this.authenticationService.login(this.model.username, this.model.password)
       .subscribe(result => {
         if (!result.getError()) {
+            this.notificationService.getNotifications()
+              .subscribe(notifications => {
+                this.navBarService.notifications.next(notifications);
+            });
           this.router.navigate(['/']);
           this.loading = false;
         } else {

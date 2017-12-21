@@ -13,6 +13,7 @@ import { HttpService } from './http.service';
 export class PostService {
   private queuedPosts: { [area: string]: Post[]; } = {};
   private used: { [area: string]: number[]; } = {};
+  userPosts: { [area: string]: Post[]; } = {};
 
   constructor(
     private httpService: HttpService
@@ -83,7 +84,6 @@ export class PostService {
       .subscribe();
   }
 
-
   getNextPost(area: string): Observable<Post> {
     if (!this.used[area]) {
       this.used[area] = [];
@@ -120,18 +120,23 @@ export class PostService {
     }
   }
 
-  getOwnPosts(area: string): Observable<Post[]> {
-    return this.httpService.GET('/areas/' + area + '/own/')
-      .map((response: Response) => {
-        const posts: Post[] = [];
-        response.json().forEach((post: any) => {
-          posts.push(Post.parse(post));
-        });
-        posts.sort((a: Post, b: Post) => {
-          return b.created.getTime() - a.created.getTime();
-        });
-        return posts;
+  getOwnPosts(area: string, refresh: boolean): Observable<Post[]> {
+    if (this.userPosts[area] && !refresh) {
+      return Observable.of(this.userPosts[area]);
+    } else {
+      return this.httpService.GET('/areas/' + area + '/own/')
+        .map((response: Response) => {
+          const posts: Post[] = [];
+          response.json().forEach((post: any) => {
+            posts.push(Post.parse(post));
+          });
+          posts.sort((a: Post, b: Post) => {
+            return b.created.getTime() - a.created.getTime();
+          });
+          this.userPosts[area] = posts;
+          return posts;
       });
+    }
   }
 
   getPost(areaID: string, postID: string): Observable<Post> {

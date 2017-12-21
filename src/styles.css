@@ -136,6 +136,10 @@ span.result {
   padding: 7px;
 }
 
+.centerText {
+  text-align: center;
+}
+
 .comment-card {
   margin-top: 1%;
   margin-bottom: 1%;
@@ -306,6 +310,10 @@ span.result {
   margin: 0 auto;
 }
 
+#archive {
+  float: right;
+}
+
 #captcha {
   margin: 0 auto;
   width: 304px;
@@ -398,6 +406,7 @@ span.result {
       resize: none;
     }
 
+
     .icons {
       height: 5%;
       width: 5%;
@@ -407,6 +416,20 @@ span.result {
       display: block;
       margin: auto;
       width: 40%;
+    }
+
+    .numberCircle {
+      background: #e65100;
+      border-radius: 1em;
+      color: white;
+      display: inline-block;
+      font-weight: bold;
+      line-height: 2em;
+      margin-right: -25px;;
+      text-align: center;
+      width: 2em;
+      position: absolute;
+      right: 2em;
     }
 
     .pfp2 {
@@ -495,6 +518,20 @@ span.result {
       display: block;
       margin: auto;
       width: 15%;
+    }
+
+    .numberCircle {
+      background: #e65100;
+      border-radius: 1em;
+      color: white;
+      display: inline-block;
+      font-weight: bold;
+      line-height: 2em;
+      margin-right: -5px;;
+      text-align: center;
+      width: 2em;
+      position: absolute;
+      right: 2em;
     }
 
     .pfp {
