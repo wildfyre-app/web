@@ -1,5 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { MdDialog, MdDialogRef, MdSnackBar } from '@angular/material';
 import { Router, ActivatedRoute } from '@angular/router';
+import { ConfirmDeletionComponent } from '../_dialogs/confirmDeletion.component';
 import { Author } from '../_models/author';
 import { Comment } from '../_models/comment';
 import { Post } from '../_models/post';
@@ -21,6 +23,7 @@ export class PostViewComponent implements OnInit {
   checked: boolean;
   editName: string;
   expanded = false;
+  heightText: string;
   isCopied = false;
   loading: boolean;
   model: any = {};
@@ -35,8 +38,10 @@ export class PostViewComponent implements OnInit {
 
   constructor(
     private cdRef: ChangeDetectorRef,
+    private dialog: MdDialog,
     private route: ActivatedRoute,
     private router: Router,
+    private snackBar: MdSnackBar,
     private areaService: AreaService,
     private authenticationService: AuthenticationService,
     private commentService: CommentService,
@@ -60,7 +65,7 @@ export class PostViewComponent implements OnInit {
       this.styleTextBottom = '0px';
       this.styleCommentBottom = '-1px';
     } else {
-      this.styleTextBottom = '45px';
+      this.styleTextBottom = '42px';
       this.styleCommentBottom = '44px';
     }
 
@@ -141,28 +146,29 @@ export class PostViewComponent implements OnInit {
     if (window.screen.width > 600) {
       this.styleTextBottom = '0px';
       this.styleCommentBottom = '-1px';
+      this.heightText = '56px';
     } else {
-      this.styleTextBottom = '45px';
+      this.styleTextBottom = '42px';
       this.styleCommentBottom = '44px';
+      this.heightText = '40px';
     }
-  }
-
-  deleteComment(c: Comment) {
-    this.commentService.deleteComment(this.areaService.currentAreaName, this.post, c);
-  }
-
-  deletePost() {
-    this.postService.deletePost(this.areaService.currentAreaName, this.post);
-    this.router.navigateByUrl('');
   }
 
   expandBox() {
     this.expanded = true;
     this.rowsExapanded = 3;
     this.navBarService.isVisibleSource.next('none');
-    this.styleTextBottom = '0px';
-    this.styleCommentBottom = '0px';
-    this.styleEditorBottom = '35px';
+    if (window.screen.width > 600) {
+      this.styleTextBottom = '0px';
+      this.styleCommentBottom = '-5px';
+      this.styleEditorBottom = '30px';
+      this.heightText = '71px';
+    } else {
+      this.styleTextBottom = '0px';
+      this.styleCommentBottom = '0px';
+      this.styleEditorBottom = '33px';
+      this.heightText = '71px';
+    }
   }
 
   getCommentLink(commentID: number) {
@@ -182,7 +188,24 @@ export class PostViewComponent implements OnInit {
     }
   }
 
-  openDialog(post: Post, comment: Comment, typeOfFlagReport: TypeOfReport) {
+  openCommentDeleteDialog(c: Comment) {
+    const dialogRef = this.dialog.open(ConfirmDeletionComponent);
+    dialogRef.afterClosed()
+      .subscribe(result => {
+        if (result.bool) {
+          this.commentService.deleteComment(
+            this.areaService.currentAreaName,
+            this.post,
+            c
+          );
+          const snackBarRef = this.snackBar.open('Comment deleted successfully', 'Close', {
+            duration: 3000
+          });
+        }
+      });
+  }
+
+  openFlagDialog(post: Post, comment: Comment, typeOfFlagReport: TypeOfReport) {
     this.flagService.currentComment = comment;
     this.flagService.currentPost = post;
 
@@ -194,6 +217,20 @@ export class PostViewComponent implements OnInit {
         this.flagService.openDialog(TypeOfReport.Comment);
         break;
     }
+  }
+
+  openPostDeleteDialog() {
+    const dialogRef = this.dialog.open(ConfirmDeletionComponent);
+    dialogRef.afterClosed()
+      .subscribe(result => {
+        if (result.bool) {
+          this.postService.deletePost(this.areaService.currentAreaName, this.post);
+          const snackBarRef = this.snackBar.open('Post deleted successfully', 'Close', {
+            duration: 3000
+          });
+          this.router.navigateByUrl('');
+        }
+      });
   }
 
   postComment() {

@@ -1,6 +1,6 @@
-<md-card class="example-card">
+<md-card class="register-card">
+  <a class="logoLink" routerLink="/" routerLinkActive="active"><img class="logo" src="https://static.wildfyre.net/wildfyre.png" alt="WildFyre"></a>
   <md-card-content>
-    <a routerLink="/" routerLinkActive="active"><img class="logo" src="https://static.wildfyre.net/wildfyre.png" alt="WildFyre"></a>
     <div class="alert alert-info">
       Usernames must use Letters, Digits and @/./+/-/_ only.<br>
       Passwords must contain at least 8 characters and be alphanumeric (At least 1 letter and 1 number)
@@ -15,7 +15,7 @@
 
       <div class="form" [ngClass]="{ 'has-error': f.submitted && (!username.valid || (errors && errors._username)) }">
         <md-input-container>
-          <input mdInput placeholder="Username" type="text" name="username" [(ngModel)]="model.username" #username="ngModel" required />
+          <input mdInput placeholder="Username" type="text" name="username" [(ngModel)]="model.username" #username="ngModel" autocomplete="on" required />
         </md-input-container>
         <div *ngIf="f.submitted && !username.valid" class="help-block">Username is required</div>
         <div *ngIf="errors && errors._username" class="help-block">
@@ -27,7 +27,7 @@
 
       <div class="form" [ngClass]="{ 'has-error': f.submitted && (!email.valid || (errors && errors._email)) }">
         <md-input-container>
-          <input mdInput placeholder="Email" type="email" name="email" [(ngModel)]="model.email" #email="ngModel" required />
+          <input mdInput placeholder="Email" type="email" name="email" [(ngModel)]="model.email" #email="ngModel" autocomplete="on" required />
         </md-input-container>
         <div *ngIf="f.submitted && !email.valid" class="help-block">Email is required</div>
         <div *ngIf="errors && errors._email" class="help-block">
@@ -39,7 +39,7 @@
 
       <div class="form" [ngClass]="{ 'has-error': f.submitted && (!password.valid || (errors && errors._password)) }">
         <md-input-container>
-          <input mdInput placeholder="Password" type="password" name="password" [(ngModel)]="model.password" #password="ngModel" required />
+          <input mdInput placeholder="Password" type="password" name="password" [(ngModel)]="model.password" #password="ngModel" autocomplete="on" required />
         </md-input-container>
         <div *ngIf="f.submitted && !password.valid" class="help-block">Password is required</div>
         <div *ngIf="errors && errors._password" class="help-block">
@@ -51,7 +51,7 @@
 
       <div class="form" [ngClass]="{ 'has-error': f.submitted && (!password2.valid || (errors && errors._password)) }">
         <md-input-container>
-          <input mdInput placeholder="Password (repeat)" type="password" name="password2" [(ngModel)]="model.password2" #password2="ngModel" required />
+          <input mdInput placeholder="Password (repeat)" type="password" name="password2" [(ngModel)]="model.password2" #password2="ngModel" autocomplete="on" required />
         </md-input-container>
         <div *ngIf="f.submitted && !password2.valid" class="help-block">Second password is required</div>
         <div *ngIf="errors && errors._password" class="help-block">
@@ -74,8 +74,6 @@
         <button class="wideButtons" md-raised-button color="accent" [disabled]="loading">Register</button>
         <md-spinner *ngIf="loading"></md-spinner>
       </div>
-      Can't login? <a routerLink="/recover" routerLinkActive="active">Recover it Here</a><br>
-      Don't have an account? <a routerLink="/register" routerLinkActive="active">Register Here</a>
     </form>
   </md-card-content>
 </md-card>

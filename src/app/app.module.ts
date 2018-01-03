@@ -17,13 +17,17 @@ import { NavBarComponent } from './navBar/navBar.component';
 import { NotificationArchiveComponent } from './notificationArchive/notificationArchive.component';
 import { NotificationComponent } from './notification/notification.component';
 import { PostViewComponent } from './postView/postView.component';
-import { ProfileComponent } from './profile/profile.component';
+import { ProfileComponent, LogoutDialogComponent, BioDialogComponent,
+  EmailDialogComponent, AvatarDialogComponent, PasswordDialogComponent } from './profile/profile.component';
 import { ProfileViewComponent } from './profileView/profileView.component';
 import { RecoverComponent } from './recover/recover.component';
 import { RecoverPasswordComponent } from './recoverPassword/recoverPassword.component';
 import { RegisterComponent } from './register/register.component';
 import { RegisterSuccessComponent } from './registerSuccess/registerSuccess.component';
 import { UserPostsComponent } from './userPosts/userPosts.component';
+
+// Core Dialogs
+import { ConfirmDeletionComponent } from './_dialogs/confirmDeletion.component';
 
 // Core Pipes
 import { MarkedPipe } from './_pipes/marked.pipe';
@@ -99,7 +103,13 @@ import { ReCaptchaModule } from 'angular2-recaptcha';
     UserPostsComponent,
 
     // Dialogs
+    AvatarDialogComponent,
+    BioDialogComponent,
+    ConfirmDeletionComponent,
+    EmailDialogComponent,
     FlagDialogComponent,
+    LogoutDialogComponent,
+    PasswordDialogComponent,
     PictureDialogComponent,
     YouTubeDialogComponent,
 
@@ -122,7 +132,13 @@ import { ReCaptchaModule } from 'angular2-recaptcha';
     RouteService
   ],
   entryComponents: [
+    AvatarDialogComponent,
+    BioDialogComponent,
+    ConfirmDeletionComponent,
+    EmailDialogComponent,
     FlagDialogComponent,
+    LogoutDialogComponent,
+    PasswordDialogComponent,
     PictureDialogComponent,
     YouTubeDialogComponent
   ],

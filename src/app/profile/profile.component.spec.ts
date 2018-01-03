@@ -3,7 +3,7 @@ import { ComponentFixture, ComponentFixtureAutoDetect, TestBed, async } from '@a
 import { DebugElement } from '@angular/core';
 import { NgModel, NgForm } from '@angular/forms';
 import { MarkedPipe } from '../_pipes/marked.pipe';
-import { MdSnackBar, MdMenuModule, MdCardModule } from '@angular/material';
+import { MdSnackBar, MdMenuModule, MdCardModule, MdDialog } from '@angular/material';
 import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
@@ -23,6 +23,13 @@ describe('ProfileComponent', () => {
     let el: HTMLElement;
 
     beforeEach(() => {
+        const mdDialogStub = {
+            open: () => ({
+                afterClosed: () => ({
+                    subscribe: () => ({})
+                })
+            })
+        };
         const mdSnackBarStub = {
             open: () => ({})
         };
@@ -70,6 +77,7 @@ describe('ProfileComponent', () => {
         TestBed.configureTestingModule({
             declarations: [ ProfileComponent, MarkedPipe, NgModel, NgForm, ImageCropperComponent ],
             providers: [
+                { provide: MdDialog, useValue: mdDialogStub },
                 { provide: MdSnackBar, useValue: mdSnackBarStub },
                 { provide: Router, useValue: routerStub },
                 { provide: ActivatedRoute, useValue: activatedRouteStub },

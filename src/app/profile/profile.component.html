@@ -2,12 +2,15 @@
   <md-card>
     <md-menu #appMenu="mdMenu">
       <button md-menu-item (click)="viewProfile()"><md-icon>public</md-icon>View Public Profile</button>
-      <button md-menu-item (click)="editBio()"><md-icon>mode_edit</md-icon>Bio</button>
-      <button md-menu-item (click)="editEmail()"><md-icon>mode_edit</md-icon>Email</button>
-      <button md-menu-item (click)="editPassword()"><md-icon>mode_edit</md-icon>Password</button>
-      <button md-menu-item (click)="editPicture()"><md-icon>mode_edit</md-icon>Profile Picture</button>
-      <button md-menu-item (click)="logout()"><md-icon>power_settings_new</md-icon>Logout</button>
+      <button md-menu-item (click)="openBioDialog()"><md-icon>mode_edit</md-icon>Bio</button>
+      <button md-menu-item (click)="openEmailDialog()"><md-icon>mode_edit</md-icon>Email</button>
+      <button md-menu-item (click)="openPasswordDialog()"><md-icon>mode_edit</md-icon>Password</button>
+      <button md-menu-item (click)="openPictureDialog()"><md-icon>mode_edit</md-icon>Avatar</button>
+      <button md-menu-item (click)="openLogoutDialog()"><md-icon>power_settings_new</md-icon>Logout</button>
     </md-menu>
+    <div class="box" *ngIf="author?.banned">
+      <h1><font color="red">You are currently banned</font></h1>
+    </div>
     <md-card-content>
       <md-card>
         <button md-icon-button [mdMenuTriggerFor]="appMenu"><i class="material-icons">more_vert</i></button>
@@ -17,136 +20,15 @@
           <div class="user">
             <br>
             <font id="name" size="5">{{author?.name}}</font><br>
-            <ng-container *ngIf="!emailEdit">
+            <ng-container>
               <span id="email"><a href="mailto:{{account?.email}}">{{account?.email}}</a></span>
             </ng-container>
           </div>
         </div>
       </md-card>
     </md-card-content>
-
-    <ng-container class="box" *ngIf="!bioEdit">
+    <br>
     <span id="bio" [innerHTML]="author?.bio | marked"></span>
-    </ng-container>
-
-    <div class="box" *ngIf="bioEdit">
-      <md-card>
-        <button md-button id="clearIcon"(click)="cancelEditBio()"><i class="material-icons">clear</i></button>
-      <div class="form-group">
-        <md-input-container>
-          Bio: <textarea mdInput rows="4" cols="80" type="text" class="form-control" name="bio" [(ngModel)]="model.bio" #bio="ngModel"></textarea>
-        </md-input-container>
-      </div>
-      <div class="form">
-        <button class="wideButtons" md-raised-button color="accent" (click)="submitEditBio()" [disabled]="loading">Change Bio</button>
-        <md-spinner *ngIf="loading"></md-spinner>
-      </div>
-      <br>
-    </md-card>
-    <br>
-    </div>
-
-    <div class="box" *ngIf="emailEdit">
-      <md-card>
-        <button md-button id="clearIcon"(click)="cancelEditEmail()"><i class="material-icons">clear</i></button>
-      <div class="form-group">
-        <md-input-container>
-          New Email: <input mdInput type="text"  name="email" [(ngModel)]="model.email" #email="ngModel">
-        </md-input-container>
-      </div>
-
-      <div class="form">
-        <button class="wideButtons" md-raised-button color="accent" (click)="submitEditEmail()" [disabled]="loading">Send Email</button>
-        <md-spinner *ngIf="loading"></md-spinner>
-      </div>
-      <br>
-    </md-card>
-    <br>
-    </div>
-
-    <div class="box" *ngIf="passwordEdit">
-      <md-card>
-        <button md-button id="clearIcon"(click)="cancelEditPassword()"><i class="material-icons">clear</i></button>
-        <br>
-        <div class="alert alert-info">
-          Passwords must contain at least 8 characters and be alphanumeric (At least 1 letter and 1 number)
-        </div>
-        <div *ngIf="errors && errors._text" class="help-block">
-          <ul *ngFor="let err of errors._text">
-            <li>{{err}}</li>
-          </ul>
-        </div>
-        <form name="form" id="change-password-form" (ngSubmit)="f.form.valid && submitEditPassword()" #f="ngForm" novalidate>
-          <div *ngIf="errors && errors.non_field_errors" class="alert alert-danger">
-            <ul *ngFor="let err of errors.non_field_errors">
-              <li>{{err}}</li>
-            </ul>
-          </div>
-
-          <div class="form" [ngClass]="{ 'has-error': f.submitted && (!oldPassword.valid || (errors && errors._oldPassword)) }">
-            <md-input-container>
-              <input mdInput placeholder="Old Password" type="password" name="oldPassword" [(ngModel)]="model.oldPassword" #oldPassword="ngModel" required />
-            </md-input-container>
-            <div *ngIf="f.submitted && !oldPassword.valid" class="help-block">Password is required</div>
-            <div *ngIf="errors && errors._oldPassword" class="help-block">
-              <ul *ngFor="let err of errors._oldPassword">
-                <li>{{err}}</li>
-              </ul>
-            </div>
-          </div>
-
-          <div class="form" [ngClass]="{ 'has-error': f.submitted && (!newPassword1.valid || (errors && errors._newPassword1)) }">
-            <md-input-container>
-              <input mdInput placeholder="New Password" type="password" name="newPassword1" [(ngModel)]="model.newPassword1" #newPassword1="ngModel" required />
-            </md-input-container>
-            <div *ngIf="f.submitted && !newPassword1.valid" class="help-block">Password is required</div>
-            <div *ngIf="errors && errors._newPassword1" class="help-block">
-              <ul *ngFor="let err of errors._newPassword1">
-                <li>{{err}}</li>
-              </ul>
-            </div>
-          </div>
-
-          <div class="form" [ngClass]="{ 'has-error': f.submitted && (!newPassword2.valid || (errors && errors._newPassword2)) }">
-            <md-input-container>
-              <input mdInput placeholder="New Password (repeat)" type="password" name="newPassword2" [(ngModel)]="model.newPassword2" #newPassword2="ngModel" required />
-            </md-input-container>
-            <div *ngIf="f.submitted && !newPassword2.valid" class="help-block">Password is required</div>
-            <div *ngIf="errors && errors._newPassword2" class="help-block">
-              <ul *ngFor="let err of errors._newPassword2">
-                <li>{{err}}</li>
-              </ul>
-            </div>
-          </div>
-
-          <br>
-          <div class="form">
-            <button class="wideButtons" md-raised-button color="accent" [disabled]="loading">Change Password</button>
-            <md-spinner *ngIf="loading"></md-spinner>
-          </div>
-        </form>
-      </md-card>
-    </div>
-
-    <div class="box" *ngIf="pictureEdit">
-      <md-card>
-        <button md-button id="clearIcon" (click)="cancelEditPicture()"><i class="material-icons">clear</i></button>
-        <img-cropper [image]="data" [settings]="cropperSettings" (onCrop)="cropped($event)"></img-cropper>
-         <span class="result" *ngIf="data.image">
-            <img [src]="data.image" [width]="croppedWidth" [height]="croppedHeight">
-        </span>
-        <div class="form">
-          <button class="wideButtons" md-raised-button color="accent" (click)="submitEditPicture()" [disabled]="loading">Update Profile Picture</button>
-          <md-spinner *ngIf="loading"></md-spinner>
-        </div>
-        <br>
-      </md-card>
-      <br>
-    </div>
-
-    <div class="box" *ngIf="author?.banned">
-      <p>You are currently banned</p>
-    </div>
 
   <div id="userID">ID: {{author?.user}}</div>
 </md-card>

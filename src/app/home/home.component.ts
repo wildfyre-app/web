@@ -1,5 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { MdDialog, MdDialogRef, MdSnackBar } from '@angular/material';
 import { Router, ActivatedRoute } from '@angular/router';
+import { ConfirmDeletionComponent } from '../_dialogs/confirmDeletion.component';
 import { Area } from '../_models/area';
 import { Author } from '../_models/author';
 import { Comment } from '../_models/comment';
@@ -24,6 +26,7 @@ export class HomeComponent implements OnInit {
     'No more posts in this area, try creating one?', []);
   checked: boolean;
   expanded = false;
+  heightText: string;
   isCopied = false;
   loading = true;
   model: any = {};
@@ -38,8 +41,10 @@ export class HomeComponent implements OnInit {
 
   constructor(
     private cdRef: ChangeDetectorRef,
+    private dialog: MdDialog,
     private route: ActivatedRoute,
     private router: Router,
+    private snackBar: MdSnackBar,
     private areaService: AreaService,
     private commentService: CommentService,
     private flagService: FlagService,
@@ -66,7 +71,7 @@ export class HomeComponent implements OnInit {
       this.styleTextBottom = '0px';
       this.styleCommentBottom = '-1px';
     } else {
-      this.styleTextBottom = '45px';
+      this.styleTextBottom = '42px';
       this.styleCommentBottom = '44px';
     }
 
@@ -124,27 +129,29 @@ export class HomeComponent implements OnInit {
     if (window.screen.width > 600) {
       this.styleTextBottom = '0px';
       this.styleCommentBottom = '-1px';
+      this.heightText = '56px';
     } else {
-      this.styleTextBottom = '45px';
+      this.styleTextBottom = '42px';
       this.styleCommentBottom = '44px';
+      this.heightText = '40px';
     }
-  }
-
-  deleteComment(c: Comment) {
-    this.commentService.deleteComment(
-      this.areaService.currentAreaName,
-      this.post,
-      c
-    );
   }
 
   expandBox() {
     this.expanded = true;
     this.rowsExapanded = 3;
     this.navBarService.isVisibleSource.next('none');
-    this.styleTextBottom = '0px';
-    this.styleCommentBottom = '0px';
-    this.styleEditorBottom = '35px';
+    if (window.screen.width > 600) {
+      this.styleTextBottom = '0px';
+      this.styleCommentBottom = '-5px';
+      this.styleEditorBottom = '30px';
+      this.heightText = '71px';
+    } else {
+      this.styleTextBottom = '0px';
+      this.styleCommentBottom = '0px';
+      this.styleEditorBottom = '33px';
+      this.heightText = '71px';
+    }
   }
 
   getCommentLink(commentID: number) {
@@ -192,7 +199,24 @@ export class HomeComponent implements OnInit {
       });
   }
 
-  openDialog(post: Post, comment: Comment, typeOfFlagReport: TypeOfReport) {
+  openCommentDeleteDialog(c: Comment) {
+    const dialogRef = this.dialog.open(ConfirmDeletionComponent);
+    dialogRef.afterClosed()
+      .subscribe(result => {
+        if (result.bool) {
+          this.commentService.deleteComment(
+            this.areaService.currentAreaName,
+            this.post,
+            c
+          );
+          const snackBarRef = this.snackBar.open('Comment deleted successfully', 'Close', {
+            duration: 3000
+          });
+        }
+      });
+  }
+
+  openFlagDialog(post: Post, comment: Comment, typeOfFlagReport: TypeOfReport) {
     this.contractBox();
     this.flagService.currentComment = comment;
     this.flagService.currentPost = post;

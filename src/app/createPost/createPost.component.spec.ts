@@ -1,12 +1,11 @@
 import { ComponentFixture, TestBed, inject } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { MdDialog, MdMenuModule, MdSlideToggleModule, MdSnackBarModule } from '@angular/material';
+import { MdDialog, MdDialogRef, MdMenuModule, MdSlideToggleModule, MdSnackBarModule } from '@angular/material';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { AreaService } from '../_services/area.service';
 import { PostService } from '../_services/post.service';
-import { MdDialogRef } from '@angular/material';
 import { CreatePostComponent } from './createPost.component';
 import { PictureDialogComponent } from './createPost.component';
 import { YouTubeDialogComponent } from './createPost.component';

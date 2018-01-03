@@ -9,7 +9,7 @@
   <div *ngIf="post">
     <md-spinner *ngIf="loading"></md-spinner>
     <md-card *ngIf="!loading" class="content">
-        <span class="mainText" [innerHTML]="post.text | marked"></span>
+      <span class="mainText" [innerHTML]="post.text | marked"></span>
       <md-card (click)="gotoUser(post.author.user)" class="parentContainer1">
       <div class="parentContainer">
         <img class="pfp2" (click)="gotoUser(post.author.user)" *ngIf="post.author.avatar" [src]="post.author.avatar" alt="Avatar of {{post.author.name}}"/>
@@ -35,14 +35,14 @@
         <md-menu #appMenu="mdMenu">
           <input class="hideMeClass" type="text" [(ngModel)]="text">
           <button md-menu-item [class.btn-success]="isCopied" type="button" ngxClipboard [cbContent]="text" (cbOnSuccess)="isCopied = true"><md-icon>link</md-icon>Copy Link to Post</button>
-          <button md-menu-item (click)="openDialog(post, null, typeOfReport.Post)"><md-icon>flag</md-icon>Flag Post</button>
+          <button md-menu-item (click)="openFlagDialog(post, null, typeOfReport.Post)"><md-icon>flag</md-icon>Flag Post</button>
         </md-menu>
       </div>
       <br>
     </md-card>
     <hr>
     <div *ngIf="expanded" id="focusTouchZone" (click)="contractBox()"></div>
-    <textarea [style.bottom]="styleTextBottom" *ngIf="post.id !== 0" class="commentBox" (click)="expandBox()" name="comment" rows="{{rowsExapanded}}" cols="40" type="text" name="comment" [(ngModel)]="model.comment" #comment="ngModel" placeholder="Post a Comment"></textarea>
+    <textarea [style.bottom]="styleTextBottom" [style.height]="heightText" *ngIf="post.id !== 0" class="commentBox" (click)="expandBox()" name="comment" rows="{{rowsExapanded}}" cols="40" type="text" name="comment" [(ngModel)]="model.comment" #comment="ngModel" placeholder="Post a Comment"></textarea>
     <button [style.bottom]="styleEditorBottom" *ngIf="(post.id !== 0) && expanded" id="editorButton" (click)="$event.stopPropagation();" md-button color="accent" [disabled]="loading" [mdMenuTriggerFor]="commentMenu"><i class="material-icons">text_format</i></button>
     <button [style.bottom]="styleCommentBottom" *ngIf="post.id !== 0" id="commentButton" md-button color="accent" [disabled]="loading" (click)="postComment()"><b>Comment</b></button>
 
@@ -60,8 +60,8 @@
             <button md-icon-button [mdMenuTriggerFor]="appMenu"><i class="material-icons">more_vert</i></button>
             <md-menu #appMenu="mdMenu">
               <button md-menu-item [class.btn-success]="isCopied" type="button" ngxClipboard [cbContent]="getCommentLink(comment.id)" (cbOnSuccess)="isCopied = true"><md-icon>link</md-icon>Copy Link to Comment</button>
-              <button *ngIf="comment.author?.user == userID" md-menu-item color="warn" (click)="deleteComment(comment)"><md-icon>delete</md-icon>Delete Comment</button>
-              <button *ngIf="!(comment.author?.user == userID)" md-menu-item (click)="openDialog(post, comment, typeOfReport.Comment)"><md-icon>flag</md-icon>Flag Comment</button>
+              <button *ngIf="comment.author?.user == userID" md-menu-item color="warn" (click)="openCommentDeleteDialog(comment)"><md-icon>delete</md-icon>Delete Comment</button>
+              <button *ngIf="!(comment.author?.user == userID)" md-menu-item (click)="openFlagDialog(post, comment, typeOfReport.Comment)"><md-icon>flag</md-icon>Flag Comment</button>
             </md-menu>
           </div>
           <div class="commentText" [innerHTML]="comment.text | marked"></div>

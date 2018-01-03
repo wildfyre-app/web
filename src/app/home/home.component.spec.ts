@@ -3,7 +3,7 @@ import { ChangeDetectorRef } from '@angular/core';
 import { ComponentFixture, ComponentFixtureAutoDetect, TestBed, async } from '@angular/core/testing';
 import { DebugElement } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { MdMenuModule, MdSlideToggleModule } from '@angular/material';
+import { MdMenuModule, MdSlideToggleModule, MdDialogRef, MdDialog, MdSnackBarModule } from '@angular/material';
 import { Router, RouterModule } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
@@ -30,6 +30,18 @@ describe('HomeComponent', () => {
     let el: HTMLElement;
 
     beforeEach(() => {
+      const mdDialogStub = {
+          open: () => ({
+              afterClosed: () => ({
+                  subscribe: () => ({})
+              })
+          })
+      };
+        const mdDialogRefStub = {
+            close: () => {
+              return 's';
+            }
+        };
         const changeDetectorRefStub = {
             detectChanges: () => ({})
         };
@@ -108,6 +120,8 @@ describe('HomeComponent', () => {
                 { provide: AreaService, useValue: areaServiceStub },
                 { provide: CommentService, useValue: commentServiceStub },
                 { provide: FlagService, useValue: flagServiceStub },
+                { provide: MdDialog, useValue: mdDialogStub },
+                { provide: MdDialogRef, useValue: mdDialogRefStub },
                 { provide: NavBarService, useValue: navBarServiceStub },
                 { provide: NotificationService, useValue: notificationServiceStub },
                 { provide: PostService, useValue: postServiceStub },
@@ -115,7 +129,7 @@ describe('HomeComponent', () => {
                 { provide: RouteService, useValue: routeServiceStub },
                 { provide: ComponentFixtureAutoDetect, useValue: true }
             ],
-            imports: [ MdMenuModule, FormsModule, ClipboardModule, MdSlideToggleModule, RouterModule ]
+            imports: [ MdMenuModule, FormsModule, ClipboardModule, MdSlideToggleModule, RouterModule, MdSnackBarModule ]
         });
         fixture = TestBed.createComponent(HomeComponent);
         comp = fixture.componentInstance;

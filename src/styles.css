@@ -104,6 +104,29 @@ span {
   margin: 0 auto;
 }
 
+span.markdown table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+span.markdown tbody tr td {
+    padding: 5px;
+}
+
+span.markdown tbody tr:nth-child(even){
+  background-color: #f2f2f2
+}
+
+span.markdown thead tr th, span.markdown tbody tr th td {
+    text-align: left;
+    padding: 10px;
+}
+
+span.markdown thead tr th {
+    background-color: #ed763e;
+    color: #263238;
+}
+
 span.result {
   width: 200px;
   height: 200px;
@@ -172,13 +195,21 @@ span.result {
   border: 2px solid #4f5b62;
 }
 
-.mat-raised-button:hover {
-  background-color: #4f5b62;
-  z-index: 1000;
-  box-shadow: rgba(0, 0, 0, 0.3) 0 16px 16px 0;
+.example-card.mat-card {
+  background-color: #EEEEEE;
 }
 
-.example-card.mat-card {
+.login-card {
+  margin-top: 5%;
+  margin-bottom: 5%;
+  margin-right: 5%;
+  margin-left: 5%;
+  word-wrap: break-word;
+  background-color: #ed763e;
+  border: 2px solid #4f5b62;
+}
+
+.login-card.mat-card {
   background-color: #EEEEEE;
 }
 
@@ -290,6 +321,20 @@ span.result {
   width: 100%;
 }
 
+.register-card {
+  margin-top: 5%;
+  margin-bottom: 5%;
+  margin-right: 5%;
+  margin-left: 5%;
+  word-wrap: break-word;
+  background-color: #ed763e;
+  border: 2px solid #4f5b62;
+}
+
+.register-card.mat-card {
+  background-color: #EEEEEE;
+}
+
 .spreadButtons {
   display: flex;
   justify-content: center;
@@ -373,10 +418,9 @@ span.result {
       position: fixed;
       right: -1px;
       bottom: 44px;
-      z-index: 3;
+      z-index: 4;
       width: 27%;
-      height: 57px;
-      padding-top: 10px;
+      height: 38px;
       background-color: #263238;
       color: white;
       border-top-right-radius: 10px;
@@ -386,9 +430,9 @@ span.result {
       position: fixed;
       right: -1px;
       bottom: 80px;
-      z-index: 4;
+      z-index: 3;
       width: 26%;
-      height: 41px;
+      height: 38px;
       background-color: #263238;
       color: white;
       border-top-right-radius: 10px;
@@ -401,11 +445,11 @@ span.result {
       z-index: 5;
       border: 6px solid #263238;
       width: 75%;
+      height: 40px;
       overflow-y: scroll;
       border-top-left-radius: 10px;
       resize: none;
     }
-
 
     .icons {
       height: 5%;
@@ -447,7 +491,7 @@ span.result {
       bottom: -1px;
       width: 100%;
       float: left;
-      z-index: 5;
+      z-index: 6;
     }
 }
 
@@ -504,6 +548,7 @@ span.result {
       z-index: 5;
       border: 6px solid #263238;
       width: 85%;
+      height: 56px;
       overflow-y: scroll;
       border-top-left-radius: 10px;
       resize: none;
@@ -514,10 +559,40 @@ span.result {
       width: 2%;
     }
 
+    .login:after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+
+    .login-card.mat-card {
+      background-color: #EEEEEE;
+      height: 400px;
+    }
+
+    .login-card.mat-card .logoLink {
+      float: left;
+      width: 50%;
+      padding: 1px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .login-card.mat-card md-card-content{
+      float: left;
+      width: 50%;
+      height: 100%;
+      padding-left: 30px;
+      border-left: 1px solid black;
+    }
+
     .logo {
+      width: 300px;
+      height: 300px;
+      margin: 0 auto;
+      text-align: center;
       display: block;
       margin: auto;
-      width: 15%;
     }
 
     .numberCircle {
@@ -543,6 +618,28 @@ span.result {
       width: 50px;
       height: 50px;
       margin-bottom: 5px;
+    }
+
+    .register-card.mat-card {
+      background-color: #EEEEEE;
+      height: 650px;
+    }
+
+    .register-card.mat-card .logoLink {
+      float: left;
+      width: 50%;
+      padding: 1px;
+      padding-top: 130px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .register-card.mat-card md-card-content{
+      float: left;
+      width: 50%;
+      height: 100%;
+      padding-left: 30px;
+      border-left: 1px solid black;
     }
 
     #navB {

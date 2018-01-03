@@ -1,5 +1,5 @@
-<md-card class="example-card">
-  <a routerLink="/" routerLinkActive="active"><img class="logo" src="https://static.wildfyre.net/wildfyre.png" alt="WildFyre"></a>
+<md-card class="login-card">
+  <a class="logoLink" routerLink="/" routerLinkActive="active"><img class="logo" src="https://static.wildfyre.net/wildfyre.png" alt="WildFyre"></a>
   <md-card-content>
     <div class="alert alert-info">
       Welcome to the WildFyre Beta Client!<br />
@@ -15,14 +15,14 @@
 
       <div class="form" [ngClass]="{ 'has-error': f.submitted && !username.valid }">
         <md-input-container>
-          <input mdInput placeholder="Username" type="text" name="username" [(ngModel)]="model.username" #username="ngModel" required />
+          <input mdInput placeholder="Username" type="text" name="username" [(ngModel)]="model.username" #username="ngModel" autocomplete="username" required />
         </md-input-container>
         <div *ngIf="f.submitted && !username.valid" class="help-block">Username is required</div>
       </div>
 
       <div class="form" [ngClass]="{ 'has-error': f.submitted && !password.valid }">
         <md-input-container>
-          <input mdInput placeholder="Password" type="password" name="password" [(ngModel)]="model.password" #password="ngModel" required />
+          <input mdInput placeholder="Password" type="password" name="password" [(ngModel)]="model.password" #password="ngModel" autocomplete="current-password" required />
         </md-input-container>
         <div *ngIf="f.submitted && !password.valid" class="help-block">Password is required</div>
       </div>

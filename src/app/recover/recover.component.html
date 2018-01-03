@@ -1,6 +1,6 @@
-<md-card class="example-card">
+<md-card class="register-card">
+  <a class="logoLink" routerLink="/" routerLinkActive="active"><img class="logo" src="https://static.wildfyre.net/wildfyre.png" alt="WildFyre"></a>
   <md-card-content>
-    <a routerLink="/" routerLinkActive="active"><img class="logo" src="https://static.wildfyre.net/wildfyre.png" alt="WildFyre"></a>
     <h2>Recover</h2>
     <md-accordion>
       <md-expansion-panel hideToggle="true">
@@ -18,7 +18,7 @@
       Emails are case sensitive in this form
     </div>
     <md-input-container>
-      <input mdInput placeholder="Email" type="email" name="email" [(ngModel)]="model.email" #email="ngModel"/>
+      <input mdInput placeholder="Email" type="email" name="email" [(ngModel)]="model.email" #email="ngModel" autocomplete="email" required/>
     </md-input-container>
     <div *ngIf="errors && errors._email" class="help-block has-error">
       <ul *ngFor="let err of errors._email">
@@ -53,7 +53,7 @@
       Emails are case sensitive in this form
     </div>
     <md-input-container>
-      <input mdInput placeholder="Email" type="email" name="email2" [(ngModel)]="model.email2" #email2="ngModel"/>
+      <input mdInput placeholder="Email" type="email" name="email2" [(ngModel)]="model.email2" #email2="ngModel" autocomplete="email" required/>
     </md-input-container>
     <div *ngIf="errors && errors._email" class="help-block has-error">
       <ul *ngFor="let err of errors._email">
@@ -61,7 +61,7 @@
       </ul>
     </div>
     <md-input-container>
-      <input mdInput placeholder="Username"  type="text" name="username" [(ngModel)]="model.username" #username="ngModel"/>
+      <input mdInput placeholder="Username"  type="text" name="username" [(ngModel)]="model.username" #username="ngModel" autocomplete="username" required/>
     </md-input-container>
     <div *ngIf="errors && errors._username" class="help-block has-error">
       <ul *ngFor="let err of errors._username">

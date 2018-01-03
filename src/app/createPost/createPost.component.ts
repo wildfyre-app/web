@@ -39,38 +39,6 @@ export class CreatePostComponent implements OnInit {
     this.model.card += s;
   }
 
-  onChange(value: any) {
-    if (value.checked === true) {
-      this.areaService.isAreaChecked = true;
-      this.areaService.currentAreaName = 'information';
-    } else {
-      this.areaService.isAreaChecked = false;
-      this.areaService.currentAreaName = 'fun';
-    }
-  }
-
-  createPost() {
-    this.loading = true;
-    if (this.model.card !== '') {
-      this.postService.createPost(this.areaService.currentAreaName, this.model.card)
-        .subscribe(result => {
-          if (!result.getError()) {
-            this.model.card = '';
-            this.postService.getOwnPosts(this.areaService.currentAreaName, true).subscribe();
-            this.router.navigate(['']);
-          } else {
-            this.errors = result.getError();
-            this.loading = false;
-          }
-        });
-    } else {
-      this.loading = false;
-      const snackBarRef = this.snackBar.open('You did not input anything', 'Close', {
-        duration: 3000
-      });
-    }
-  }
-
   addBlockQoutes() {
     this.addLineBreak('> Blockquote example\n> This line is part of the same quote.\n\nQuote break.\n\n>'
     + ' This is a very long line that will still be quoted properly when it wraps. You can *put* **Markdown** into a blockquote.');
@@ -136,6 +104,41 @@ export class CreatePostComponent implements OnInit {
 
   addUnorderedList() {
     this.addLineBreak('* Unordered list can use asterisks\n- Or minuses\n+ Or pluses');
+  }
+
+  createPost() {
+    this.loading = true;
+    if (this.model.card !== '') {
+      this.postService.createPost(this.areaService.currentAreaName, this.model.card)
+        .subscribe(result => {
+          if (!result.getError()) {
+            this.model.card = '';
+            this.postService.getOwnPosts(this.areaService.currentAreaName, true).subscribe();
+            const snackBarRef = this.snackBar.open('Post Created Successfully!', 'Close', {
+              duration: 3000
+            });
+            this.router.navigate(['']);
+          } else {
+            this.errors = result.getError();
+            this.loading = false;
+          }
+        });
+    } else {
+      this.loading = false;
+      const snackBarRef = this.snackBar.open('You did not input anything', 'Close', {
+        duration: 3000
+      });
+    }
+  }
+
+  onChange(value: any) {
+    if (value.checked === true) {
+      this.areaService.isAreaChecked = true;
+      this.areaService.currentAreaName = 'information';
+    } else {
+      this.areaService.isAreaChecked = false;
+      this.areaService.currentAreaName = 'fun';
+    }
   }
 
   openPictureDialog() {
