@@ -12,7 +12,6 @@ import { NotificationService } from '../_services/notification.service';
 export class NavBarComponent implements OnInit {
   activeLinkIndex = 2;
   mobileRouteLinks: any[];
-  notifications: Notification[] = [];
   notificationLength: number;
   routeLinks: any[];
   styleDesktop: string;
@@ -27,9 +26,9 @@ export class NavBarComponent implements OnInit {
   ) {
     router.events.subscribe((url: any) => {
       if (this.authenticationService.token) {
-        this.notificationService.getNotifications()
-          .subscribe(notifications => {
-            this.navBarService.notifications.next(notifications);
+        this.notificationService.getSuperNotification(10, 0)
+          .subscribe(superNotification => {
+            this.navBarService.notifications.next(superNotification.count);
             this.cdRef.detectChanges();
         });
         this.styleMobile = '';
@@ -44,25 +43,25 @@ export class NavBarComponent implements OnInit {
 
     this.routeLinks = [
       {label: 'Profile', link: '/profile/', index: '0'},
-      {label: 'Notifications', link: '/notifications/', index: '1'},
+      {label: 'Notifications', link: '/notifications/1/', index: '1'},
       {label: 'Home', link: '/', index: '2'},
-      {label: 'My Posts', link: '/posts/', index: '3'},
+      {label: 'My Posts', link: '/posts/1/', index: '3'},
       {label: 'Create a Post', link: '/create/', index: '4'}
     ];
 
     this.mobileRouteLinks = [
       {label: '<i class="material-icons">perm_identity</i>', link: '/profile/', index: '0'},
-      {label: '<i class="material-icons">notifications_none</i>', link: '/notifications/', index: '1'},
+      {label: '<i class="material-icons">notifications_none</i>', link: '/notifications/1/', index: '1'},
       {label: '<i class="material-icons">home</i>', link: '/', index: '2'},
-      {label: '<i class="material-icons">content_copy</i>', link: '/posts/', index: '3'},
+      {label: '<i class="material-icons">content_copy</i>', link: '/posts/1/', index: '3'},
       {label: '<i class="material-icons">create</i>', link: '/create/', index: '4'}
     ];
   }
 
   ngOnInit() {
     this.navBarService.notifications
-      .subscribe((notifications: Notification[]) => {
-        this.notifications = notifications;
+      .subscribe(num => {
+        this.notificationLength = num;
         this.cdRef.detectChanges();
     });
 
@@ -94,11 +93,15 @@ export class NavBarComponent implements OnInit {
       this.activeLinkIndex = 0;
     } else if (s === '/notifications') {
       this.activeLinkIndex = 1;
+    } else if (s.lastIndexOf('/notifications/') !== -1) {
+      this.activeLinkIndex = 1;
     } else if (s === '/') {
       this.activeLinkIndex = 2;
     } else if (s === '/posts') {
       this.activeLinkIndex = 3;
-    } else if (s === '/create') {
+    } else if (s.lastIndexOf('/posts/') !== -1) {
+      this.activeLinkIndex = 3;
+    }else if (s === '/create') {
       this.activeLinkIndex = 4;
     }
     this.cdRef.detectChanges();

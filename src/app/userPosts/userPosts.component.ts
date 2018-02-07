@@ -1,5 +1,5 @@
 import { Component, OnInit, NgModule, ChangeDetectorRef } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Post } from '../_models/post';
 import { AreaService } from '../_services/area.service';
 import { PostService } from '../_services/post.service';
@@ -11,20 +11,23 @@ import { MasonryOptions } from 'angular2-masonry';
   templateUrl: 'userPosts.component.html'
 })
 export class UserPostsComponent implements OnInit {
-  backupFunPosts: Post[] = [];
-  backupInfoPosts: Post[] = [];
+  backupPosts: { [area: string]: Post[]; } = {};
   checked: boolean;
   funImageArray: string[] = [];
-  funPosts: Post[] = [];
+  index = 1;
   infoImageArray: string[] = [];
-  infoPosts: Post[] = [];
+  limit = 10;
   loading = true;
   model: any = {};
+  offset = 10;
   searchArray: Post[] = [];
   searching = false;
+  superPosts: { [area: string]: Post[]; } = {};
+  totalCount = 0;
 
   constructor(
     private cdRef: ChangeDetectorRef,
+    private route: ActivatedRoute,
     private router: Router,
     private areaService: AreaService,
     private postService: PostService,
@@ -34,6 +37,9 @@ export class UserPostsComponent implements OnInit {
    }
 
   private imageInPosts(posts: Post[], area: string) {
+    this.funImageArray = [];
+    this.infoImageArray = [];
+
     for (let i = 0; i <= posts.length - 1; i++) {
       // Find image markdown data in post.text - Guarenteed by Regex
       const indexOfStart = posts[i].text.search(/\!\[.*?\][\[\(].*?[\]\)]/g);
@@ -99,38 +105,70 @@ export class UserPostsComponent implements OnInit {
     this.cdRef.detectChanges();
     this.routeService.resetRoutes();
 
-    // get posts from secure api end point
-    this.postService.getOwnPosts('fun', false)
-      .subscribe(posts => {
-        // Removes binding to original 'posts' variable
-        const noMarkdownPosts = JSON.parse(JSON.stringify(posts));
-
-        this.funPosts = posts;
-        this.imageInPosts(this.funPosts, 'fun');
-        this.backupFunPosts = noMarkdownPosts;
-
-        for (let i = 0; i <= this.backupFunPosts.length - 1; i++) {
-          this.backupFunPosts[i].text = this.removeMarkdown(this.backupFunPosts[i].text);
+    this.route.params
+      .subscribe(params => {
+        if (params['index'] !== undefined) {
+          this.index = params['index'];
         }
-    });
+      });
 
-    this.postService.getOwnPosts('information', false)
-      .subscribe(posts => {
-        // Removes binding to original 'posts' variable
-        const noMarkdownPosts = JSON.parse(JSON.stringify(posts));
+    this.getPostsByArea('fun');
+    this.getPostsByArea('information');
+  }
 
-        this.infoPosts = posts;
-        this.imageInPosts(this.infoPosts, 'information');
-        this.backupInfoPosts = noMarkdownPosts;
+  getPosts(page: number) {
+    this.loading = true;
+    const currentArea = this.areaService.currentAreaName;
+    const posts: Post[] = [];
 
-        for (let i = 0; i <= this.backupInfoPosts.length - 1; i++) {
-          this.backupInfoPosts[i].text = this.removeMarkdown(this.backupInfoPosts[i].text);
+    this.postService.getOwnPosts(currentArea, this.limit, (this.offset * page) - this.limit)
+      .subscribe(superPost => {
+        superPost.results.forEach((obj: any) => {
+          posts.push(Post.parse(obj));
+        });
+
+        // Removes binding to original 'superPost' variable
+        this.superPosts[currentArea] = JSON.parse(JSON.stringify(posts));
+        this.backupPosts[currentArea] = posts;
+        this.imageInPosts(this.superPosts[currentArea], currentArea);
+
+        for (let i = 0; i <= this.backupPosts[currentArea].length - 1; i++) {
+          this.backupPosts[currentArea][i].text = this.removeMarkdown(this.backupPosts[currentArea][i].text);
         }
-    });
+        this.index = page;
+        this.totalCount = superPost.count;
+        this.cdRef.detectChanges();
+        this.loading = false;
+      });
+  }
+
+  getPostsByArea(area: string) {
+    this.loading = true;
+    const posts: Post[] = [];
+
+    this.postService.getOwnPosts(area, this.limit, 0)
+      .subscribe(superPost => {
+        superPost.results.forEach((obj: any) => {
+          posts.push(Post.parse(obj));
+        });
+
+        // Removes binding to original 'superPost' variable
+        this.superPosts[area] = JSON.parse(JSON.stringify(posts));
+        this.backupPosts[area] = posts;
+        this.totalCount = superPost.count;
+
+        this.imageInPosts(this.superPosts[area], area);
+
+        for (let i = 0; i <= this.backupPosts[area].length - 1; i++) {
+          this.backupPosts[area][i].text = this.removeMarkdown(this.backupPosts[area][i].text);
+        }
+        this.cdRef.detectChanges();
+        this.loading = false;
+      });
   }
 
   goto(areaID: string, postID: string) {
-    this.routeService.addNextRoute(this.router.url);
+    this.routeService.addNextRouteByIndex(this.index);
     this.router.navigateByUrl('/areas/' + areaID + '/' + postID);
   }
 
@@ -139,13 +177,16 @@ export class UserPostsComponent implements OnInit {
       this.checked = true;
       this.areaService.isAreaChecked = true;
       this.areaService.currentAreaName = 'information';
+      this.getPostsByArea('information');
     } else {
       this.checked = false;
       this.areaService.isAreaChecked = false;
       this.areaService.currentAreaName = 'fun';
+      this.getPostsByArea('fun');
     }
+    this.cdRef.detectChanges();
   }
-
+/* Removed as of D114
   searchInput() {
     if (this.areaService.currentAreaName === 'fun') {
       this.searchArray = [];
@@ -179,4 +220,5 @@ export class UserPostsComponent implements OnInit {
       }
     }
   }
+  */
 }

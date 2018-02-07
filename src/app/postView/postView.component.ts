@@ -78,10 +78,10 @@ export class PostViewComponent implements OnInit {
       .subscribe(params => {
         this.area = params['area'];
 
-        if (this.postService.userPosts[this.area]) {
-          for (let i = 0; i < this.postService.userPosts[this.area].length; i++) {
-            if (this.postService.userPosts[this.area][i].id === params['id']) {
-              this.post = this.postService.userPosts[this.area][i];
+        if (this.postService.superPosts[this.area]) {
+          for (let i = 0; i < this.postService.superPosts[this.area].results.length; i++) {
+            if (this.postService.superPosts[this.area].results[i].id === params['id']) {
+              this.post = this.postService.superPosts[this.area].results[i];
             }
           }
         } else {

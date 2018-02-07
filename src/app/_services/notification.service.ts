@@ -4,12 +4,15 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import { Notification } from '../_models/notification';
 import { Post } from '../_models/post';
+import { SuperNotification } from '../_models/superNotification';
+import { SuperPost } from '../_models/superPost';
 import { HttpService } from './http.service';
 import { NavBarService } from '../_services/navBar.service';
 
 @Injectable()
 export class NotificationService {
-  notifications: Notification[] = [];
+  superNotification: SuperNotification;
+  superPosts: { [area: string]: SuperPost; } = {};
 
   constructor(
     private httpService: HttpService,
@@ -20,53 +23,38 @@ export class NotificationService {
     // get notifications from api
     this.httpService.DELETE('/areas/notification/')
       .subscribe();
-      this.notifications = [];
+      this.superNotification = null;
   }
 
-  getArchive(area: string): Observable<Post[]> {
-    return this.httpService.GET('/areas/' + area + '/subscribed/')
+  getArchive(area: string, limit: number, offset: number): Observable<SuperPost> {
+    return this.httpService.GET('/areas/' + area + '/subscribed/?limit=' + limit + '&offset=' + offset)
       .map((response: Response) => {
-        const posts: Post[] = [];
-        response.json().forEach((post: any) => {
-          posts.push(Post.parse(post));
-        });
-        posts.sort((a: Post, b: Post) => {
-          return b.created.getTime() - a.created.getTime();
-        });
-        return posts;
+        this.superPosts[area] = SuperPost.parse(response.json());
+
+        return this.superPosts[area];
       });
   }
 
   getNotificationLength() {
-    if (this.notifications.length === 0) {
-      this.getNotifications()
-        .subscribe(notifications => {
-          return this.notifications.length;
+    if (this.superNotification.count === 0) {
+      this.getSuperNotification(10, 0)
+        .subscribe(superNotification => {
+          this.superNotification = superNotification;
+          return superNotification.count;
         });
     } else {
-      return this.notifications.length;
+      return this.superNotification.count;
     }
   }
 
-  getNotifications(): Observable<Notification[]> {
-    // get notifications from api
-    if (this.notifications.length === 0) {
-    return this.httpService.GET('/areas/notification/')
+  getSuperNotification(limit: number, offset: number): Observable<SuperNotification> {
+    if (offset === undefined) {
+      offset = 0;
+    }
+    return this.httpService.GET('/areas/notification/?limit=' + limit + '&offset=' + offset)
       .map((response: Response) => {
-        const notifications: Notification[] = [];
-        response.json().forEach((notification: any) => {
-          notifications.push(Notification.parse(notification));
-        });
-        this.notifications = notifications;
-        return notifications;
+        this.superNotification = SuperNotification.parse(response.json());
+        return this.superNotification;
       });
-    } else {
-      return Observable.of(this.notifications);
-    }
-  }
-
-  removeNotification(index: number): Observable<Notification[]> {
-    this.notifications.splice(index, 1);
-    return Observable.of(this.notifications);
   }
 }

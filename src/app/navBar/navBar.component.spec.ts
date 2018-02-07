@@ -10,6 +10,7 @@ import { Author } from '../_models/author';
 import { Comment } from '../_models/comment';
 import { Notification } from '../_models/notification';
 import { Post } from '../_models/post';
+import { SuperNotification } from '../_models/superNotification';
 import { NavBarComponent } from './navBar.component';
 import { AuthenticationService } from '../_services/authentication.service';
 import { NavBarService } from '../_services/navBar.service';
@@ -48,16 +49,16 @@ describe('NavBarComponent', () => {
           notifications: new BehaviorSubject([])
         };
         const notificationServiceStub = {
-            getNotifications: () => {
+            getSuperNotification: () => {
               return Observable.of(
-                new Array<Notification>(
-                  new Notification('fun',
+                new SuperNotification(0, null, null,
+                  new Array<Notification>(new Notification('fun',
                     new Post(1,
                       new Author(1, 'test', null, 'test', false), false, '2017-07-22T12:03:23.465373Z', false, 'test',
                         new Array<Comment>(
                           new Comment(1,
                             new Author(1, 'test', null, 'test', false), '2017-07-22T12:03:23.465373Z', 'test'))),
-                              new Array<number>(1, 2)))
+                              new Array<number>(1, 2))))
               );
             }
         };

@@ -2,7 +2,7 @@ import { By } from '@angular/platform-browser';
 import { ComponentFixture, ComponentFixtureAutoDetect, TestBed, async } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { MdCardModule, MdSlideToggleModule } from '@angular/material';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Author } from '../_models/author';
 import { Comment } from '../_models/comment';
@@ -14,6 +14,7 @@ import { PostService } from '../_services/post.service';
 import { RouteService } from '../_services/route.service';
 import { UserPostsComponent } from './userPosts.component';
 import { MasonryModule } from 'angular2-masonry';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 describe('UserPostsComponent', () => {
     let comp: UserPostsComponent;
@@ -25,6 +26,9 @@ describe('UserPostsComponent', () => {
         };
         const authenticationServiceStub = {
             token: 'token'
+        };
+        const activatedRouteStub = {
+          params: Observable.of({'id': 1})
         };
         const postServiceStub = {
             getOwnPosts: () => {
@@ -52,13 +56,14 @@ describe('UserPostsComponent', () => {
             declarations: [ UserPostsComponent, MarkedPipe ],
             providers: [
                 { provide: Router, useValue: routerStub },
+                { provide: ActivatedRoute, useValue: activatedRouteStub },
                 { provide: AreaService, useValue: areaServiceStub },
                 { provide: AuthenticationService, useValue: authenticationServiceStub },
                 { provide: PostService, useValue: postServiceStub },
                 { provide: RouteService, useValue: routeServiceStub },
                 { provide: ComponentFixtureAutoDetect, useValue: true }
             ],
-            imports: [ MdCardModule, MdSlideToggleModule, FormsModule, MasonryModule ],
+            imports: [ MdCardModule, MdSlideToggleModule, FormsModule, MasonryModule, NgxPaginationModule ],
         });
         fixture = TestBed.createComponent(UserPostsComponent);
         comp = fixture.componentInstance;

@@ -6,6 +6,7 @@ import 'rxjs/add/operator/mergeMap';
 import { Area } from '../_models/area';
 import { Comment, CommentError } from '../_models/comment';
 import { Post, PostError } from '../_models/post';
+import { SuperPost } from '../_models/superPost';
 import { AreaService } from './area.service';
 import { HttpService } from './http.service';
 
@@ -13,24 +14,24 @@ import { HttpService } from './http.service';
 export class PostService {
   private queuedPosts: { [area: string]: Post[]; } = {};
   private used: { [area: string]: number[]; } = {};
-  userPosts: { [area: string]: Post[]; } = {};
+  superPosts: { [area: string]: SuperPost; } = {};
 
   constructor(
     private httpService: HttpService
   ) { }
 
   private getPosts(area: string): Observable<Post[]> {
-    return this.httpService.GET('/areas/' + area + '/')
+    return this.httpService.GET('/areas/' + area + '/?limit=10')
       .map((response: Response) => {
-
+        const superPost: SuperPost = SuperPost.parse(response.json());
         const posts: Post[] = [];
 
-        response.json().forEach((obj: any) => {
+        superPost.results.forEach((obj: any) => {
           posts.push(Post.parse(obj));
         });
 
         // Cache
-        if (posts.length !== 0) {
+        if (superPost.count !== 0) {
           this.queuedPosts[area] = posts;
           return posts;
         } else {
@@ -120,23 +121,13 @@ export class PostService {
     }
   }
 
-  getOwnPosts(area: string, refresh: boolean): Observable<Post[]> {
-    if (this.userPosts[area] && !refresh) {
-      return Observable.of(this.userPosts[area]);
-    } else {
-      return this.httpService.GET('/areas/' + area + '/own/')
+  getOwnPosts(area: string, limit: number, offset: number): Observable<SuperPost> {
+      return this.httpService.GET('/areas/' + area + '/own/?limit=' + limit + '&offset=' + offset)
         .map((response: Response) => {
-          const posts: Post[] = [];
-          response.json().forEach((post: any) => {
-            posts.push(Post.parse(post));
-          });
-          posts.sort((a: Post, b: Post) => {
-            return b.created.getTime() - a.created.getTime();
-          });
-          this.userPosts[area] = posts;
-          return posts;
+          this.superPosts[area] = SuperPost.parse(response.json());
+
+          return this.superPosts[area];
       });
-    }
   }
 
   getPost(areaID: string, postID: string): Observable<Post> {

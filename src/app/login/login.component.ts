@@ -35,9 +35,9 @@ export class LoginComponent implements OnInit {
     this.authenticationService.login(this.model.username, this.model.password)
       .subscribe(result => {
         if (!result.getError()) {
-            this.notificationService.getNotifications()
-              .subscribe(notifications => {
-                this.navBarService.notifications.next(notifications);
+            this.notificationService.getSuperNotification(10, 0)
+              .subscribe(superNotification => {
+                this.navBarService.notifications.next(superNotification.count);
             });
           this.router.navigate(['/']);
           this.loading = false;

@@ -2,7 +2,7 @@ import { By } from '@angular/platform-browser';
 import { ComponentFixture,  ComponentFixtureAutoDetect, TestBed, async } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA, Component } from '@angular/core';
 import { MdCardModule, MdTabsModule } from '@angular/material';
-import { Router, RouterModule } from '@angular/router';
+import { Router, ActivatedRoute, RouterModule } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Author } from '../_models/author';
 import { Comment } from '../_models/comment';
@@ -13,6 +13,7 @@ import { NotificationService } from '../_services/notification.service';
 import { RouteService } from '../_services/route.service';
 import { NavBarService } from '../_services/navBar.service';
 import { NotificationComponent } from './notification.component';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 describe('NotificationComponent', () => {
     let comp: NotificationComponent;
@@ -26,6 +27,9 @@ describe('NotificationComponent', () => {
             token: 'token'
         };
         const navBarServiceStub = {};
+        const activatedRouteStub = {
+          params: Observable.of({'id': 1})
+        };
         const notificationServiceStub = {
             getNotifications: () => {
               return Observable.of(
@@ -46,13 +50,14 @@ describe('NotificationComponent', () => {
             declarations: [ NotificationComponent ],
             providers: [
                 { provide: Router, useValue: routerStub },
+                { provide: ActivatedRoute, useValue: activatedRouteStub },
                 { provide: AuthenticationService, useValue: authenticationServiceStub },
                 { provide: NavBarService, useValue: navBarServiceStub },
                 { provide: NotificationService, useValue: notificationServiceStub },
                 { provide: RouteService, useValue: routeServiceStub },
                 { provide: ComponentFixtureAutoDetect, useValue: true }
             ],
-            imports: [ MdCardModule, RouterModule, MdTabsModule ],
+            imports: [ MdCardModule, RouterModule, MdTabsModule, NgxPaginationModule ],
         }).compileComponents();
         fixture = TestBed.createComponent(NotificationComponent);
         comp = fixture.componentInstance;

@@ -113,7 +113,6 @@ export class CreatePostComponent implements OnInit {
         .subscribe(result => {
           if (!result.getError()) {
             this.model.card = '';
-            this.postService.getOwnPosts(this.areaService.currentAreaName, true).subscribe();
             const snackBarRef = this.snackBar.open('Post Created Successfully!', 'Close', {
               duration: 3000
             });

@@ -5,7 +5,7 @@ export class Profile {
       obj.name,
       obj.avatar,
       obj.bio,
-      obj.banned,
+      obj.banned
     );
   }
 
@@ -14,7 +14,7 @@ export class Profile {
     public name: string,
     public avatar: string,
     public bio: string,
-    public banned: boolean,
+    public banned: boolean
   ) { }
 
   getError(): ProfileError {

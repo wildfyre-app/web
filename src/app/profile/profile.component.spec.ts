@@ -13,7 +13,9 @@ import { Author } from '../_models/author';
 import { AuthenticationService } from '../_services/authentication.service';
 import { ProfileService } from '../_services/profile.service';
 import { RouteService } from '../_services/route.service';
+import { ReasonService } from '../_services/reason.service';
 import { ImageCropperComponent, CropperSettings, Bounds } from 'ng2-img-cropper';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 
 describe('ProfileComponent', () => {
@@ -40,7 +42,7 @@ describe('ProfileComponent', () => {
         const authenticationServiceStub = {
           token: 'token'
         };
-
+        const reasonServiceStub = {}
         const profileServiceStub = {
           getUser: (id: number) => {
             if (id !== 1) {
@@ -83,10 +85,11 @@ describe('ProfileComponent', () => {
                 { provide: ActivatedRoute, useValue: activatedRouteStub },
                 { provide: AuthenticationService, useValue: authenticationServiceStub },
                 { provide: ProfileService, useValue: profileServiceStub },
+                { provide: ReasonService, useValue: reasonServiceStub },
                 { provide: RouteService, useValue: routeServiceStub },
                 { provide: ComponentFixtureAutoDetect, useValue: true }
             ],
-            imports: [ MdMenuModule, MdCardModule ],
+            imports: [ MdMenuModule, MdCardModule, NgxPaginationModule ],
         });
         fixture = TestBed.createComponent(ProfileComponent);
         comp = fixture.componentInstance;

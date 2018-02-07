@@ -33,7 +33,7 @@ export class Post {
   ) {
     this.created = new Date(created);
 
-    // sort comments
+    // Sort comments
     comments.sort((a: Comment, b: Comment) => {
       return a.created.getTime() - b.created.getTime();
     });

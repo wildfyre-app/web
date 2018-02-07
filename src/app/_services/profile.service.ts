@@ -4,12 +4,14 @@ import { Observable } from 'rxjs';
 import { Account, AccountError } from '../_models/account';
 import { Author, AuthorError } from '../_models/author';
 import { Profile, ProfileError } from '../_models/profile';
+import { SuperBan } from '../_models/superBan';
 import { HttpService } from './http.service';
 
 @Injectable()
 export class ProfileService {
-  private self: Author;
   private account: Account;
+  private self: Author;
+  private superBans: SuperBan;
   private userArray: Author[] = [];
 
   constructor(
@@ -26,6 +28,14 @@ export class ProfileService {
         return this.account;
       });
     }
+  }
+
+  getBans(limit: number, offset: number): Observable<SuperBan> {
+    return this.httpService.GET('/bans/?limit=' + limit + '&offset=' + offset)
+      .map((response: Response) => {
+        this.superBans = SuperBan.parse(response.json()); // cache
+        return this.superBans;
+      });
   }
 
   getSelf(): Observable<Author> {

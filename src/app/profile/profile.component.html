@@ -8,9 +8,31 @@
       <button md-menu-item (click)="openPictureDialog()"><md-icon>mode_edit</md-icon>Avatar</button>
       <button md-menu-item (click)="openLogoutDialog()"><md-icon>power_settings_new</md-icon>Logout</button>
     </md-menu>
-    <div class="box" *ngIf="author?.banned">
-      <h1><font color="red">You are currently banned</font></h1>
+    <md-spinner *ngIf="loading"></md-spinner>
+    <div class="alert alert-danger" *ngIf="author?.banned">
+      <h2>You are currently banned</h2>
     </div>
+    <br>
+    <div *ngFor="let ban of bans | paginate: { id: 'server', itemsPerPage: limit, currentPage: index, totalItems: totalCount }">
+      <div class="alert alert-danger" *ngIf="author?.banned">
+        Reason: {{getReason(ban.reason)}}<br>
+        <ng-container>{{ban.comment}}</ng-container><br>
+        You can not
+        <ng-container *ngIf="ban.ban_all || (ban.ban_post && ban.ban_comment && ban.ban_flag)"> post, comment, or flag.</ng-container>
+        <ng-container *ngIf="ban.ban_post && !(ban.ban_all || (ban.ban_post && ban.ban_comment && ban.ban_flag))"> post</ng-container>
+        <ng-container *ngIf="((ban.ban_post && ban.ban_comment) || (ban.ban_post && ban.ban_flag)) && !(ban.ban_all || (ban.ban_post && ban.ban_comment && ban.ban_flag))"> or</ng-container>
+        <ng-container *ngIf="ban.ban_comment && !(ban.ban_all || (ban.ban_post && ban.ban_comment && ban.ban_flag))"> comment</ng-container>
+        <ng-container *ngIf="(ban.ban_flag && ban.ban_comment) && !(ban.ban_all || (ban.ban_post && ban.ban_comment && ban.ban_flag))"> or</ng-container>
+        <ng-container *ngIf="ban.ban_flag && !(ban.ban_all || (ban.ban_post && ban.ban_comment && ban.ban_flag))"> flag</ng-container><ng-container *ngIf="!(ban.ban_all || (ban.ban_post && ban.ban_comment && ban.ban_flag))">.</ng-container>
+        <br>
+        <ng-container>{{ban.timestamp}}</ng-container><br>
+        <hr>
+        Expires: {{ban.expiry}}
+      </div>
+      <br>
+    </div>
+    <pagination-controls *ngIf="(bans.length !== 0)" (pageChange)="getBans($event)" id="server"></pagination-controls>
+
     <md-card-content>
       <md-card>
         <button md-icon-button [mdMenuTriggerFor]="appMenu"><i class="material-icons">more_vert</i></button>
@@ -30,5 +52,6 @@
     <br>
     <span id="bio" [innerHTML]="author?.bio | marked"></span>
 
-  <div id="userID">ID: {{author?.user}}</div>
+    <div id="userID">ID: {{author?.user}}</div>
+  </md-card>
 </md-card>

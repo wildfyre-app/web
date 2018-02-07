@@ -5,7 +5,7 @@
     [active]="activeLinkIndex === i"
     (click)="activeLinkIndex = i">
     {{routeLink.label}}
-    <div class="numberCircle" *ngIf="(i === 1) && notifications.length !== 0">{{getNotificationLength(notifications.length)}}</div>
+    <div class="numberCircle" *ngIf="(i === 1) && notificationLength !== 0">{{getNotificationLength(notificationLength)}}</div>
   </a>
 </nav>
 
@@ -16,7 +16,7 @@
     [active]="activeLinkIndex === i"
     (click)="activeLinkIndex = i">
     <div class="mobileButtons" [innerHtml]="routeLink.label"></div>
-    <div class="numberCircle" *ngIf="(i === 1) && notifications.length !== 0">{{getNotificationLength(notifications.length)}}</div>
+    <div class="numberCircle" *ngIf="(i === 1) && notificationLength !== 0">{{getNotificationLength(notificationLength)}}</div>
   </a>
 </nav>
 

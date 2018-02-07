@@ -6,7 +6,7 @@
   <md-card class="centerText" *ngIf="(notifications.length === 0) && !loading">
       No more notifications, try engaging more?
   </md-card>
-  <div *ngFor="let notification of notifications">
+  <div *ngFor="let notification of notifications | paginate: { id: 'server', itemsPerPage: limit, currentPage: index, totalItems: totalCount }">
     <button type="submit" md-raised-button (click)="goto(notification.area, notification.post.id, notification.comments)">
       <div class="notifCount">
         <h2>{{notification.comments.length}}</h2>
@@ -16,4 +16,5 @@
       –{{notification.post.author.name}}
     </button>
   </div>
+    <pagination-controls *ngIf="(notifications.length !== 0)" (pageChange)="getNotifications($event)" id="server"></pagination-controls>
 </md-card>

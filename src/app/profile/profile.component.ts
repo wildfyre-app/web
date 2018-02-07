@@ -1,11 +1,15 @@
-import { Component, OnInit, ViewChild, NgZone } from '@angular/core';
+import { Component, OnInit, ViewChild, NgZone, ChangeDetectorRef } from '@angular/core';
 import { MdDialog, MdDialogRef, MdSnackBar } from '@angular/material';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Account } from '../_models/account';
 import { Author } from '../_models/author';
-import { PasswordError } from '../_models';
+import { Ban } from '../_models/ban';
+import { Choice } from '../_models/choice';
+import { PasswordError } from '../_models/password';
+import { SuperBan } from '../_models/superBan';
 import { AuthenticationService } from '../_services/authentication.service';
 import { ProfileService } from '../_services/profile.service';
+import { ReasonService } from '../_services/reason.service';
 import { RouteService } from '../_services/route.service';
 import { ImageCropperComponent, CropperSettings, Bounds } from 'ng2-img-cropper';
 import { BootController } from '../../boot-control';
@@ -16,12 +20,20 @@ import { BootController } from '../../boot-control';
 export class ProfileComponent implements OnInit {
   account: Account;
   author: Author;
+  choices: Choice[];
   data: any;
+  index = 1;
+  limit = 2;
+  loading = true;
   model: any = {};
+  offset = 2;
   url: string;
   self: boolean;
+  bans: Ban[] = [];
+  totalCount = 0;
 
   constructor(
+    private cdRef: ChangeDetectorRef,
     private dialog: MdDialog,
     private ngZone: NgZone,
     private route: ActivatedRoute,
@@ -29,10 +41,15 @@ export class ProfileComponent implements OnInit {
     public snackBar: MdSnackBar,
     private authenticationService: AuthenticationService,
     private profileService: ProfileService,
+    private reasonService: ReasonService,
     private routeService: RouteService
   ) { }
 
   ngOnInit() {
+    this.reasonService.getFlagReasons()
+      .subscribe((choices) => {
+        this.choices = choices;
+      });
     this.routeService.resetRoutes();
     this.route.params.subscribe((parms) => {
       if (parms['id']) {
@@ -41,17 +58,28 @@ export class ProfileComponent implements OnInit {
           this.author = user;
         });
       } else {
-        this.profileService.getSelf().subscribe((self: Author) => {
-          this.author = self;
-          this.model.bio = this.author.bio;
-          this.self = true;
-        });
+        this.self = true;
 
-        this.profileService.getAccount().subscribe((self: Account) => {
-          this.account = self;
-          this.model.email = this.account.email;
-          this.self = true;
-        });
+        this.profileService.getSelf()
+          .subscribe((self: Author) => {
+            this.author = self;
+            this.model.bio = this.author.bio;
+          });
+
+        this.profileService.getAccount()
+          .subscribe((self: Account) => {
+            this.account = self;
+            this.model.email = this.account.email;
+          });
+
+        this.profileService.getBans(this.limit, (this.index * this.limit) - this.limit)
+          .subscribe((superBan: SuperBan) => {
+            superBan.results.forEach((obj: any) => {
+              this.bans.push(Ban.parse(obj));
+            });
+            this.totalCount = superBan.count;
+            this.cdRef.detectChanges();
+          });
 
       }
     });
@@ -61,8 +89,34 @@ export class ProfileComponent implements OnInit {
       this.model.email = this.account.email;
       this.self = true;
     });
+    this.loading = false;
   }
 
+  getBans(page: number) {
+    this.loading = true;
+    this.bans = [];
+
+    this.profileService.getBans(this.limit, (this.offset * page) - this.limit)
+      .subscribe(superBan => {
+
+        superBan.results.forEach((obj: any) => {
+          this.bans.push(Ban.parse(obj));
+        });
+
+        this.index = page;
+        this.totalCount = superBan.count;
+        this.cdRef.detectChanges();
+        this.loading = false;
+    });
+  }
+
+  getReason(number: number): string {
+    if (number !== null) {
+      return this.choices[number].value;
+    } else {
+      return this.choices[3].value;
+    }
+  }
 
   openBioDialog() {
     const dialogRef = this.dialog.open(BioDialogComponent);

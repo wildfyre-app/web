@@ -54,6 +54,7 @@ import { ClipboardModule } from 'ngx-clipboard';
 import 'hammerjs';
 import { ImageCropperModule } from 'ng2-img-cropper';
 import { MasonryModule } from 'angular2-masonry';
+import { NgxPaginationModule } from 'ngx-pagination';
 import { ReCaptchaModule } from 'angular2-recaptcha';
 
 @NgModule({
@@ -80,6 +81,7 @@ import { ReCaptchaModule } from 'angular2-recaptcha';
     MdRadioModule,
     MdTabsModule,
     MdSlideToggleModule,
+    NgxPaginationModule,
     ReCaptchaModule,
     Routing
   ],

@@ -3,7 +3,7 @@ import { ComponentFixture,  ComponentFixtureAutoDetect, TestBed, async } from '@
 import { FormsModule } from '@angular/forms';
 import { NO_ERRORS_SCHEMA, Component } from '@angular/core';
 import { MdCardModule, MdTabsModule, MdSlideToggleModule } from '@angular/material';
-import { Router, RouterModule } from '@angular/router';
+import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Author } from '../_models/author';
 import { Comment } from '../_models/comment';
@@ -16,6 +16,7 @@ import { NotificationService } from '../_services/notification.service';
 import { RouteService } from '../_services/route.service';
 import { NotificationArchiveComponent } from './notificationArchive.component';
 import { MasonryModule } from 'angular2-masonry';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 describe('NotificationArchiveComponent', () => {
     let comp: NotificationArchiveComponent;
@@ -34,6 +35,9 @@ describe('NotificationArchiveComponent', () => {
             getAreaRep: () => ({
                 subscribe: () => ({})
             })
+        };
+        const activatedRouteStub = {
+          params: Observable.of({'id': 1})
         };
         const notificationServiceStub = {
             getNotifications: () => {
@@ -55,13 +59,14 @@ describe('NotificationArchiveComponent', () => {
             declarations: [ NotificationArchiveComponent, MarkedPipe ],
             providers: [
                 { provide: Router, useValue: routerStub },
+                { provide: ActivatedRoute, useValue: activatedRouteStub },
                 { provide: AreaService, useValue: areaServiceStub },
                 { provide: AuthenticationService, useValue: authenticationServiceStub },
                 { provide: NotificationService, useValue: notificationServiceStub },
                 { provide: RouteService, useValue: routeServiceStub },
                 { provide: ComponentFixtureAutoDetect, useValue: true }
             ],
-            imports: [ MdCardModule, RouterModule, MdTabsModule, MdSlideToggleModule, FormsModule, MasonryModule ],
+            imports: [ MdCardModule, RouterModule, MdTabsModule, MdSlideToggleModule, FormsModule, MasonryModule, NgxPaginationModule ],
         }).compileComponents();
         fixture = TestBed.createComponent(NotificationArchiveComponent);
         comp = fixture.componentInstance;

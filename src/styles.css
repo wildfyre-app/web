@@ -98,6 +98,14 @@ p {
   font-size: 100%;
 }
 
+pagination-controls#server {
+	text-align: center;
+}
+
+pagination-controls#server pagination-template ul.ngx-pagination li.current{
+	background: #ed763e;
+}
+
 span {
   display: block;
   height: 100%;
@@ -131,6 +139,10 @@ span.result {
   width: 200px;
   height: 200px;
   border: 2px solid #bf3f7f;
+}
+
+ul.ngx-pagination {
+  padding-left: 0px;
 }
 
 .alert.alert-info {
