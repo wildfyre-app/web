@@ -32,10 +32,10 @@
   </md-card>
 
   <hr>
-  <div *ngIf="expanded" id="focusTouchZone" (click)="contractBox()"></div>
-  <textarea [style.bottom]="styleTextBottom" [style.height]="heightText" class="commentBox" (click)="expandBox()" name="comment" rows="{{rowsExapanded}}" cols="40" type="text" name="comment" [(ngModel)]="model.comment" #comment="ngModel" placeholder="Post a Comment"></textarea>
-  <button [style.bottom]="styleEditorBottom" *ngIf="expanded" id="editorButton" (click)="$event.stopPropagation();" md-button color="accent" [disabled]="loading" [mdMenuTriggerFor]="commentMenu"><i class="material-icons">text_format</i></button>
-  <button [style.bottom]="styleCommentBottom" id="commentButton" md-button color="accent" [disabled]="loading" (click)="postComment()"><b>Comment</b></button>
+  <div *ngIf="expanded && loggedIn" id="focusTouchZone" (click)="contractBox()"></div>
+  <textarea [style.bottom]="styleTextBottom" *ngIf="loggedIn" [style.height]="heightText" class="commentBox" (click)="expandBox()" name="comment" rows="{{rowsExapanded}}" cols="40" type="text" name="comment" [(ngModel)]="model.comment" #comment="ngModel" placeholder="Post a Comment"></textarea>
+  <button [style.bottom]="styleEditorBottom" *ngIf="expanded && loggedIn" id="editorButton" (click)="$event.stopPropagation();" md-button color="accent" [disabled]="loading" [mdMenuTriggerFor]="commentMenu"><i class="material-icons">text_format</i></button>
+  <button [style.bottom]="styleCommentBottom" *ngIf="loggedIn" id="commentButton" md-button color="accent" [disabled]="loading" (click)="postComment()"><b>Comment</b></button>
 
   <md-menu #commentMenu="mdMenu">
     <button md-menu-item (click)="addBold()"><i class="material-icons">format_bold</i> Bold</button>

@@ -62,8 +62,9 @@ export class PostService {
       });
   }
 
-  createPost(area: string, text: string): Observable<Post> {
+  createPost(area: string, text: string, anonymous: boolean): Observable<Post> {
     const body = {
+      'anonym': anonymous,
       'text': text
     };
 
@@ -75,7 +76,7 @@ export class PostService {
       .catch((error) => {
         return Observable.of(new PostError(
           JSON.parse(error._body).non_field_errors,
-          JSON.parse(error._body).username
+          JSON.parse(error._body)._text
         ));
       });
   }

@@ -6,7 +6,6 @@ import { Author } from '../_models/author';
 import { Comment } from '../_models/comment';
 import { Post } from '../_models/post';
 import { AreaService } from '../_services/area.service';
-import { AuthenticationService } from '../_services/authentication.service';
 import { CommentService } from '../_services/comment.service';
 import { FlagService } from '../_services/flag.service';
 import { NavBarService } from '../_services/navBar.service';
@@ -26,6 +25,7 @@ export class PostViewComponent implements OnInit {
   heightText: string;
   isCopied = false;
   loading: boolean;
+  loggedIn = false;
   model: any = {};
   parsedCommentArray: string[] = [];
   post: Post;
@@ -43,7 +43,6 @@ export class PostViewComponent implements OnInit {
     private router: Router,
     private snackBar: MdSnackBar,
     private areaService: AreaService,
-    private authenticationService: AuthenticationService,
     private commentService: CommentService,
     private flagService: FlagService,
     private navBarService: NavBarService,
@@ -72,6 +71,7 @@ export class PostViewComponent implements OnInit {
     this.profileService.getSelf()
       .subscribe( (author: Author) => {
         this.userID = author.user;
+        this.loggedIn = true;
       });
 
     this.route.params

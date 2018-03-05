@@ -11,6 +11,7 @@ import { RouteService } from '../_services/route.service';
   templateUrl: 'createPost.component.html'
 })
 export class CreatePostComponent implements OnInit {
+  anonymous = false;
   checked: boolean;
   errors: PostError;
   loading: boolean;
@@ -109,7 +110,7 @@ export class CreatePostComponent implements OnInit {
   createPost() {
     this.loading = true;
     if (this.model.card !== '') {
-      this.postService.createPost(this.areaService.currentAreaName, this.model.card)
+      this.postService.createPost(this.areaService.currentAreaName, this.model.card, this.anonymous)
         .subscribe(result => {
           if (!result.getError()) {
             this.model.card = '';
@@ -128,6 +129,10 @@ export class CreatePostComponent implements OnInit {
         duration: 3000
       });
     }
+  }
+
+  makeAnonymous(value: any) {
+    this.anonymous = value.checked;
   }
 
   onChange(value: any) {

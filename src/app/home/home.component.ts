@@ -22,7 +22,7 @@ import { RouteService } from '../_services/route.service';
 export class HomeComponent implements OnInit {
   private typeOfReport = TypeOfReport;
   systemAuthor: Author = new Author(375, 'WildFyre', '', '', false);
-  fakePost: Post = new Post(0, this.systemAuthor, false, Date(), false,
+  fakePost: Post = new Post(0, this.systemAuthor, false, false, Date(), false,
     'No more posts in this area, try creating one?', []);
   checked: boolean;
   expanded = false;
@@ -84,7 +84,7 @@ export class HomeComponent implements OnInit {
           this.cdRef.detectChanges();
         } else {
           this.text = 'https://client.wildfyre.net';
-          this.fakePost = new Post(0, this.systemAuthor, false,
+          this.fakePost = new Post(0, this.systemAuthor, false, false,
             Date(), false, 'No more posts in this area, try creating one?', []);
           this.post = this.fakePost;
           this.loading = false;
@@ -185,7 +185,7 @@ export class HomeComponent implements OnInit {
           this.cdRef.detectChanges();
         } else {
           this.text = 'https://client.wildfyre.net';
-          this.fakePost = new Post(0, this.systemAuthor, false,
+          this.fakePost = new Post(0, this.systemAuthor, false, false,
             Date(), false, 'No more posts in this area, try creating one?', []);
           this.post = this.fakePost;
           this.loading = false;
@@ -261,7 +261,7 @@ export class HomeComponent implements OnInit {
           this.cdRef.detectChanges();
         } else {
           this.text = 'https://client.wildfyre.net';
-          this.fakePost = new Post(0, this.systemAuthor, false,
+          this.fakePost = new Post(0, this.systemAuthor, false, false,
             Date(), false, 'No more posts in this area, try creating one?', []);
           this.post = this.fakePost;
           this.loading = false;

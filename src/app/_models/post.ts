@@ -7,7 +7,13 @@ export class Post {
   static parse(obj: any) {
     return new Post(
       obj.id,
-      Author.parse(obj.author),
+      (() => {
+        if (obj.author === null) {
+          return  new Author(498, 'Anonymous', 'https://upload.wildfyre.net/api/avatar/ic_visibility_off_black_24dp.png', null, false);
+        }
+        return Author.parse(obj.author);
+      })(), // Call method
+      obj.anonym,
       obj.subscribed,
       obj.created,
       obj.active,
@@ -25,6 +31,7 @@ export class Post {
   constructor(
     public id: number,
     public author: Author,
+    public anonym: boolean,
     public subscribed: boolean,
     created: string,
     public active: boolean,
@@ -49,7 +56,7 @@ export class PostError extends Post {
     public non_field_errors?: string[],
     public _text?: string[]
   ) {
-    super(null, null, null, null, null, null, null);
+    super(null, null, null, null, null, null, null, null);
   }
 
   getError(): PostError {

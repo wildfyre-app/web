@@ -354,6 +354,11 @@ ul.ngx-pagination {
   text-align: center;
 }
 
+.toggle {
+  text-align: center;
+  z-index: 1;
+}
+
 .username {
   text-align: left;
 }
@@ -388,11 +393,6 @@ ul.ngx-pagination {
   width: 100%;
   height: 100%;
   z-index: 2;
-}
-
-#toggle {
-  text-align: center;
-  z-index: 1;
 }
 
 #userID {

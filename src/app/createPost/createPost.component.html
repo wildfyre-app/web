@@ -30,6 +30,13 @@
       <button md-button (click)="openPictureDialog()"><i class="material-icons">insert_photo</i></button>
       <button md-button (click)="openYoutubeDialog()"><i class="material-icons">slideshow</i></button>
     </div>
+    <div class="toggle">
+      Post Anonymously<md-slide-toggle
+      class="example-margin"
+      color="#263238"
+      [checked]="anonymous"
+      (change)="makeAnonymous($event)"></md-slide-toggle>
+    </div>
     <hr>
     <div class="form-group">
       <md-input-container>
@@ -40,14 +47,13 @@
           <li>{{err}}</li>
         </ul>
       </div>
-
       <button class="wideButtons" md-raised-button (click)="createPost()" color="accent" [disabled]="loading"><b>Create</b></button>
       <md-spinner *ngIf="loading"></md-spinner>
     </div>
   </md-card>
 </md-card>
 
-<div id="toggle">
+<div class="toggle">
   Current Area:<br>
   Fun  &nbsp;<md-slide-toggle
   class="example-margin"
