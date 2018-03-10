@@ -33,7 +33,6 @@ export class PostViewComponent implements OnInit {
   styleCommentBottom: string;
   styleEditorBottom: string;
   styleTextBottom: string;
-  text = 'https://client.wildfyre.net/';
   userID: number;
 
   constructor(
@@ -89,7 +88,6 @@ export class PostViewComponent implements OnInit {
             .subscribe(post => {
               this.post =  post;
               this.post.subscribed = post.subscribed;
-              this.text = 'https://client.wildfyre.net/areas/' + this.areaService.currentAreaName + '/' + post.id;
           });
         }
 
@@ -173,6 +171,10 @@ export class PostViewComponent implements OnInit {
 
   getCommentLink(commentID: number) {
     return 'https://client.wildfyre.net/areas/' + this.areaService.currentAreaName + '/' + this.post.id + '/' + commentID;
+  }
+
+  getPostLink(postID: number) {
+    return 'https://client.wildfyre.net/areas/' + this.areaService.currentAreaName + '/' + postID;
   }
 
   gotoUser(user: string) {

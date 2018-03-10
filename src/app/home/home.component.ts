@@ -36,7 +36,6 @@ export class HomeComponent implements OnInit {
   styleCommentBottom: string;
   styleEditorBottom: string;
   styleTextBottom: string;
-  text = 'https://client.wildfyre.net/';
   userID: number;
 
   constructor(
@@ -78,12 +77,10 @@ export class HomeComponent implements OnInit {
     this.postService.getNextPost(this.areaService.currentAreaName)
       .subscribe(nextPost => {
         if (nextPost) {
-          this.text = 'https://client.wildfyre.net/areas/' + this.areaService.currentAreaName + '/' + nextPost.id;
           this.post = nextPost;
           this.loading = false;
           this.cdRef.detectChanges();
         } else {
-          this.text = 'https://client.wildfyre.net';
           this.fakePost = new Post(0, this.systemAuthor, false, false,
             Date(), false, 'No more posts in this area, try creating one?', []);
           this.post = this.fakePost;
@@ -158,6 +155,10 @@ export class HomeComponent implements OnInit {
     return 'https://client.wildfyre.net/areas/' + this.areaService.currentAreaName + '/' + this.post.id + '/' + commentID;
   }
 
+  getPostLink(postID: number) {
+    return 'https://client.wildfyre.net/areas/' + this.areaService.currentAreaName + '/' + postID;
+  }
+
   gotoUser(user: string) {
     this.routeService.addNextRoute(this.router.url);
     this.router.navigateByUrl('/user/' + user);
@@ -179,12 +180,10 @@ export class HomeComponent implements OnInit {
     this.postService.getNextPost(this.areaService.currentAreaName)
       .subscribe(nextPost => {
         if (nextPost) {
-          this.text = 'https://client.wildfyre.net/areas/' + this.areaService.currentAreaName + '/' + nextPost.id;
           this.post = nextPost;
           this.loading = false;
           this.cdRef.detectChanges();
         } else {
-          this.text = 'https://client.wildfyre.net';
           this.fakePost = new Post(0, this.systemAuthor, false, false,
             Date(), false, 'No more posts in this area, try creating one?', []);
           this.post = this.fakePost;
@@ -255,12 +254,10 @@ export class HomeComponent implements OnInit {
     this.postService.getNextPost(this.areaService.currentAreaName)
       .subscribe(nextPost => {
         if (nextPost) {
-          this.text = 'https://client.wildfyre.net/areas/' + this.areaService.currentAreaName + '/' + nextPost.id;
           this.post = nextPost;
           this.loading = false;
           this.cdRef.detectChanges();
         } else {
-          this.text = 'https://client.wildfyre.net';
           this.fakePost = new Post(0, this.systemAuthor, false, false,
             Date(), false, 'No more posts in this area, try creating one?', []);
           this.post = this.fakePost;
