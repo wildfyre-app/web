@@ -1,17 +1,17 @@
-import { Post } from './post';
+import { NotificationPost } from './notificationPost';
 
 export class Notification {
   static parse(obj: any) {
     return new Notification(
       obj.area,
-      obj.post,
-      obj.comments,
+      NotificationPost.parse(obj.post),
+      obj.comments
     );
   }
 
   constructor(
     public area: string,
-    public post: Post,
+    public post: NotificationPost,
     public comments: number[]
   ) { }
 

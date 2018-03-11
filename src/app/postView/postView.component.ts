@@ -230,7 +230,7 @@ export class PostViewComponent implements OnInit {
           const snackBarRef = this.snackBar.open('Post deleted successfully', 'Close', {
             duration: 3000
           });
-          this.router.navigateByUrl('');
+          this.router.navigateByUrl(this.routeService.getNextRoute());
         }
       });
   }
