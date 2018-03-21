@@ -1,17 +1,16 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { MdDialog, MdDialogRef, MdSnackBar } from '@angular/material';
 import { Router, ActivatedRoute } from '@angular/router';
+import { Subject } from 'rxjs/Subject';
 import { ConfirmDeletionComponent } from '../_dialogs/confirmDeletion.component';
-import { Area } from '../_models/area';
+import { AreaList } from '../_models/areaList';
 import { Author } from '../_models/author';
 import { Comment } from '../_models/comment';
 import { Post } from '../_models/post';
 import { Reputation } from '../_models/reputation';
-import { AreaService } from '../_services/area.service';
 import { CommentService } from '../_services/comment.service';
 import { FlagService } from '../_services/flag.service';
 import { NavBarService } from '../_services/navBar.service';
-import { NotificationService } from '../_services/notification.service';
 import { PostService } from '../_services/post.service';
 import { ProfileService } from '../_services/profile.service';
 import { RouteService } from '../_services/route.service';
@@ -19,13 +18,15 @@ import { RouteService } from '../_services/route.service';
 @Component({
   templateUrl: 'home.component.html',
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, OnDestroy {
+  private systemAuthor: Author = new Author(375, 'WildFyre', '', '', false);
   private typeOfReport = TypeOfReport;
-  systemAuthor: Author = new Author(375, 'WildFyre', '', '', false);
+  commentCount = 0;
+  componentDestroyed: Subject<boolean> = new Subject();
+  currentArea: string;
+  expanded = false;
   fakePost: Post = new Post(0, this.systemAuthor, false, false, Date(), false,
     'No more posts in this area, try creating one?', []);
-  checked: boolean;
-  expanded = false;
   heightText: string;
   isCopied = false;
   loading = true;
@@ -44,28 +45,48 @@ export class HomeComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private snackBar: MdSnackBar,
-    private areaService: AreaService,
     private commentService: CommentService,
     private flagService: FlagService,
     private navBarService: NavBarService,
-    private notificationService: NotificationService,
     private postService: PostService,
     private profileService: ProfileService,
     private routeService: RouteService
-  ) {
-    this.checked = this.areaService.isAreaChecked;
-    this.model.comment = '';
-
-    this.profileService.getSelf()
-      .subscribe( (author: Author) => {
-        this.userID = author.user;
-    });
-  }
+  ) { }
 
   ngOnInit() {
-    this.routeService.resetRoutes();
-    this.cdRef.detectChanges();
     this.loading = true;
+    this.model.comment = '';
+    this.routeService.resetRoutes();
+
+    this.profileService.getSelf()
+      .takeUntil(this.componentDestroyed)
+      .subscribe( (author: Author) => {
+        this.userID = author.user;
+        this.navBarService.currentArea
+          .takeUntil(this.componentDestroyed)
+          .subscribe((currentArea: AreaList) => {
+            this.currentArea = currentArea.name;
+
+            this.postService.getNextPost(currentArea.name)
+              .takeUntil(this.componentDestroyed)
+              .subscribe(nextPost => {
+                if (nextPost) {
+                  this.post = nextPost;
+                  this.commentCount = this.post.comments.length;
+                  this.loading = false;
+                  this.cdRef.detectChanges();
+                } else {
+                  this.fakePost = new Post(0, this.systemAuthor, false, false,
+                    Date(), false, 'No more posts in this area, try creating one?', []);
+                  this.post = this.fakePost;
+                  this.commentCount = 0;
+                  this.loading = false;
+                  this.cdRef.detectChanges();
+                }
+              });
+        });
+    });
+
     if (window.screen.width > 600) {
       this.styleTextBottom = '0px';
       this.styleCommentBottom = '-1px';
@@ -74,25 +95,13 @@ export class HomeComponent implements OnInit {
       this.styleCommentBottom = '44px';
     }
 
-    this.postService.getNextPost(this.areaService.currentAreaName)
-      .subscribe(nextPost => {
-        if (nextPost) {
-          this.post = nextPost;
-          this.loading = false;
-          this.cdRef.detectChanges();
-        } else {
-          this.fakePost = new Post(0, this.systemAuthor, false, false,
-            Date(), false, 'No more posts in this area, try creating one?', []);
-          this.post = this.fakePost;
-          this.loading = false;
-          this.cdRef.detectChanges();
-        }
-      });
+    this.cdRef.detectChanges();
+  }
 
-    this.areaService.getAreaRep(this.areaService.currentAreaName)
-      .subscribe(reputation => {
-        this.rep = reputation;
-      });
+  ngOnDestroy() {
+    this.cdRef.detach();
+    this.componentDestroyed.next(true);
+    this.componentDestroyed.complete();
   }
 
   private addLineBreak(s: string) {
@@ -152,11 +161,11 @@ export class HomeComponent implements OnInit {
   }
 
   getCommentLink(commentID: number) {
-    return 'https://client.wildfyre.net/areas/' + this.areaService.currentAreaName + '/' + this.post.id + '/' + commentID;
+    return 'https://client.wildfyre.net/areas/' + this.currentArea + '/' + this.post.id + '/' + commentID;
   }
 
   getPostLink(postID: number) {
-    return 'https://client.wildfyre.net/areas/' + this.areaService.currentAreaName + '/' + postID;
+    return 'https://client.wildfyre.net/areas/' + this.currentArea + '/' + postID;
   }
 
   gotoUser(user: string) {
@@ -164,50 +173,18 @@ export class HomeComponent implements OnInit {
     this.router.navigateByUrl('/user/' + user);
   }
 
-  onChange(value: any) {
-    this.contractBox();
-    this.loading = true;
-
-    this.cdRef.detectChanges();
-    if (value.checked === true) {
-      this.areaService.isAreaChecked = true;
-      this.areaService.currentAreaName = 'information';
-    } else {
-      this.areaService.isAreaChecked = false;
-      this.areaService.currentAreaName = 'fun';
-    }
-
-    this.postService.getNextPost(this.areaService.currentAreaName)
-      .subscribe(nextPost => {
-        if (nextPost) {
-          this.post = nextPost;
-          this.loading = false;
-          this.cdRef.detectChanges();
-        } else {
-          this.fakePost = new Post(0, this.systemAuthor, false, false,
-            Date(), false, 'No more posts in this area, try creating one?', []);
-          this.post = this.fakePost;
-          this.loading = false;
-          this.cdRef.detectChanges();
-        }
-      });
-
-    this.areaService.getAreaRep(this.areaService.currentAreaName)
-      .subscribe(reputation => {
-        this.rep = reputation;
-      });
-  }
-
   openCommentDeleteDialog(c: Comment) {
     const dialogRef = this.dialog.open(ConfirmDeletionComponent);
     dialogRef.afterClosed()
+      .takeUntil(this.componentDestroyed)
       .subscribe(result => {
         if (result.bool) {
           this.commentService.deleteComment(
-            this.areaService.currentAreaName,
+            this.currentArea,
             this.post,
             c
           );
+          this.commentCount = 0;
           const snackBarRef = this.snackBar.open('Comment deleted successfully', 'Close', {
             duration: 3000
           });
@@ -232,13 +209,48 @@ export class HomeComponent implements OnInit {
 
   postComment() {
     this.cdRef.detectChanges();
-    this.postService.comment(
-      this.areaService.currentAreaName,
-      this.post, this.model.comment
-    ).subscribe();
+    this.postService.comment(this.currentArea, this.post, this.model.comment)
+      .takeUntil(this.componentDestroyed)
+      .subscribe();
     this.cdRef.detectChanges();
     this.contractBox();
+    this.commentCount += 1;
     this.model.comment = '';
+  }
+
+  refresh() {
+    this.loading = true;
+    this.profileService.getSelf()
+      .takeUntil(this.componentDestroyed)
+      .subscribe( (author: Author) => {
+        this.userID = author.user;
+        this.navBarService.currentArea
+          .takeUntil(this.componentDestroyed)
+          .subscribe((currentArea: AreaList) => {
+            this.currentArea = currentArea.name;
+
+            this.postService.getPost(currentArea.name, this.post.id.toString())
+              .takeUntil(this.componentDestroyed)
+              .subscribe(nextPost => {
+                if (nextPost) {
+                  this.post = nextPost;
+                  this.commentCount = this.post.comments.length;
+                  this.loading = false;
+                  this.cdRef.detectChanges();
+                }
+              });
+        });
+    });
+
+    if (window.screen.width > 600) {
+      this.styleTextBottom = '0px';
+      this.styleCommentBottom = '-1px';
+    } else {
+      this.styleTextBottom = '42px';
+      this.styleCommentBottom = '44px';
+    }
+
+    this.cdRef.detectChanges();
   }
 
   spread(spread: boolean) {
@@ -246,12 +258,12 @@ export class HomeComponent implements OnInit {
     this.contractBox();
     this.cdRef.detectChanges();
     this.postService.spread(
-      this.areaService.currentAreaName,
+      this.currentArea,
       this.post,
       spread
     );
 
-    this.postService.getNextPost(this.areaService.currentAreaName)
+    this.postService.getNextPost(this.currentArea)
       .subscribe(nextPost => {
         if (nextPost) {
           this.post = nextPost;
@@ -268,11 +280,9 @@ export class HomeComponent implements OnInit {
   }
 
   subscribe(s: boolean) {
-    this.postService.subscribe(
-      this.areaService.currentAreaName,
-      this.post,
-      s
-    ).subscribe();
+    this.postService.subscribe(this.currentArea, this.post, s)
+      .takeUntil(this.componentDestroyed)
+      .subscribe();
   }
 }
 

@@ -1,3 +1,43 @@
+<md-sidenav-container>
+    <md-sidenav class="sideNav" align="end" #sidenav>
+      <md-nav-list>
+        <a md-list-item href="https://wildfyre.net/index.php/about-us/">
+          About Us
+        </a>
+        <a md-list-item href="https://wildfyre.net/index.php/frequently-asked-questions/">
+          FAQ
+        </a>
+        <a md-list-item href="https://wildfyre.net/index.php/terms-and-conditions/">
+          Terms and Conditions
+        </a>
+        <a md-list-item href="https://wildfyre.net/index.php/privacy-policy/">
+          Privacy Policy
+        </a>
+        <a md-list-item (click)="openLogoutDialog()">
+          Logout
+        </a>
+        <hr>
+        <a href="https://wildfyre.net/">
+          <img class="sideNavlogo" width="200px" height="200px" src="https://static.wildfyre.net/wildfyre.png" alt="WildFyre">
+        </a>
+        <div class="iconContainer">
+          <a href="https://www.facebook.com/wildfyreapp/"><img class="icons" width="32px" height="32px" src="../assets/Facebook.png" alt="WildFyre Facebook"></a>
+          <a href="https://twitter.com/wildfyreapp"><img class="icons" width="32px" height="32px" src="../assets/Twitter.png" alt="WildFyre Telegram"></a>
+          <a href="https://t.me/WildFyreChat"><img class="icons" width="32px" height="32px" src="../assets/Telegram.png" alt="WildFyre Twitter"></a>
+        </div>
+        <br>
+        <a href="mailto:bugs@wildfyre.net">
+          <em>Please report any and all bugs to bugs@wildfyre.net</em>
+        </a>
+      </md-nav-list>
+    </md-sidenav>
+<nav id="topNav" md-tab-nav-bar aria-label="Navigation links">
+  <md-select *ngIf="areaVisible" [(ngModel)]="currentArea" (ngModelChange)="onChange($event)">
+    <md-option *ngFor="let area of areas" [value]="area.name">{{area.getDisplayName()}} - {{area.spread}}.{{area.rep}}<img style="width:32px;height:32px" width="32px" height="32px" src="../assets/logo.png" alt="WildFyre"></md-option>
+  </md-select>
+  <button id="topNavMenu" md-button (click)="sidenav.open()"><i class="material-icons">menu</i></button>
+</nav>
+
 <nav [style.display]="styleDesktop" id="navB" md-tab-nav-bar aria-label="Navigation links">
   <a md-tab-link
     *ngFor="let routeLink of routeLinks; let i = index"
@@ -19,5 +59,6 @@
     <div class="numberCircle" *ngIf="(i === 1) && notificationLength !== 0">{{getNotificationLength(notificationLength)}}</div>
   </a>
 </nav>
-
+<br><br><br>
 <router-outlet></router-outlet>
+</md-sidenav-container>

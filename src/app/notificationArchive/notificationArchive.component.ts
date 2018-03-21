@@ -1,8 +1,9 @@
 import { Component, OnInit, NgModule, ChangeDetectorRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import { AreaList } from '../_models/areaList';
 import { Notification } from '../_models/notification';
 import { Post } from '../_models/post';
-import { AreaService } from '../_services/area.service';
+import { NavBarService } from '../_services/navBar.service';
 import { NotificationService } from '../_services/notification.service';
 import { RouteService } from '../_services/route.service';
 import { MasonryOptions } from 'angular2-masonry';
@@ -15,7 +16,7 @@ export class NotificationArchiveComponent implements OnInit {
   backupPosts: { [area: string]: Post[]; } = {};
   backupFunPosts: Post[] = [];
   backupInfoPosts: Post[] = [];
-  checked: boolean;
+  currentArea: string;
   funImageArray: string[] = [];
   funPosts: Post[] = [];
   index = 1;
@@ -34,12 +35,10 @@ export class NotificationArchiveComponent implements OnInit {
     private cdRef: ChangeDetectorRef,
     private route: ActivatedRoute,
     private router: Router,
-    private areaService: AreaService,
+    private navBarService: NavBarService,
     private notificationService: NotificationService,
     private routeService: RouteService
-  ) {
-    this.checked = this.areaService.isAreaChecked;
-   }
+  ) { }
 
   private imageInPosts(posts: Post[], area: string) {
     this.funImageArray = [];
@@ -112,10 +111,34 @@ export class NotificationArchiveComponent implements OnInit {
         if (params['index'] !== undefined) {
           this.index = params['index'];
         }
-      });
 
-    this.getPostsByArea('fun');
-    this.getPostsByArea('information');
+        this.navBarService.currentArea
+          .subscribe((currentArea: AreaList) => {
+            this.currentArea = currentArea.name;
+            this.loading = true;
+            const posts: Post[] = [];
+
+            this.notificationService.getArchive(currentArea.name, this.limit, 0)
+              .subscribe(superPost => {
+                superPost.results.forEach((obj: any) => {
+                  posts.push(Post.parse(obj));
+                });
+
+                // Removes binding to original 'superPost' variable
+                this.superPosts[currentArea.name] = JSON.parse(JSON.stringify(posts));
+                this.backupPosts[currentArea.name] = posts;
+                this.totalCount = superPost.count;
+
+                this.imageInPosts(this.superPosts[currentArea.name], currentArea.name);
+
+                for (let i = 0; i <= this.backupPosts[currentArea.name].length - 1; i++) {
+                  this.backupPosts[currentArea.name][i].text = this.removeMarkdown(this.backupPosts[currentArea.name][i].text);
+                }
+                this.cdRef.detectChanges();
+                this.loading = false;
+              });
+          });
+      });
   }
 
   back() {
@@ -128,22 +151,21 @@ export class NotificationArchiveComponent implements OnInit {
 
   getPosts(page: number) {
     this.loading = true;
-    const currentArea = this.areaService.currentAreaName;
     const posts: Post[] = [];
 
-    this.notificationService.getArchive(currentArea, this.limit, (this.offset * page) - this.limit)
+    this.notificationService.getArchive(this.currentArea, this.limit, (this.offset * page) - this.limit)
       .subscribe(superPost => {
-        // Removes binding to original 'superPost' variable
         superPost.results.forEach((obj: any) => {
           posts.push(Post.parse(obj));
         });
 
-        this.superPosts[currentArea] = JSON.parse(JSON.stringify(posts));
-        this.backupPosts[currentArea] = posts;
-        this.imageInPosts(this.superPosts[currentArea], currentArea);
+        // Removes binding to original 'superPost' variable
+        this.superPosts[this.currentArea] = JSON.parse(JSON.stringify(posts));
+        this.backupPosts[this.currentArea] = posts;
+        this.imageInPosts(this.superPosts[this.currentArea], this.currentArea);
 
-        for (let i = 0; i <= this.backupPosts[currentArea].length - 1; i++) {
-          this.backupPosts[currentArea][i].text = this.removeMarkdown(this.backupPosts[currentArea][i].text);
+        for (let i = 0; i <= this.backupPosts[this.currentArea].length - 1; i++) {
+          this.backupPosts[this.currentArea][i].text = this.removeMarkdown(this.backupPosts[this.currentArea][i].text);
         }
         this.index = page;
         this.totalCount = superPost.count;
@@ -152,49 +174,9 @@ export class NotificationArchiveComponent implements OnInit {
       });
   }
 
-  getPostsByArea(area: string) {
-    this.loading = true;
-    const posts: Post[] = [];
-
-    this.notificationService.getArchive(area, this.limit, 0)
-      .subscribe(superPost => {
-        superPost.results.forEach((obj: any) => {
-          posts.push(Post.parse(obj));
-        });
-
-        // Removes binding to original 'superPost' variable
-        this.superPosts[area] = JSON.parse(JSON.stringify(posts));
-        this.backupPosts[area] = posts;
-        this.totalCount = superPost.count;
-
-        this.imageInPosts(this.superPosts[area], area);
-
-        for (let i = 0; i <= this.backupPosts[area].length - 1; i++) {
-          this.backupPosts[area][i].text = this.removeMarkdown(this.backupPosts[area][i].text);
-        }
-        this.cdRef.detectChanges();
-        this.loading = false;
-      });
-  }
-
   goto(areaID: string, postID: string) {
     this.routeService.addNextRouteByIndex(this.index);
     this.router.navigateByUrl('/areas/' + areaID + '/' + postID);
-  }
-
-  onChange(value: any) {
-    if (value.checked === true) {
-      this.checked = true;
-      this.areaService.isAreaChecked = true;
-      this.areaService.currentAreaName = 'information';
-      this.getPostsByArea('information');
-    } else {
-      this.checked = false;
-      this.areaService.isAreaChecked = false;
-      this.areaService.currentAreaName = 'fun';
-      this.getPostsByArea('fun');
-    }
-    this.cdRef.detectChanges();
   }
 
 /* Removed as of D114

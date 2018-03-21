@@ -13,11 +13,11 @@ import { Component404Component } from './404component/404.component';
 import { CreatePostComponent, PictureDialogComponent, YouTubeDialogComponent } from './createPost/createPost.component';
 import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './login/login.component';
-import { NavBarComponent } from './navBar/navBar.component';
+import { NavBarComponent, LogoutDialogComponent } from './navBar/navBar.component';
 import { NotificationArchiveComponent } from './notificationArchive/notificationArchive.component';
 import { NotificationComponent } from './notification/notification.component';
 import { PostViewComponent } from './postView/postView.component';
-import { ProfileComponent, LogoutDialogComponent, BioDialogComponent,
+import { ProfileComponent, BioDialogComponent,
   EmailDialogComponent, AvatarDialogComponent, PasswordDialogComponent } from './profile/profile.component';
 import { ProfileViewComponent } from './profileView/profileView.component';
 import { RecoverComponent } from './recover/recover.component';

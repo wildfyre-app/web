@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MdSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
+import { Subject } from 'rxjs/Subject';
 import { ViewChild } from '@angular/core';
 import { RegistrationError } from '../_models/registration';
 import { AuthenticationService } from '../_services/authentication.service';
@@ -10,8 +11,10 @@ import { ReCaptchaComponent } from 'angular2-recaptcha';
 @Component({
   templateUrl: 'register.component.html'
 })
-export class RegisterComponent implements OnInit {
+export class RegisterComponent implements OnInit, OnDestroy {
   @ViewChild(ReCaptchaComponent) captcha: ReCaptchaComponent;
+
+  componentDestroyed: Subject<boolean> = new Subject();
   errors: RegistrationError;
   loading = false;
   model: any = {};
@@ -29,11 +32,17 @@ export class RegisterComponent implements OnInit {
     this.authenticationService.logout();
   }
 
+  ngOnDestroy() {
+    this.componentDestroyed.next(true);
+    this.componentDestroyed.complete();
+  }
+
   register() {
     this.loading = true;
 
     if (this.model.password === this.model.password2) {
       this.registrationService.register(this.model.username, this.model.email, this.model.password, this.token)
+        .takeUntil(this.componentDestroyed)
         .subscribe(result => {
           if (!result.getError()) {
             this.router.navigate(['/register/success']);

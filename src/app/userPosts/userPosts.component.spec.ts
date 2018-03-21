@@ -10,6 +10,7 @@ import { Post } from '../_models/post';
 import { MarkedPipe } from '../_pipes/marked.pipe';
 import { AreaService } from '../_services/area.service';
 import { AuthenticationService } from '../_services/authentication.service';
+import { NavBarService } from '../_services/navBar.service';
 import { PostService } from '../_services/post.service';
 import { RouteService } from '../_services/route.service';
 import { UserPostsComponent } from './userPosts.component';
@@ -51,6 +52,8 @@ describe('UserPostsComponent', () => {
             })
         };
         const routeServiceStub = {};
+        
+        const navBarServiceStub = {};
 
         TestBed.configureTestingModule({
             declarations: [ UserPostsComponent, MarkedPipe ],
@@ -59,6 +62,7 @@ describe('UserPostsComponent', () => {
                 { provide: ActivatedRoute, useValue: activatedRouteStub },
                 { provide: AreaService, useValue: areaServiceStub },
                 { provide: AuthenticationService, useValue: authenticationServiceStub },
+                { provide: NavBarService, useValue: navBarServiceStub },
                 { provide: PostService, useValue: postServiceStub },
                 { provide: RouteService, useValue: routeServiceStub },
                 { provide: ComponentFixtureAutoDetect, useValue: true }

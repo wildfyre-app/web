@@ -1,14 +1,13 @@
-<button *ngIf="post.id !== 0" class="extinguishButton" (click)="spread(false)" md-raised-button color="accent"><b>Extinguish</b></button>
-<button *ngIf="post.id !== 0" class="igniteButton" (click)="spread(true)" md-raised-button color="primary"><font color="#000000"><b>Ignite</b></font></button>
+<button *ngIf="(post.id !== 0) && !loading" class="extinguishButton" (click)="spread(false)" md-raised-button color="warn"><b>Extinguish</b></button>
+<button *ngIf="(post.id !== 0) && !loading" class="igniteButton" (click)="spread(true)" md-raised-button color="primary"><font color="#000000"><b>Ignite</b></font></button>
 <br><br>
-
 <md-card class="example-card">
+  <md-spinner *ngIf="loading"></md-spinner>
   <div *ngIf="(post.id === 0) && !loading">
     <button class="refreshButton" md-button (click)="ngOnInit()">Refresh <i class="material-icons">refresh</i></button>
   </div>
-  <div *ngIf="post">
-    <md-spinner *ngIf="loading"></md-spinner>
-    <md-card *ngIf="!loading" class="content">
+  <div *ngIf="post && !loading">
+    <md-card class="content">
       <span class="mainText" [innerHTML]="post.text | marked"></span>
       <md-card (click)="gotoUser(post.author.user)" class="parentContainer1">
       <div class="parentContainer">
@@ -39,7 +38,7 @@
       </div>
       <br>
     </md-card>
-    <hr>
+    <hr *ngIf="!loading">
     <div *ngIf="expanded" id="focusTouchZone" (click)="contractBox()"></div>
     <textarea [style.bottom]="styleTextBottom" [style.height]="heightText" *ngIf="post.id !== 0" class="commentBox" (click)="expandBox()" name="comment" rows="{{rowsExapanded}}" cols="40" type="text" name="comment" [(ngModel)]="model.comment" #comment="ngModel" placeholder="Post a Comment"></textarea>
     <button [style.bottom]="styleEditorBottom" *ngIf="(post.id !== 0) && expanded" id="editorButton" (click)="$event.stopPropagation();" md-button color="accent" [disabled]="loading" [mdMenuTriggerFor]="commentMenu"><i class="material-icons">text_format</i></button>
@@ -51,6 +50,11 @@
       <button md-menu-item (click)="addStrikethrough()"><i class="material-icons">strikethrough_s</i> Strikethrough</button>
       <button md-menu-item (click)="addBlockQoutes()"><i class="material-icons">format_quote</i> Quote</button>
     </md-menu>
+    
+    <md-card class="centerText" (click)="refresh()" *ngIf="(commentCount === 0) && !loading">
+        No comments, try commenting?
+        <button class="refreshButton" *ngIf="!loading" md-button>Refresh <i class="material-icons">refresh</i></button>
+    </md-card>
 
     <md-list>
       <div *ngFor="let comment of post?.comments">
@@ -81,13 +85,3 @@
     </md-list>
   </div>
 </md-card>
-
-<div class="toggle">
-  Current Area:<br>
-  Fun  &nbsp;<md-slide-toggle
-  class="example-margin"
-  color="warn"
-  [checked]="checked"
-  (change)="onChange($event)">Information</md-slide-toggle><br>
-  Current Area Reputation: {{rep?.spread}}.{{rep?.reputation}}
-</div>

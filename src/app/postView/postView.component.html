@@ -1,8 +1,9 @@
 <md-card class="example-card">
-    <md-card class="content">
-      <button md-button (click)="back()"><i class="material-icons">arrow_back</i></button>
-      <span class="mainText" [innerHTML]="post?.text | marked"></span>
-      <md-card (click)="gotoUser(post?.author?.user)" class="parentContainer1">
+  <md-spinner *ngIf="loading"></md-spinner>
+  <md-card class="content" *ngIf="!loading">
+    <button id="topNavBack" md-button (click)="back()"><i class="material-icons">arrow_back</i></button>
+    <span class="mainText" [innerHTML]="post?.text | marked"></span>
+    <md-card (click)="gotoUser(post?.author?.user)" class="parentContainer1">
       <div class="parentContainer">
         <img class="pfp2" (click)="gotoUser(post?.author?.user)" *ngIf="post?.author?.avatar" [src]="post?.author?.avatar" alt="Avatar of {{post?.author?.name}}"/>
         <img class="pfp2" (click)="gotoUser(post?.author?.user)" *ngIf="!post?.author?.avatar" src="/assets/logo.png" alt="Avatar of {{post?.author?.name}}"/>
@@ -30,7 +31,7 @@
     <br>
   </md-card>
 
-  <hr>
+  <hr *ngIf="!loading">
   <div *ngIf="expanded && loggedIn" id="focusTouchZone" (click)="contractBox()"></div>
   <textarea [style.bottom]="styleTextBottom" *ngIf="loggedIn" [style.height]="heightText" class="commentBox" (click)="expandBox()" name="comment" rows="{{rowsExapanded}}" cols="40" type="text" name="comment" [(ngModel)]="model.comment" #comment="ngModel" placeholder="Post a Comment"></textarea>
   <button [style.bottom]="styleEditorBottom" *ngIf="expanded && loggedIn" id="editorButton" (click)="$event.stopPropagation();" md-button color="accent" [disabled]="loading" [mdMenuTriggerFor]="commentMenu"><i class="material-icons">text_format</i></button>
@@ -41,7 +42,12 @@
     <button md-menu-item (click)="addItalics()"><i class="material-icons">format_italic</i> Italic</button>
     <button md-menu-item (click)="addStrikethrough()"><i class="material-icons">strikethrough_s</i> Strikethrough</button>
     <button md-menu-item (click)="addBlockQoutes()"><i class="material-icons">format_quote</i> Quote</button>
-  </md-menu>
+  </md-menu> 
+  
+  <md-card class="centerText" (click)="ngOnInit()" *ngIf="(commentCount === 0) && !loading">
+      No comments, try commenting?
+      <button class="refreshButton" md-button>Refresh <i class="material-icons">refresh</i></button>
+  </md-card>
 
   <md-list>
     <div *ngFor="let comment of post?.comments">

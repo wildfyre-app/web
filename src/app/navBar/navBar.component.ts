@@ -1,16 +1,32 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef, NgZone, ViewChild } from '@angular/core';
+import { NgModule } from '@angular/core';
+import { BrowserModule  } from '@angular/platform-browser';
+import { FormsModule } from '@angular/forms';
+import { MdSidenav, MdDialogRef, MdDialog, MdSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
+import { Subject } from 'rxjs/Subject';
+import { AreaList } from '../_models/areaList';
 import { Notification } from '../_models/notification';
+import { AreaService } from '../_services/area.service';
 import { AuthenticationService } from '../_services/authentication.service';
 import { NavBarService } from '../_services/navBar.service';
 import { NotificationService } from '../_services/notification.service';
+import { BootController } from '../../boot-control';
 
 @Component({
   selector: 'app-nav-bar',
   templateUrl: 'navBar.component.html'
 })
-export class NavBarComponent implements OnInit {
+export class NavBarComponent implements OnInit, OnDestroy {
+  @ViewChild('sidenav') sidenav: MdSidenav;
+
   activeLinkIndex = 2;
+  areas = new Array<AreaList>(new AreaList('', 0, 0));
+  areaReputation: { [area: string]: number; } = { };
+  areaSpread: { [area: string]: number; } = { };
+  areaVisible = false;
+  componentDestroyed: Subject<boolean> = new Subject();
+  currentArea = this.areas[0].name;
   mobileRouteLinks: any[];
   notificationLength: number;
   routeLinks: any[];
@@ -19,26 +35,34 @@ export class NavBarComponent implements OnInit {
 
   constructor(
     private cdRef: ChangeDetectorRef,
+    private dialog: MdDialog,
+    private ngZone: NgZone,
     private router: Router,
+    public snackBar: MdSnackBar,
+    private areaService: AreaService,
     private authenticationService: AuthenticationService,
     private notificationService: NotificationService,
     private navBarService: NavBarService
   ) {
-    router.events.subscribe((url: any) => {
-      if (this.authenticationService.token) {
-        this.notificationService.getSuperNotification(10, 0)
-          .subscribe(superNotification => {
-            this.navBarService.notifications.next(superNotification.count);
-            this.cdRef.detectChanges();
-        });
-        this.styleMobile = '';
-        this.styleDesktop = '';
-      } else {
-        this.styleMobile = 'none';
-        this.styleDesktop = 'none';
-      }
+    router.events
+      .takeUntil(this.componentDestroyed)
+      .subscribe((url: any) => {
+        if (this.authenticationService.token) {
+          this.notificationService.getSuperNotification(10, 0)
+            .takeUntil(this.componentDestroyed)
+            .subscribe(superNotification => {
+              this.navBarService.notifications.next(superNotification.count);
+              this.cdRef.detectChanges();
+          });
 
-      this.setActiveIndex(url.url);
+          this.styleMobile = '';
+          this.styleDesktop = '';
+        } else {
+          this.styleMobile = 'none';
+          this.styleDesktop = 'none';
+        }
+
+        this.setActiveIndex(url.url);
     });
 
     this.routeLinks = [
@@ -60,6 +84,7 @@ export class NavBarComponent implements OnInit {
 
   ngOnInit() {
     this.navBarService.notifications
+      .takeUntil(this.componentDestroyed)
       .subscribe(num => {
         this.notificationLength = num;
         this.cdRef.detectChanges();
@@ -68,12 +93,49 @@ export class NavBarComponent implements OnInit {
     if (this.authenticationService.token) {
       this.styleMobile = '';
       this.navBarService.isVisibleSource
+        .takeUntil(this.componentDestroyed)
         .subscribe((isVisible: string) => {
           this.styleMobile = isVisible;
       });
+      this.navBarService.areaVisible
+        .takeUntil(this.componentDestroyed)
+        .subscribe((visible: boolean) => {
+          this.areaVisible = visible;
+      });
+      this.areaService.getAreas()
+        .takeUntil(this.componentDestroyed)
+        .subscribe(areas => {
+          let area;
+          this.areas = [];
+
+          for (let i = 0; i < areas.length; i++) {
+            this.areaService.getAreaRep(areas[i].name)
+              .takeUntil(this.componentDestroyed)
+              .subscribe(result => {
+                area = new AreaList(
+                  areas[i].name,
+                  result.reputation,
+                  result.spread
+                );
+                this.areas.push(area);
+            });
+          }
+
+          this.currentArea = areas[0].name;
+        });
     } else {
       this.styleMobile = 'none';
     }
+  }
+
+  ngOnDestroy() {
+    this.cdRef.detach();
+    this.componentDestroyed.next(true);
+    this.componentDestroyed.complete();
+  }
+
+  close(reason: string) {
+    this.sidenav.close();
   }
 
   getNotificationLength(nLength: number) {
@@ -88,22 +150,88 @@ export class NavBarComponent implements OnInit {
     }
   }
 
+  onChange(area: string) {
+    for (let i = 0; i <= this.areas.length - 1; i++) {
+      if (this.areas[i].name === area) {
+        this.navBarService.currentArea.next(this.areas[i]);
+      }
+    }
+  }
+
+  openLogoutDialog() {
+    const dialogRef = this.dialog.open(LogoutDialogComponent);
+    dialogRef.afterClosed()
+      .takeUntil(this.componentDestroyed)
+      .subscribe(result => {
+        if (result.bool) {
+          this.authenticationService.logout();
+          // Triggers the reboot in main.ts
+          this.ngZone.runOutsideAngular(() => BootController.getbootControl().restart());
+          const snackBarRef = this.snackBar.open('You were logged out successfully', 'Close', {
+            duration: 3000
+          });
+          this.router.navigateByUrl('/login');
+        }
+      });
+  }
+
   setActiveIndex(s: string) {
     if (s === '/profile') {
       this.activeLinkIndex = 0;
+      this.navBarService.areaVisible.next(false);
+    }  else if (s === '/notifications/archive') {
+      this.activeLinkIndex = 1;
+      this.navBarService.areaVisible.next(true);
+    } else if (s.lastIndexOf('/notifications/archive/') !== -1) {
+      this.activeLinkIndex = 1;
+      this.navBarService.areaVisible.next(true);
     } else if (s === '/notifications') {
       this.activeLinkIndex = 1;
+      this.navBarService.areaVisible.next(false);
     } else if (s.lastIndexOf('/notifications/') !== -1) {
       this.activeLinkIndex = 1;
+      this.navBarService.areaVisible.next(false);
     } else if (s === '/') {
       this.activeLinkIndex = 2;
+      this.navBarService.areaVisible.next(true);
     } else if (s === '/posts') {
       this.activeLinkIndex = 3;
+      this.navBarService.areaVisible.next(true);
     } else if (s.lastIndexOf('/posts/') !== -1) {
-      this.activeLinkIndex = 3;
-    }else if (s === '/create') {
+      this.navBarService.areaVisible.next(true);
+    } else if (s === '/create') {
       this.activeLinkIndex = 4;
+      this.navBarService.areaVisible.next(true);
+    } else if (s.lastIndexOf('/areas/') !== -1) {
+      this.navBarService.areaVisible.next(false);
+    } else if (s.lastIndexOf('/user/') !== -1) {
+      this.navBarService.areaVisible.next(false);
     }
     this.cdRef.detectChanges();
   }
+}
+
+@Component({
+  template: `
+  <h1 md-dialog-title>Are you sure you want to logout?</h1>
+  <div md-dialog-actions>
+    <button md-button md-dialog-close="true" (click)="returnInformation(true)">Yes</button>
+    <button md-button md-dialog-close="false" (click)="returnInformation(false)">Cancel</button>
+  </div>
+  `
+})
+export class LogoutDialogComponent {
+  model: any = {};
+
+  constructor(
+    public dialogRef: MdDialogRef<LogoutDialogComponent>
+    ) { }
+
+    returnInformation(bool: boolean) {
+      const message = {
+        'bool': bool
+      };
+
+      this.dialogRef.close(message);
+    }
 }

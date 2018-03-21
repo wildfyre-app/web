@@ -7,7 +7,7 @@ import { Reputation } from '../_models/reputation';
 
 @Injectable()
 export class AreaService {
-  public areas: Observable<Area[]>;
+  public areas: Area[];
   public currentAreaName = 'fun';
   public isAreaChecked = false;
   private reputation: { [area: string]: Reputation; } = { };
@@ -30,13 +30,19 @@ export class AreaService {
 
   getAreas(): Observable<Area[]> {
     // get areas from api
+    if (!this.areas) {
     return this.httpService.GET('/areas/')
       .map((response: Response) => {
         const areas: Area[] = [];
         response.json().forEach((area: any) => {
+            this.getAreaRep(area.name).subscribe();
             areas.push(Area.parse(area));
+            this.areas = areas;
         });
         return areas;
       });
+    } else {
+      return Observable.of(this.areas);
+    }
   }
 }

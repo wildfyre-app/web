@@ -1,57 +1,54 @@
 <md-card class="example-card">
-  <md-card>
-    <md-menu #appMenu="mdMenu">
-      <button md-menu-item (click)="viewProfile()"><md-icon>public</md-icon>View Public Profile</button>
-      <button md-menu-item (click)="openBioDialog()"><md-icon>mode_edit</md-icon>Bio</button>
-      <button md-menu-item (click)="openEmailDialog()"><md-icon>mode_edit</md-icon>Email</button>
-      <button md-menu-item (click)="openPasswordDialog()"><md-icon>mode_edit</md-icon>Password</button>
-      <button md-menu-item (click)="openPictureDialog()"><md-icon>mode_edit</md-icon>Avatar</button>
-      <button md-menu-item (click)="openLogoutDialog()"><md-icon>power_settings_new</md-icon>Logout</button>
-    </md-menu>
-    <md-spinner *ngIf="loading"></md-spinner>
+  <md-menu #appMenu="mdMenu">
+    <button md-menu-item (click)="viewProfile()"><md-icon>public</md-icon>View Public Profile</button>
+    <button md-menu-item (click)="openBioDialog()"><md-icon>mode_edit</md-icon>Bio</button>
+    <button md-menu-item (click)="openEmailDialog()"><md-icon>mode_edit</md-icon>Email</button>
+    <button md-menu-item (click)="openPasswordDialog()"><md-icon>mode_edit</md-icon>Password</button>
+    <button md-menu-item (click)="openPictureDialog()"><md-icon>mode_edit</md-icon>Avatar</button>
+  </md-menu>
+  <md-spinner *ngIf="loading"></md-spinner>
+  <div class="alert alert-danger" *ngIf="author?.banned">
+    <h2>You are currently banned</h2>
+  </div>
+  <br *ngIf="author?.banned">
+  <div *ngFor="let ban of bans | paginate: { id: 'server', itemsPerPage: limit, currentPage: index, totalItems: totalCount }">
     <div class="alert alert-danger" *ngIf="author?.banned">
-      <h2>You are currently banned</h2>
-    </div>
-    <br>
-    <div *ngFor="let ban of bans | paginate: { id: 'server', itemsPerPage: limit, currentPage: index, totalItems: totalCount }">
-      <div class="alert alert-danger" *ngIf="author?.banned">
-        Reason: {{getReason(ban.reason)}}<br>
-        <ng-container>{{ban.comment}}</ng-container><br>
-        You can not
-        <ng-container *ngIf="ban.ban_all || (ban.ban_post && ban.ban_comment && ban.ban_flag)"> post, comment, or flag.</ng-container>
-        <ng-container *ngIf="ban.ban_post && !(ban.ban_all || (ban.ban_post && ban.ban_comment && ban.ban_flag))"> post</ng-container>
-        <ng-container *ngIf="((ban.ban_post && ban.ban_comment) || (ban.ban_post && ban.ban_flag)) && !(ban.ban_all || (ban.ban_post && ban.ban_comment && ban.ban_flag))"> or</ng-container>
-        <ng-container *ngIf="ban.ban_comment && !(ban.ban_all || (ban.ban_post && ban.ban_comment && ban.ban_flag))"> comment</ng-container>
-        <ng-container *ngIf="(ban.ban_flag && ban.ban_comment) && !(ban.ban_all || (ban.ban_post && ban.ban_comment && ban.ban_flag))"> or</ng-container>
-        <ng-container *ngIf="ban.ban_flag && !(ban.ban_all || (ban.ban_post && ban.ban_comment && ban.ban_flag))"> flag</ng-container><ng-container *ngIf="!(ban.ban_all || (ban.ban_post && ban.ban_comment && ban.ban_flag))">.</ng-container>
-        <br>
-        <ng-container>{{ban.timestamp}}</ng-container><br>
-        <hr>
-        Expires: {{ban.expiry}}
-      </div>
+      Reason: {{getReason(ban.reason)}}<br>
+      <ng-container>{{ban.comment}}</ng-container><br>
+      You can not
+      <ng-container *ngIf="ban.ban_all || (ban.ban_post && ban.ban_comment && ban.ban_flag)"> post, comment, or flag.</ng-container>
+      <ng-container *ngIf="ban.ban_post && !(ban.ban_all || (ban.ban_post && ban.ban_comment && ban.ban_flag))"> post</ng-container>
+      <ng-container *ngIf="((ban.ban_post && ban.ban_comment) || (ban.ban_post && ban.ban_flag)) && !(ban.ban_all || (ban.ban_post && ban.ban_comment && ban.ban_flag))"> or</ng-container>
+      <ng-container *ngIf="ban.ban_comment && !(ban.ban_all || (ban.ban_post && ban.ban_comment && ban.ban_flag))"> comment</ng-container>
+      <ng-container *ngIf="(ban.ban_flag && ban.ban_comment) && !(ban.ban_all || (ban.ban_post && ban.ban_comment && ban.ban_flag))"> or</ng-container>
+      <ng-container *ngIf="ban.ban_flag && !(ban.ban_all || (ban.ban_post && ban.ban_comment && ban.ban_flag))"> flag</ng-container><ng-container *ngIf="!(ban.ban_all || (ban.ban_post && ban.ban_comment && ban.ban_flag))">.</ng-container>
       <br>
+      <ng-container>{{ban.timestamp}}</ng-container><br>
+      <hr>
+      Expires: {{ban.expiry}}
     </div>
-    <pagination-controls *ngIf="(bans.length !== 0)" (pageChange)="getBans($event)" id="server"></pagination-controls>
-
-    <md-card-content>
-      <md-card>
-        <button md-icon-button [mdMenuTriggerFor]="appMenu"><i class="material-icons">more_vert</i></button>
-        <a [href]="author?.avatar"><img class="pfp" *ngIf="author?.avatar" [src]="author?.avatar" alt="Avatar of {{author?.name}}"/></a>
-        <a href="/assets/logo.png"><img class="pfp" *ngIf="!author?.avatar" src="/assets/logo.png" alt="Avatar of {{author?.name}}"/></a>
-        <div class="parentContainer">
-          <div class="user">
-            <br>
-            <font id="name" size="5">{{author?.name}}</font><br>
-            <ng-container>
-              <span id="email"><a href="mailto:{{account?.email}}">{{account?.email}}</a></span>
-            </ng-container>
-          </div>
-        </div>
-      </md-card>
-    </md-card-content>
     <br>
-    <span id="bio" [innerHTML]="author?.bio | marked"></span>
+  </div>
+  <pagination-controls *ngIf="(bans.length !== 0)" (pageChange)="getBans($event)" id="server"></pagination-controls>
 
-    <div id="userID">ID: {{author?.user}}</div>
+  <md-card class="content">
+    <button md-icon-button [mdMenuTriggerFor]="appMenu"><i class="material-icons">more_vert</i></button>
+    <a [href]="author?.avatar"><img class="pfp" *ngIf="author?.avatar" [src]="author?.avatar" alt="Avatar of {{author?.name}}"/></a>
+    <a href="/assets/logo.png"><img class="pfp" *ngIf="!author?.avatar" src="/assets/logo.png" alt="Avatar of {{author?.name}}"/></a>
+    <div class="parentContainer">
+      <div class="user">
+        <br>
+        <font id="name" size="5">{{author?.name}}</font><br>
+        <ng-container>
+          <span id="email"><a href="mailto:{{account?.email}}">{{account?.email}}</a></span>
+        </ng-container>
+      </div>
+    </div>
   </md-card>
+  <br>
+  <md-card>
+    <span id="bio" [innerHTML]="author?.bio | marked"></span>
+  </md-card>
+
+  <div id="userID">ID: {{author?.user}}</div>
 </md-card>

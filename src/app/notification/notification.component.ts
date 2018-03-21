@@ -1,5 +1,6 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import { Subject } from 'rxjs/Subject';
 import { Notification } from '../_models/notification';
 import { Post } from '../_models/post';
 import { SuperNotification } from '../_models/superNotification';
@@ -10,8 +11,9 @@ import { RouteService } from '../_services/route.service';
 @Component({
   templateUrl: 'notification.component.html'
 })
-export class NotificationComponent implements OnInit {
+export class NotificationComponent implements OnInit, OnDestroy {
   archivedPosts: Post[] = [];
+  componentDestroyed: Subject<boolean> = new Subject();
   index = 1;
   limit = 10;
   loading = true;
@@ -34,27 +36,33 @@ export class NotificationComponent implements OnInit {
     this.routeService.resetRoutes();
 
     this.route.params
+      .takeUntil(this.componentDestroyed)
       .subscribe(params => {
         if (params['index'] !== undefined) {
           this.index = params['index'];
         }
-      });
+        // get notifications from secure api end point
+        this.notificationService.getSuperNotification(this.limit, (this.index * this.limit) - this.limit)
+          .takeUntil(this.componentDestroyed)
+          .subscribe(superNotification => {
+            this.superNotification = superNotification;
 
+            superNotification.results.forEach((obj: any) => {
+              this.notifications.push(Notification.parse(obj));
+            });
 
-    // get notifications from secure api end point
-    this.notificationService.getSuperNotification(this.limit, (this.index * this.limit) - this.limit)
-      .subscribe(superNotification => {
-        this.superNotification = superNotification;
-
-        superNotification.results.forEach((obj: any) => {
-          this.notifications.push(Notification.parse(obj));
+            this.totalCount = this.superNotification.count;
+            this.navBarService.notifications.next(this.superNotification.count);
+            this.loading = false;
+            this.cdRef.detectChanges();
         });
+      });
+  }
 
-        this.totalCount = this.superNotification.count;
-        this.navBarService.notifications.next(this.superNotification.count);
-        this.loading = false;
-        this.cdRef.detectChanges();
-    });
+  ngOnDestroy() {
+    this.cdRef.detach();
+    this.componentDestroyed.next(true);
+    this.componentDestroyed.complete();
   }
 
   deleteNotifications() {
@@ -74,6 +82,7 @@ export class NotificationComponent implements OnInit {
     this.notifications = [];
 
     this.notificationService.getSuperNotification(this.limit, (this.offset * page) - this.limit)
+      .takeUntil(this.componentDestroyed)
       .subscribe(superNotification => {
         this.superNotification = superNotification;
 

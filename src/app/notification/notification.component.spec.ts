@@ -7,7 +7,9 @@ import { Observable } from 'rxjs';
 import { Author } from '../_models/author';
 import { Comment } from '../_models/comment';
 import { Notification } from '../_models/notification';
+import { NotificationPost } from '../_models/notificationPost';
 import { Post } from '../_models/post';
+import { SuperNotification } from '../_models/superNotification';
 import { AuthenticationService } from '../_services/authentication.service';
 import { NotificationService } from '../_services/notification.service';
 import { RouteService } from '../_services/route.service';
@@ -31,17 +33,15 @@ describe('NotificationComponent', () => {
           params: Observable.of({'id': 1})
         };
         const notificationServiceStub = {
-            getNotifications: () => {
+            getSuperNotifications: () => {
               return Observable.of(
-                new Array<Notification>(
-                  new Notification('fun',
-                    new Post(1,
-                      new Author(1, 'test', null, 'test', false), false, false, '2017-07-22T12:03:23.465373Z', false, 'test',
-                        new Array<Comment>(
-                          new Comment(1,
-                            new Author(1, 'test', null, 'test', false), '2017-07-22T12:03:23.465373Z', 'test'))),
-                              new Array<number>(1, 2)))
-              );
+                new SuperNotification(1, '', '',
+                  new Array<Notification>(
+                    new Notification('', 
+                      new NotificationPost(0, 
+                        new Author(0, '', '', '', false), 'test'), 
+                          new Array<number>(0)))
+              ));
             }
         };
         const routeServiceStub = {};

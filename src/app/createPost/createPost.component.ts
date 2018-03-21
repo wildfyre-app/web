@@ -1,18 +1,21 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MdDialog, MdDialogRef, MdSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
+import { Subject } from 'rxjs/Subject';
+import { AreaList } from '../_models/areaList';
 import { Author } from '../_models/author';
 import { PostError } from '../_models/post';
-import { AreaService } from '../_services/area.service';
+import { NavBarService } from '../_services/navBar.service';
 import { PostService } from '../_services/post.service';
 import { RouteService } from '../_services/route.service';
 
 @Component({
   templateUrl: 'createPost.component.html'
 })
-export class CreatePostComponent implements OnInit {
+export class CreatePostComponent implements OnInit, OnDestroy {
   anonymous = false;
-  checked: boolean;
+  componentDestroyed: Subject<boolean> = new Subject();
+  currentArea: string;
   errors: PostError;
   loading: boolean;
   model: any = {};
@@ -21,16 +24,25 @@ export class CreatePostComponent implements OnInit {
     private dialog: MdDialog,
     private snackBar: MdSnackBar,
     private router: Router,
-    private areaService: AreaService,
+    private navBarService: NavBarService,
     private postService: PostService,
     private routeService: RouteService
-  ) {
-    this.checked = this.areaService.isAreaChecked;
-    this.model.card = '';
-  }
+  ) { }
 
   ngOnInit() {
+    this.model.card = '';
     this.routeService.resetRoutes();
+
+    this.navBarService.currentArea
+      .takeUntil(this.componentDestroyed)
+      .subscribe((currentArea: AreaList) => {
+        this.currentArea = currentArea.name;
+      });
+  }
+
+  ngOnDestroy() {
+    this.componentDestroyed.next(true);
+    this.componentDestroyed.complete();
   }
 
   private addLineBreak(s: string) {
@@ -110,7 +122,8 @@ export class CreatePostComponent implements OnInit {
   createPost() {
     this.loading = true;
     if (this.model.card !== '') {
-      this.postService.createPost(this.areaService.currentAreaName, this.model.card, this.anonymous)
+      this.postService.createPost(this.currentArea, this.model.card, this.anonymous)
+        .takeUntil(this.componentDestroyed)
         .subscribe(result => {
           if (!result.getError()) {
             this.model.card = '';
@@ -135,19 +148,10 @@ export class CreatePostComponent implements OnInit {
     this.anonymous = value.checked;
   }
 
-  onChange(value: any) {
-    if (value.checked === true) {
-      this.areaService.isAreaChecked = true;
-      this.areaService.currentAreaName = 'information';
-    } else {
-      this.areaService.isAreaChecked = false;
-      this.areaService.currentAreaName = 'fun';
-    }
-  }
-
   openPictureDialog() {
     const dialogRef = this.dialog.open(PictureDialogComponent);
     dialogRef.afterClosed()
+      .takeUntil(this.componentDestroyed)
       .subscribe(result => {
         if (result.url) {
           if (this.model.card === undefined) {
@@ -162,6 +166,7 @@ export class CreatePostComponent implements OnInit {
   openYoutubeDialog() {
     const dialogRef = this.dialog.open(YouTubeDialogComponent);
     dialogRef.afterClosed()
+      .takeUntil(this.componentDestroyed)
       .subscribe(result => {
         if (result.url) {
           result.url = result.url.replace('https://', '');

@@ -1,6 +1,7 @@
-import { Component, OnInit, ViewChild, NgZone, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { MdDialog, MdDialogRef, MdSnackBar } from '@angular/material';
 import { Router, ActivatedRoute } from '@angular/router';
+import { Subject } from 'rxjs/Subject';
 import { Account } from '../_models/account';
 import { Author } from '../_models/author';
 import { Ban } from '../_models/ban';
@@ -12,15 +13,15 @@ import { ProfileService } from '../_services/profile.service';
 import { ReasonService } from '../_services/reason.service';
 import { RouteService } from '../_services/route.service';
 import { ImageCropperComponent, CropperSettings, Bounds } from 'ng2-img-cropper';
-import { BootController } from '../../boot-control';
 
 @Component({
   templateUrl: 'profile.component.html'
 })
-export class ProfileComponent implements OnInit {
+export class ProfileComponent implements OnInit, OnDestroy {
   account: Account;
   author: Author;
   choices: Choice[];
+  componentDestroyed: Subject<boolean> = new Subject();
   data: any;
   index = 1;
   limit = 2;
@@ -35,7 +36,6 @@ export class ProfileComponent implements OnInit {
   constructor(
     private cdRef: ChangeDetectorRef,
     private dialog: MdDialog,
-    private ngZone: NgZone,
     private route: ActivatedRoute,
     private router: Router,
     public snackBar: MdSnackBar,
@@ -47,49 +47,65 @@ export class ProfileComponent implements OnInit {
 
   ngOnInit() {
     this.reasonService.getFlagReasons()
+      .takeUntil(this.componentDestroyed)
       .subscribe((choices) => {
         this.choices = choices;
       });
     this.routeService.resetRoutes();
-    this.route.params.subscribe((parms) => {
-      if (parms['id']) {
-        this.profileService.getUser(parms['id']).subscribe((user: Author) => {
-          this.self = false;
-          this.author = user;
-        });
-      } else {
-        this.self = true;
-
-        this.profileService.getSelf()
-          .subscribe((self: Author) => {
-            this.author = self;
-            this.model.bio = this.author.bio;
+    this.route.params
+      .takeUntil(this.componentDestroyed)
+      .subscribe((parms) => {
+        if (parms['id']) {
+          this.profileService.getUser(parms['id'])
+            .takeUntil(this.componentDestroyed)
+            .subscribe((user: Author) => {
+              this.self = false;
+              this.author = user;
           });
+        } else {
+          this.self = true;
 
-        this.profileService.getAccount()
-          .subscribe((self: Account) => {
-            this.account = self;
-            this.model.email = this.account.email;
-          });
-
-        this.profileService.getBans(this.limit, (this.index * this.limit) - this.limit)
-          .subscribe((superBan: SuperBan) => {
-            superBan.results.forEach((obj: any) => {
-              this.bans.push(Ban.parse(obj));
+          this.profileService.getSelf()
+            .takeUntil(this.componentDestroyed)
+            .subscribe((self: Author) => {
+              this.author = self;
+              this.model.bio = this.author.bio;
             });
-            this.totalCount = superBan.count;
-            this.cdRef.detectChanges();
-          });
 
-      }
+          this.profileService.getAccount()
+            .takeUntil(this.componentDestroyed)
+            .subscribe((self: Account) => {
+              this.account = self;
+              this.model.email = this.account.email;
+            });
+
+          this.profileService.getBans(this.limit, (this.index * this.limit) - this.limit)
+            .takeUntil(this.componentDestroyed)
+            .subscribe((superBan: SuperBan) => {
+              superBan.results.forEach((obj: any) => {
+                this.bans.push(Ban.parse(obj));
+              });
+              this.totalCount = superBan.count;
+              this.cdRef.detectChanges();
+            });
+
+        }
     });
 
-    this.profileService.getAccount().subscribe((self: Account) => {
-      this.account = self;
-      this.model.email = this.account.email;
-      this.self = true;
+    this.profileService.getAccount()
+      .takeUntil(this.componentDestroyed)
+      .subscribe((self: Account) => {
+        this.account = self;
+        this.model.email = this.account.email;
+        this.self = true;
     });
     this.loading = false;
+  }
+
+  ngOnDestroy() {
+    this.cdRef.detach();
+    this.componentDestroyed.next(true);
+    this.componentDestroyed.complete();
   }
 
   getBans(page: number) {
@@ -97,6 +113,7 @@ export class ProfileComponent implements OnInit {
     this.bans = [];
 
     this.profileService.getBans(this.limit, (this.offset * page) - this.limit)
+      .takeUntil(this.componentDestroyed)
       .subscribe(superBan => {
 
         superBan.results.forEach((obj: any) => {
@@ -122,9 +139,12 @@ export class ProfileComponent implements OnInit {
     const dialogRef = this.dialog.open(BioDialogComponent);
     dialogRef.componentInstance.model.bio = this.author.bio;
     dialogRef.afterClosed()
+      .takeUntil(this.componentDestroyed)
       .subscribe(result => {
         if (result.bool) {
-          this.profileService.setBio(this.author, result.bio).subscribe();
+          this.profileService.setBio(this.author, result.bio)
+            .takeUntil(this.componentDestroyed)
+            .subscribe();
           const snackBarRef = this.snackBar.open('Bio changed successfully', 'Close', {
             duration: 3000
           });
@@ -136,9 +156,12 @@ export class ProfileComponent implements OnInit {
     const dialogRef = this.dialog.open(EmailDialogComponent);
     dialogRef.componentInstance.model.email = this.account.email;
     dialogRef.afterClosed()
+      .takeUntil(this.componentDestroyed)
       .subscribe(result => {
         if (result.bool) {
-          this.profileService.setEmail(result.email).subscribe();
+          this.profileService.setEmail(result.email)
+            .takeUntil(this.componentDestroyed)
+            .subscribe();
           const snackBarRef = this.snackBar
             .open('We just sent you a verification email, you must verify your email for it to be set', 'Close', {
             duration: 3000
@@ -152,6 +175,7 @@ export class ProfileComponent implements OnInit {
     dialogRef.componentInstance.account = this.account;
     dialogRef.componentInstance.author = this.author;
     dialogRef.afterClosed()
+      .takeUntil(this.componentDestroyed)
       .subscribe(result => {
         if (result.bool) {
           const snackBarRef = this.snackBar.open('Password changed successfully', 'Close', {
@@ -165,10 +189,12 @@ export class ProfileComponent implements OnInit {
     const dialogRef = this.dialog.open(AvatarDialogComponent);
     dialogRef.componentInstance.author = this.author;
     dialogRef.afterClosed()
+      .takeUntil(this.componentDestroyed)
       .subscribe(result => {
         if (result.bool) {
           if (result.profilePicture) {
           this.profileService.setProfilePicture(result.profilePicture)
+            .takeUntil(this.componentDestroyed)
             .subscribe(result2 => {
               if (!result2.getError()) {
               this.author.avatar = result2.avatar;
@@ -183,22 +209,6 @@ export class ProfileComponent implements OnInit {
               duration: 3000
             });
           }
-        }
-      });
-  }
-
-  openLogoutDialog() {
-    const dialogRef = this.dialog.open(LogoutDialogComponent);
-    dialogRef.afterClosed()
-      .subscribe(result => {
-        if (result.bool) {
-          this.authenticationService.logout();
-          // Triggers the reboot in main.ts
-          this.ngZone.runOutsideAngular(() => BootController.getbootControl().restart());
-          const snackBarRef = this.snackBar.open('You were logged out successfully', 'Close', {
-            duration: 3000
-          });
-          this.router.navigateByUrl('/login');
         }
       });
   }
@@ -277,7 +287,7 @@ export class ProfileComponent implements OnInit {
 
           // Create a blob that looks like a file.
           this.profilePicture = new Blob([ab], {'type': mimeString });
-          this.profilePicture['name'] = this.author.name + this.author.user;
+          this.profilePicture['name'] = this.author.name;
           switch (this.profilePicture.type) {
             case 'image/jpeg':
               this.profilePicture['name'] += '.jpg';
@@ -363,31 +373,6 @@ export class ProfileComponent implements OnInit {
 
   @Component({
     template: `
-    <h1 md-dialog-title>Are you sure you want to logout?</h1>
-    <div md-dialog-actions>
-      <button md-button md-dialog-close="true" (click)="returnInformation(true)">Yes</button>
-      <button md-button md-dialog-close="false" (click)="returnInformation(false)">Cancel</button>
-    </div>
-    `
-  })
-  export class LogoutDialogComponent {
-    model: any = {};
-
-    constructor(
-      public dialogRef: MdDialogRef<LogoutDialogComponent>
-      ) { }
-
-      returnInformation(bool: boolean) {
-        const message = {
-          'bool': bool
-        };
-
-        this.dialogRef.close(message);
-      }
-  }
-
-  @Component({
-    template: `
     <h1 md-dialog-title>Change Password</h1>
     <div class="alert alert-info">
       Passwords must contain at least 8 characters and be alphanumeric (At least 1 letter and 1 number)
@@ -452,9 +437,10 @@ export class ProfileComponent implements OnInit {
     </div>
     `
   })
-  export class PasswordDialogComponent {
+  export class PasswordDialogComponent implements OnDestroy {
     account: Account;
     author: Author;
+    componentDestroyed: Subject<boolean> = new Subject();
     errors: PasswordError;
     model: any = {};
 
@@ -465,28 +451,37 @@ export class ProfileComponent implements OnInit {
       private profileService: ProfileService,
       ) { }
 
+      ngOnDestroy() {
+        this.componentDestroyed.next(true);
+        this.componentDestroyed.complete();
+      }
+
       submitEditPassword() {
         this.authenticationService.login(this.account.username, this.model.oldPassword)
+          .takeUntil(this.componentDestroyed)
           .subscribe(result => {
             if (!result.getError()) {
               if (this.model.newPassword1 === this.model.newPassword2) {
-                this.profileService.setPassword(this.model.newPassword1).subscribe(result2 => {
-                  if (!result2.getError()) {
-                    this.authenticationService.login(this.account.username, this.model.newPassword1)
-                      .subscribe(result3 => {
-                        if (!result3.getError()) {
-                          this.model.oldPassword = '';
-                          this.model.newPassword1 = '';
-                          this.model.newPassword2 = '';
-                        this.returnInformation(true);
-                      } else {
-                        const snackBarRef = this.snackBar.open('Error could not set token', 'Close');
-                      }
-                      });
-                  } else {
-                    this.errors = result2.getError();
-                    const snackBarRef = this.snackBar.open('You did not follow the requirements', 'Close');
-                  }
+                this.profileService.setPassword(this.model.newPassword1)
+                  .takeUntil(this.componentDestroyed)
+                  .subscribe(result2 => {
+                    if (!result2.getError()) {
+                      this.authenticationService.login(this.account.username, this.model.newPassword1)
+                        .takeUntil(this.componentDestroyed)
+                        .subscribe(result3 => {
+                          if (!result3.getError()) {
+                            this.model.oldPassword = '';
+                            this.model.newPassword1 = '';
+                            this.model.newPassword2 = '';
+                            this.returnInformation(true);
+                          } else {
+                            const snackBarRef = this.snackBar.open('Error could not set token', 'Close');
+                          }
+                        });
+                    } else {
+                      this.errors = result2.getError();
+                      const snackBarRef = this.snackBar.open('You did not follow the requirements', 'Close');
+                    }
                 });
 
               } else {

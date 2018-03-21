@@ -5,6 +5,7 @@ import { MdDialog, MdDialogRef, MdMenuModule, MdSlideToggleModule, MdSnackBarMod
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { AreaService } from '../_services/area.service';
+import { NavBarService } from '../_services/navBar.service';
 import { PostService } from '../_services/post.service';
 import { CreatePostComponent } from './createPost.component';
 import { PictureDialogComponent } from './createPost.component';
@@ -31,6 +32,7 @@ describe('CreatePostComponent', () => {
             isAreaChecked: {},
             currentAreaName: {}
         };
+        const navBarServiceStub = {};
         const postServiceStub = {
             createPost: () => ({
                 subscribe: () => {
@@ -53,6 +55,7 @@ describe('CreatePostComponent', () => {
                 { provide: MdDialog, useValue: mdDialogStub },
                 { provide: Router, useValue: routerStub },
                 { provide: AreaService, useValue: areaServiceStub },
+                { provide: NavBarService, useValue: navBarServiceStub },
                 { provide: PostService, useValue: postServiceStub },
                 { provide: MdDialogRef, useValue: mdDialogRefStub },
                 { provide: RouteService, useValue: routeServiceStub }

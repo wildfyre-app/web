@@ -25,6 +25,29 @@ canvas {
   user-select: none;
 }
 
+div div md-option#md-option-1.mat-option {
+  font-size: 20px;
+}
+
+div div md-option#md-option-1.mat-option.mat-selected {
+  color: #ed763e;
+  font-size: 20px;
+}
+
+div div md-option#md-option-2.mat-option {
+  font-size: 20px;
+}
+
+div div md-option#md-option-2.mat-option.mat-selected {
+  color: #ed763e;
+  font-size: 20px;
+}
+ 
+div span.mat-select-underline {
+  background-color: #ed763e;
+  font-size: 20px;
+}
+
 div.creationEditor {
   zoom: 0.65;
 }
@@ -86,6 +109,20 @@ md-input-container.mat-input-container {
   margin: 0 auto;
 }
 
+md-select div.mat-select-trigger {
+  width: 200px;
+  margin-top: -5px;
+}
+
+md-sidenav.sideNav {
+  z-index: 10;
+  width: 200px;
+  min-width: 200px;
+  position: fixed;
+  right: 0px;
+  top: 0px;
+}
+
 md-spinner {
   margin: 0 auto;
 }
@@ -133,6 +170,10 @@ span.markdown thead tr th, span.markdown tbody tr th td {
 span.markdown thead tr th {
     background-color: #ed763e;
     color: #263238;
+}
+
+span.mat-select-arrow {
+  color: #ed763e;
 }
 
 span.result {
@@ -237,6 +278,11 @@ ul.ngx-pagination {
   display: none;
 }
 
+.iconContainer {
+  margin: 0 auto;
+  text-align: center;
+}
+
 .mainText {
   font-size: 110%;
   text-align: center;
@@ -245,6 +291,13 @@ ul.ngx-pagination {
 
 .mat-button {
   word-wrap: break-word;
+}
+
+.mat-drawer-backdrop.mat-drawer-shown {
+  z-index: 9;
+  position: fixed;
+  right: 0px;
+  top: 0px;
 }
 
 .mat-icon-button {
@@ -265,16 +318,22 @@ ul.ngx-pagination {
   box-shadow: rgba(0, 0, 0, 0.3) 0 16px 16px 0;
 }
 
+.mat-select-value-text {
+  color: white;
+}
+
+.mat-sidenav-content,
+.mat-sidenav-container,
+.mat-drawer-content {
+    transform: none !important;
+}
+
 .mat-tab-link {
   width: 20%;
 }
 
 .mat-tab-links {
   text-align: center;
-}
-
-.mobileButtons {
-  color: white;
 }
 
 .markdown {
@@ -294,6 +353,10 @@ ul.ngx-pagination {
 
 .markdown.p {
   overflow: hidden;
+}
+
+.mobileButtons {
+  color: white;
 }
 
 .notifCount {
@@ -347,6 +410,12 @@ ul.ngx-pagination {
   background-color: #EEEEEE;
 }
 
+.sideNavlogo {
+  margin: auto;
+  height: 100%;
+  width: 100%;
+}
+
 .spreadButtons {
   display: flex;
   justify-content: center;
@@ -395,6 +464,32 @@ ul.ngx-pagination {
   z-index: 2;
 }
 
+#topNav {
+  height: 50px;
+  margin: 0 auto;
+  background-color: #263238;
+  color: white;
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  z-index: 5;
+}
+
+#topNavMenu {
+  position: fixed;
+  right: -20px;
+  top: 7px;
+}
+
+#topNavBack {
+  position: fixed;
+  left: -20px;
+  top: 7px;
+  color: white;
+  z-index: 6;
+}
+
 #userID {
   float: right;
   color: #eceff1;
@@ -404,23 +499,23 @@ ul.ngx-pagination {
     /*applied if browser window width is less than or equal to 600px*/
 
     a.mat-tab-link {
-      width: 20%;
       min-width: 20%;
     }
 
-    button.extinguishButton.mat-raised-button.mat-accent {
+    button.extinguishButton.mat-raised-button.mat-warn {
       position: fixed;
-      top: 0px;
+      top: 50px;
       left: 0px;
       width: 50%;
       z-index: 5;
       border-radius: 0 !important;
+      background-color: #1289c1
     }
 
     button.igniteButton.mat-raised-button.mat-primary {
       position: fixed;
       right: 0px;
-      top: 0px;
+      top: 50px;
       width: 50%;
       z-index: 5;
       border-radius: 0 !important;
@@ -464,8 +559,9 @@ ul.ngx-pagination {
     }
 
     .icons {
-      height: 5%;
-      width: 5%;
+      height: 15%;
+      width: 15%;
+      margin: 0 auto;
     }
 
     .logo {
@@ -510,19 +606,20 @@ ul.ngx-pagination {
 @media (min-width: 641px) {
     /*applied if browser window width is greater than 600px*/
 
-    button.extinguishButton.mat-raised-button.mat-accent {
+    button.extinguishButton.mat-raised-button.mat-warn {
       position: fixed;
-      top: 41px;
+      top: 94px;
       left: 0px;
       width: 50%;
       z-index: 5;
       border-radius: 0 !important;
+      background-color: #1289c1
     }
 
     button.igniteButton.mat-raised-button.mat-primary {
       position: fixed;
       right: 0px;
-      top: 41px;
+      top: 94px;
       width: 50%;
       z-index: 5;
       border-radius: 0 !important;
@@ -567,8 +664,8 @@ ul.ngx-pagination {
     }
 
     .icons {
-      height: 2%;
-      width: 2%;
+      height: 15%;
+      width: 15%;
     }
 
     .login:after {
@@ -656,7 +753,7 @@ ul.ngx-pagination {
 
     #navB {
       position: fixed;
-      top: -1px;
+      top: 61px;
       width: 100%;
       float: left;
       z-index: 5;

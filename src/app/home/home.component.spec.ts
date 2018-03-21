@@ -16,7 +16,6 @@ import { AreaService } from '../_services/area.service';
 import { CommentService } from '../_services/comment.service';
 import { FlagService } from '../_services/flag.service';
 import { NavBarService } from '../_services/navBar.service';
-import { NotificationService } from '../_services/notification.service';
 import { PostService } from '../_services/post.service';
 import { ProfileService } from '../_services/profile.service';
 import { RouteService } from '../_services/route.service';
@@ -95,20 +94,7 @@ describe('HomeComponent', () => {
         const routeServiceStub = {
             addNextRoute: () => ({})
         };
-        const notificationServiceStub = {
-            getNotifications: () => {
-              return Observable.of(
-                new Array<Notification>(
-                  new Notification('fun',
-                    new Post(1,
-                      new Author(1, 'test', null, 'test', false), false, false, '2017-07-22T12:03:23.465373Z', false, 'test',
-                        new Array<Comment>(
-                          new Comment(1,
-                            new Author(1, 'test', null, 'test', false), '2017-07-22T12:03:23.465373Z', 'test'))),
-                              new Array<number>(1, 2)))
-              );
-            }
-        };
+
         TestBed.configureTestingModule({
             declarations: [ HomeComponent, MarkedPipe ],
             providers: [
@@ -123,7 +109,6 @@ describe('HomeComponent', () => {
                 { provide: MdDialog, useValue: mdDialogStub },
                 { provide: MdDialogRef, useValue: mdDialogRefStub },
                 { provide: NavBarService, useValue: navBarServiceStub },
-                { provide: NotificationService, useValue: notificationServiceStub },
                 { provide: PostService, useValue: postServiceStub },
                 { provide: ProfileService, useValue: profileServiceStub },
                 { provide: RouteService, useValue: routeServiceStub },

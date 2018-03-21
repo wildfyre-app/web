@@ -1,7 +1,10 @@
-import { Component, OnInit, NgModule, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, NgModule, ChangeDetectorRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import { Subject } from 'rxjs/Subject';
+import { AreaList } from '../_models/areaList';
 import { Post } from '../_models/post';
 import { AreaService } from '../_services/area.service';
+import { NavBarService } from '../_services/navBar.service';
 import { PostService } from '../_services/post.service';
 import { RouteService } from '../_services/route.service';
 import { MasonryOptions } from 'angular2-masonry';
@@ -10,9 +13,10 @@ import { MasonryOptions } from 'angular2-masonry';
   selector: 'user-posts',
   templateUrl: 'userPosts.component.html'
 })
-export class UserPostsComponent implements OnInit {
+export class UserPostsComponent implements OnInit, OnDestroy {
   backupPosts: { [area: string]: Post[]; } = {};
-  checked: boolean;
+  componentDestroyed: Subject<boolean> = new Subject();
+  currentArea: string;
   funImageArray: string[] = [];
   index = 1;
   infoImageArray: string[] = [];
@@ -29,12 +33,10 @@ export class UserPostsComponent implements OnInit {
     private cdRef: ChangeDetectorRef,
     private route: ActivatedRoute,
     private router: Router,
-    private areaService: AreaService,
+    private navBarService: NavBarService,
     private postService: PostService,
     private routeService: RouteService
-  ) {
-    this.checked = this.areaService.isAreaChecked;
-   }
+  ) { }
 
   private imageInPosts(posts: Post[], area: string) {
     this.funImageArray = [];
@@ -104,64 +106,77 @@ export class UserPostsComponent implements OnInit {
   ngOnInit() {
     this.cdRef.detectChanges();
     this.routeService.resetRoutes();
-
     this.route.params
+      .takeUntil(this.componentDestroyed)
       .subscribe(params => {
         if (params['index'] !== undefined) {
           this.index = params['index'];
         }
       });
 
-    this.getPostsByArea('fun');
-    this.getPostsByArea('information');
+    this.navBarService.currentArea
+      .takeUntil(this.componentDestroyed)
+      .subscribe((currentArea: AreaList) => {
+        this.currentArea = currentArea.name;
+        if (!this.superPosts[currentArea.name]) {
+          this.superPosts[currentArea.name] = [];
+        }
+        if (!this.backupPosts[currentArea.name]) {
+          this.backupPosts[currentArea.name] = [];
+        }
+        this.loading = true;
+        const posts: Post[] = [];
+
+        this.postService.getOwnPosts(currentArea.name, this.limit, 0)
+          .takeUntil(this.componentDestroyed)
+          .subscribe(superPost => {
+            superPost.results.forEach((obj: any) => {
+              posts.push(Post.parse(obj));
+            });
+
+            // Removes binding to original 'superPost' variable
+            this.superPosts[currentArea.name] = JSON.parse(JSON.stringify(posts));
+            this.backupPosts[currentArea.name] = posts;
+            this.totalCount = superPost.count;
+
+            this.imageInPosts(this.superPosts[currentArea.name], currentArea.name);
+
+            for (let i = 0; i <= this.backupPosts[currentArea.name].length - 1; i++) {
+              this.backupPosts[currentArea.name][i].text = this.removeMarkdown(this.backupPosts[currentArea.name][i].text);
+            }
+            this.cdRef.detectChanges();
+            this.loading = false;
+          });
+        });
+  }
+
+  ngOnDestroy() {
+    this.cdRef.detach();
+    this.componentDestroyed.next(true);
+    this.componentDestroyed.complete();
   }
 
   getPosts(page: number) {
     this.loading = true;
-    const currentArea = this.areaService.currentAreaName;
     const posts: Post[] = [];
 
-    this.postService.getOwnPosts(currentArea, this.limit, (this.offset * page) - this.limit)
+    this.postService.getOwnPosts(this.currentArea, this.limit, (this.offset * page) - this.limit)
+      .takeUntil(this.componentDestroyed)
       .subscribe(superPost => {
         superPost.results.forEach((obj: any) => {
           posts.push(Post.parse(obj));
         });
 
         // Removes binding to original 'superPost' variable
-        this.superPosts[currentArea] = JSON.parse(JSON.stringify(posts));
-        this.backupPosts[currentArea] = posts;
-        this.imageInPosts(this.superPosts[currentArea], currentArea);
+        this.superPosts[this.currentArea] = JSON.parse(JSON.stringify(posts));
+        this.backupPosts[this.currentArea] = posts;
+        this.imageInPosts(this.superPosts[this.currentArea], this.currentArea);
 
-        for (let i = 0; i <= this.backupPosts[currentArea].length - 1; i++) {
-          this.backupPosts[currentArea][i].text = this.removeMarkdown(this.backupPosts[currentArea][i].text);
+        for (let i = 0; i <= this.backupPosts[this.currentArea].length - 1; i++) {
+          this.backupPosts[this.currentArea][i].text = this.removeMarkdown(this.backupPosts[this.currentArea][i].text);
         }
         this.index = page;
         this.totalCount = superPost.count;
-        this.cdRef.detectChanges();
-        this.loading = false;
-      });
-  }
-
-  getPostsByArea(area: string) {
-    this.loading = true;
-    const posts: Post[] = [];
-
-    this.postService.getOwnPosts(area, this.limit, 0)
-      .subscribe(superPost => {
-        superPost.results.forEach((obj: any) => {
-          posts.push(Post.parse(obj));
-        });
-
-        // Removes binding to original 'superPost' variable
-        this.superPosts[area] = JSON.parse(JSON.stringify(posts));
-        this.backupPosts[area] = posts;
-        this.totalCount = superPost.count;
-
-        this.imageInPosts(this.superPosts[area], area);
-
-        for (let i = 0; i <= this.backupPosts[area].length - 1; i++) {
-          this.backupPosts[area][i].text = this.removeMarkdown(this.backupPosts[area][i].text);
-        }
         this.cdRef.detectChanges();
         this.loading = false;
       });
@@ -172,20 +187,6 @@ export class UserPostsComponent implements OnInit {
     this.router.navigateByUrl('/areas/' + areaID + '/' + postID);
   }
 
-  onChange(value: any) {
-    if (value.checked === true) {
-      this.checked = true;
-      this.areaService.isAreaChecked = true;
-      this.areaService.currentAreaName = 'information';
-      this.getPostsByArea('information');
-    } else {
-      this.checked = false;
-      this.areaService.isAreaChecked = false;
-      this.areaService.currentAreaName = 'fun';
-      this.getPostsByArea('fun');
-    }
-    this.cdRef.detectChanges();
-  }
 /* Removed as of D114
   searchInput() {
     if (this.areaService.currentAreaName === 'fun') {

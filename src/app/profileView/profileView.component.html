@@ -1,6 +1,5 @@
 <md-card class="example-card">
-  <md-card>
-    <button md-button (click)="back()"><i class="material-icons">arrow_back</i></button>
+  <button id="topNavBack" md-button (click)="back()"><i class="material-icons">arrow_back</i></button>
     <md-card class="content">
     <div class="alert alert-danger" *ngIf="author?.banned">
       You are currently banned
@@ -13,7 +12,9 @@
       </div>
     </div>
   </md-card>
-  <span id="bio" [innerHTML]="author?.bio | marked"></span>
+  <br>
+  <md-card>
+    <span id="bio" [innerHTML]="author?.bio | marked"></span>
+  </md-card>
   <div id="userID">ID: {{author?.user}}</div>
-</md-card>
 </md-card>

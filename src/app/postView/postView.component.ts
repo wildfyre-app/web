@@ -1,11 +1,11 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { MdDialog, MdDialogRef, MdSnackBar } from '@angular/material';
 import { Router, ActivatedRoute } from '@angular/router';
+import { Subject } from 'rxjs/Subject';
 import { ConfirmDeletionComponent } from '../_dialogs/confirmDeletion.component';
 import { Author } from '../_models/author';
 import { Comment } from '../_models/comment';
 import { Post } from '../_models/post';
-import { AreaService } from '../_services/area.service';
 import { CommentService } from '../_services/comment.service';
 import { FlagService } from '../_services/flag.service';
 import { NavBarService } from '../_services/navBar.service';
@@ -16,10 +16,12 @@ import { RouteService } from '../_services/route.service';
 @Component({
   templateUrl: 'postView.component.html',
 })
-export class PostViewComponent implements OnInit {
+export class PostViewComponent implements OnInit, OnDestroy {
   private typeOfReport = TypeOfReport;
   area: string;
-  checked: boolean;
+  commentCount = 0;
+  componentDestroyed: Subject<boolean> = new Subject();
+  currentUrlArea: string;
   editName: string;
   expanded = false;
   heightText: string;
@@ -41,23 +43,20 @@ export class PostViewComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private snackBar: MdSnackBar,
-    private areaService: AreaService,
     private commentService: CommentService,
     private flagService: FlagService,
     private navBarService: NavBarService,
     private postService: PostService,
     private profileService: ProfileService,
     private routeService: RouteService,
-  ) {
-    this.checked = this.areaService.isAreaChecked;
-    this.model.comment = '';
-  }
+  ) { }
 
   ngOnInit() {
-    let currentUrlArea: string = this.router.url;
-    currentUrlArea = currentUrlArea.replace(currentUrlArea.substring(0, 7), '');
-    currentUrlArea = currentUrlArea.substring(0, currentUrlArea.indexOf('/'));
-    this.areaService.currentAreaName = currentUrlArea;
+    this.loading = true;
+    this.model.comment = '';
+    this.currentUrlArea = this.router.url;
+    this.currentUrlArea = this.currentUrlArea.replace(this.currentUrlArea.substring(0, 7), '');
+    this.currentUrlArea = this.currentUrlArea.substring(0, this.currentUrlArea.indexOf('/'));
 
     if (window.screen.width > 600) {
       this.styleTextBottom = '0px';
@@ -68,41 +67,44 @@ export class PostViewComponent implements OnInit {
     }
 
     this.profileService.getSelf()
+      .takeUntil(this.componentDestroyed)
       .subscribe( (author: Author) => {
         this.userID = author.user;
         this.loggedIn = true;
-      });
 
-    this.route.params
-      .subscribe(params => {
-        this.area = params['area'];
+        this.route.params
+          .takeUntil(this.componentDestroyed)
+          .subscribe(params => {
+            this.area = params['area'];
 
-        if (this.postService.superPosts[this.area]) {
-          for (let i = 0; i < this.postService.superPosts[this.area].results.length; i++) {
-            if (this.postService.superPosts[this.area].results[i].id === params['id']) {
-              this.post = this.postService.superPosts[this.area].results[i];
+            this.postService.getPost(this.area, params['id'])
+              .takeUntil(this.componentDestroyed)
+              .subscribe(post => {
+                this.post =  post;
+                this.commentCount = post.comments.length;
+                this.post.subscribed = post.subscribed;
+                this.loading = false;
+                this.cdRef.detectChanges();
+            });
+
+            let commentIDArray = params['comments'];
+            commentIDArray = commentIDArray + '-';
+
+            if (commentIDArray) {
+              while (commentIDArray.indexOf('-') !== -1) {
+                this.parsedCommentArray.push(commentIDArray.slice(0, commentIDArray.indexOf('-')));
+                commentIDArray = commentIDArray.slice(commentIDArray.indexOf('-') + 1, commentIDArray.length);
+              }
             }
-          }
-        } else {
-          this.postService.getPost(this.area, params['id'])
-            .subscribe(post => {
-              this.post =  post;
-              this.post.subscribed = post.subscribed;
-          });
-        }
-
-        let commentIDArray = params['comments'];
-        commentIDArray = commentIDArray + '-';
-
-        if (commentIDArray) {
-          let checksum = 0;
-          while (commentIDArray.indexOf('-') !== -1) {
-            checksum += 1;
-            this.parsedCommentArray.push(commentIDArray.slice(0, commentIDArray.indexOf('-')));
-            commentIDArray = commentIDArray.slice(commentIDArray.indexOf('-') + 1, commentIDArray.length);
-          }
-        }
+        });
+        this.cdRef.detectChanges();
     });
+  }
+
+  ngOnDestroy() {
+    this.cdRef.detach();
+    this.componentDestroyed.next(true);
+    this.componentDestroyed.complete();
   }
 
   private addLineBreak(s: string) {
@@ -170,11 +172,11 @@ export class PostViewComponent implements OnInit {
   }
 
   getCommentLink(commentID: number) {
-    return 'https://client.wildfyre.net/areas/' + this.areaService.currentAreaName + '/' + this.post.id + '/' + commentID;
+    return 'https://client.wildfyre.net/areas/' + this.currentUrlArea + '/' + this.post.id + '/' + commentID;
   }
 
   getPostLink(postID: number) {
-    return 'https://client.wildfyre.net/areas/' + this.areaService.currentAreaName + '/' + postID;
+    return 'https://client.wildfyre.net/areas/' + this.currentUrlArea + '/' + postID;
   }
 
   gotoUser(user: string) {
@@ -193,13 +195,15 @@ export class PostViewComponent implements OnInit {
   openCommentDeleteDialog(c: Comment) {
     const dialogRef = this.dialog.open(ConfirmDeletionComponent);
     dialogRef.afterClosed()
+      .takeUntil(this.componentDestroyed)
       .subscribe(result => {
         if (result.bool) {
           this.commentService.deleteComment(
-            this.areaService.currentAreaName,
+            this.currentUrlArea,
             this.post,
             c
           );
+          this.commentCount = 0;
           const snackBarRef = this.snackBar.open('Comment deleted successfully', 'Close', {
             duration: 3000
           });
@@ -224,9 +228,10 @@ export class PostViewComponent implements OnInit {
   openPostDeleteDialog() {
     const dialogRef = this.dialog.open(ConfirmDeletionComponent);
     dialogRef.afterClosed()
+      .takeUntil(this.componentDestroyed)
       .subscribe(result => {
         if (result.bool) {
-          this.postService.deletePost(this.areaService.currentAreaName, this.post);
+          this.postService.deletePost(this.currentUrlArea, this.post);
           const snackBarRef = this.snackBar.open('Post deleted successfully', 'Close', {
             duration: 3000
           });
@@ -237,18 +242,19 @@ export class PostViewComponent implements OnInit {
 
   postComment() {
     this.cdRef.detectChanges();
-    this.postService.comment(this.area, this.post, this.model.comment).subscribe();
+    this.postService.comment(this.area, this.post, this.model.comment)
+      .takeUntil(this.componentDestroyed)
+      .subscribe();
     this.model.comment = '';
     this.contractBox();
+    this.commentCount += 1;
     this.cdRef.detectChanges();
   }
 
   subscribe(s: boolean) {
-    this.postService.subscribe(
-      this.areaService.currentAreaName,
-      this.post,
-      s
-    ).subscribe();
+    this.postService.subscribe(this.currentUrlArea, this.post, s)
+      .takeUntil(this.componentDestroyed)
+      .subscribe();
   }
 }
 

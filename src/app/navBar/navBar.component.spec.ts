@@ -2,16 +2,19 @@ import { APP_BASE_HREF } from '@angular/common';
 import { By } from '@angular/platform-browser';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { ChangeDetectorRef } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { ComponentFixture, ComponentFixtureAutoDetect, TestBed , async} from '@angular/core/testing';
 import { Router, ActivatedRoute, RouterModule, Routes, UrlTree } from '@angular/router';
-import { MdTabsModule } from '@angular/material';
+import { MdTabsModule, MdDialogModule, MdSidenavModule, MdOptionModule, MdSnackBarModule } from '@angular/material';
 import { Observable } from 'rxjs';
 import { Author } from '../_models/author';
 import { Comment } from '../_models/comment';
 import { Notification } from '../_models/notification';
+import { NotificationPost } from '../_models/notificationPost';
 import { Post } from '../_models/post';
 import { SuperNotification } from '../_models/superNotification';
 import { NavBarComponent } from './navBar.component';
+import { AreaService } from '../_services/area.service';
 import { AuthenticationService } from '../_services/authentication.service';
 import { NavBarService } from '../_services/navBar.service';
 import { NotificationService } from '../_services/notification.service';
@@ -33,6 +36,13 @@ describe('NavBarComponent', () => {
         const authenticationServiceStub = {
           token: 'token'
         };
+        const areaServiceStub = {
+            isAreaChecked: {},
+            currentAreaName: {},
+            getAreaRep: () => ({
+                subscribe: () => ({})
+            })
+        };
         const routerStub = {
             events: Observable.of(''),
             createUrlTree: () => {
@@ -51,15 +61,13 @@ describe('NavBarComponent', () => {
         const notificationServiceStub = {
             getSuperNotification: () => {
               return Observable.of(
-                new SuperNotification(0, null, null,
-                  new Array<Notification>(new Notification('fun',
-                    new Post(1,
-                      new Author(1, 'test', null, 'test', false), false, false, '2017-07-22T12:03:23.465373Z', false, 'test',
-                        new Array<Comment>(
-                          new Comment(1,
-                            new Author(1, 'test', null, 'test', false), '2017-07-22T12:03:23.465373Z', 'test'))),
-                              new Array<number>(1, 2))))
-              );
+                new SuperNotification(1, '', '',
+                  new Array<Notification>(
+                    new Notification('', 
+                      new NotificationPost(0, 
+                        new Author(0, '', '', '', false), 'test'), 
+                          new Array<number>(0)))
+              ));
             }
         };
         TestBed.configureTestingModule({
@@ -69,12 +77,13 @@ describe('NavBarComponent', () => {
                 { provide: Router, useValue: routerStub },
                 { provide: ActivatedRoute, useValue: activatedRouteStub },
                 { provide: APP_BASE_HREF, useValue: '' },
+                { provide: AreaService, useValue: areaServiceStub },
                 { provide: AuthenticationService, useValue: authenticationServiceStub },
                 { provide: NavBarService, useValue: navBarServiceStub },
                 { provide: NotificationService, useValue: notificationServiceStub },
                 { provide: ComponentFixtureAutoDetect, useValue: true }
             ],
-            imports: [ MdTabsModule, RouterModule.forRoot(routes) ],
+            imports: [ MdTabsModule, MdOptionModule, FormsModule, MdSidenavModule, MdSnackBarModule, MdDialogModule, RouterModule.forRoot(routes) ],
         });
         fixture = TestBed.createComponent(NavBarComponent);
         comp = fixture.componentInstance;

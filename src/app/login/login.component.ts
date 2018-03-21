@@ -1,5 +1,6 @@
-﻿import { Component, OnInit } from '@angular/core';
+﻿import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
+import { Subject } from 'rxjs/Subject';
 import { AuthError } from '../_models/auth';
 import { AuthenticationService } from '../_services/authentication.service';
 import { NavBarService } from '../_services/navBar.service';
@@ -9,7 +10,8 @@ import { RouteService } from '../_services/route.service';
 @Component({
   templateUrl: 'login.component.html'
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
+  componentDestroyed: Subject<boolean> = new Subject();
   errors: AuthError;
   loading = false;
   model: any = {};
@@ -30,12 +32,19 @@ export class LoginComponent implements OnInit {
     console.log('Turning up the heat');
   }
 
+  ngOnDestroy() {
+    this.componentDestroyed.next(true);
+    this.componentDestroyed.complete();
+  }
+
   login() {
     this.loading = true;
     this.authenticationService.login(this.model.username, this.model.password)
+      .takeUntil(this.componentDestroyed)
       .subscribe(result => {
         if (!result.getError()) {
             this.notificationService.getSuperNotification(10, 0)
+              .takeUntil(this.componentDestroyed)
               .subscribe(superNotification => {
                 this.navBarService.notifications.next(superNotification.count);
             });
