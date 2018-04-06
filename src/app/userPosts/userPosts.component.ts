@@ -17,9 +17,8 @@ export class UserPostsComponent implements OnInit, OnDestroy {
   backupPosts: { [area: string]: Post[]; } = {};
   componentDestroyed: Subject<boolean> = new Subject();
   currentArea: string;
-  funImageArray: string[] = [];
+  imageArray: { [area: string]: string[]; } = {};
   index = 1;
-  infoImageArray: string[] = [];
   limit = 10;
   loading = true;
   model: any = {};
@@ -39,8 +38,7 @@ export class UserPostsComponent implements OnInit, OnDestroy {
   ) { }
 
   private imageInPosts(posts: Post[], area: string) {
-    this.funImageArray = [];
-    this.infoImageArray = [];
+    this.imageArray[area] = [];
 
     for (let i = 0; i <= posts.length - 1; i++) {
       // Find image markdown data in post.text - Guarenteed by Regex
@@ -50,11 +48,7 @@ export class UserPostsComponent implements OnInit, OnDestroy {
         for (let j = indexOfStart; j <= posts[i].text.length; j++) {
           if (posts[i].text.charAt(j) === ')') {
             // Add data to image array in specific area
-            if (area === 'fun') {
-              this.funImageArray[i]  = posts[i].text.slice(indexOfStart, j + 1);
-            } else {
-              this.infoImageArray[i]  = posts[i].text.slice(indexOfStart, j + 1);
-            }
+              this.imageArray[area][i]  = posts[i].text.slice(indexOfStart, j + 1);
           }
         }
       }

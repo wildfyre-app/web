@@ -17,10 +17,9 @@ export class NotificationArchiveComponent implements OnInit {
   backupFunPosts: Post[] = [];
   backupInfoPosts: Post[] = [];
   currentArea: string;
-  funImageArray: string[] = [];
   funPosts: Post[] = [];
+  imageArray: { [area: string]: string[]; } = {};
   index = 1;
-  infoImageArray: string[] = [];
   infoPosts: Post[] = [];
   limit = 10;
   loading = true;
@@ -41,8 +40,7 @@ export class NotificationArchiveComponent implements OnInit {
   ) { }
 
   private imageInPosts(posts: Post[], area: string) {
-    this.funImageArray = [];
-    this.infoImageArray = [];
+    this.imageArray[area] = [];
 
     for (let i = 0; i <= posts.length - 1; i++) {
       // Find image markdown data in post.text - Guarenteed by Regex
@@ -52,11 +50,7 @@ export class NotificationArchiveComponent implements OnInit {
         for (let j = indexOfStart; j <= posts[i].text.length; j++) {
           if (posts[i].text.charAt(j) === ')') {
             // Add data to image array in specific area
-            if (area === 'fun') {
-              this.funImageArray[i]  = posts[i].text.slice(indexOfStart, j + 1);
-            } else {
-              this.infoImageArray[i]  = posts[i].text.slice(indexOfStart, j + 1);
-            }
+              this.imageArray[area][i]  = posts[i].text.slice(indexOfStart, j + 1);
           }
         }
       }

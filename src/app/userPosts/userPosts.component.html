@@ -8,11 +8,11 @@
 
   <masonry *ngIf="currentArea">
     <masonry-brick class="brick" *ngFor="let post of backupPosts[currentArea]  | paginate: { id: 'server', itemsPerPage: limit, currentPage: index, totalItems: totalCount }; let i = index">
-        <md-card class="userPostsGrid" (click)="goto('fun', post.id)">
+        <md-card class="userPostsGrid" (click)="goto(currentArea, post.id)">
             <font size="0.1">
               <ng-container *ngIf="!post.anonym"><i class="material-icons">visibility_on</i></ng-container>
               <ng-container *ngIf="post.anonym"><i class="material-icons">visibility_off</i></ng-container>
-              <ng-container *ngIf="funImageArray[i]"><i class="material-icons">image</i></ng-container>
+              <ng-container *ngIf="imageArray[currentArea][i]"><i class="material-icons">image</i></ng-container>
               <span class="mainText" [innerHTML]="post.text | slice:0:200 | marked"></span><ng-container *ngIf="post.text.length > 200">...</ng-container>
               <hr>
               {{post.created}}
