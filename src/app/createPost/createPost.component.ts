@@ -155,9 +155,10 @@ export class CreatePostComponent implements OnInit, OnDestroy {
       .subscribe(result => {
         if (result.url) {
           if (this.model.card === undefined) {
-            this.model.card = '![' + result.altText + '](' + result.url + ' "' + result.description + '")\n';
+            this.model.card = '[![' + result.altText + '](' + result.url + ' "' + result.description + '")](' + result.url + ')\n';
           } else {
-            this.model.card = '![' + result.altText + '](' + result.url + ' "' + result.description + '")\n' + this.model.card;
+            this.model.card = '[![' + result.altText + '](' + result.url + ' "'
+              + result.description + '")](' + result.url + ')\n' + this.model.card;
           }
       }
       });

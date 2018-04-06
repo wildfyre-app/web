@@ -23,6 +23,7 @@
       </div>
       <button md-icon-button [mdMenuTriggerFor]="appMenu"><i class="material-icons">more_vert</i></button>
       <md-menu #appMenu="mdMenu">
+        <button md-menu-item type="button" (click)="ngOnInit()"><md-icon>refresh</md-icon>Refresh Post</button>
         <button md-menu-item type="button" ngxClipboard [cbContent]="getPostLink(post?.id)" (cbOnSuccess)="isCopied = true"><md-icon>link</md-icon>Copy Link to Post</button>
         <button *ngIf="post?.author?.user == userID" md-menu-item color="warn" (click)="openPostDeleteDialog()"><md-icon>delete</md-icon>Delete Post</button>
         <button *ngIf="!(post?.author?.user == userID)" md-menu-item (click)="openFlagDialog(post, null, typeOfReport.Post)"><md-icon>flag</md-icon>Flag Post</button>

@@ -96,11 +96,13 @@ export class NavBarComponent implements OnInit, OnDestroy {
         .takeUntil(this.componentDestroyed)
         .subscribe((isVisible: string) => {
           this.styleMobile = isVisible;
+          this.cdRef.detectChanges();
       });
       this.navBarService.areaVisible
         .takeUntil(this.componentDestroyed)
         .subscribe((visible: boolean) => {
           this.areaVisible = visible;
+          this.cdRef.detectChanges();
       });
       this.areaService.getAreas()
         .takeUntil(this.componentDestroyed)
@@ -122,6 +124,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
           }
 
           this.currentArea = areas[0].name;
+          this.cdRef.detectChanges();
         });
     } else {
       this.styleMobile = 'none';

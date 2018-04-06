@@ -123,6 +123,10 @@ md-sidenav.sideNav {
   top: 0px;
 }
 
+md-sidenav-container.mat-drawer-container.mat-sidenav-container.mat-drawer-transition {
+  background-color: white;
+}
+
 md-spinner {
   margin: 0 auto;
 }
@@ -249,7 +253,7 @@ ul.ngx-pagination {
 }
 
 .example-card.mat-card {
-  background-color: #EEEEEE;
+  background-color: white;
 }
 
 .login-card {
@@ -330,6 +334,10 @@ ul.ngx-pagination {
 
 .mat-tab-link {
   width: 20%;
+}
+
+a.mat-tab-link {
+  opacity: 1.0;
 }
 
 .mat-tab-links {

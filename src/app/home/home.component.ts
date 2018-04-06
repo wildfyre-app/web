@@ -54,6 +54,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
+    this.cdRef.detectChanges();
     this.loading = true;
     this.model.comment = '';
     this.routeService.resetRoutes();

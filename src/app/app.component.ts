@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
 import { AreaService } from './_services/area.service';
 import { Angulartics2Piwik } from 'angulartics2';
@@ -12,17 +12,20 @@ export class AppComponent implements OnDestroy {
   loading = true;
 
   constructor(
-    angulartics2Piwik: Angulartics2Piwik,
-    private areaService: AreaService
+    private cdRef: ChangeDetectorRef,
+    private areaService: AreaService,
+    angulartics2Piwik: Angulartics2Piwik
   ) {
     this.areaService.getAreas()
       .takeUntil(this.componentDestroyed)
       .subscribe(result => {
         this.loading = false;
+        this.cdRef.detectChanges();
       });
   }
 
   ngOnDestroy() {
+    this.cdRef.detach();
     this.componentDestroyed.next(true);
     this.componentDestroyed.complete();
   }
