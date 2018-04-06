@@ -51,7 +51,7 @@
       <button md-menu-item (click)="addBlockQoutes()"><i class="material-icons">format_quote</i> Quote</button>
     </md-menu>
     
-    <md-card class="centerText" (click)="refresh()" *ngIf="(commentCount === 0) && !loading">
+    <md-card class="centerText" (click)="refresh()" *ngIf="(commentCount === 0) && !loading && post.id !== 0">
         No comments, try commenting?
         <button class="refreshButton" *ngIf="!loading" md-button>Refresh <i class="material-icons">refresh</i></button>
     </md-card>
