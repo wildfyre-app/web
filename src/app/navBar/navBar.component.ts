@@ -24,7 +24,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
   areas = new Array<AreaList>(new AreaList('', 0, 0));
   areaReputation: { [area: string]: number; } = { };
   areaSpread: { [area: string]: number; } = { };
-  areaVisible = false;
+  areaVisible = true;
   componentDestroyed: Subject<boolean> = new Subject();
   currentArea = this.areas[0].name;
   mobileRouteLinks: any[];
