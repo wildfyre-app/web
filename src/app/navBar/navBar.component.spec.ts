@@ -1,4 +1,5 @@
 import { APP_BASE_HREF } from '@angular/common';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { By } from '@angular/platform-browser';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { ChangeDetectorRef } from '@angular/core';
@@ -83,7 +84,7 @@ describe('NavBarComponent', () => {
                 { provide: NotificationService, useValue: notificationServiceStub },
                 { provide: ComponentFixtureAutoDetect, useValue: true }
             ],
-            imports: [ MdTabsModule, MdOptionModule, FormsModule, MdSidenavModule, MdSnackBarModule, MdDialogModule, RouterModule.forRoot(routes) ],
+            imports: [ MdTabsModule, MdOptionModule, FormsModule, MdSidenavModule, MdSnackBarModule, MdDialogModule, RouterModule.forRoot(routes), BrowserAnimationsModule ],
         });
         fixture = TestBed.createComponent(NavBarComponent);
         comp = fixture.componentInstance;

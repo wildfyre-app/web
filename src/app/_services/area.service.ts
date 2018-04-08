@@ -35,7 +35,6 @@ export class AreaService {
       .map((response: Response) => {
         const areas: Area[] = [];
         response.json().forEach((area: any) => {
-            this.getAreaRep(area.name).subscribe();
             areas.push(Area.parse(area));
             this.areas = areas;
         });

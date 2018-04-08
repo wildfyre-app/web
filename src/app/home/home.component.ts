@@ -63,39 +63,8 @@ export class HomeComponent implements OnInit, OnDestroy {
       .takeUntil(this.componentDestroyed)
       .subscribe( (author: Author) => {
         this.userID = author.user;
-        this.navBarService.currentArea
-          .takeUntil(this.componentDestroyed)
-          .subscribe((currentArea: AreaList) => {
-            this.currentArea = currentArea.name;
-
-            this.postService.getNextPost(currentArea.name)
-              .takeUntil(this.componentDestroyed)
-              .subscribe(nextPost => {
-                if (nextPost) {
-                  this.post = nextPost;
-                  this.commentCount = this.post.comments.length;
-                  this.loading = false;
-                  this.cdRef.detectChanges();
-                } else {
-                  this.fakePost = new Post(0, this.systemAuthor, false, false,
-                    Date(), false, 'No more posts in this area, try creating one?', []);
-                  this.post = this.fakePost;
-                  this.commentCount = 0;
-                  this.loading = false;
-                  this.cdRef.detectChanges();
-                }
-              });
-        });
     });
-
-    if (window.screen.width > 600) {
-      this.styleTextBottom = '0px';
-      this.styleCommentBottom = '-1px';
-    } else {
-      this.styleTextBottom = '42px';
-      this.styleCommentBottom = '44px';
-    }
-
+    this.refresh();
     this.cdRef.detectChanges();
   }
 
@@ -185,7 +154,7 @@ export class HomeComponent implements OnInit, OnDestroy {
             this.post,
             c
           );
-          this.commentCount = 0;
+          this.commentCount -= 1;
           const snackBarRef = this.snackBar.open('Comment deleted successfully', 'Close', {
             duration: 3000
           });
@@ -221,25 +190,27 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   refresh() {
     this.loading = true;
-    this.profileService.getSelf()
+    this.navBarService.currentArea
       .takeUntil(this.componentDestroyed)
-      .subscribe( (author: Author) => {
-        this.userID = author.user;
-        this.navBarService.currentArea
-          .takeUntil(this.componentDestroyed)
-          .subscribe((currentArea: AreaList) => {
-            this.currentArea = currentArea.name;
+      .subscribe((currentArea: AreaList) => {
+        this.currentArea = currentArea.name;
 
-            this.postService.getPost(currentArea.name, this.post.id.toString())
-              .takeUntil(this.componentDestroyed)
-              .subscribe(nextPost => {
-                if (nextPost) {
-                  this.post = nextPost;
-                  this.commentCount = this.post.comments.length;
-                  this.loading = false;
-                  this.cdRef.detectChanges();
-                }
-              });
+        this.postService.getNextPost(currentArea.name)
+          .takeUntil(this.componentDestroyed)
+          .subscribe(nextPost => {
+            if (nextPost) {
+              this.post = nextPost;
+              this.commentCount = this.post.comments.length;
+              this.loading = false;
+              this.cdRef.detectChanges();
+            } else {
+              this.fakePost = new Post(0, this.systemAuthor, false, false,
+                Date(), false, 'No more posts in this area, try creating one?', []);
+              this.post = this.fakePost;
+              this.commentCount = 0;
+              this.loading = false;
+              this.cdRef.detectChanges();
+            }
         });
     });
 

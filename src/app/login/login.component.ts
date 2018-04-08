@@ -1,4 +1,5 @@
 ﻿import { Component, OnInit, OnDestroy } from '@angular/core';
+import { MdSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs/Subject';
 import { AuthError } from '../_models/auth';
@@ -18,11 +19,16 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   constructor(
     private router: Router,
+    public snackBar: MdSnackBar,
     private authenticationService: AuthenticationService,
     private navBarService: NavBarService,
     private notificationService: NotificationService,
     private routeService: RouteService
-  ) { }
+  ) {
+    const snackBarRef = this.snackBar.open('Authentication Required', 'Close', {
+      duration: 3000
+    });
+  }
 
   ngOnInit() {
     // reset login status
@@ -43,11 +49,13 @@ export class LoginComponent implements OnInit, OnDestroy {
       .takeUntil(this.componentDestroyed)
       .subscribe(result => {
         if (!result.getError()) {
-            this.notificationService.getSuperNotification(10, 0)
-              .takeUntil(this.componentDestroyed)
-              .subscribe(superNotification => {
-                this.navBarService.notifications.next(superNotification.count);
-            });
+          this.notificationService.getSuperNotification(10, 0)
+            .takeUntil(this.componentDestroyed)
+            .subscribe(superNotification => {
+              this.navBarService.notifications.next(superNotification.count);
+          });
+          this.navBarService.loggedIn.next(true);
+          this.navBarService.areaVisible.next(true);
           this.router.navigate(['/']);
           this.loading = false;
         } else {
