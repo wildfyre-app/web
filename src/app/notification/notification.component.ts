@@ -1,6 +1,8 @@
 import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { MdDialog, MdDialogRef, MdSnackBar } from '@angular/material';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs/Subject';
+import { ConfirmDeletionComponent } from '../_dialogs/confirmDeletion.component';
 import { Notification } from '../_models/notification';
 import { Post } from '../_models/post';
 import { SuperNotification } from '../_models/superNotification';
@@ -24,8 +26,10 @@ export class NotificationComponent implements OnInit, OnDestroy {
 
   constructor(
     private cdRef: ChangeDetectorRef,
+    private dialog: MdDialog,
     private route: ActivatedRoute,
     private router: Router,
+    private snackBar: MdSnackBar,
     private navBarService: NavBarService,
     private notificationService: NotificationService,
     private routeService: RouteService
@@ -66,9 +70,20 @@ export class NotificationComponent implements OnInit, OnDestroy {
   }
 
   deleteNotifications() {
-    this.notificationService.deleteNotifications();
-    this.notifications = [];
-    this.navBarService.notifications.next(0);
+    const dialogRef = this.dialog.open(ConfirmDeletionComponent);
+    dialogRef.afterClosed()
+      .takeUntil(this.componentDestroyed)
+      .subscribe(result => {
+        if (result.bool) {
+          this.notificationService.deleteNotifications();
+          this.notifications = [];
+          this.navBarService.notifications.next(0);
+          const snackBarRef = this.snackBar.open('Notifications deleted successfully', 'Close', {
+            duration: 3000
+          });
+        }
+      });
+
     this.cdRef.detectChanges();
   }
 
@@ -108,7 +123,7 @@ export class NotificationComponent implements OnInit, OnDestroy {
       commentString += comments[i];
     }
     this.routeService.addNextRouteByIndex(this.index);
-
+    this.navBarService.notifications.next(this.superNotification.count - 1);
     this.router.navigateByUrl('/areas/' + areaID + '/' + postID + '/' + commentString);
   }
 }

@@ -3,7 +3,6 @@ import { MdDialog, MdDialogRef, MdSnackBar } from '@angular/material';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs/Subject';
 import { ConfirmDeletionComponent } from '../_dialogs/confirmDeletion.component';
-import { AreaList } from '../_models/areaList';
 import { Author } from '../_models/author';
 import { Comment } from '../_models/comment';
 import { Post } from '../_models/post';
@@ -78,7 +77,6 @@ export class PostViewComponent implements OnInit, OnDestroy {
           .takeUntil(this.componentDestroyed)
           .subscribe(params => {
             this.currentArea = params['area'];
-            this.navBarService.currentArea.next(new AreaList(this.currentArea, 0, 0));
 
             this.postService.getPost(this.currentArea, params['id'])
               .takeUntil(this.componentDestroyed)

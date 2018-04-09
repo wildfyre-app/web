@@ -1,7 +1,7 @@
 import { By } from '@angular/platform-browser';
 import { ComponentFixture,  ComponentFixtureAutoDetect, TestBed, async } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA, Component } from '@angular/core';
-import { MdCardModule, MdTabsModule } from '@angular/material';
+import { MdCardModule, MdTabsModule, MdDialogModule, MdSnackBarModule } from '@angular/material';
 import { Router, ActivatedRoute, RouterModule } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Author } from '../_models/author';
@@ -13,7 +13,7 @@ import { SuperNotification } from '../_models/superNotification';
 import { AuthenticationService } from '../_services/authentication.service';
 import { NotificationService } from '../_services/notification.service';
 import { RouteService } from '../_services/route.service';
-import { NavBarService } from '../_services/navBar.service';
+import { NavBarService } from '../_services/navBar.service'; 
 import { NotificationComponent } from './notification.component';
 import { NgxPaginationModule } from 'ngx-pagination';
 
@@ -57,7 +57,7 @@ describe('NotificationComponent', () => {
                 { provide: RouteService, useValue: routeServiceStub },
                 { provide: ComponentFixtureAutoDetect, useValue: true }
             ],
-            imports: [ MdCardModule, RouterModule, MdTabsModule, NgxPaginationModule ],
+            imports: [ MdCardModule, RouterModule, MdTabsModule, NgxPaginationModule, MdDialogModule, MdSnackBarModule ],
         }).compileComponents();
         fixture = TestBed.createComponent(NotificationComponent);
         comp = fixture.componentInstance;

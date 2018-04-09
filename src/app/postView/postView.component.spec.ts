@@ -2,8 +2,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { By } from '@angular/platform-browser';
 import { ComponentFixture, TestBed, async } from '@angular/core/testing';
 import { DebugElement } from '@angular/core';
-import { MaterialModule } from '@angular/material';
-import { MdSnackBar, MdMenuModule, MdCardModule } from '@angular/material';
+import { MdSnackBar, MdMenuModule, MdCardModule, MdDialogModule, MdSnackBarModule } from '@angular/material';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -97,7 +96,7 @@ describe('PostViewComponent', () => {
                 { provide: ProfileService, useValue: profileServiceStub },
                 { provide: RouteService, useValue: routeServiceStub }
             ],
-            imports: [ MdMenuModule, MdCardModule, ClipboardModule, MaterialModule,
+            imports: [ MdMenuModule, MdCardModule, ClipboardModule, MdDialogModule, MdSnackBarModule,
               FormsModule, BrowserAnimationsModule, RouterTestingModule ],
         });
         fixture = TestBed.createComponent(PostViewComponent);
