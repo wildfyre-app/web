@@ -1,0 +1,21 @@
+<button id="topNavBack" md-button (click)="back()"><i class="material-icons">arrow_back</i></button>
+<br><br>
+
+<md-spinner *ngIf="loading"></md-spinner>
+
+<masonry *ngIf="currentArea">
+  <masonry-brick class="brick" *ngFor="let post of backupPosts[currentArea]  | paginate: { id: 'server', itemsPerPage: limit, currentPage: index, totalItems: totalCount }; let i = index">
+      <md-card class="userPostsGrid" (click)="goto(post.id)">
+          <font size="0.1">
+            <ng-container *ngIf="!post.anonym"><i class="material-icons">visibility_on</i></ng-container>
+            <ng-container *ngIf="post.anonym"><i class="material-icons">visibility_off</i></ng-container>
+            <ng-container *ngIf="imageArray[currentArea][i]"><i class="material-icons">image</i></ng-container>
+            <span class="mainText" [innerHTML]="post.text | slice:0:200 | marked"></span><ng-container *ngIf="post.text.length > 200">...</ng-container>
+            <hr>
+            {{post.created}}
+        </font>
+      </md-card>
+  </masonry-brick>
+</masonry>
+
+<pagination-controls (pageChange)="getDrafts($event)" id="server"></pagination-controls>

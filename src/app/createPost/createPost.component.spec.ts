@@ -4,6 +4,7 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { MdDialog, MdDialogRef, MdMenuModule, MdSlideToggleModule, MdSnackBarModule } from '@angular/material';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
 import { AreaService } from '../_services/area.service';
 import { NavBarService } from '../_services/navBar.service';
 import { PostService } from '../_services/post.service';
@@ -27,6 +28,9 @@ describe('CreatePostComponent', () => {
         };
         const routerStub = {
             navigate: () => ({})
+        };
+        const activatedRouteStub = {
+          params: Observable.of({'id': 1})
         };
         const areaServiceStub = {
             isAreaChecked: {},
@@ -54,6 +58,7 @@ describe('CreatePostComponent', () => {
             providers: [
                 { provide: MdDialog, useValue: mdDialogStub },
                 { provide: Router, useValue: routerStub },
+                { provide: ActivatedRoute, useValue: activatedRouteStub },
                 { provide: AreaService, useValue: areaServiceStub },
                 { provide: NavBarService, useValue: navBarServiceStub },
                 { provide: PostService, useValue: postServiceStub },

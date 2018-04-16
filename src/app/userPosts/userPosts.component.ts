@@ -10,7 +10,6 @@ import { RouteService } from '../_services/route.service';
 import { MasonryOptions } from 'angular2-masonry';
 
 @Component({
-  selector: 'user-posts',
   templateUrl: 'userPosts.component.html'
 })
 export class UserPostsComponent implements OnInit, OnDestroy {
@@ -100,6 +99,7 @@ export class UserPostsComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.cdRef.detectChanges();
     this.routeService.resetRoutes();
+    this.routeService.addNextRoute('/posts');
     this.route.params
       .takeUntil(this.componentDestroyed)
       .subscribe(params => {
@@ -176,9 +176,9 @@ export class UserPostsComponent implements OnInit, OnDestroy {
       });
   }
 
-  goto(areaID: string, postID: string) {
+  goto(postID: string) {
     this.routeService.addNextRouteByIndex(this.index);
-    this.router.navigateByUrl('/areas/' + areaID + '/' + postID);
+    this.router.navigateByUrl('/areas/' + this.currentArea + '/' + postID);
   }
 
 /* Removed as of D114

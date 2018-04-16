@@ -62,28 +62,68 @@ export class PostService {
       });
   }
 
-  createPost(area: string, text: string, anonymous: boolean): Observable<Post> {
+  createPost(area: string, text: string, anonymous: boolean, draft: boolean = false, postID: number = null): Observable<Post> {
     const body = {
       'anonym': anonymous,
       'text': text
     };
 
-    return this.httpService.POST(
-      '/areas/' + area + '/', body)
-      .map((response: Response) => {
-        return Post.parse(response.json());
-      })
-      .catch((error) => {
-        return Observable.of(new PostError(
-          JSON.parse(error._body).non_field_errors,
-          JSON.parse(error._body)._text
-        ));
-      });
+    if (!draft && postID === null) {
+        return this.httpService.POST('/areas/' + area + '/', body)
+          .map((response: Response) => {
+            return Post.parse(response.json());
+          })
+          .catch((error) => {
+            return Observable.of(new PostError(
+              JSON.parse(error._body).non_field_errors,
+              JSON.parse(error._body)._text
+            ));
+          });
+      } else if (draft && postID === null) {
+        return this.httpService.POST('/areas/' + area + '/drafts/', body)
+          .map((response: Response) => {
+            return Post.parse(response.json());
+          })
+          .catch((error) => {
+            return Observable.of(new PostError(
+              JSON.parse(error._body).non_field_errors,
+              JSON.parse(error._body)._text
+            ));
+          });
+      } else if (draft && postID !== null) {
+        return this.httpService.PATCH('/areas/' + area + '/drafts/' + postID + '/', body)
+          .map((response: Response) => {
+            return Post.parse(response.json());
+          })
+          .catch((error) => {
+            return Observable.of(new PostError(
+              JSON.parse(error._body).non_field_errors,
+              JSON.parse(error._body)._text
+            ));
+          });
+      } else {
+        throw new Error('Don\'t set postID, if not a draft');
+      }
   }
 
-  deletePost(area: string, post: Post) {
-    this.httpService.DELETE('/areas/' + area + '/' + post.id + '/')
+  deletePost(area: string, postID: number, draft: boolean) {
+    let url = '/areas/' + area + '/';
+
+    if (draft === true) {
+      url += 'drafts/';
+    }
+
+    this.httpService.DELETE(url + postID + '/')
       .subscribe();
+  }
+
+  getDrafts(area: string, limit: number, offset: number): Observable<SuperPost> {
+      return this.httpService.GET('/areas/' + area + '/drafts/?limit=' + limit + '&offset=' + offset)
+        .map((response: Response) => {
+          this.superPosts[area] = SuperPost.parse(response.json());
+
+          return this.superPosts[area];
+      });
   }
 
   getNextPost(area: string): Observable<Post> {
@@ -131,11 +171,30 @@ export class PostService {
       });
   }
 
-  getPost(areaID: string, postID: string): Observable<Post> {
-    return this.httpService.GET('/areas/' + areaID + '/' + postID + '/')
+  getPost(areaID: string, postID: string, draft: boolean = false): Observable<Post> {
+    let url = '/areas/' + areaID + '/';
+
+    if (draft === true) {
+      url += 'drafts/';
+    }
+
+    return this.httpService.GET(url + postID + '/')
       .map((response: Response) => {
         return Post.parse(response.json());
       });
+  }
+
+  publishDraft(area: string, postID: number): Observable<Post> {
+      return this.httpService.POST('/areas/' + area + '/drafts/' + postID + '/publish/', '')
+        .map((response: Response) => {
+          return Post.parse(response.json());
+        })
+        .catch((error) => {
+          return Observable.of(new PostError(
+            JSON.parse(error._body).non_field_errors,
+            JSON.parse(error._body)._text
+          ));
+        });
   }
 
   spread(area: string, post: Post, spread: boolean): void {

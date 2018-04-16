@@ -1,3 +1,6 @@
+<md-card class="example-card" (click)="loadDrafts()">
+  <button class="wideButtons" md-button ><i class="material-icons">folder</i> Drafts</button>
+</md-card>
 <md-card class="example-card">
   <div *ngIf="errors && errors.non_field_errors" class="alert alert-danger">
     <ul *ngFor="let err of errors.non_field_errors">
@@ -30,8 +33,9 @@
     <button md-button (click)="openPictureDialog()"><i class="material-icons">insert_photo</i></button>
     <button md-button (click)="openYoutubeDialog()"><i class="material-icons">slideshow</i></button>
   </div>
+  <hr>
   <div class="toggle">
-    Post Anonymously<md-slide-toggle
+    Post Anonymously <md-slide-toggle
     class="example-margin"
     color="#263238"
     [checked]="anonymous"
@@ -40,14 +44,19 @@
   <hr>
   <div class="form-group">
     <md-input-container>
-      <textarea id="createPostInput" mdInput rows="7" cols="80" type="text" name="post" [(ngModel)]="model.card" #comment="ngModel" ></textarea>
+      <textarea id="createPostInput" mdInput rows="7" cols="80" type="text" name="post" [(ngModel)]="model.card" #comment="ngModel"></textarea>
     </md-input-container>
     <div *ngIf="errors && errors._text" class="help-block">
       <ul *ngFor="let err of errors._text">
         <li>{{err}}</li>
       </ul>
     </div>
-    <button class="wideButtons" md-raised-button (click)="createPost()" color="accent" [disabled]="loading"><b>Create</b></button>
+    <button *ngIf="!postID" class="wideButtons" md-raised-button (click)="createPost(false)" color="accent" [disabled]="loading"><b>Create</b></button>
+    <button *ngIf="postID" class="wideButtons" md-raised-button (click)="publishDraft()" color="accent" [disabled]="loading"><b>Create</b></button>
+    <br><br>
+    <button class="wideButtons" md-raised-button (click)="createPost(true)" color="primary" [disabled]="loading"><b>Save Draft</b></button>
+    <br><br>
+    <button *ngIf="isDraft" class="wideButtons" md-raised-button (click)="openDraftDeleteDialog()" color="warn" [disabled]="loading"><b>Delete</b></button>
     <md-spinner *ngIf="loading"></md-spinner>
   </div>
 </md-card>

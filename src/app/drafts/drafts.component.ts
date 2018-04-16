@@ -1,26 +1,23 @@
-import { Component, OnInit, NgModule, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, NgModule, ChangeDetectorRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import { Subject } from 'rxjs/Subject';
 import { AreaList } from '../_models/areaList';
-import { Notification } from '../_models/notification';
 import { Post } from '../_models/post';
+import { AreaService } from '../_services/area.service';
 import { NavBarService } from '../_services/navBar.service';
-import { NotificationService } from '../_services/notification.service';
+import { PostService } from '../_services/post.service';
 import { RouteService } from '../_services/route.service';
 import { MasonryOptions } from 'angular2-masonry';
 
 @Component({
-  selector: 'user-posts',
-  templateUrl: 'notificationArchive.component.html'
+  templateUrl: 'drafts.component.html'
 })
-export class NotificationArchiveComponent implements OnInit {
+export class DraftsComponent implements OnInit, OnDestroy {
   backupPosts: { [area: string]: Post[]; } = {};
-  backupFunPosts: Post[] = [];
-  backupInfoPosts: Post[] = [];
+  componentDestroyed: Subject<boolean> = new Subject();
   currentArea: string;
-  funPosts: Post[] = [];
   imageArray: { [area: string]: string[]; } = {};
   index = 1;
-  infoPosts: Post[] = [];
   limit = 10;
   loading = true;
   model: any = {};
@@ -35,7 +32,7 @@ export class NotificationArchiveComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private navBarService: NavBarService,
-    private notificationService: NotificationService,
+    private postService: PostService,
     private routeService: RouteService
   ) { }
 
@@ -100,39 +97,55 @@ export class NotificationArchiveComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.cdRef.detectChanges();
     this.route.params
+      .takeUntil(this.componentDestroyed)
       .subscribe(params => {
         if (params['index'] !== undefined) {
           this.index = params['index'];
         }
-
-        this.navBarService.currentArea
-          .subscribe((currentArea: AreaList) => {
-            this.currentArea = currentArea.name;
-            this.loading = true;
-            const posts: Post[] = [];
-
-            this.notificationService.getArchive(currentArea.name, this.limit, 0)
-              .subscribe(superPost => {
-                superPost.results.forEach((obj: any) => {
-                  posts.push(Post.parse(obj));
-                });
-
-                // Removes binding to original 'superPost' variable
-                this.superPosts[currentArea.name] = JSON.parse(JSON.stringify(posts));
-                this.backupPosts[currentArea.name] = posts;
-                this.totalCount = superPost.count;
-
-                this.imageInPosts(this.superPosts[currentArea.name], currentArea.name);
-
-                for (let i = 0; i <= this.backupPosts[currentArea.name].length - 1; i++) {
-                  this.backupPosts[currentArea.name][i].text = this.removeMarkdown(this.backupPosts[currentArea.name][i].text);
-                }
-                this.cdRef.detectChanges();
-                this.loading = false;
-              });
-          });
       });
+
+    this.navBarService.currentArea
+      .takeUntil(this.componentDestroyed)
+      .subscribe((currentArea: AreaList) => {
+        this.currentArea = currentArea.name;
+        if (!this.superPosts[currentArea.name]) {
+          this.superPosts[currentArea.name] = [];
+        }
+        if (!this.backupPosts[currentArea.name]) {
+          this.backupPosts[currentArea.name] = [];
+        }
+        this.loading = true;
+        const posts: Post[] = [];
+
+        this.postService.getDrafts(currentArea.name, this.limit, 0)
+          .takeUntil(this.componentDestroyed)
+          .subscribe(superPost => {
+            superPost.results.forEach((obj: any) => {
+              posts.push(Post.parse(obj));
+            });
+
+            // Removes binding to original 'superPost' variable
+            this.superPosts[currentArea.name] = JSON.parse(JSON.stringify(posts));
+            this.backupPosts[currentArea.name] = posts;
+            this.totalCount = superPost.count;
+
+            this.imageInPosts(this.superPosts[currentArea.name], currentArea.name);
+
+            for (let i = 0; i <= this.backupPosts[currentArea.name].length - 1; i++) {
+              this.backupPosts[currentArea.name][i].text = this.removeMarkdown(this.backupPosts[currentArea.name][i].text);
+            }
+            this.cdRef.detectChanges();
+            this.loading = false;
+          });
+        });
+  }
+
+  ngOnDestroy() {
+    this.cdRef.detach();
+    this.componentDestroyed.next(true);
+    this.componentDestroyed.complete();
   }
 
   back() {
@@ -143,11 +156,12 @@ export class NotificationArchiveComponent implements OnInit {
     }
   }
 
-  getPosts(page: number) {
+  getDrafts(page: number) {
     this.loading = true;
     const posts: Post[] = [];
 
-    this.notificationService.getArchive(this.currentArea, this.limit, (this.offset * page) - this.limit)
+    this.postService.getDrafts(this.currentArea, this.limit, (this.offset * page) - this.limit)
+      .takeUntil(this.componentDestroyed)
       .subscribe(superPost => {
         superPost.results.forEach((obj: any) => {
           posts.push(Post.parse(obj));
@@ -170,42 +184,6 @@ export class NotificationArchiveComponent implements OnInit {
 
   goto(postID: string) {
     this.routeService.addNextRouteByIndex(this.index);
-    this.router.navigateByUrl('/areas/' + this.currentArea + '/' + postID);
+    this.router.navigateByUrl('/create/' + postID);
   }
-
-/* Removed as of D114
-  searchInput() {
-    if (this.areaService.currentAreaName === 'fun') {
-      this.searchArray = [];
-      if (this.model.postText === '') {
-        this.searching = false;
-        this.cdRef.detectChanges();
-      } else {
-        this.searching = true;
-
-        for (let i = 0; i <= this.funPosts.length - 1; i++) {
-          if (this.funPosts[i].text.toLowerCase().includes(this.model.postText.toLowerCase())) {
-            this.searchArray.push(this.backupFunPosts[i]);
-          }
-        }
-        this.cdRef.detectChanges();
-      }
-    } else {
-      this.searchArray = [];
-      if (this.model.postText === '') {
-        this.searching = false;
-        this.cdRef.detectChanges();
-      } else {
-        this.searching = true;
-
-        for (let i = 0; i <= this.infoPosts.length - 1; i++) {
-          if (this.infoPosts[i].text.toLowerCase().includes(this.model.postText.toLowerCase())) {
-            this.searchArray.push(this.backupInfoPosts[i]);
-          }
-        }
-        this.cdRef.detectChanges();
-      }
-    }
-  }
-  */
 }

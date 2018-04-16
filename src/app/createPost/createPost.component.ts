@@ -1,7 +1,8 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { MdDialog, MdDialogRef, MdSnackBar } from '@angular/material';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs/Subject';
+import { ConfirmDeletionComponent } from '../_dialogs/confirmDeletion.component';
 import { AreaList } from '../_models/areaList';
 import { Author } from '../_models/author';
 import { PostError } from '../_models/post';
@@ -17,12 +18,16 @@ export class CreatePostComponent implements OnInit, OnDestroy {
   componentDestroyed: Subject<boolean> = new Subject();
   currentArea: string;
   errors: PostError;
+  isDraft = false;
   loading: boolean;
   model: any = {};
+  postID: number = null;
 
   constructor(
+    private cdRef: ChangeDetectorRef,
     private dialog: MdDialog,
     private snackBar: MdSnackBar,
+    private route: ActivatedRoute,
     private router: Router,
     private navBarService: NavBarService,
     private postService: PostService,
@@ -37,10 +42,29 @@ export class CreatePostComponent implements OnInit, OnDestroy {
       .takeUntil(this.componentDestroyed)
       .subscribe((currentArea: AreaList) => {
         this.currentArea = currentArea.name;
-      });
+
+        this.route.params
+          .takeUntil(this.componentDestroyed)
+          .subscribe(params => {
+            if (params['id'] !== undefined) {
+              this.isDraft = true;
+
+              this.postService.getPost(this.currentArea, params['id'], true)
+                .takeUntil(this.componentDestroyed)
+                .subscribe(post => {
+                  this.model.card =  post.text;
+                  this.postID = post.id;
+                  this.anonymous = post.anonym;
+                  this.loading = false;
+                  this.cdRef.detectChanges();
+              });
+            }
+        });
+    });
   }
 
   ngOnDestroy() {
+    this.cdRef.detach();
     this.componentDestroyed.next(true);
     this.componentDestroyed.complete();
   }
@@ -119,10 +143,49 @@ export class CreatePostComponent implements OnInit, OnDestroy {
     this.addLineBreak('* Unordered list can use asterisks\n- Or minuses\n+ Or pluses');
   }
 
-  createPost() {
+  createPost(draft: boolean) {
     this.loading = true;
     if (this.model.card !== '') {
-      this.postService.createPost(this.currentArea, this.model.card, this.anonymous)
+      this.postService.createPost(this.currentArea, this.model.card, this.anonymous, draft, this.postID)
+        .takeUntil(this.componentDestroyed)
+        .subscribe(result => {
+          if (!result.getError()) {
+            this.model.card = '';
+            let object = 'Post Created';
+            if (draft === true) {
+              object = 'Draft Saved';
+            }
+            const snackBarRef = this.snackBar.open(object + ' Successfully!', 'Close', {
+              duration: 3000
+            });
+            this.router.navigate(['']);
+          } else {
+            this.errors = result.getError();
+            this.loading = false;
+          }
+        });
+    } else {
+      this.loading = false;
+      const snackBarRef = this.snackBar.open('You did not input anything', 'Close', {
+        duration: 3000
+      });
+    }
+  }
+
+  loadDrafts() {
+    this.routeService.addNextRoute('/create');
+    this.router.navigateByUrl('/drafts');
+  }
+
+  makeAnonymous(value: any) {
+    this.anonymous = value.checked;
+  }
+
+  publishDraft() {
+    this.loading = true;
+    if (this.model.card !== '') {
+      this.createPost(true);
+      this.postService.publishDraft(this.currentArea, this.postID)
         .takeUntil(this.componentDestroyed)
         .subscribe(result => {
           if (!result.getError()) {
@@ -144,8 +207,19 @@ export class CreatePostComponent implements OnInit, OnDestroy {
     }
   }
 
-  makeAnonymous(value: any) {
-    this.anonymous = value.checked;
+  openDraftDeleteDialog() {
+    const dialogRef = this.dialog.open(ConfirmDeletionComponent);
+    dialogRef.afterClosed()
+      .takeUntil(this.componentDestroyed)
+      .subscribe(result => {
+        if (result.bool) {
+          this.postService.deletePost(this.currentArea, this.postID, true);
+          const snackBarRef = this.snackBar.open('Draft deleted successfully', 'Close', {
+            duration: 3000
+          });
+          this.router.navigateByUrl('');
+        }
+      });
   }
 
   openPictureDialog() {

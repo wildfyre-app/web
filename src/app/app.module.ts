@@ -11,6 +11,7 @@ import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { Component404Component } from './404component/404.component';
 import { CreatePostComponent, PictureDialogComponent, YouTubeDialogComponent } from './createPost/createPost.component';
+import { DraftsComponent } from './drafts/drafts.component';
 import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './login/login.component';
 import { NavBarComponent, LogoutDialogComponent } from './navBar/navBar.component';
@@ -89,6 +90,7 @@ import { ReCaptchaModule } from 'angular2-recaptcha';
     // Components
     AppComponent,
     Component404Component,
+    DraftsComponent,
     CreatePostComponent,
     HomeComponent,
     LoginComponent,

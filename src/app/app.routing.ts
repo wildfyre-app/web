@@ -1,5 +1,6 @@
 ﻿import { Routes, RouterModule } from '@angular/router';
 import { Component404Component } from './404component/404.component';
+import { DraftsComponent } from './drafts/drafts.component';
 import { CreatePostComponent } from './createPost/createPost.component';
 import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './login/login.component';
@@ -20,10 +21,11 @@ const appRoutes: Routes = [
   { path: 'areas/:area/:id', component: PostViewComponent },
   { path: 'areas/:area/:id/:comments', component: PostViewComponent },
   { path: 'create', component: CreatePostComponent, canActivate: [AuthGuard] },
+  { path: 'create/:id', component: CreatePostComponent, canActivate: [AuthGuard] },
+  { path: 'drafts', component: DraftsComponent, canActivate: [AuthGuard] },
   { path: 'login', component: LoginComponent },
   { path: 'notifications', component: NotificationComponent, canActivate: [AuthGuard] },
   { path: 'notifications/:index', component: NotificationComponent, canActivate: [AuthGuard] },
-  { path: 'notifications/archive', component: NotificationArchiveComponent, canActivate: [AuthGuard] },
   { path: 'notifications/archive/:index', component: NotificationArchiveComponent, canActivate: [AuthGuard] },
   { path: 'posts', component: UserPostsComponent, canActivate: [AuthGuard] },
   { path: 'posts/:index', component: UserPostsComponent, canActivate: [AuthGuard] },

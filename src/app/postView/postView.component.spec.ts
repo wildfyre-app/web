@@ -77,7 +77,7 @@ describe('PostViewComponent', () => {
               new Author(1, 'Test User', null, 'test', false)
             );
           }
-        };
+        }; 
         const routeServiceStub = {};
         const navBarServiceStub = {};
         TestBed.configureTestingModule({

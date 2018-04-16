@@ -73,31 +73,31 @@ export class PostViewComponent implements OnInit, OnDestroy {
         });
     }
 
-        this.route.params
+    this.route.params
+      .takeUntil(this.componentDestroyed)
+      .subscribe(params => {
+        this.currentArea = params['area'];
+
+        this.postService.getPost(this.currentArea, params['id'])
           .takeUntil(this.componentDestroyed)
-          .subscribe(params => {
-            this.currentArea = params['area'];
-
-            this.postService.getPost(this.currentArea, params['id'])
-              .takeUntil(this.componentDestroyed)
-              .subscribe(post => {
-                this.post =  post;
-                this.commentCount = this.post.comments.length;
-                this.loading = false;
-                this.cdRef.detectChanges();
-            });
-
-            let commentIDArray = params['comments'];
-            commentIDArray = commentIDArray + '-';
-
-            if (commentIDArray) {
-              while (commentIDArray.indexOf('-') !== -1) {
-                this.parsedCommentArray.push(commentIDArray.slice(0, commentIDArray.indexOf('-')));
-                commentIDArray = commentIDArray.slice(commentIDArray.indexOf('-') + 1, commentIDArray.length);
-              }
-            }
+          .subscribe(post => {
+            this.post =  post;
+            this.commentCount = this.post.comments.length;
+            this.loading = false;
+            this.cdRef.detectChanges();
         });
-        this.cdRef.detectChanges();
+
+        let commentIDArray = params['comments'];
+        commentIDArray = commentIDArray + '-';
+
+        if (commentIDArray) {
+          while (commentIDArray.indexOf('-') !== -1) {
+            this.parsedCommentArray.push(commentIDArray.slice(0, commentIDArray.indexOf('-')));
+            commentIDArray = commentIDArray.slice(commentIDArray.indexOf('-') + 1, commentIDArray.length);
+          }
+        }
+    });
+    this.cdRef.detectChanges();
   }
 
   ngOnDestroy() {
@@ -230,7 +230,7 @@ export class PostViewComponent implements OnInit, OnDestroy {
       .takeUntil(this.componentDestroyed)
       .subscribe(result => {
         if (result.bool) {
-          this.postService.deletePost(this.currentArea, this.post);
+          this.postService.deletePost(this.currentArea, this.post.id, false);
           const snackBarRef = this.snackBar.open('Post deleted successfully', 'Close', {
             duration: 3000
           });
