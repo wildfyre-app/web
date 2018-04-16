@@ -4,6 +4,10 @@ a {
   color: #b54710;
 }
 
+a.mat-tab-link {
+  opacity: 1.0;
+}
+
 button[type="submit"] {
     white-space: normal;
     width: 100%;
@@ -86,6 +90,14 @@ hr {
 img {
   height: 100%;
   width: 100%;
+}
+
+li.pagination-next.disabled, li.pagination-next {
+  float: right;
+}
+
+li.pagination-previous.disabled, li.pagination-previous {
+  float: left;
 }
 
 masonry {
@@ -213,7 +225,9 @@ ul.ngx-pagination {
 
 .brick {
   width: 50%;
-  padding: 7px;
+  padding-right: 5%;
+  padding-left: 5%;
+  padding-bottom: 2%;
 }
 
 .centerText {
@@ -221,10 +235,10 @@ ul.ngx-pagination {
 }
 
 .comment-card {
-  margin-top: 1%;
-  margin-bottom: 1%;
-  margin-right: 1%;
-  margin-left: 1%;
+  margin-top: 5%;
+  margin-bottom: 5%;
+  margin-right: 5%;
+  margin-left: 5%;
 }
 
 .commentEditing {
@@ -232,7 +246,12 @@ ul.ngx-pagination {
 }
 
 .content {
-  border: 2px solid #ed763e;
+  margin-top: 5%;
+  margin-bottom: 5%;
+  margin-right: 5%;
+  margin-left: 5%;
+  word-wrap: break-word;
+  border: 2px solid #263238;
 }
 
 .deleteButtons {
@@ -249,7 +268,7 @@ ul.ngx-pagination {
   margin-left: 5%;
   word-wrap: break-word;
   background-color: #ed763e;
-  border: 2px solid #4f5b62;
+  border: 2px solid #ed763e;
 }
 
 .example-card.mat-card {
@@ -336,10 +355,6 @@ ul.ngx-pagination {
   width: 20%;
 }
 
-a.mat-tab-link {
-  opacity: 1.0;
-}
-
 .mat-tab-links {
   text-align: center;
 }
@@ -367,15 +382,19 @@ a.mat-tab-link {
   color: white;
 }
 
+.notifContent {
+  text-align: center;
+}
+
 .notifCount {
-  float: left;
+  float: right;
 }
 
 .parentContainer {
   display: flex;
 }
 
-.parentContainer1.mat-card {
+.parentContainer1.mat-card, md-card.parentContainer1.mat-card {
   padding: initial;
 }
 
@@ -400,8 +419,13 @@ a.mat-tab-link {
 }
 
 .refreshButton {
-  margin: 0 auto;
-  width: 100%;
+  text-align: center;
+  margin-top: 5%;
+  margin-bottom: 5%;
+  margin-right: 5%;
+  margin-left: 5%;
+  word-wrap: break-word;
+  border: 2px solid #263238;
 }
 
 .register-card {
@@ -512,33 +536,34 @@ a.mat-tab-link {
 
     button.extinguishButton.mat-raised-button.mat-warn {
       position: fixed;
-      top: 50px;
+      bottom: 80px;
       left: 0px;
       width: 50%;
-      z-index: 5;
-      border-radius: 0 !important;
-      background-color: #1289c1
+      z-index: 3;
+      background-color: #1289c1;
+      border-top-left-radius: 10px;
     }
 
     button.igniteButton.mat-raised-button.mat-primary {
       position: fixed;
       right: 0px;
-      top: 50px;
+      bottom: 80px;
       width: 50%;
-      z-index: 5;
-      border-radius: 0 !important;
+      z-index: 3;
+      border-top-right-radius: 10px;
     }
 
     button#commentButton.mat-button.mat-accent {
       position: fixed;
       right: -1px;
-      bottom: 44px;
-      z-index: 4;
-      width: 27%;
+      bottom: 45px;
+      z-index: 3;
+      width: 5%;
       height: 38px;
       background-color: #263238;
       color: white;
-      border-top-right-radius: 10px;
+      text-align: right;
+      border-radius: 0 !important;
     }
 
     button#editorButton.mat-button.mat-accent {
@@ -546,23 +571,23 @@ a.mat-tab-link {
       right: -1px;
       bottom: 80px;
       z-index: 3;
-      width: 26%;
+      width: 5%;
       height: 38px;
       background-color: #263238;
       color: white;
-      border-top-right-radius: 10px;
+      text-align: right;
+      border-radius: 0 !important;
     }
 
     .commentBox {
       position: fixed;
       left: 0px;
-      bottom: 45px;
       z-index: 5;
       border: 6px solid #263238;
-      width: 75%;
+      width: 85%;
       height: 40px;
       overflow-y: scroll;
-      border-top-left-radius: 10px;
+      border-radius: 0 !important;
       resize: none;
     }
 
@@ -616,34 +641,35 @@ a.mat-tab-link {
 
     button.extinguishButton.mat-raised-button.mat-warn {
       position: fixed;
-      top: 94px;
+      bottom: 56px;
       left: 0px;
       width: 50%;
-      z-index: 5;
-      border-radius: 0 !important;
+      z-index: 3;
+      border-top-left-radius: 10px;
       background-color: #1289c1
     }
 
     button.igniteButton.mat-raised-button.mat-primary {
       position: fixed;
       right: 0px;
-      top: 94px;
+      bottom: 56px;
       width: 50%;
-      z-index: 5;
-      border-radius: 0 !important;
+      z-index: 3;
+      border-top-right-radius: 10px;
     }
 
     button#commentButton.mat-button.mat-accent {
       position: fixed;
       right: -1px;
-      bottom: -1px;
+      bottom: 17px;
       z-index: 3;
-      width: 16%;
-      height: 57px;
+      width: 5%;
+      height: 56px;
       padding-top: 10px;
       background-color: #263238;
       color: white;
-      border-top-right-radius: 10px;
+      text-align: right;
+      border-radius: 0 !important;
     }
 
     button#editorButton.mat-button.mat-accent {
@@ -651,11 +677,12 @@ a.mat-tab-link {
       right: -1px;
       bottom: 3px;
       z-index: 4;
-      width: 16%;
-      height: 41px;
+      width: 5%;
+      height: 30px;
       background-color: #263238;
       color: white;
-      border-top-right-radius: 10px;
+      text-align: right;
+      border-radius: 0 !important;
     }
 
     .commentBox {
@@ -664,10 +691,10 @@ a.mat-tab-link {
       bottom: 0px;
       z-index: 5;
       border: 6px solid #263238;
-      width: 85%;
+      width: 93%;
       height: 56px;
       overflow-y: scroll;
-      border-top-left-radius: 10px;
+      border-radius: 0 !important;
       resize: none;
     }
 

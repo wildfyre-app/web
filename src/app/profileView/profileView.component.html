@@ -1,20 +1,17 @@
-<md-card class="example-card">
-  <button id="topNavBack" md-button (click)="back()"><i class="material-icons">arrow_back</i></button>
-    <md-card class="content">
-    <div class="alert alert-danger" *ngIf="author?.banned">
-      You are currently banned
+<button id="topNavBack" md-button (click)="back()"><i class="material-icons">arrow_back</i></button>
+  <md-card class="example-card">
+  <div class="alert alert-danger" *ngIf="author?.banned">
+    You are currently banned
+  </div>
+  <a [href]="author?.avatar"><img class="pfp" *ngIf="author?.avatar" [src]="author?.avatar" alt="Avatar of {{author?.name}}"/></a>
+  <a href="/assets/logo.png"><img class="pfp" *ngIf="!author?.avatar" src="/assets/logo.png" alt="Avatar of {{author?.name}}"/></a>
+  <div class="parentContainer">
+    <div class="user">
+      <font id="name" size="5">{{author?.name}}</font><br>
     </div>
-    <a [href]="author?.avatar"><img class="pfp" *ngIf="author?.avatar" [src]="author?.avatar" alt="Avatar of {{author?.name}}"/></a>
-    <a href="/assets/logo.png"><img class="pfp" *ngIf="!author?.avatar" src="/assets/logo.png" alt="Avatar of {{author?.name}}"/></a>
-    <div class="parentContainer">
-      <div class="user">
-        <font id="name" size="5">{{author?.name}}</font><br>
-      </div>
-    </div>
-  </md-card>
-  <br>
-  <md-card>
-    <span id="bio" [innerHTML]="author?.bio | marked"></span>
-  </md-card>
-  <div id="userID">ID: {{author?.user}}</div>
+  </div>
 </md-card>
+<md-card class="content">
+  <span id="bio" [innerHTML]="author?.bio | marked"></span>
+</md-card>
+<div id="userID">ID: {{author?.user}}</div>

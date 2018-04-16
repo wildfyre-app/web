@@ -1,65 +1,63 @@
-<md-card class="example-card">
-  <!-- Removed as of D114
-  <md-input-container>
-    <input mdInput placeholder="Search Posts" type="text" name="search" (input)="searchInput()" [(ngModel)]="model.postText" #postText="ngModel" autocomplete="off" />
-  </md-input-container>
-  -->
-  <md-spinner *ngIf="loading"></md-spinner>
-  <button id="topNavBack" md-button (click)="back()"><i class="material-icons">arrow_back</i></button>
+<!-- Removed as of D114
+<md-input-container>
+  <input mdInput placeholder="Search Posts" type="text" name="search" (input)="searchInput()" [(ngModel)]="model.postText" #postText="ngModel" autocomplete="off" />
+</md-input-container>
+-->
+<br><br>
+<md-spinner *ngIf="loading"></md-spinner>
+<button id="topNavBack" md-button (click)="back()"><i class="material-icons">arrow_back</i></button>
 
-  <masonry *ngIf="currentArea">
-    <masonry-brick class="brick" *ngFor="let post of backupPosts[currentArea] | paginate: { id: 'server', itemsPerPage: limit, currentPage: index, totalItems: totalCount }; let i = index">
-      <md-card class="userPostsGrid" (click)="goto(currentArea, post.id)">
-        <font size="0.1">
-          <ng-container *ngIf="!post.anonym"><i class="material-icons">visibility_on</i></ng-container>
-          <ng-container *ngIf="post.anonym"><i class="material-icons">visibility_off</i></ng-container>
-          <ng-container *ngIf="imageArray[currentArea][i]"><i class="material-icons">image</i></ng-container>
-          <span class="mainText" [innerHTML]="post.text | slice:0:200 | marked"></span><ng-container *ngIf="post.text.length > 200">...</ng-container>
-          <hr>
-          {{post.created}}
-      </font>
-      </md-card>
-    </masonry-brick>
-  </masonry>
-
-  <!-- Removed as of D114
-  <masonry *ngIf="!checked && searching">
-    <md-card class="userPostsGrid" style="margin: 0 auto; text-align: center;" *ngIf="searchArray.length === 0">
-      No posts match this search
+<masonry *ngIf="currentArea">
+  <masonry-brick class="brick" *ngFor="let post of backupPosts[currentArea] | paginate: { id: 'server', itemsPerPage: limit, currentPage: index, totalItems: totalCount }; let i = index">
+    <md-card class="userPostsGrid" (click)="goto(currentArea, post.id)">
+      <font size="0.1">
+        <ng-container *ngIf="!post.anonym"><i class="material-icons">visibility_on</i></ng-container>
+        <ng-container *ngIf="post.anonym"><i class="material-icons">visibility_off</i></ng-container>
+        <ng-container *ngIf="imageArray[currentArea][i]"><i class="material-icons">image</i></ng-container>
+        <span class="mainText" [innerHTML]="post.text | slice:0:200 | marked"></span><ng-container *ngIf="post.text.length > 200">...</ng-container>
+        <hr>
+        {{post.created}}
+    </font>
     </md-card>
-    <masonry-brick class="brick" *ngFor="let post of searchArray; let i = index">
-        <md-card class="userPostsGrid" (click)="goto('fun', post.id)">
-            <font size="0.1">
-              <ng-container *ngIf="funImageArray[i]">
-                <h1><i class="material-icons">image</i></h1>
-              </ng-container>
-              <span class="mainText" [innerHTML]="post.text | slice:0:200 | marked"></span><ng-container *ngIf="post.text.length > 200">...</ng-container>
-              <hr>
-              {{post.created}}
-          </font>
-        </md-card>
-    </masonry-brick>
-  </masonry>
+  </masonry-brick>
+</masonry>
 
-  <masonry *ngIf="checked && searching">
-    <md-card class="userPostsGrid" style="margin: 0 auto; text-align: center;" *ngIf="searchArray.length === 0">
-      No posts match this search
-    </md-card>
-    <masonry-brick class="brick" *ngFor="let post of searchArray; let i = index">
-      <md-card class="userPostsGrid" (click)="goto('information', post.id)">
-        <font size="0.1">
-          <ng-container *ngIf="infoImageArray[i]">
-            <h1><i class="material-icons">image</i></h1>
-          </ng-container>
-          <span class="mainText" [innerHTML]="post.text | slice:0:200 | marked"></span><ng-container *ngIf="post.text.length > 200">...</ng-container>
-          <hr>
-          {{post.created}}
-      </font>
+<!-- Removed as of D114
+<masonry *ngIf="!checked && searching">
+  <md-card class="userPostsGrid" style="margin: 0 auto; text-align: center;" *ngIf="searchArray.length === 0">
+    No posts match this search
+  </md-card>
+  <masonry-brick class="brick" *ngFor="let post of searchArray; let i = index">
+      <md-card class="userPostsGrid" (click)="goto('fun', post.id)">
+          <font size="0.1">
+            <ng-container *ngIf="funImageArray[i]">
+              <h1><i class="material-icons">image</i></h1>
+            </ng-container>
+            <span class="mainText" [innerHTML]="post.text | slice:0:200 | marked"></span><ng-container *ngIf="post.text.length > 200">...</ng-container>
+            <hr>
+            {{post.created}}
+        </font>
       </md-card>
-    </masonry-brick>
-  </masonry>
-  -->
+  </masonry-brick>
+</masonry>
 
-  <pagination-controls (pageChange)="getPosts($event)" id="server"></pagination-controls>
-  <br><br><br>
-</md-card>
+<masonry *ngIf="checked && searching">
+  <md-card class="userPostsGrid" style="margin: 0 auto; text-align: center;" *ngIf="searchArray.length === 0">
+    No posts match this search
+  </md-card>
+  <masonry-brick class="brick" *ngFor="let post of searchArray; let i = index">
+    <md-card class="userPostsGrid" (click)="goto('information', post.id)">
+      <font size="0.1">
+        <ng-container *ngIf="infoImageArray[i]">
+          <h1><i class="material-icons">image</i></h1>
+        </ng-container>
+        <span class="mainText" [innerHTML]="post.text | slice:0:200 | marked"></span><ng-container *ngIf="post.text.length > 200">...</ng-container>
+        <hr>
+        {{post.created}}
+    </font>
+    </md-card>
+  </masonry-brick>
+</masonry>
+-->
+
+<pagination-controls (pageChange)="getPosts($event)" id="server"></pagination-controls>

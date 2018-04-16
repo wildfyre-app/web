@@ -1,88 +1,85 @@
-<button *ngIf="(post.id !== 0) && !loading" class="extinguishButton" (click)="spread(false)" md-raised-button color="warn"><b>Extinguish</b></button>
-<button *ngIf="(post.id !== 0) && !loading" class="igniteButton" (click)="spread(true)" md-raised-button color="primary"><font color="#000000"><b>Ignite</b></font></button>
-<br><br>
-<md-card class="example-card">
-  <md-spinner *ngIf="loading"></md-spinner>
-  <div *ngIf="(post.id === 0) && !loading">
-    <button class="refreshButton" md-button (click)="ngOnInit()">Refresh <i class="material-icons">refresh</i></button>
+<button *ngIf="!expanded && ((post.id !== 0) && !loading)" class="extinguishButton" (click)="spread(false)" md-raised-button color="warn"><b>Extinguish</b></button>
+<button *ngIf="!expanded && ((post.id !== 0) && !loading)" class="igniteButton" (click)="spread(true)" md-raised-button color="primary"><font color="#000000"><b>Ignite</b></font></button>
+<md-spinner *ngIf="loading"></md-spinner>
+<div *ngIf="(post.id === 0) && !loading">
+  <br><br>
+  <button class="wideButtons" md-button (click)="ngOnInit()">Refresh <i class="material-icons">refresh</i></button>
+</div>
+  <md-card class="example-card" *ngIf="post && !loading">
+    <span class="mainText" [innerHTML]="post.text | marked"></span>
+    <md-card (click)="gotoUser(post.author.user)" class="parentContainer1">
+    <div class="parentContainer">
+      <img class="pfp2" (click)="gotoUser(post.author.user)" *ngIf="post.author.avatar" [src]="post.author.avatar" alt="Avatar of {{post.author.name}}"/>
+      <img class="pfp2" (click)="gotoUser(post.author.user)" *ngIf="!post.author.avatar" src="/assets/logo.png" alt="Avatar of {{post.author.name}}"/>
+      <ng-container class="user">
+        <br>
+      <i><small><a routerLink="/user/{{post.author.user}}" class="dateText" (click)="gotoUser(post.author.user)" routerLinkActive="active">{{post.author.name}}</a><br> {{post.created}}</small></i>
+    </ng-container>
+    </div>
+  </md-card>
+
+  <div class="postEditing">
+    <ng-container *ngIf="post.id !== 0">
+      <div *ngIf="!post?.subscribed">
+        <button md-button (click)="subscribe(true)"><i class="material-icons">turned_in_not</i></button>
+      </div>
+      <div *ngIf="post?.subscribed">
+        <button md-button (click)="subscribe(false)"><i class="material-icons">turned_in</i></button>
+      </div>
+    </ng-container>
+
+    <button *ngIf="post.id !== 0" md-icon-button [mdMenuTriggerFor]="appMenu"><i class="material-icons">more_vert</i></button>
+    <md-menu #appMenu="mdMenu">
+      <button md-menu-item type="button" (click)="refresh()"><md-icon>refresh</md-icon>Refresh Post</button>
+      <button md-menu-item type="button" ngxClipboard [cbContent]="getPostLink(post?.id)" (cbOnSuccess)="isCopied = true"><md-icon>link</md-icon>Copy Link to Post</button>
+      <button md-menu-item (click)="openFlagDialog(post, null, typeOfReport.Post)"><md-icon>flag</md-icon>Flag Post</button>
+    </md-menu>
   </div>
-  <div *ngIf="post && !loading">
+  <br>
+</md-card>
+<div *ngIf="expanded" id="focusTouchZone" (click)="contractBox()"></div>
+<textarea [style.bottom]="styleTextBottom" [style.height]="heightText" *ngIf="post.id !== 0" class="commentBox" (click)="expandBox()" name="comment" rows="{{rowsExapanded}}" cols="40" type="text" name="comment" [(ngModel)]="model.comment" #comment="ngModel" placeholder="Post a Comment"></textarea>
+<button [style.bottom]="styleEditorBottom" *ngIf="(post.id !== 0) && expanded" id="editorButton" (click)="$event.stopPropagation();" md-button color="accent" [disabled]="loading" [mdMenuTriggerFor]="commentMenu"><i class="material-icons">text_format</i></button>
+<button [style.bottom]="styleCommentBottom" *ngIf="post.id !== 0" id="commentButton" md-button color="accent" [disabled]="loading" (click)="postComment()"><i class="material-icons">send</i></button>
+
+<md-menu #commentMenu="mdMenu">
+  <button md-menu-item (click)="addBold()"><i class="material-icons">format_bold</i> Bold</button>
+  <button md-menu-item (click)="addItalics()"><i class="material-icons">format_italic</i> Italic</button>
+  <button md-menu-item (click)="addStrikethrough()"><i class="material-icons">strikethrough_s</i> Strikethrough</button>
+  <button md-menu-item (click)="addBlockQoutes()"><i class="material-icons">format_quote</i> Quote</button>
+</md-menu>
+
+<md-list>
+  <div *ngFor="let comment of post?.comments">
     <md-card class="content">
-      <span class="mainText" [innerHTML]="post.text | marked"></span>
-      <md-card (click)="gotoUser(post.author.user)" class="parentContainer1">
+      <div class="commentEditing">
+        <button md-icon-button [mdMenuTriggerFor]="appMenu"><i class="material-icons">more_vert</i></button>
+        <md-menu #appMenu="mdMenu">
+          <button md-menu-item type="button" ngxClipboard [cbContent]="getCommentLink(comment.id)" (cbOnSuccess)="isCopied = true"><md-icon>link</md-icon>Copy Link to Comment</button>
+          <button *ngIf="comment.author?.user == userID" md-menu-item color="warn" (click)="openCommentDeleteDialog(comment)"><md-icon>delete</md-icon>Delete Comment</button>
+          <button *ngIf="!(comment.author?.user == userID)" md-menu-item (click)="openFlagDialog(post, comment, typeOfReport.Comment)"><md-icon>flag</md-icon>Flag Comment</button>
+        </md-menu>
+      </div>
+      <div class="commentText" [innerHTML]="comment.text | marked"></div>
+
+      <md-card (click)="gotoUser(comment.author?.user)" class="parentContainer1">
       <div class="parentContainer">
-        <img class="pfp2" (click)="gotoUser(post.author.user)" *ngIf="post.author.avatar" [src]="post.author.avatar" alt="Avatar of {{post.author.name}}"/>
-        <img class="pfp2" (click)="gotoUser(post.author.user)" *ngIf="!post.author.avatar" src="/assets/logo.png" alt="Avatar of {{post.author.name}}"/>
+        <img class="pfp2" (click)="gotoUser(comment.author?.user)" *ngIf="comment.author?.avatar" [src]="comment.author?.avatar" alt="Avatar of {{comment.author?.name}}"/>
+        <img class="pfp2" (click)="gotoUser(comment.author?.user)" *ngIf="!comment.author?.avatar" src="/assets/logo.png" alt="Avatar of {{comment.author?.name}}"/>
         <ng-container class="user">
           <br>
-        <i><small><a routerLink="/user/{{post.author.user}}" class="dateText" (click)="gotoUser(post.author.user)" routerLinkActive="active">{{post.author.name}}</a><br> {{post.created}}</small></i>
+        <i><small><a class="dateText" routerLink="/user/{{comment.author?.user}}" (click)="gotoUser(comment.author?.user)" routerLinkActive="active">{{comment.author?.name}}</a><br> {{comment.created}}</small></i>
       </ng-container>
       </div>
     </md-card>
 
-      <div class="postEditing">
-        <ng-container *ngIf="post.id !== 0">
-          <div *ngIf="!post?.subscribed">
-            <button md-button (click)="subscribe(true)"><i class="material-icons">turned_in_not</i></button>
-          </div>
-          <div *ngIf="post?.subscribed">
-            <button md-button (click)="subscribe(false)"><i class="material-icons">turned_in</i></button>
-          </div>
-        </ng-container>
-
-        <button *ngIf="post.id !== 0" md-icon-button [mdMenuTriggerFor]="appMenu"><i class="material-icons">more_vert</i></button>
-        <md-menu #appMenu="mdMenu">
-          <button md-menu-item type="button" (click)="refresh()"><md-icon>refresh</md-icon>Refresh Post</button>
-          <button md-menu-item type="button" ngxClipboard [cbContent]="getPostLink(post?.id)" (cbOnSuccess)="isCopied = true"><md-icon>link</md-icon>Copy Link to Post</button>
-          <button md-menu-item (click)="openFlagDialog(post, null, typeOfReport.Post)"><md-icon>flag</md-icon>Flag Post</button>
-        </md-menu>
-      </div>
-      <br>
     </md-card>
-    <hr *ngIf="!loading">
-    <div *ngIf="expanded" id="focusTouchZone" (click)="contractBox()"></div>
-    <textarea [style.bottom]="styleTextBottom" [style.height]="heightText" *ngIf="post.id !== 0" class="commentBox" (click)="expandBox()" name="comment" rows="{{rowsExapanded}}" cols="40" type="text" name="comment" [(ngModel)]="model.comment" #comment="ngModel" placeholder="Post a Comment"></textarea>
-    <button [style.bottom]="styleEditorBottom" *ngIf="(post.id !== 0) && expanded" id="editorButton" (click)="$event.stopPropagation();" md-button color="accent" [disabled]="loading" [mdMenuTriggerFor]="commentMenu"><i class="material-icons">text_format</i></button>
-    <button [style.bottom]="styleCommentBottom" *ngIf="post.id !== 0" id="commentButton" md-button color="accent" [disabled]="loading" (click)="postComment()"><b>Comment</b></button>
-
-    <md-menu #commentMenu="mdMenu">
-      <button md-menu-item (click)="addBold()"><i class="material-icons">format_bold</i> Bold</button>
-      <button md-menu-item (click)="addItalics()"><i class="material-icons">format_italic</i> Italic</button>
-      <button md-menu-item (click)="addStrikethrough()"><i class="material-icons">strikethrough_s</i> Strikethrough</button>
-      <button md-menu-item (click)="addBlockQoutes()"><i class="material-icons">format_quote</i> Quote</button>
-    </md-menu>
-    
-    <md-card class="centerText" (click)="refresh()" *ngIf="(commentCount === 0) && !loading && post.id !== 0">
-        No comments, try commenting?
-        <button class="refreshButton" *ngIf="!loading" md-button>Refresh <i class="material-icons">refresh</i></button>
-    </md-card>
-
-    <md-list>
-      <div *ngFor="let comment of post?.comments">
-        <md-card class="comment-card">
-          <div class="commentEditing">
-            <button md-icon-button [mdMenuTriggerFor]="appMenu"><i class="material-icons">more_vert</i></button>
-            <md-menu #appMenu="mdMenu">
-              <button md-menu-item type="button" ngxClipboard [cbContent]="getCommentLink(comment.id)" (cbOnSuccess)="isCopied = true"><md-icon>link</md-icon>Copy Link to Comment</button>
-              <button *ngIf="comment.author?.user == userID" md-menu-item color="warn" (click)="openCommentDeleteDialog(comment)"><md-icon>delete</md-icon>Delete Comment</button>
-              <button *ngIf="!(comment.author?.user == userID)" md-menu-item (click)="openFlagDialog(post, comment, typeOfReport.Comment)"><md-icon>flag</md-icon>Flag Comment</button>
-            </md-menu>
-          </div>
-          <div class="commentText" [innerHTML]="comment.text | marked"></div>
-
-          <md-card (click)="gotoUser(comment.author?.user)" class="parentContainer1">
-          <div class="parentContainer">
-            <img class="pfp2" (click)="gotoUser(comment.author?.user)" *ngIf="comment.author?.avatar" [src]="comment.author?.avatar" alt="Avatar of {{comment.author?.name}}"/>
-            <img class="pfp2" (click)="gotoUser(comment.author?.user)" *ngIf="!comment.author?.avatar" src="/assets/logo.png" alt="Avatar of {{comment.author?.name}}"/>
-            <ng-container class="user">
-              <br>
-            <i><small><a class="dateText" routerLink="/user/{{comment.author?.user}}" (click)="gotoUser(comment.author?.user)" routerLinkActive="active">{{comment.author?.name}}</a><br> {{comment.created}}</small></i>
-          </ng-container>
-          </div>
-        </md-card>
-
-        </md-card>
-      </div>
-    </md-list>
   </div>
+</md-list>
+
+<md-card class="refreshButton" (click)="refresh(false)" *ngIf="(commentCount === 0) && !loading && post.id !== 0">
+    No comments, try commenting?
+    <button class="wideButtons" *ngIf="!loading" md-button>Refresh <i class="material-icons">refresh</i></button>
 </md-card>
+<br *ngIf="(post.id !== 0) && !loading">
+<br *ngIf="(post.id !== 0) && !loading">

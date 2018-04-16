@@ -82,8 +82,7 @@ export class PostViewComponent implements OnInit, OnDestroy {
               .takeUntil(this.componentDestroyed)
               .subscribe(post => {
                 this.post =  post;
-                this.commentCount = post.comments.length;
-                this.post.subscribed = post.subscribed;
+                this.commentCount = this.post.comments.length;
                 this.loading = false;
                 this.cdRef.detectChanges();
             });

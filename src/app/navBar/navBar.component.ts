@@ -28,6 +28,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
   areaVisible = true;
   componentDestroyed: Subject<boolean> = new Subject();
   currentArea = this.areas[0].name;
+  loggedIn = false;
   mobileRouteLinks: any[];
   notificationLength = 0;
   routeLinks: any[];
@@ -84,6 +85,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
 
     if (this.authenticationService.token) {
       this.login();
+      this.loggedIn = true;
     } else {
       this.styleMobile = 'none';
       this.styleDesktop = 'none';
@@ -178,6 +180,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
         this.currentArea = areas[0].name;
         this.cdRef.detectChanges();
       });
+      this.loggedIn = true;
   }
 
   onChange(area: string) {
@@ -194,6 +197,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
       .takeUntil(this.componentDestroyed)
       .subscribe(result => {
         if (result.bool) {
+          this.loggedIn = false;
           this.authenticationService.logout();
           // Triggers the reboot in main.ts
           this.ngZone.runOutsideAngular(() => BootController.getbootControl().restart());

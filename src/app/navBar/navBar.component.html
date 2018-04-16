@@ -13,7 +13,7 @@
         <a md-list-item href="https://wildfyre.net/index.php/privacy-policy/">
           Privacy Policy
         </a>
-        <a md-list-item (click)="openLogoutDialog()">
+        <a md-list-item *ngIf="loggedIn" (click)="openLogoutDialog()">
           Logout
         </a>
         <hr>

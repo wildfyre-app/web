@@ -1,20 +1,25 @@
-<md-card class="example-card">
-  <button class="wideButtons" md-button (click)="loadArchive()"><i class="material-icons">folder</i> Archive</button>
-  <md-spinner *ngIf="loading"></md-spinner>
-  <button class="refreshButton" (click)="deleteNotifications()" *ngIf="(notifications.length !== 0) && !loading" md-raised-button>Delete all Notifications <i class="material-icons">delete</i></button>
-  <md-card class="centerText" (click)="ngOnInit()" *ngIf="(notifications.length === 0) && !loading">
+<md-card class="example-card" (click)="loadArchive()">
+  <button class="wideButtons" md-button ><i class="material-icons">folder</i> Archive</button>
+  <hr *ngIf="(notifications.length !== 0) && !loading">
+  <button class="wideButtons" (click)="deleteNotifications()" *ngIf="(notifications.length !== 0) && !loading" md-button><i class="material-icons">delete</i>Delete all Notifications</button>
+</md-card>
+<md-card class="content" (click)="ngOnInit()" *ngIf="(notifications.length === 0) && !loading">
+    <div class="notifContent">
       No more notifications, try engaging more?
-      <button class="refreshButton" md-button>Refresh <i class="material-icons">refresh</i></button>
-  </md-card>
-  <div *ngFor="let notification of notifications | paginate: { id: 'server', itemsPerPage: limit, currentPage: index, totalItems: totalCount }">
-    <button type="submit" md-raised-button (click)="goto(notification.area, notification.post.id, notification.comments)">
-      <div class="notifCount">
-        <h2>{{notification.comments.length}}</h2>
-      </div>
+    </div>
+    <button class="wideButtons" md-button>Refresh <i class="material-icons">refresh</i></button>
+</md-card>
+<md-spinner *ngIf="loading"></md-spinner>
+<div *ngFor="let notification of notifications | paginate: { id: 'server', itemsPerPage: limit, currentPage: index, totalItems: totalCount }">
+  <md-card class="content" (click)="goto(notification.area, notification.post.id, notification.comments)">
+    <div class="notifCount">
+      <h2>{{notification.comments.length}}</h2>
+    </div>
+    <div class="notifContent">
       <ng-container class="notifications">{{notification.post.text | slice:0:31}}</ng-container><ng-container *ngIf="notification.post.text.length > 32">…</ng-container>
       <br>
       –{{notification.post.author.name}}
-    </button>
-  </div>
-    <pagination-controls *ngIf="(notifications.length !== 0)" (pageChange)="getNotifications($event)" id="server"></pagination-controls>
-</md-card>
+    </div>
+  </md-card>
+</div>
+  <pagination-controls *ngIf="(notifications.length !== 0)" (pageChange)="getNotifications($event)" id="server"></pagination-controls>

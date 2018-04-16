@@ -1,54 +1,53 @@
 <md-card class="example-card">
-  <md-card>
-    <div *ngIf="errors && errors.non_field_errors" class="alert alert-danger">
-      <ul *ngFor="let err of errors.non_field_errors">
+  <div *ngIf="errors && errors.non_field_errors" class="alert alert-danger">
+    <ul *ngFor="let err of errors.non_field_errors">
+      <li>{{err}}</li>
+    </ul>
+  </div>
+  Preview: <br><br>
+  <span class="mainText" [innerHTML]="model.card | marked"></span>
+</md-card>
+<md-card class="content">
+  <div class="creationEditor">
+    <button md-button [mdMenuTriggerFor]="appMenu"><i class="material-icons">text_fields</i></button>
+    <md-menu #appMenu="mdMenu">
+      <button md-menu-item (click)="addHeader(1)"><span class="mainText" [innerHTML]="'# h1' | marked"></span></button>
+      <button md-menu-item (click)="addHeader(2)"><span class="mainText" [innerHTML]="'## h2' | marked"></span></button>
+      <button md-menu-item (click)="addHeader(3)"><span class="mainText" [innerHTML]="'### h3' | marked"></span></button>
+      <button md-menu-item (click)="addHeader(4)"><span class="mainText" [innerHTML]="'#### h4' | marked"></span></button>
+      <button md-menu-item (click)="addHeader(5)"><span class="mainText" [innerHTML]="'##### h5' | marked"></span></button>
+      <button md-menu-item (click)="addHeader(6)"><span class="mainText" [innerHTML]="'###### h6' | marked"></span></button>
+    </md-menu>
+    <button md-button (click)="addBold()"><i class="material-icons">format_bold</i></button>
+    <button md-button (click)="addItalics()"><i class="material-icons">format_italic</i></button>
+    <button md-button (click)="addStrikethrough()"><i class="material-icons">strikethrough_s</i></button>
+    <button md-button (click)="addUnorderedList()"><i class="material-icons">format_list_bulleted</i></button>
+    <button md-button (click)="addOrderedList()"><i class="material-icons">format_list_numbered</i></button>
+    <button md-button (click)="addBlockQoutes()"><i class="material-icons">format_quote</i></button>
+    <button md-button (click)="addCode()"><i class="material-icons">code</i></button>
+    <button md-button (click)="addTable()"><i class="material-icons">border_all</i></button>
+    <button md-button (click)="addHorizontalRule()"><i class="material-icons">remove</i></button>
+    <button md-button (click)="openPictureDialog()"><i class="material-icons">insert_photo</i></button>
+    <button md-button (click)="openYoutubeDialog()"><i class="material-icons">slideshow</i></button>
+  </div>
+  <div class="toggle">
+    Post Anonymously<md-slide-toggle
+    class="example-margin"
+    color="#263238"
+    [checked]="anonymous"
+    (change)="makeAnonymous($event)"></md-slide-toggle>
+  </div>
+  <hr>
+  <div class="form-group">
+    <md-input-container>
+      <textarea id="createPostInput" mdInput rows="7" cols="80" type="text" name="post" [(ngModel)]="model.card" #comment="ngModel" ></textarea>
+    </md-input-container>
+    <div *ngIf="errors && errors._text" class="help-block">
+      <ul *ngFor="let err of errors._text">
         <li>{{err}}</li>
       </ul>
     </div>
-    Preview: <br>
-    <span class="mainText" [innerHTML]="model.card | marked"></span>
-    <hr>
-    <div class="creationEditor">
-      <button md-button [mdMenuTriggerFor]="appMenu"><i class="material-icons">text_fields</i></button>
-      <md-menu #appMenu="mdMenu">
-        <button md-menu-item (click)="addHeader(1)"><span class="mainText" [innerHTML]="'# h1' | marked"></span></button>
-        <button md-menu-item (click)="addHeader(2)"><span class="mainText" [innerHTML]="'## h2' | marked"></span></button>
-        <button md-menu-item (click)="addHeader(3)"><span class="mainText" [innerHTML]="'### h3' | marked"></span></button>
-        <button md-menu-item (click)="addHeader(4)"><span class="mainText" [innerHTML]="'#### h4' | marked"></span></button>
-        <button md-menu-item (click)="addHeader(5)"><span class="mainText" [innerHTML]="'##### h5' | marked"></span></button>
-        <button md-menu-item (click)="addHeader(6)"><span class="mainText" [innerHTML]="'###### h6' | marked"></span></button>
-      </md-menu>
-      <button md-button (click)="addBold()"><i class="material-icons">format_bold</i></button>
-      <button md-button (click)="addItalics()"><i class="material-icons">format_italic</i></button>
-      <button md-button (click)="addStrikethrough()"><i class="material-icons">strikethrough_s</i></button>
-      <button md-button (click)="addUnorderedList()"><i class="material-icons">format_list_bulleted</i></button>
-      <button md-button (click)="addOrderedList()"><i class="material-icons">format_list_numbered</i></button>
-      <button md-button (click)="addBlockQoutes()"><i class="material-icons">format_quote</i></button>
-      <button md-button (click)="addCode()"><i class="material-icons">code</i></button>
-      <button md-button (click)="addTable()"><i class="material-icons">border_all</i></button>
-      <button md-button (click)="addHorizontalRule()"><i class="material-icons">remove</i></button>
-      <button md-button (click)="openPictureDialog()"><i class="material-icons">insert_photo</i></button>
-      <button md-button (click)="openYoutubeDialog()"><i class="material-icons">slideshow</i></button>
-    </div>
-    <div class="toggle">
-      Post Anonymously<md-slide-toggle
-      class="example-margin"
-      color="#263238"
-      [checked]="anonymous"
-      (change)="makeAnonymous($event)"></md-slide-toggle>
-    </div>
-    <hr>
-    <div class="form-group">
-      <md-input-container>
-        <textarea id="createPostInput" mdInput rows="7" cols="80" type="text" name="post" [(ngModel)]="model.card" #comment="ngModel" ></textarea>
-      </md-input-container>
-      <div *ngIf="errors && errors._text" class="help-block">
-        <ul *ngFor="let err of errors._text">
-          <li>{{err}}</li>
-        </ul>
-      </div>
-      <button class="wideButtons" md-raised-button (click)="createPost()" color="accent" [disabled]="loading"><b>Create</b></button>
-      <md-spinner *ngIf="loading"></md-spinner>
-    </div>
-  </md-card>
+    <button class="wideButtons" md-raised-button (click)="createPost()" color="accent" [disabled]="loading"><b>Create</b></button>
+    <md-spinner *ngIf="loading"></md-spinner>
+  </div>
 </md-card>

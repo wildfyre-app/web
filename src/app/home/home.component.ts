@@ -21,6 +21,7 @@ import { RouteService } from '../_services/route.service';
 export class HomeComponent implements OnInit, OnDestroy {
   private systemAuthor: Author = new Author(375, 'WildFyre', '', '', false);
   private typeOfReport = TypeOfReport;
+  areaCheck: string;
   commentCount = 0;
   componentDestroyed: Subject<boolean> = new Subject();
   currentArea: string;
@@ -64,7 +65,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       .subscribe( (author: Author) => {
         this.userID = author.user;
     });
-    this.refresh();
+    this.refresh(true);
     this.cdRef.detectChanges();
   }
 
@@ -104,7 +105,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     if (window.screen.width > 600) {
       this.styleTextBottom = '0px';
-      this.styleCommentBottom = '-1px';
+      this.styleCommentBottom = '0px';
       this.heightText = '56px';
     } else {
       this.styleTextBottom = '42px';
@@ -119,8 +120,8 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.navBarService.isVisibleSource.next('none');
     if (window.screen.width > 600) {
       this.styleTextBottom = '0px';
-      this.styleCommentBottom = '-5px';
-      this.styleEditorBottom = '30px';
+      this.styleCommentBottom = '0px';
+      this.styleEditorBottom = '41px';
       this.heightText = '71px';
     } else {
       this.styleTextBottom = '0px';
@@ -188,35 +189,49 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.model.comment = '';
   }
 
-  refresh() {
+  refresh(reload: boolean) {
     this.loading = true;
     this.navBarService.currentArea
       .takeUntil(this.componentDestroyed)
       .subscribe((currentArea: AreaList) => {
         this.currentArea = currentArea.name;
 
-        this.postService.getNextPost(currentArea.name)
-          .takeUntil(this.componentDestroyed)
-          .subscribe(nextPost => {
-            if (nextPost) {
-              this.post = nextPost;
+        if (reload === true || this.areaCheck !== currentArea.name) {
+          this.postService.getNextPost(currentArea.name)
+            .takeUntil(this.componentDestroyed)
+            .subscribe(nextPost => {
+              if (nextPost) {
+                this.post = nextPost;
+                this.commentCount = this.post.comments.length;
+                this.loading = false;
+                this.areaCheck = this.currentArea;
+                this.cdRef.detectChanges();
+              } else {
+                this.fakePost = new Post(0, this.systemAuthor, false, false,
+                  Date(), false, 'No more posts in this area, try creating one?', []);
+                this.post = this.fakePost;
+                this.commentCount = 0;
+                this.loading = false;
+                this.areaCheck = this.currentArea;
+                this.cdRef.detectChanges();
+              }
+          });
+        } else {
+          this.postService.getPost(this.currentArea, this.post.id.toString())
+            .takeUntil(this.componentDestroyed)
+            .subscribe(post => {
+              this.post =  post;
               this.commentCount = this.post.comments.length;
               this.loading = false;
+              this.areaCheck = this.currentArea;
               this.cdRef.detectChanges();
-            } else {
-              this.fakePost = new Post(0, this.systemAuthor, false, false,
-                Date(), false, 'No more posts in this area, try creating one?', []);
-              this.post = this.fakePost;
-              this.commentCount = 0;
-              this.loading = false;
-              this.cdRef.detectChanges();
-            }
-        });
+          });
+        }
     });
 
     if (window.screen.width > 600) {
       this.styleTextBottom = '0px';
-      this.styleCommentBottom = '-1px';
+      this.styleCommentBottom = '0px';
     } else {
       this.styleTextBottom = '42px';
       this.styleCommentBottom = '44px';
