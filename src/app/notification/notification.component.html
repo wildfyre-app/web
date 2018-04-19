@@ -1,5 +1,5 @@
-<md-card class="example-card" (click)="loadArchive()">
-  <button class="wideButtons" md-button ><i class="material-icons">folder</i> Archive</button>
+<md-card class="example-card">
+  <button class="wideButtons" md-button (click)="loadArchive()"><i class="material-icons">folder</i> Archive</button>
   <hr *ngIf="(notifications.length !== 0) && !loading">
   <button class="wideButtons" (click)="deleteNotifications()" *ngIf="(notifications.length !== 0) && !loading" md-button><i class="material-icons">delete</i>Delete all Notifications</button>
 </md-card>

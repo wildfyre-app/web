@@ -78,7 +78,7 @@ export class NotificationComponent implements OnInit, OnDestroy {
           this.notificationService.deleteNotifications();
           this.notifications = [];
           this.navBarService.notifications.next(0);
-          const snackBarRef = this.snackBar.open('Notifications deleted successfully', 'Close', {
+          const snackBarRef = this.snackBar.open('Notifications Deleted Successfully', 'Close', {
             duration: 3000
           });
         }
