@@ -392,6 +392,7 @@ ul.ngx-pagination {
 
 .parentContainer {
   display: flex;
+  height: 50px
 }
 
 .parentContainer1.mat-card, md-card.parentContainer1.mat-card {
@@ -404,9 +405,7 @@ ul.ngx-pagination {
 
 .pfp2 {
   text-align: left;
-  padding-right: 5px;
-  padding-left: 5px;
-  padding-top: 10px;
+  padding: 0px;
 }
 
 .postEditing {
@@ -620,7 +619,7 @@ ul.ngx-pagination {
     .pfp2 {
       width: 50px;
       height: 50px;
-      margin: 0 auto;
+      margin-right: 5px;
     }
 
     #navB {
@@ -761,7 +760,7 @@ ul.ngx-pagination {
     .pfp2 {
       width: 50px;
       height: 50px;
-      margin-bottom: 5px;
+      margin-right: 5px;
     }
 
     .register-card.mat-card {

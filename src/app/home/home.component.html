@@ -13,7 +13,7 @@
       <img class="pfp2" (click)="gotoUser(post.author.user)" *ngIf="!post.author.avatar" src="/assets/logo.png" alt="Avatar of {{post.author.name}}"/>
       <ng-container class="user">
         <br>
-      <i><small><a routerLink="/user/{{post.author.user}}" class="dateText" (click)="gotoUser(post.author.user)" routerLinkActive="active">{{post.author.name}}</a><br> {{post.created}}</small></i>
+      <i><small><a routerLink="/user/{{post.author.user}}" class="dateText" (click)="gotoUser(post.author.user)" routerLinkActive="active">{{post.author.name}}</a><br> <p>{{post.created}}</p></small></i>
     </ng-container>
     </div>
   </md-card>
@@ -68,7 +68,7 @@
         <img class="pfp2" (click)="gotoUser(comment.author?.user)" *ngIf="!comment.author?.avatar" src="/assets/logo.png" alt="Avatar of {{comment.author?.name}}"/>
         <ng-container class="user">
           <br>
-        <i><small><a class="dateText" routerLink="/user/{{comment.author?.user}}" (click)="gotoUser(comment.author?.user)" routerLinkActive="active">{{comment.author?.name}}</a><br> {{comment.created}}</small></i>
+        <i><small><a class="dateText" routerLink="/user/{{comment.author?.user}}" (click)="gotoUser(comment.author?.user)" routerLinkActive="active">{{comment.author?.name}}</a><br> <p>{{comment.created}}</p></small></i>
       </ng-container>
       </div>
     </md-card>
