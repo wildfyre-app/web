@@ -29,6 +29,7 @@ import { UserPostsComponent } from './userPosts/userPosts.component';
 
 // Core Dialogs
 import { ConfirmDeletionComponent } from './_dialogs/confirmDeletion.component';
+import { ShareDialogComponent } from './_dialogs/share.dialogComponent';
 
 // Core Pipes
 import { MarkedPipe } from './_pipes/marked.pipe';
@@ -57,6 +58,7 @@ import { ImageCropperModule } from 'ng2-img-cropper';
 import { MasonryModule } from 'angular2-masonry';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { ReCaptchaModule } from 'angular2-recaptcha';
+import { ShareModule } from 'ng2share/share.module';
 
 @NgModule({
   imports: [
@@ -66,11 +68,8 @@ import { ReCaptchaModule } from 'angular2-recaptcha';
     // Modules
     BrowserAnimationsModule,
     BrowserModule,
-    ClipboardModule,
     FormsModule,
     HttpModule,
-    ImageCropperModule,
-    MasonryModule,
     MaterialModule,
     MdButtonModule,
     MdCardModule,
@@ -82,9 +81,16 @@ import { ReCaptchaModule } from 'angular2-recaptcha';
     MdRadioModule,
     MdTabsModule,
     MdSlideToggleModule,
+    Routing,
+
+    // Third Party Modules
+    ClipboardModule,
+    ImageCropperModule,
+    MasonryModule,
     NgxPaginationModule,
     ReCaptchaModule,
-    Routing
+    ShareModule
+
   ],
   declarations: [
     // Components
@@ -115,6 +121,7 @@ import { ReCaptchaModule } from 'angular2-recaptcha';
     LogoutDialogComponent,
     PasswordDialogComponent,
     PictureDialogComponent,
+    ShareDialogComponent,
     YouTubeDialogComponent,
 
     // Pipes
@@ -144,6 +151,7 @@ import { ReCaptchaModule } from 'angular2-recaptcha';
     LogoutDialogComponent,
     PasswordDialogComponent,
     PictureDialogComponent,
+    ShareDialogComponent,
     YouTubeDialogComponent
   ],
   bootstrap: [AppComponent]

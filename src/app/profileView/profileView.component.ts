@@ -1,8 +1,12 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { MdDialog, MdDialogRef } from '@angular/material';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs/Subject';
+import { ShareDialogComponent } from '../_dialogs/share.dialogComponent';
 import { Author } from '../_models/author';
+import { Link } from '../_models/link';
 import { AuthenticationService } from '../_services/authentication.service';
+import { NavBarService } from '../_services/navBar.service';
 import { ProfileService } from '../_services/profile.service';
 import { RouteService } from '../_services/route.service';
 
@@ -14,9 +18,11 @@ export class ProfileViewComponent implements OnInit, OnDestroy {
   componentDestroyed: Subject<boolean> = new Subject();
 
   constructor(
+    private dialog: MdDialog,
     private route: ActivatedRoute,
     private router: Router,
     private authenticationService: AuthenticationService,
+    private navBarService: NavBarService,
     private profileService: ProfileService,
     private routeService: RouteService
   ) { }
@@ -47,5 +53,17 @@ export class ProfileViewComponent implements OnInit, OnDestroy {
     } else {
       this.router.navigateByUrl(this.routeService.getNextRoute());
     }
+  }
+
+  share(commentID: number) {
+    this.navBarService.link.next(
+      new Link('https://client.wildfyre.net/user/' + this.author.user,
+      this.author.bio.slice(0, 100),
+      this.author.name
+    ));
+    const dialogRef = this.dialog.open(ShareDialogComponent);
+    dialogRef.afterClosed()
+      .takeUntil(this.componentDestroyed)
+      .subscribe(result => { });
   }
 }

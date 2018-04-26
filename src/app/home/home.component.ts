@@ -3,9 +3,11 @@ import { MdDialog, MdDialogRef, MdSnackBar } from '@angular/material';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs/Subject';
 import { ConfirmDeletionComponent } from '../_dialogs/confirmDeletion.component';
+import { ShareDialogComponent } from '../_dialogs/share.dialogComponent';
 import { AreaList } from '../_models/areaList';
 import { Author } from '../_models/author';
 import { Comment } from '../_models/comment';
+import { Link } from '../_models/link';
 import { Post } from '../_models/post';
 import { Reputation } from '../_models/reputation';
 import { CommentService } from '../_services/comment.service';
@@ -131,14 +133,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
   }
 
-  getCommentLink(commentID: number) {
-    return 'https://client.wildfyre.net/areas/' + this.currentArea + '/' + this.post.id + '/' + commentID;
-  }
-
-  getPostLink(postID: number) {
-    return 'https://client.wildfyre.net/areas/' + this.currentArea + '/' + postID;
-  }
-
   gotoUser(user: string) {
     this.routeService.addNextRoute(this.router.url);
     this.router.navigateByUrl('/user/' + user);
@@ -238,6 +232,34 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
 
     this.cdRef.detectChanges();
+  }
+
+  share(commentID: number) {
+    let commentURL = '';
+    let authorName = this.post.author.name;
+    let description = this.post.text.slice(0, 100);
+
+    if (commentID !== undefined) {
+      commentURL = '/' + commentID.toString();
+
+      for (let i = 0; i < this.post.comments.length; i++) {
+        if (this.post.comments[i].id === commentID) {
+          authorName = this.post.comments[i].author.name;
+          description = this.post.comments[i].text.slice(0, 100);
+        }
+      }
+    }
+
+    this.navBarService.link.next(
+      new Link('https://client.wildfyre.net/areas/'
+        + this.currentArea + '/' + this.post.id + commentURL,
+        description,
+        authorName
+      ));
+    const dialogRef = this.dialog.open(ShareDialogComponent);
+    dialogRef.afterClosed()
+      .takeUntil(this.componentDestroyed)
+      .subscribe(result => { });
   }
 
   spread(spread: boolean) {

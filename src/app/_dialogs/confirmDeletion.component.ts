@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { MdDialog, MdDialogRef } from '@angular/material';
+
 @Component({
   template: `
   <h1 md-dialog-title>Are you sure you want to delete this?</h1>

@@ -1,5 +1,6 @@
 <button id="topNavBack" md-button (click)="back()"><i class="material-icons">arrow_back</i></button>
-  <md-card class="example-card">
+<md-card class="example-card">
+  <button md-button class="wideButtons" (click)="share()"><md-icon>share</md-icon>Share Profile</button>
   <div class="alert alert-danger" *ngIf="author?.banned">
     You are currently banned
   </div>

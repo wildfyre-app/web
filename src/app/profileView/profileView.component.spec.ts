@@ -7,15 +7,16 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { AuthenticationService } from '../_services/authentication.service';
 import { ProfileService } from '../_services/profile.service';
 import { RouteService } from '../_services/route.service';
-import { MdCardModule } from '@angular/material';
+import { MdCardModule, MdDialogModule } from '@angular/material';
 import { MarkedPipe } from '../_pipes/marked.pipe';
 import { Author } from '../_models/author';
+import { NavBarService } from '../_services/navBar.service';
 
 describe('ProfileViewComponent', () => {
   let comp: ProfileViewComponent;
   let fixture: ComponentFixture<ProfileViewComponent>;
   let de: DebugElement;
-  let el: HTMLElement;
+  let el: HTMLElement; 
 
   beforeEach(() => {
     // stubs
@@ -37,7 +38,7 @@ describe('ProfileViewComponent', () => {
         );
       }
     };
-
+    const navBarServiceStub = {};
     const routeServiceStub = {};
 
     TestBed.configureTestingModule({
@@ -47,9 +48,10 @@ describe('ProfileViewComponent', () => {
         { provide: Router, useValue: routerStub },
         { provide: AuthenticationService, useValue: authenticationServiceStub },
         { provide: ProfileService, useValue: profileServiceStub },
-        { provide: RouteService, useValue: routeServiceStub }
+        { provide: RouteService, useValue: routeServiceStub },
+        { provide: NavBarService, useValue: navBarServiceStub }
       ],
-      imports: [ MdCardModule ],
+      imports: [ MdCardModule, MdDialogModule ],
     });
 
     fixture = TestBed.createComponent(ProfileViewComponent);
