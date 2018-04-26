@@ -2,7 +2,7 @@
 <md-card class="example-card">
   <button md-button class="wideButtons" (click)="share()"><md-icon>share</md-icon>Share Profile</button>
   <div class="alert alert-danger" *ngIf="author?.banned">
-    You are currently banned
+    User is currently banned
   </div>
   <a [href]="author?.avatar"><img class="pfp" *ngIf="author?.avatar" [src]="author?.avatar" alt="Avatar of {{author?.name}}"/></a>
   <a href="/assets/logo.png"><img class="pfp" *ngIf="!author?.avatar" src="/assets/logo.png" alt="Avatar of {{author?.name}}"/></a>

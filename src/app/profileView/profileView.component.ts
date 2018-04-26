@@ -55,7 +55,7 @@ export class ProfileViewComponent implements OnInit, OnDestroy {
     }
   }
 
-  share(commentID: number) {
+  share() {
     this.navBarService.link.next(
       new Link('https://client.wildfyre.net/user/' + this.author.user,
       this.author.bio.slice(0, 100),

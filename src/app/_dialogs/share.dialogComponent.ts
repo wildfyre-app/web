@@ -14,8 +14,8 @@ import { NavBarService } from '../_services/navBar.service';
     [properties]='{title:getPostDescription(), url: link.url, via:"WildFyreApp", hashtags:"WildFyre"}'
 		[platforms]="['reddit','twitter','facebook','stumbleUpon']">
 	</share-container>
-  <button md-menu-item type="button" ngxClipboard [cbContent]="getPostLink()"
-    (cbOnSuccess)="isCopied = true"><md-icon>link</md-icon>Clipboard</button>
+  <button md-menu-item type="button" ngxClipboard [cbContent]="getPostLink()">
+  <md-icon>link</md-icon>Clipboard</button>
   `
 })
 export class ShareDialogComponent implements OnInit, OnDestroy {
