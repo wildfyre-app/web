@@ -103,6 +103,7 @@ export class PostViewComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.contractBox();
     this.cdRef.detach();
     this.componentDestroyed.next(true);
     this.componentDestroyed.complete();
