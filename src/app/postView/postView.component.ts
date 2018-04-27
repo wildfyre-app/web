@@ -2,8 +2,8 @@ import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { MdDialog, MdDialogRef, MdSnackBar } from '@angular/material';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs/Subject';
-import { ConfirmDeletionComponent } from '../_dialogs/confirmDeletion.component';
-import { ShareDialogComponent } from '../_dialogs/share.dialogComponent';
+import { ConfirmDeletionDialogComponent } from '../_dialogs/confirmDeletion.dialog.component';
+import { ShareDialogComponent } from '../_dialogs/share.dialog.component';
 import { Author } from '../_models/author';
 import { Comment } from '../_models/comment';
 import { Link } from '../_models/link';
@@ -187,7 +187,7 @@ export class PostViewComponent implements OnInit, OnDestroy {
   }
 
   openCommentDeleteDialog(c: Comment) {
-    const dialogRef = this.dialog.open(ConfirmDeletionComponent);
+    const dialogRef = this.dialog.open(ConfirmDeletionDialogComponent);
     dialogRef.afterClosed()
       .takeUntil(this.componentDestroyed)
       .subscribe(result => {
@@ -220,7 +220,7 @@ export class PostViewComponent implements OnInit, OnDestroy {
   }
 
   openPostDeleteDialog() {
-    const dialogRef = this.dialog.open(ConfirmDeletionComponent);
+    const dialogRef = this.dialog.open(ConfirmDeletionDialogComponent);
     dialogRef.afterClosed()
       .takeUntil(this.componentDestroyed)
       .subscribe(result => {

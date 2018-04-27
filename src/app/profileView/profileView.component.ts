@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MdDialog, MdDialogRef } from '@angular/material';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs/Subject';
-import { ShareDialogComponent } from '../_dialogs/share.dialogComponent';
+import { ShareDialogComponent } from '../_dialogs/share.dialog.component';
 import { Author } from '../_models/author';
 import { Link } from '../_models/link';
 import { AuthenticationService } from '../_services/authentication.service';

@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { MdDialog, MdDialogRef, MdSnackBar } from '@angular/material';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs/Subject';
-import { ConfirmDeletionComponent } from '../_dialogs/confirmDeletion.component';
+import { ConfirmDeletionDialogComponent } from '../_dialogs/confirmDeletion.dialog.component';
 import { AreaList } from '../_models/areaList';
 import { Author } from '../_models/author';
 import { PostError } from '../_models/post';
@@ -208,7 +208,7 @@ export class CreatePostComponent implements OnInit, OnDestroy {
   }
 
   openDraftDeleteDialog() {
-    const dialogRef = this.dialog.open(ConfirmDeletionComponent);
+    const dialogRef = this.dialog.open(ConfirmDeletionDialogComponent);
     dialogRef.afterClosed()
       .takeUntil(this.componentDestroyed)
       .subscribe(result => {

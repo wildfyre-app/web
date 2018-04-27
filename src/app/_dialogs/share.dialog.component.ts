@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { MdDialog, MdDialogRef } from '@angular/material';
+import { MdDialogRef } from '@angular/material';
 import { Subject } from 'rxjs/Subject';
 import { Link } from '../_models/link';
 import { NavBarService } from '../_services/navBar.service';

@@ -10,10 +10,10 @@ import { MdDialog, MdDialogRef } from '@angular/material';
   </div>
   `
 })
-export class ConfirmDeletionComponent {
+export class ConfirmDeletionDialogComponent {
   model: any = {};
   constructor(
-    public dialogRef: MdDialogRef<ConfirmDeletionComponent>
+    public dialogRef: MdDialogRef<ConfirmDeletionDialogComponent>
     ) { }
 
     returnInformation(bool: boolean) {

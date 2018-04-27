@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { MdDialog, MdDialogRef, MdSnackBar } from '@angular/material';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs/Subject';
-import { ConfirmDeletionComponent } from '../_dialogs/confirmDeletion.component';
+import { ConfirmDeletionDialogComponent } from '../_dialogs/confirmDeletion.dialog.component';
 import { Notification } from '../_models/notification';
 import { Post } from '../_models/post';
 import { SuperNotification } from '../_models/superNotification';
@@ -71,7 +71,7 @@ export class NotificationComponent implements OnInit, OnDestroy {
   }
 
   deleteNotifications() {
-    const dialogRef = this.dialog.open(ConfirmDeletionComponent);
+    const dialogRef = this.dialog.open(ConfirmDeletionDialogComponent);
     dialogRef.afterClosed()
       .takeUntil(this.componentDestroyed)
       .subscribe(result => {

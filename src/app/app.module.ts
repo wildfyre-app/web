@@ -18,8 +18,7 @@ import { NavBarComponent, LogoutDialogComponent } from './navBar/navBar.componen
 import { NotificationArchiveComponent } from './notificationArchive/notificationArchive.component';
 import { NotificationComponent } from './notification/notification.component';
 import { PostViewComponent } from './postView/postView.component';
-import { ProfileComponent, BioDialogComponent,
-  EmailDialogComponent, AvatarDialogComponent, PasswordDialogComponent } from './profile/profile.component';
+import { ProfileComponent } from './profile/profile.component';
 import { ProfileViewComponent } from './profileView/profileView.component';
 import { RecoverComponent } from './recover/recover.component';
 import { RecoverPasswordComponent } from './recoverPassword/recoverPassword.component';
@@ -28,8 +27,12 @@ import { RegisterSuccessComponent } from './registerSuccess/registerSuccess.comp
 import { UserPostsComponent } from './userPosts/userPosts.component';
 
 // Core Dialogs
-import { ConfirmDeletionComponent } from './_dialogs/confirmDeletion.component';
-import { ShareDialogComponent } from './_dialogs/share.dialogComponent';
+import { AvatarDialogComponent } from './_dialogs/avatar.dialog.component';
+import { BioDialogComponent } from './_dialogs/bio.dialog.component';
+import { ConfirmDeletionDialogComponent } from './_dialogs/confirmDeletion.dialog.component';
+import { EmailDialogComponent } from './_dialogs/email.dialog.component';
+import { PasswordDialogComponent } from './_dialogs/password.dialog.component';
+import { ShareDialogComponent } from './_dialogs/share.dialog.component';
 
 // Core Pipes
 import { MarkedPipe } from './_pipes/marked.pipe';
@@ -115,7 +118,7 @@ import { ShareModule } from 'ng2share/share.module';
     // Dialogs
     AvatarDialogComponent,
     BioDialogComponent,
-    ConfirmDeletionComponent,
+    ConfirmDeletionDialogComponent,
     EmailDialogComponent,
     FlagDialogComponent,
     LogoutDialogComponent,
@@ -145,7 +148,7 @@ import { ShareModule } from 'ng2share/share.module';
   entryComponents: [
     AvatarDialogComponent,
     BioDialogComponent,
-    ConfirmDeletionComponent,
+    ConfirmDeletionDialogComponent,
     EmailDialogComponent,
     FlagDialogComponent,
     LogoutDialogComponent,
