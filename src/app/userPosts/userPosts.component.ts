@@ -7,7 +7,6 @@ import { AreaService } from '../_services/area.service';
 import { NavBarService } from '../_services/navBar.service';
 import { PostService } from '../_services/post.service';
 import { RouteService } from '../_services/route.service';
-import { MasonryOptions } from 'angular2-masonry';
 
 @Component({
   templateUrl: 'userPosts.component.html'

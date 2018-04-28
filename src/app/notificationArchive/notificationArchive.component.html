@@ -11,8 +11,8 @@
 <md-spinner *ngIf="loading"></md-spinner>
 <button id="topNavBack" md-button (click)="back()"><i class="material-icons">arrow_back</i></button>
 
-<masonry *ngIf="currentArea">
-  <masonry-brick class="brick" *ngFor="let post of backupPosts[currentArea] | paginate: { id: 'server', itemsPerPage: limit, currentPage: index, totalItems: totalCount }; let i = index">
+<ngx-masonry [options]="{ horizontalOrder: true }" *ngIf="currentArea">
+  <ngx-masonry-item class="brick" *ngFor="let post of backupPosts[currentArea] | paginate: { id: 'server', itemsPerPage: limit, currentPage: index, totalItems: totalCount }; let i = index">
     <md-card class="userPostsGrid" (click)="goto(post.id)">
       <font size="0.1">
         <ng-container *ngIf="!post.anonym"><i class="material-icons">visibility_on</i></ng-container>
@@ -23,8 +23,8 @@
         {{post.created}}
       </font>
     </md-card>
-  </masonry-brick>
-</masonry>
+  </ngx-masonry-item>
+</ngx-masonry>
 
 <!-- Removed as of D114
 <masonry *ngIf="!checked && searching">

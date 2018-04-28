@@ -34,6 +34,9 @@ import { EmailDialogComponent } from './_dialogs/email.dialog.component';
 import { PasswordDialogComponent } from './_dialogs/password.dialog.component';
 import { ShareDialogComponent } from './_dialogs/share.dialog.component';
 
+// Core Modules
+import { NgxMasonryModule } from './_modules/ngx-masonry/ngx-masonry.module';
+
 // Core Pipes
 import { MarkedPipe } from './_pipes/marked.pipe';
 
@@ -58,7 +61,6 @@ import { Angulartics2Module, Angulartics2Piwik } from 'angulartics2';
 import { ClipboardModule } from 'ngx-clipboard';
 import 'hammerjs';
 import { ImageCropperModule } from 'ng2-img-cropper';
-import { MasonryModule } from 'angular2-masonry';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { ReCaptchaModule } from 'angular2-recaptcha';
 import { ShareModule } from 'ng2share/share.module';
@@ -68,11 +70,15 @@ import { ShareModule } from 'ng2share/share.module';
     // forRoot
     Angulartics2Module.forRoot([ Angulartics2Piwik ]),
 
+    // Core Modules
+    NgxMasonryModule,
+
     // Modules
     BrowserAnimationsModule,
     BrowserModule,
     FormsModule,
     HttpModule,
+    ImageCropperModule,
     MaterialModule,
     MdButtonModule,
     MdCardModule,
@@ -89,7 +95,6 @@ import { ShareModule } from 'ng2share/share.module';
     // Third Party Modules
     ClipboardModule,
     ImageCropperModule,
-    MasonryModule,
     NgxPaginationModule,
     ReCaptchaModule,
     ShareModule

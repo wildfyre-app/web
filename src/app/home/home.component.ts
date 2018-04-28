@@ -212,7 +212,7 @@ export class HomeComponent implements OnInit, OnDestroy {
               }
           });
         } else {
-          this.postService.getPost(this.currentArea, this.post.id.toString())
+          this.postService.getPost(this.currentArea, this.post.id.toString(), false)
             .takeUntil(this.componentDestroyed)
             .subscribe(post => {
               this.post =  post;

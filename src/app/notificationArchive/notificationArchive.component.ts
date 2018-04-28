@@ -7,7 +7,6 @@ import { Post } from '../_models/post';
 import { NavBarService } from '../_services/navBar.service';
 import { NotificationService } from '../_services/notification.service';
 import { RouteService } from '../_services/route.service';
-import { MasonryOptions } from 'angular2-masonry';
 
 @Component({
   selector: 'user-posts',

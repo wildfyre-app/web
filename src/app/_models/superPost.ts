@@ -25,7 +25,7 @@ export class SuperPost {
 
     // Sort posts
     results.sort((a: Post, b: Post) => {
-      return a.created.getTime() - b.created.getTime();
+      return b.created.getTime() - a.created.getTime();
     });
    }
 
