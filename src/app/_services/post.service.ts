@@ -184,17 +184,9 @@ export class PostService {
       });
   }
 
-  publishDraft(area: string, postID: number): Observable<Post> {
-      return this.httpService.POST('/areas/' + area + '/drafts/' + postID + '/publish/', '')
-        .map((response: Response) => {
-          return Post.parse(response.json());
-        })
-        .catch((error) => {
-          return Observable.of(new PostError(
-            JSON.parse(error._body).non_field_errors,
-            JSON.parse(error._body)._text
-          ));
-        });
+  publishDraft(area: string, postID: number): void {
+    this.httpService.POST('/areas/' + area + '/drafts/' + postID + '/publish/', {})
+      .subscribe();
   }
 
   spread(area: string, post: Post, spread: boolean): void {

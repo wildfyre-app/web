@@ -143,21 +143,25 @@ export class CreatePostComponent implements OnInit, OnDestroy {
     this.addLineBreak('* Unordered list can use asterisks\n- Or minuses\n+ Or pluses');
   }
 
-  createPost(draft: boolean) {
+  createPost(draft: boolean, publish: boolean = false) {
     this.loading = true;
     if (this.model.card !== '') {
       this.postService.createPost(this.currentArea, this.model.card, this.anonymous, draft, this.postID)
         .takeUntil(this.componentDestroyed)
         .subscribe(result => {
           if (!result.getError()) {
-            this.model.card = '';
-            let object = 'Post Created';
-            if (draft === true) {
-              object = 'Draft Saved';
+            if (publish) {
+              this.publishDraft();
+            } else {
+              this.model.card = '';
+              let object = 'Post Created';
+              if (draft) {
+                object = 'Draft Saved';
+              }
+              const snackBarRef = this.snackBar.open(object + ' Successfully!', 'Close', {
+                duration: 3000
+              });
             }
-            const snackBarRef = this.snackBar.open(object + ' Successfully!', 'Close', {
-              duration: 3000
-            });
             this.router.navigate(['']);
           } else {
             this.errors = result.getError();
@@ -185,20 +189,13 @@ export class CreatePostComponent implements OnInit, OnDestroy {
     this.loading = true;
     if (this.model.card !== '') {
       this.createPost(true);
-      this.postService.publishDraft(this.currentArea, this.postID)
-        .takeUntil(this.componentDestroyed)
-        .subscribe(result => {
-          if (!result.getError()) {
-            this.model.card = '';
-            const snackBarRef = this.snackBar.open('Post Created Successfully!', 'Close', {
-              duration: 3000
-            });
-            this.router.navigate(['']);
-          } else {
-            this.errors = result.getError();
-            this.loading = false;
-          }
-        });
+      this.postService.publishDraft(this.currentArea, this.postID);
+      this.model.card = '';
+      const snackBarRef = this.snackBar.open('Post Created Successfully!', 'Close', {
+        duration: 3000
+      });
+      this.router.navigate(['']);
+      this.loading = false;
     } else {
       this.loading = false;
       const snackBarRef = this.snackBar.open('You did not input anything', 'Close', {

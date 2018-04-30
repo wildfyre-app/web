@@ -1,4 +1,8 @@
 <button id="topNavBack" md-button (click)="back()"><i class="material-icons">arrow_back</i></button>
+<md-card class="refreshButton" (click)="ngOnInit()" *ngIf="totalCount === 0 && !loading">
+    No drafts, try saving one?
+    <button class="wideButtons" md-button>Refresh <i class="material-icons">refresh</i></button>
+</md-card>
 <br><br>
 
 <md-spinner *ngIf="loading"></md-spinner>
@@ -18,4 +22,4 @@
   </masonry-brick>
 </masonry>
 
-<pagination-controls (pageChange)="getDrafts($event)" id="server"></pagination-controls>
+<pagination-controls *ngIf="totalCount !== 0 && !loading" (pageChange)="getDrafts($event)" id="server"></pagination-controls>
