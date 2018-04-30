@@ -1,5 +1,6 @@
-import { Component, OnInit, NgModule, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, NgModule, ChangeDetectorRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import { Subject } from 'rxjs/Subject';
 import { AreaList } from '../_models/areaList';
 import { Notification } from '../_models/notification';
 import { Post } from '../_models/post';
@@ -12,10 +13,9 @@ import { MasonryOptions } from 'angular2-masonry';
   selector: 'user-posts',
   templateUrl: 'notificationArchive.component.html'
 })
-export class NotificationArchiveComponent implements OnInit {
+export class NotificationArchiveComponent implements OnInit, OnDestroy {
   backupPosts: { [area: string]: Post[]; } = {};
-  backupFunPosts: Post[] = [];
-  backupInfoPosts: Post[] = [];
+  componentDestroyed: Subject<boolean> = new Subject();
   currentArea: string;
   funPosts: Post[] = [];
   imageArray: { [area: string]: string[]; } = {};
@@ -101,38 +101,53 @@ export class NotificationArchiveComponent implements OnInit {
 
   ngOnInit() {
     this.route.params
+      .takeUntil(this.componentDestroyed)
       .subscribe(params => {
         if (params['index'] !== undefined) {
           this.index = params['index'];
         }
+      });
 
         this.navBarService.currentArea
+          .takeUntil(this.componentDestroyed)
           .subscribe((currentArea: AreaList) => {
             this.currentArea = currentArea.name;
+            if (!this.superPosts[currentArea.name]) {
+              this.superPosts[currentArea.name] = [];
+            }
+            if (!this.backupPosts[currentArea.name]) {
+              this.backupPosts[currentArea.name] = [];
+            }
             this.loading = true;
             const posts: Post[] = [];
 
-            this.notificationService.getArchive(currentArea.name, this.limit, 0)
-              .subscribe(superPost => {
-                superPost.results.forEach((obj: any) => {
-                  posts.push(Post.parse(obj));
-                });
-
-                // Removes binding to original 'superPost' variable
-                this.superPosts[currentArea.name] = JSON.parse(JSON.stringify(posts));
-                this.backupPosts[currentArea.name] = posts;
-                this.totalCount = superPost.count;
-
-                this.imageInPosts(this.superPosts[currentArea.name], currentArea.name);
-
-                for (let i = 0; i <= this.backupPosts[currentArea.name].length - 1; i++) {
-                  this.backupPosts[currentArea.name][i].text = this.removeMarkdown(this.backupPosts[currentArea.name][i].text);
-                }
-                this.cdRef.detectChanges();
-                this.loading = false;
+          this.notificationService.getArchive(currentArea.name, this.limit, 0)
+            .takeUntil(this.componentDestroyed)
+            .subscribe(superPost => {
+              superPost.results.forEach((obj: any) => {
+                posts.push(Post.parse(obj));
               });
-          });
-      });
+
+              // Removes binding to original 'superPost' variable
+              this.superPosts[currentArea.name] = JSON.parse(JSON.stringify(posts));
+              this.backupPosts[currentArea.name] = posts;
+              this.totalCount = superPost.count;
+
+              this.imageInPosts(this.superPosts[currentArea.name], currentArea.name);
+
+              for (let i = 0; i <= this.backupPosts[currentArea.name].length - 1; i++) {
+                this.backupPosts[currentArea.name][i].text = this.removeMarkdown(this.backupPosts[currentArea.name][i].text);
+              }
+              this.cdRef.detectChanges();
+              this.loading = false;
+            });
+        });
+  }
+
+  ngOnDestroy() {
+    this.cdRef.detach();
+    this.componentDestroyed.next(true);
+    this.componentDestroyed.complete();
   }
 
   back() {
@@ -148,6 +163,7 @@ export class NotificationArchiveComponent implements OnInit {
     const posts: Post[] = [];
 
     this.notificationService.getArchive(this.currentArea, this.limit, (this.offset * page) - this.limit)
+      .takeUntil(this.componentDestroyed)
       .subscribe(superPost => {
         superPost.results.forEach((obj: any) => {
           posts.push(Post.parse(obj));
