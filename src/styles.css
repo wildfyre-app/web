@@ -593,6 +593,21 @@ ul.ngx-pagination {
       border-radius: 0 !important;
       resize: none;
     }
+    
+    .commentCircle {
+      background: #e65100;
+      border-radius: 1em;
+      color: white;
+      display: inline-block;
+      font-weight: bold;
+      line-height: 2em;
+      margin-right: 75px;
+      text-align: center;
+      width: 2em;
+      position: absolute;
+      right: 2em;
+      margin-top: 8px;
+    }
 
     .icons {
       height: 15%;
@@ -699,6 +714,21 @@ ul.ngx-pagination {
       overflow-y: scroll;
       border-radius: 0 !important;
       resize: none;
+    }
+    
+    .commentCircle {
+      background: #e65100;
+      border-radius: 1em;
+      color: white;
+      display: inline-block;
+      font-weight: bold;
+      line-height: 2em;
+      margin-right: 80px;
+      text-align: center;
+      width: 2em;
+      position: absolute;
+      right: 2em;
+      margin-top: 8px;
     }
 
     .icons {

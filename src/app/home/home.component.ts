@@ -134,6 +134,18 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
   }
 
+  getCommentLength(nLength: number) {
+    if (nLength.toString().length === 4) {
+      return nLength.toString().slice(0, 1) + 'K';
+    } else if (nLength.toString().length === 5) {
+      return nLength.toString().slice(0, 2) + 'K';
+    } else if (nLength.toString().length >= 6) {
+      return '\u221E';
+    } else {
+      return nLength.toString();
+    }
+  }
+
   gotoUser(user: string) {
     this.routeService.addNextRoute(this.router.url);
     this.router.navigateByUrl('/user/' + user);
