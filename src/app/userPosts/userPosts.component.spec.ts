@@ -14,7 +14,7 @@ import { NavBarService } from '../_services/navBar.service';
 import { PostService } from '../_services/post.service';
 import { RouteService } from '../_services/route.service';
 import { UserPostsComponent } from './userPosts.component';
-import { MasonryModule } from 'angular2-masonry';
+import { NgxMasonryModule } from '../_modules/ngx-masonry/ngx-masonry.module';
 import { NgxPaginationModule } from 'ngx-pagination';
 
 describe('UserPostsComponent', () => {
@@ -67,7 +67,7 @@ describe('UserPostsComponent', () => {
                 { provide: RouteService, useValue: routeServiceStub },
                 { provide: ComponentFixtureAutoDetect, useValue: true }
             ],
-            imports: [ MdCardModule, MdSlideToggleModule, FormsModule, MasonryModule, NgxPaginationModule ],
+            imports: [ MdCardModule, MdSlideToggleModule, FormsModule, NgxMasonryModule, NgxPaginationModule ],
         });
         fixture = TestBed.createComponent(UserPostsComponent);
         comp = fixture.componentInstance;

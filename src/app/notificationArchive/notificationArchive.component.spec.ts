@@ -17,7 +17,7 @@ import { NavBarService } from '../_services/navBar.service';
 import { NotificationService } from '../_services/notification.service';
 import { RouteService } from '../_services/route.service';
 import { NotificationArchiveComponent } from './notificationArchive.component';
-import { MasonryModule } from 'angular2-masonry';
+import { NgxMasonryModule } from '../_modules/ngx-masonry/ngx-masonry.module';
 import { NgxPaginationModule } from 'ngx-pagination';
 
 describe('NotificationArchiveComponent', () => {
@@ -66,7 +66,7 @@ describe('NotificationArchiveComponent', () => {
                 { provide: RouteService, useValue: routeServiceStub },
                 { provide: ComponentFixtureAutoDetect, useValue: true }
             ],
-            imports: [ MdCardModule, RouterModule, MdTabsModule, MdSlideToggleModule, FormsModule, MasonryModule, NgxPaginationModule ],
+            imports: [ MdCardModule, RouterModule, MdTabsModule, MdSlideToggleModule, FormsModule, NgxMasonryModule, NgxPaginationModule ],
         }).compileComponents();
         fixture = TestBed.createComponent(NotificationArchiveComponent);
         comp = fixture.componentInstance;

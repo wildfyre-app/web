@@ -9,8 +9,6 @@ import { AreaService } from '../_services/area.service';
 import { NavBarService } from '../_services/navBar.service';
 import { PostService } from '../_services/post.service';
 import { CreatePostComponent } from './createPost.component';
-import { PictureDialogComponent } from './createPost.component';
-import { YouTubeDialogComponent } from './createPost.component';
 import { RouteService } from '../_services/route.service';
 import { MarkedPipe } from '../_pipes/marked.pipe';
 
@@ -53,7 +51,7 @@ describe('CreatePostComponent', () => {
             addNextRoute: () => ({})
         };
         TestBed.configureTestingModule({
-            declarations: [ CreatePostComponent, PictureDialogComponent, YouTubeDialogComponent, MarkedPipe ],
+            declarations: [ CreatePostComponent, MarkedPipe ],
             schemas: [ NO_ERRORS_SCHEMA ],
             providers: [
                 { provide: MdDialog, useValue: mdDialogStub },
@@ -79,119 +77,5 @@ describe('CreatePostComponent', () => {
       spyOn(postService, 'createPost').and.returnValue({subscribe: () => {}});
       expect(comp).toBeTruthy();
     }));
-
-});
-describe('PictureDialogComponent', () => {
-    let comp: PictureDialogComponent;
-    let fixture: ComponentFixture<PictureDialogComponent>;
-
-    beforeEach(() => {
-        const mdDialogStub = {
-            open: () => ({
-                afterClosed: () => ({
-                    subscribe: () => ({})
-                })
-            })
-        };
-        const routerStub = {
-            navigate: () => ({})
-        };
-        const areaServiceStub = {
-            isAreaChecked: {},
-            currentAreaName: {}
-        };
-        const postServiceStub = {
-            createPost: () => ({
-                subscribe: () => ({})
-            })
-        };
-        const mdDialogRefStub = {
-            close: () => ({})
-        };
-        TestBed.configureTestingModule({
-            declarations: [ CreatePostComponent, PictureDialogComponent, YouTubeDialogComponent, MarkedPipe ],
-            schemas: [ NO_ERRORS_SCHEMA ],
-            providers: [
-                { provide: MdDialog, useValue: mdDialogStub },
-                { provide: Router, useValue: routerStub },
-                { provide: AreaService, useValue: areaServiceStub },
-                { provide: PostService, useValue: postServiceStub },
-                { provide: MdDialogRef, useValue: mdDialogRefStub }
-            ],
-            imports: [ MdMenuModule, FormsModule ]
-        });
-        fixture = TestBed.createComponent(PictureDialogComponent);
-        comp = fixture.componentInstance;
-    });
-
-    it('can load instance', () => {
-        expect(comp).toBeTruthy();
-    });
-
-    describe('sendPictureInformation', () => {
-        it('makes expected calls', () => {
-            const mdDialogRefStub = fixture.debugElement.injector.get(MdDialogRef);
-            spyOn(mdDialogRefStub, 'close');
-            comp.sendPictureInformation();
-            expect(mdDialogRefStub.close).toHaveBeenCalled();
-        });
-    });
-
-});
-describe('YouTubeDialogComponent', () => {
-    let comp: YouTubeDialogComponent;
-    let fixture: ComponentFixture<YouTubeDialogComponent>;
-
-    beforeEach(() => {
-        const mdDialogStub = {
-            open: () => ({
-                afterClosed: () => ({
-                    subscribe: () => ({})
-                })
-            })
-        };
-        const routerStub = {
-            navigate: () => ({})
-        };
-        const areaServiceStub = {
-            isAreaChecked: {},
-            currentAreaName: {}
-        };
-        const postServiceStub = {
-            createPost: () => ({
-                subscribe: () => ({})
-            })
-        };
-        const mdDialogRefStub = {
-            close: () => ({})
-        };
-        TestBed.configureTestingModule({
-            declarations: [ CreatePostComponent, PictureDialogComponent, YouTubeDialogComponent, MarkedPipe ],
-            schemas: [ NO_ERRORS_SCHEMA ],
-            providers: [
-                { provide: MdDialog, useValue: mdDialogStub },
-                { provide: Router, useValue: routerStub },
-                { provide: AreaService, useValue: areaServiceStub },
-                { provide: PostService, useValue: postServiceStub },
-                { provide: MdDialogRef, useValue: mdDialogRefStub }
-            ],
-            imports: [ MdMenuModule, FormsModule ]
-        });
-        fixture = TestBed.createComponent(YouTubeDialogComponent);
-        comp = fixture.componentInstance;
-    });
-
-    it('can load instance', () => {
-        expect(comp).toBeTruthy();
-    });
-
-    describe('sendYouTubeInformation', () => {
-        it('makes expected calls', () => {
-            const mdDialogRefStub = fixture.debugElement.injector.get(MdDialogRef);
-            spyOn(mdDialogRefStub, 'close');
-            comp.sendYouTubeInformation();
-            expect(mdDialogRefStub.close).toHaveBeenCalled();
-        });
-    });
 
 });

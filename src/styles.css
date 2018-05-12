@@ -681,12 +681,12 @@ ul.ngx-pagination {
       right: -1px;
       bottom: 17px;
       z-index: 3;
-      width: 5%;
+      width: 7%;
       height: 56px;
       padding-top: 10px;
       background-color: #263238;
       color: white;
-      text-align: right;
+      text-align: center;
       border-radius: 0 !important;
     }
 
@@ -695,11 +695,11 @@ ul.ngx-pagination {
       right: -1px;
       bottom: 3px;
       z-index: 4;
-      width: 5%;
+      width: 7%;
       height: 30px;
       background-color: #263238;
       color: white;
-      text-align: right;
+      text-align: center;
       border-radius: 0 !important;
     }
 

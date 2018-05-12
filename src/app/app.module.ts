@@ -10,11 +10,11 @@ import { NgModule } from '@angular/core';
 // Core Components
 import { AppComponent } from './app.component';
 import { Component404Component } from './404component/404.component';
-import { CreatePostComponent, PictureDialogComponent, YouTubeDialogComponent } from './createPost/createPost.component';
+import { CreatePostComponent } from './createPost/createPost.component';
 import { DraftsComponent } from './drafts/drafts.component';
 import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './login/login.component';
-import { NavBarComponent, LogoutDialogComponent } from './navBar/navBar.component';
+import { NavBarComponent } from './navBar/navBar.component';
 import { NotificationArchiveComponent } from './notificationArchive/notificationArchive.component';
 import { NotificationComponent } from './notification/notification.component';
 import { PostViewComponent } from './postView/postView.component';
@@ -31,8 +31,11 @@ import { AvatarDialogComponent } from './_dialogs/avatar.dialog.component';
 import { BioDialogComponent } from './_dialogs/bio.dialog.component';
 import { ConfirmDeletionDialogComponent } from './_dialogs/confirmDeletion.dialog.component';
 import { EmailDialogComponent } from './_dialogs/email.dialog.component';
+import { LogoutDialogComponent  } from './_dialogs/logout.dialog.component';
 import { PasswordDialogComponent } from './_dialogs/password.dialog.component';
+import { PictureDialogComponent } from './_dialogs/picture.dialog.component';
 import { ShareDialogComponent } from './_dialogs/share.dialog.component';
+import { YouTubeDialogComponent } from './_dialogs/youtube.dialog.component';
 
 // Core Modules
 import { NgxMasonryModule } from './_modules/ngx-masonry/ngx-masonry.module';

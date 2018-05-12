@@ -3,6 +3,8 @@ import { MdDialog, MdDialogRef, MdSnackBar } from '@angular/material';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs/Subject';
 import { ConfirmDeletionDialogComponent } from '../_dialogs/confirmDeletion.dialog.component';
+import { PictureDialogComponent } from '../_dialogs/picture.dialog.component';
+import { YouTubeDialogComponent } from '../_dialogs/youtube.dialog.component';
 import { AreaList } from '../_models/areaList';
 import { Author } from '../_models/author';
 import { PostError } from '../_models/post';
@@ -263,83 +265,4 @@ export class CreatePostComponent implements OnInit, OnDestroy {
       }
       });
   }
-}
-
-@Component({
-  template: `
-  <h1 md-dialog-title>Enter in the picture information</h1>
-
-    <div md-dialog-actions>
-      <md-input-container>
-        <input mdInput name="comment" type="text" name="url"
-        [(ngModel)]="model.url" #url="ngModel" placeholder="Url of picture, must start with https">
-      </md-input-container>
-      <md-input-container>
-        <input mdInput name="comment" type="text" name="description"
-        [(ngModel)]="model.description" #description="ngModel" placeholder="Describe your picture">
-      </md-input-container>
-      <md-input-container>
-        <input mdInput name="comment" type="text" name="altText"
-        [(ngModel)]="model.altText" #altText="ngModel" placeholder="Alt text if the picture gets removed">
-      </md-input-container>
-    </div>
-
-  <div md-dialog-actions>
-    <button md-button md-dialog-close="true" (click)="sendPictureInformation()">Ok</button>
-    <button md-button md-dialog-close="false">Cancel</button>
-  </div>
-  `
-})
-export class PictureDialogComponent {
-  model: any = {};
-  constructor(
-    public dialogRef: MdDialogRef<PictureDialogComponent>
-    ) { }
-
-    sendPictureInformation() {
-      const message = {
-        'url': this.model.url,
-        'description' : this.model.description,
-        'altText' : this.model.altText
-      };
-
-      this.dialogRef.close(message);
-    }
-}
-
-@Component({
-  template: `
-  <h1 md-dialog-title>Enter in the YouTube information</h1>
-
-    <div md-dialog-actions>
-      <md-input-container>
-        <input mdInput name="comment" type="text" name="url"
-        [(ngModel)]="model.url" #url="ngModel" placeholder="Url of full youtube link">
-      </md-input-container>
-      <md-input-container>
-        <input mdInput name="comment" type="text" name="altText"
-        [(ngModel)]="model.altText" #altText="ngModel" placeholder="Alt text if the video gets removed">
-      </md-input-container>
-    </div>
-
-  <div md-dialog-actions>
-    <button md-button md-dialog-close="true" (click)="sendYouTubeInformation()">Ok</button>
-    <button md-button md-dialog-close="false">Cancel</button>
-  </div>
-  `
-})
-export class YouTubeDialogComponent {
-  model: any = {};
-  constructor(
-    public dialogRef: MdDialogRef<YouTubeDialogComponent>
-    ) { }
-
-    sendYouTubeInformation() {
-      const message = {
-        'url': this.model.url,
-        'altText' : this.model.altText
-      };
-
-      this.dialogRef.close(message);
-    }
 }

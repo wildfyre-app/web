@@ -272,7 +272,11 @@ export class HomeComponent implements OnInit, OnDestroy {
     const dialogRef = this.dialog.open(ShareDialogComponent);
     dialogRef.afterClosed()
       .takeUntil(this.componentDestroyed)
-      .subscribe(result => { });
+      .subscribe(result => {
+        if (result.isLink) {
+          const snackBarRef = this.snackBar.open('Link copied successfully', 'Close');
+        }
+      });
   }
 
   spread(spread: boolean) {

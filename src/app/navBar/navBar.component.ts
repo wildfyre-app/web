@@ -3,9 +3,10 @@ import { NgModule } from '@angular/core';
 import { BrowserModule  } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { MdSidenav, MdDialogRef, MdDialog, MdSnackBar } from '@angular/material';
-import {Observable} from 'rxjs/Rx';
+import { Observable } from 'rxjs/Rx';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs/Subject';
+import { LogoutDialogComponent } from '../_dialogs/logout.dialog.component';
 import { AreaList } from '../_models/areaList';
 import { Notification } from '../_models/notification';
 import { AreaService } from '../_services/area.service';
@@ -247,29 +248,4 @@ export class NavBarComponent implements OnInit, OnDestroy {
     }
     this.cdRef.detectChanges();
   }
-}
-
-@Component({
-  template: `
-  <h1 md-dialog-title>Are you sure you want to logout?</h1>
-  <div md-dialog-actions>
-    <button md-button md-dialog-close="true" (click)="returnInformation(true)">Yes</button>
-    <button md-button md-dialog-close="false" (click)="returnInformation(false)">Cancel</button>
-  </div>
-  `
-})
-export class LogoutDialogComponent {
-  model: any = {};
-
-  constructor(
-    public dialogRef: MdDialogRef<LogoutDialogComponent>
-    ) { }
-
-    returnInformation(bool: boolean) {
-      const message = {
-        'bool': bool
-      };
-
-      this.dialogRef.close(message);
-    }
 }

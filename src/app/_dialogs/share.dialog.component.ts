@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { MdDialogRef } from '@angular/material';
+import { MdDialogRef, MdSnackBar } from '@angular/material';
+import { Observable } from 'rxjs/Rx';
 import { Subject } from 'rxjs/Subject';
 import { Link } from '../_models/link';
 import { NavBarService } from '../_services/navBar.service';
@@ -12,9 +13,9 @@ import { NavBarService } from '../_services/navBar.service';
 		[expandable]="false"
 		[textEnabled]="false"
     [properties]='{title:getPostDescription(), url: link.url, via:"WildFyreApp", hashtags:"WildFyre"}'
-		[platforms]="['reddit','twitter','facebook','stumbleUpon']">
+		[platforms]="['reddit','twitter','facebook','stumbleUpon']" (click)="returnInformation(false)">
 	</share-container>
-  <button md-menu-item type="button" ngxClipboard [cbContent]="getPostLink()">
+  <button md-menu-item type="button" ngxClipboard [cbContent]="getPostLink()" (click)="returnInformation(true)">
   <md-icon>link</md-icon>Clipboard</button>
   `
 })
@@ -25,6 +26,7 @@ export class ShareDialogComponent implements OnInit, OnDestroy {
 
   constructor(
     public dialogRef: MdDialogRef<ShareDialogComponent>,
+    public snackBar: MdSnackBar,
     private navBarService: NavBarService
     ) { }
 
@@ -80,6 +82,7 @@ export class ShareDialogComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
+      this.returnInformation(false);
       this.componentDestroyed.next(true);
       this.componentDestroyed.complete();
     }
@@ -92,11 +95,16 @@ export class ShareDialogComponent implements OnInit, OnDestroy {
       return this.link.url;
     }
 
-    returnInformation(bool: boolean) {
+    returnInformation(isLink: boolean) {
       const message = {
-        'bool': bool
+        'isLink': isLink
       };
 
-      this.dialogRef.close(message);
+      // Wait 1 second to avoid race conditions
+      Observable.interval(2000)
+        .takeUntil(this.componentDestroyed)
+        .subscribe(x => {
+          this.dialogRef.close(message);
+      });
     }
 }
