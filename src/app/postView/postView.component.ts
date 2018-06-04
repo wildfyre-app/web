@@ -16,6 +16,11 @@ import { PostService } from '../_services/post.service';
 import { ProfileService } from '../_services/profile.service';
 import { RouteService } from '../_services/route.service';
 
+enum TypeOfReport {
+  Post,
+  Comment
+}
+
 @Component({
   templateUrl: 'postView.component.html',
 })
@@ -295,9 +300,4 @@ export class PostViewComponent implements OnInit, OnDestroy {
       .takeUntil(this.componentDestroyed)
       .subscribe();
   }
-}
-
-enum TypeOfReport {
-  Post,
-  Comment
 }

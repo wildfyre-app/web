@@ -71,7 +71,7 @@ export class HttpService {
     let onAction: Function;
 
     if (!navigator.onLine) {
-      const snackBarRef = this.snackBar.open('Your internet appears to be down', action, {
+      const snackBarRef2 = this.snackBar.open('Your internet appears to be down', action, {
         duration: 20000
       });
     }

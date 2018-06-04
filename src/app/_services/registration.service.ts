@@ -37,7 +37,7 @@ export class RegistrationService {
       });
   }
 
-  recoverPasswordStep2(password: string, token: string, transactionID: string, captchaResponse: String): Observable<RecoverTransaction> {
+  recoverPasswordStep2(password: string, token: string, transactionID: string, captchaResponse: String): Observable<Reset> {
     const body = {
       'new_password': password,
       'token': token,
