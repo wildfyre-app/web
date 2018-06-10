@@ -8,7 +8,8 @@ export class Comment {
       obj.id,
       obj.author,
       obj.created,
-      obj.text
+      obj.text,
+      obj.image
     );
   }
 
@@ -16,7 +17,8 @@ export class Comment {
     public id: number,
     public author: Author,
     created: string,
-    public text: string
+    public text: string,
+    public image: string
   ) {
     this.created = new Date(created);
   }
@@ -31,7 +33,7 @@ export class CommentError extends Comment {
     public non_field_errors?: string[],
     public _text?: string[]
   ) {
-    super(null, null, null, null);
+    super(null, null, null, null, null);
   }
 
   getError(): CommentError {

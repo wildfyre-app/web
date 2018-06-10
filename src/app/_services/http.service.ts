@@ -52,6 +52,12 @@ export class HttpService {
       .catch((error: any) => this.handleError(error));
   }
 
+  POST_IMAGE(passedUrl: string, body: any): Observable<any> {
+    // POST to api
+    return this.http.post(this.apiURL + passedUrl, body, this.getOptionsForImage())
+      .catch((error: any) => this.handleError(error));
+  }
+
   PUT(passedUrl: string, body: any): Observable<any> {
     // PUT to api
     return this.http.put(this.apiURL + passedUrl, JSON.stringify(body), this.getOptions())

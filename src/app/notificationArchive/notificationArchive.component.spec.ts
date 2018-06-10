@@ -43,13 +43,17 @@ describe('NotificationArchiveComponent', () => {
         };
         const navBarServiceStub = {};
         const routeServiceStub = {};
-        
+
         const notificationServiceStub = {
             getArchive: () => {
               return Observable.of(
                 new SuperPost(1, '', '',
                   new Array<Post>(
-                    new Post(0, new Author(0, '', '', '', false), false, false, '', false, '', new Array<Comment>())
+                    new Post(1,
+                      new Author(1, 'test', null, 'test', false), false, false, '2017-07-22T12:03:23.465373Z', false, 'test', null, [],
+                        new Array<Comment>(
+                          new Comment(1,
+                            new Author(1, 'test', null, 'test', false), '2017-07-22T12:03:23.465373Z', 'test', null)))
               )));
             }
         };

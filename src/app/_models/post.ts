@@ -1,5 +1,6 @@
 import { Author } from './author';
 import { Comment } from './comment';
+import { Image } from './image';
 
 export class Post {
   public created: Date;
@@ -19,6 +20,19 @@ export class Post {
       obj.active,
       obj.text,
       (() => {
+        if (obj.image === null) {
+          return '';
+        }
+        return obj.image;
+      })(), // Call method
+      (() => {
+        const additional_images: Image[] = [];
+        obj.additional_images.forEach((additional_image: any) => {
+          additional_images.push(Image.parse(additional_image));
+        });
+        return additional_images;
+      })(),
+      (() => {
         const comments: Comment[] = [];
         obj.comments.forEach((comment: any) => {
           comments.push(Comment.parse(comment));
@@ -36,14 +50,11 @@ export class Post {
     created: string,
     public active: boolean,
     public text: string,
+    public image: string,
+    public additional_images: Image[],
     public comments: Comment[]
   ) {
     this.created = new Date(created);
-
-    // Sort comments
-    comments.sort((a: Comment, b: Comment) => {
-      return a.created.getTime() - b.created.getTime();
-    });
   }
 
   getError(): PostError {
@@ -56,7 +67,7 @@ export class PostError extends Post {
     public non_field_errors?: string[],
     public _text?: string[]
   ) {
-    super(null, null, null, null, null, null, null, null);
+    super(null, null, null, null, null, null, null, null, [], []);
   }
 
   getError(): PostError {

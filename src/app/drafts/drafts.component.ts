@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy, NgModule, ChangeDetectorRef } from '@angu
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs/Subject';
 import { AreaList } from '../_models/areaList';
+import * as C from '../_models/constants';
 import { Post } from '../_models/post';
 import { AreaService } from '../_services/area.service';
 import { NavBarService } from '../_services/navBar.service';
@@ -40,7 +41,7 @@ export class DraftsComponent implements OnInit, OnDestroy {
 
     for (let i = 0; i <= posts.length - 1; i++) {
       // Find image markdown data in post.text - Guarenteed by Regex
-      const indexOfStart = posts[i].text.search(/\!\[.*?\][\[\(].*?[\]\)]/g);
+      const indexOfStart = posts[i].text.search(C.IMAGE_REGEX);
       if (indexOfStart !== -1) {
         // Start at index and parse until we find a closing ')' char
         for (let j = indexOfStart; j <= posts[i].text.length; j++) {
@@ -74,7 +75,9 @@ export class DraftsComponent implements OnInit, OnDestroy {
       .replace(/\[\^.+?\](\: .*?$)?/g, '')
       .replace(/\s{0,2}\[.*?\]: .*?$/g, '')
       // Remove images
-      .replace(/\!\[.*?\][\[\(].*?[\]\)]/g, '')
+      .replace(C.IMAGE_REGEX, '')
+      // Remove wildfyre images
+      .replace(/(\[img: \d\])/gm, '')
       // Remove inline links
       .replace(/\[(.*?)\][\[\(].*?[\]\)]/g, '$1')
       // Remove blockquotes

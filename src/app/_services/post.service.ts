@@ -5,6 +5,7 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/mergeMap';
 import { Area } from '../_models/area';
 import { Comment, CommentError } from '../_models/comment';
+import { Image, ImageError } from '../_models/image';
 import { Post, PostError } from '../_models/post';
 import { SuperPost } from '../_models/superPost';
 import { AreaService } from './area.service';
@@ -62,11 +63,25 @@ export class PostService {
       });
   }
 
-  createPost(area: string, text: string, anonymous: boolean, draft: boolean = false, postID: number = null): Observable<Post> {
-    const body = {
-      'anonym': anonymous,
-      'text': text
-    };
+  createPost(area: string, text: string, anonymous: boolean, image: string,
+     draft: boolean = false, postID: number = null): Observable<Post> {
+    let body: any;
+    if (image === '') {
+      image = null;
+    }
+
+    if (image === null) {
+      body = {
+        'anonym': anonymous,
+        'text': text
+      };
+    } else {
+      body = {
+        'anonym': anonymous,
+        'text': text,
+        'image': image
+      };
+    }
 
     if (!draft && postID === null) {
         return this.httpService.POST('/areas/' + area + '/', body)
@@ -104,6 +119,27 @@ export class PostService {
       } else {
         throw new Error('Don\'t set postID, if not a draft');
       }
+  }
+
+  deleteImage(image: any, postID: number, area: string, text: string) {
+    const body = {
+      'image': image,
+      'text': text
+    };
+    return this.httpService.PUT_IMAGE('/areas/' + area + '/drafts/' + postID +  '/', body)
+      .map((response: Response) => {
+        return Post.parse(response.json());
+      }).catch((err) => {
+        return Observable.of(new PostError(
+          JSON.parse(err._body).non_field_errors,
+          JSON.parse(err._body).text
+        ));
+      });
+  }
+
+  deleteImages(postID: number, area: string, slot: number) {
+    this.httpService.DELETE('/areas/' + area + '/drafts/' + postID +  '/img/' + slot.toString() + '/')
+      .subscribe();
   }
 
   deletePost(area: string, postID: number, draft: boolean) {
@@ -171,7 +207,7 @@ export class PostService {
       });
   }
 
-  getPost(areaID: string, postID: string, draft: boolean = false): Observable<Post> {
+  getPost(areaID: string, postID: number, draft: boolean = false): Observable<Post> {
     let url = '/areas/' + areaID + '/';
 
     if (draft === true) {
@@ -187,6 +223,54 @@ export class PostService {
   publishDraft(area: string, postID: number): void {
     this.httpService.POST('/areas/' + area + '/drafts/' + postID + '/publish/', {})
       .subscribe();
+  }
+
+  setPicture(image: any, post: Post, area: string, draft: boolean = true, commentText: string = ''): Observable<any> {
+    const formData: FormData = new FormData();
+    formData.append('image', image, image.name);
+    if (draft) {
+      formData.append('text', post.text + '.');
+      return this.httpService.PUT_IMAGE('/areas/' + area + '/drafts/' + post.id +  '/', formData)
+        .map((response: Response) => {
+          return Post.parse(response.json());
+        }).catch((err) => {
+          return Observable.of(new PostError(
+            JSON.parse(err._body).non_field_errors,
+            JSON.parse(err._body).text
+          ));
+        });
+    } else {
+      formData.append('text', commentText + '.');
+      return this.httpService.POST_IMAGE('/areas/' + area + '/' + post.id +  '/', formData)
+        .map((response: Response) => {
+          return Comment.parse(response.json());
+        }).catch((err) => {
+          return Observable.of(new CommentError(
+            JSON.parse(err._body).non_field_errors,
+            JSON.parse(err._body).text
+          ));
+        });
+    }
+
+
+  }
+
+  setDraftPictures(image: any, post: Post, area: string, comment: string, slot: number): Observable<Image> {
+    const formData: FormData = new FormData();
+    formData.append('image', image, image.name);
+    formData.append('comment', comment);
+    return this.httpService.PUT_IMAGE('/areas/' + area + '/drafts/' + post.id + '/img/' + slot + '/', formData)
+      .map((response: Response) => {
+        return Image.parse(response.json());
+      }).catch((err) => {
+        if (err.status === 404 || err.status === 0) {
+          return Observable.of(null);
+        }
+        return Observable.of(new ImageError(
+          JSON.parse(err._body).non_field_errors,
+          JSON.parse(err._body).text
+        ));
+      });
   }
 
   spread(area: string, post: Post, spread: boolean): void {

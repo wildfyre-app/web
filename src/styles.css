@@ -46,7 +46,7 @@ div div md-option#md-option-2.mat-option.mat-selected {
   color: #ed763e;
   font-size: 20px;
 }
- 
+
 div span.mat-select-underline {
   background-color: #ed763e;
   font-size: 20px;
@@ -312,7 +312,7 @@ ul.ngx-pagination {
 
 .mainText {
   font-size: 110%;
-  text-align: center;
+  text-align: left;
   margin: 0 auto;
 }
 
@@ -593,7 +593,7 @@ ul.ngx-pagination {
       border-radius: 0 !important;
       resize: none;
     }
-    
+
     .commentCircle {
       background: #e65100;
       border-radius: 1em;
@@ -703,6 +703,10 @@ ul.ngx-pagination {
       border-radius: 0 !important;
     }
 
+    .additionalImg {
+      width: 10%;
+    }
+
     .commentBox {
       position: fixed;
       left: 0px;
@@ -715,7 +719,7 @@ ul.ngx-pagination {
       border-radius: 0 !important;
       resize: none;
     }
-    
+
     .commentCircle {
       background: #e65100;
       border-radius: 1em;
@@ -817,6 +821,12 @@ ul.ngx-pagination {
       height: 100%;
       padding-left: 30px;
       border-left: 1px solid black;
+    }
+
+    .wfImages {
+      width: 50%;
+      display: block;
+      margin: 0 auto;
     }
 
     #navB {

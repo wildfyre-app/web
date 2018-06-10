@@ -10,7 +10,6 @@ import { RouteService } from '../_services/route.service';
 import { NgxMasonryModule } from '../_modules/ngx-masonry/ngx-masonry.module';
 
 @Component({
-  selector: 'user-posts',
   templateUrl: 'notificationArchive.component.html'
 })
 export class NotificationArchiveComponent implements OnInit, OnDestroy {
@@ -79,6 +78,8 @@ export class NotificationArchiveComponent implements OnInit, OnDestroy {
       .replace(/\s{0,2}\[.*?\]: .*?$/g, '')
       // Remove images
       .replace(/\!\[.*?\][\[\(].*?[\]\)]/g, '')
+      // Remove wildfyre images
+      .replace(/(\[img: \d\])/gm, '')
       // Remove inline links
       .replace(/\[(.*?)\][\[\(].*?[\]\)]/g, '$1')
       // Remove blockquotes

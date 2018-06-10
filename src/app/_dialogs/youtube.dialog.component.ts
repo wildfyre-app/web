@@ -15,7 +15,7 @@ import { MdDialogRef } from '@angular/material';
         [(ngModel)]="model.altText" #altText="ngModel" placeholder="Alt text if the video gets removed">
       </md-input-container>
     </div>
-
+    <br>
   <div md-dialog-actions>
     <button md-button md-dialog-close="true" (click)="sendYouTubeInformation()">Ok</button>
     <button md-button md-dialog-close="false">Cancel</button>

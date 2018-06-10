@@ -8,7 +8,8 @@ Copyright (c) 2010-2017 Google, Inc. - 'protractor'
 Copyright (c) 2018 angulartics - 'angulartics2'
 Copyright (c) 2014-2018 Denis Pushkarev - 'core-js'
 Copyright (c) 2011-2017 by Jorik Tangelder (Eight Media) - 'hammerjs'
-Copyright (c) 2011-2018, Christopher Jeffrey (https://github.com/chjj/) - 'marked'
+Copyright (c) 2014 Vitaly Puzrin, Alex Kocharin. - 'markdown-it'
+Copyright (c) 2014 tylerlong - 'markdown-it-regex'
 Copyright (c) 2015 Allan Bishop and contributors - 'ng2-img-cropper'
 Copyright (c) 2016 Sam Lin - 'ngx-clipboard'
 Copyright (c) 2016 Michael Bromley - 'ngx-pagination'
@@ -22,9 +23,9 @@ Copyright (c) 2018 JS Foundation and other contributors - 'uglifyjs-webpack-plug
 Copyright (c) 2017 xmaestro 'angular2-recaptcha'
 Copyright (c) 2018 jelgblad - 'angular2-masonry'
 Copyright (c) 2018 cedvdb - 'ng2share'
-Copyright (c) 2018 worr and BendingBender - '@types/marked'
+Copyright (c) 2018 plantain-00 and rapropos - '@types/markdown-it'
 Copyright (c) 2018 borisyankov, theodorejb, davidparsson, gmoothart, lukas-zech-software, and Engineer2B - '@types/jasmine'
-Copyright (c) 2018 http://typescriptlang.org/, DefinitelyTyped, parambirs, tellnes, WilcoBakker, octo-sniffle, smac89, Flarna, mwiktorczyk, wwwy3y3, 
+Copyright (c) 2018 http://typescriptlang.org/, DefinitelyTyped, parambirs, tellnes, WilcoBakker, octo-sniffle, smac89, Flarna, mwiktorczyk, wwwy3y3,
 DeividasBakanas, kjin, alvis, eps1lon, Hannes-Magnusson-CK, jkomyno, ajafff, hoo29, n-e, brunoscheufler, mohsen1, KSXGitHub, a-tarasyuk, and islishude - '@types/node'
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -139,7 +140,7 @@ attribution, so you shouldn't need to do anything additional when using these
 files normally.
 
 We've kept attribution comments terse, so we ask that you do not actively work
-to remove them from files, especially code. They're a great way for folks to 
+to remove them from files, especially code. They're a great way for folks to
 learn about Font Awesome.
 
 # Brand Icons

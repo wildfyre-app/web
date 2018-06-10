@@ -17,7 +17,7 @@
             <ng-container *ngIf="!post.anonym"><i class="material-icons">visibility_on</i></ng-container>
             <ng-container *ngIf="post.anonym"><i class="material-icons">visibility_off</i></ng-container>
             <ng-container *ngIf="imageArray[currentArea][i]"><i class="material-icons">image</i></ng-container>
-            <span class="mainText" [innerHTML]="post.text | slice:0:200 | marked"></span><ng-container *ngIf="post.text.length > 200">...</ng-container>
+            <span class="mainText" innerHTML="{{post.text | slice:0:200 | marked: post}}"></span><ng-container *ngIf="post.text.length > 200">...</ng-container>
             <hr>
             {{post.created}}
         </font>

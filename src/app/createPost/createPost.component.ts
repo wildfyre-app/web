@@ -4,10 +4,13 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs/Subject';
 import { ConfirmDeletionDialogComponent } from '../_dialogs/confirmDeletion.dialog.component';
 import { PictureDialogComponent } from '../_dialogs/picture.dialog.component';
+import { PicturesDialogComponent } from '../_dialogs/pictures.dialog.component';
 import { YouTubeDialogComponent } from '../_dialogs/youtube.dialog.component';
 import { AreaList } from '../_models/areaList';
 import { Author } from '../_models/author';
-import { PostError } from '../_models/post';
+import * as C from '../_models/constants';
+import { Image } from '../_models/image';
+import { Post, PostError } from '../_models/post';
 import { NavBarService } from '../_services/navBar.service';
 import { PostService } from '../_services/post.service';
 import { RouteService } from '../_services/route.service';
@@ -16,14 +19,12 @@ import { RouteService } from '../_services/route.service';
   templateUrl: 'createPost.component.html'
 })
 export class CreatePostComponent implements OnInit, OnDestroy {
-  anonymous = false;
   componentDestroyed: Subject<boolean> = new Subject();
   currentArea: string;
   errors: PostError;
   isDraft = false;
   loading: boolean;
-  model: any = {};
-  postID: number = null;
+  post: Post = new Post(null, null, false, null, null, null, 's', null, [], []);
 
   constructor(
     private cdRef: ChangeDetectorRef,
@@ -37,7 +38,7 @@ export class CreatePostComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    this.model.card = '';
+    this.post.text = '';
     this.routeService.resetRoutes();
 
     this.navBarService.currentArea
@@ -54,10 +55,9 @@ export class CreatePostComponent implements OnInit, OnDestroy {
               this.postService.getPost(this.currentArea, params['id'], true)
                 .takeUntil(this.componentDestroyed)
                 .subscribe(post => {
-                  this.model.card =  post.text;
-                  this.postID = post.id;
-                  this.anonymous = post.anonym;
+                  this.post = post;
                   this.loading = false;
+
                   this.cdRef.detectChanges();
               });
             }
@@ -72,10 +72,10 @@ export class CreatePostComponent implements OnInit, OnDestroy {
   }
 
   private addLineBreak(s: string) {
-    if (this.model.card !== '') {
-      this.model.card += '\n';
+    if (this.post.text !== '') {
+      this.post.text += '\n';
     }
-    this.model.card += s;
+    this.post.text += s;
   }
 
   addBlockQoutes() {
@@ -124,6 +124,10 @@ export class CreatePostComponent implements OnInit, OnDestroy {
     this.addLineBreak('---\n');
   }
 
+  addImage(image: Image) {
+    this.addLineBreak('[img: ' + image.num  + ']\n');
+  }
+
   addItalics() {
     this.addLineBreak('_Example_');
   }
@@ -147,15 +151,15 @@ export class CreatePostComponent implements OnInit, OnDestroy {
 
   createPost(draft: boolean, publish: boolean = false) {
     this.loading = true;
-    if (this.model.card !== '') {
-      this.postService.createPost(this.currentArea, this.model.card, this.anonymous, draft, this.postID)
+    if (this.post.text !== '' && this.runImageCheck()) {
+      this.postService.createPost(this.currentArea, this.post.text, this.post.anonym, this.post.image, draft, this.post.id)
         .takeUntil(this.componentDestroyed)
         .subscribe(result => {
           if (!result.getError()) {
             if (publish) {
               this.publishDraft();
             } else {
-              this.model.card = '';
+              this.post.text = '';
               let object = 'Post Created';
               if (draft) {
                 object = 'Draft Saved';
@@ -172,10 +176,51 @@ export class CreatePostComponent implements OnInit, OnDestroy {
         });
     } else {
       this.loading = false;
-      const snackBarRef = this.snackBar.open('You did not input anything', 'Close', {
-        duration: 3000
-      });
+      if (this.post.text === '') {
+        const snackBarRef = this.snackBar.open('You did not input anything', 'Close', {
+          duration: 3000
+        });
+      }
     }
+  }
+
+  deleteImage() {
+    this.postService.deleteImage(null, this.post.id, this.currentArea, this.post.text)
+      .takeUntil(this.componentDestroyed)
+      .subscribe(result2 => {
+        this.post.image = result2.image;
+        const snackBarRef = this.snackBar.open('Your image was deleted successfully', 'Close', {
+          duration: 3000
+        });
+    });
+  }
+
+  deleteImages(image: Image) {
+    const sourceString = '[img: ' + image.num + ']\n';
+    this.postService.deleteImages(this.post.id, this.currentArea, image.num);
+    for (let i = 0; i < this.post.additional_images.length; i++) {
+      if (this.post.additional_images[i].num === image.num) {
+        this.post.additional_images.splice(i, 1);
+        this.post.text = this.post.text.replace(sourceString, '');
+        this.post.text = this.post.text.replace('\n' + sourceString, '');
+        const snackBarRef = this.snackBar.open('Image deleted successfully', 'Close', {
+          duration: 3000
+        });
+        break;
+      }
+    }
+  }
+
+  getImageMatchesByGroup(index: number, str: string, reg: RegExp): string[] {
+    let match: any;
+    const matches: string[] = [];
+    // Find any occurence of image markdown
+    while ((match = reg.exec(str))) {
+      if (match[index] !== undefined) {
+        matches.push(match[index]);
+      }
+    }
+    return matches;
   }
 
   loadDrafts() {
@@ -184,15 +229,15 @@ export class CreatePostComponent implements OnInit, OnDestroy {
   }
 
   makeAnonymous(value: any) {
-    this.anonymous = value.checked;
+    this.post.anonym = value.checked;
   }
 
   publishDraft() {
     this.loading = true;
-    if (this.model.card !== '') {
+    if (this.post.text !== '') {
       this.createPost(true);
-      this.postService.publishDraft(this.currentArea, this.postID);
-      this.model.card = '';
+      this.postService.publishDraft(this.currentArea, this.post.id);
+      this.post.text = '';
       const snackBarRef = this.snackBar.open('Post Created Successfully!', 'Close', {
         duration: 3000
       });
@@ -212,7 +257,7 @@ export class CreatePostComponent implements OnInit, OnDestroy {
       .takeUntil(this.componentDestroyed)
       .subscribe(result => {
         if (result.bool) {
-          this.postService.deletePost(this.currentArea, this.postID, true);
+          this.postService.deletePost(this.currentArea, this.post.id, true);
           const snackBarRef = this.snackBar.open('Draft deleted successfully', 'Close', {
             duration: 3000
           });
@@ -223,17 +268,128 @@ export class CreatePostComponent implements OnInit, OnDestroy {
 
   openPictureDialog() {
     const dialogRef = this.dialog.open(PictureDialogComponent);
+    dialogRef.componentInstance.postID = this.post.id;
     dialogRef.afterClosed()
       .takeUntil(this.componentDestroyed)
       .subscribe(result => {
-        if (result.url) {
-          if (this.model.card === undefined) {
-            this.model.card = '[![' + result.altText + '](' + result.url + ' "' + result.description + '")](' + result.url + ')\n';
+        if (result.bool) {
+          if (result.picture) {
+            if (this.post.id === null) {
+              this.postService.createPost(this.currentArea, this.post.text + '.', this.post.anonym, '', true, this.post.id)
+              .takeUntil(this.componentDestroyed)
+              .subscribe(result3 => {
+                this.postService.setPicture(result.picture, result3, this.currentArea)
+                  .takeUntil(this.componentDestroyed)
+                  .subscribe(result4 => {
+                    if (result4) {
+                      this.post.image = result4.image;
+                      this.router.navigateByUrl('/create/' + result3.id);
+                    } else {
+                      if (result4 === null) {
+                        const snackBarRef = this.snackBar.open(
+                          'You have reached the maximum number of images allowed. Please delete some before continuing',
+                          'Close', {
+                          duration: 3000
+                        });
+                      } else {
+                      const snackBarRef = this.snackBar.open('Your image file must be below 512KiB in size', 'Close', {
+                        duration: 3000
+                      });
+                    }
+                  }
+                });
+              });
+            } else {
+              this.postService.setPicture(result.picture, this.post, this.currentArea)
+                .takeUntil(this.componentDestroyed)
+                .subscribe(result2 => {
+                  if (!result2.getError()) {
+                  this.post.image = result2.image;
+                } else {
+                  const snackBarRef = this.snackBar.open('Your image file must be below 512KiB in size', 'Close', {
+                    duration: 3000
+                  });
+                }
+                });
+            }
           } else {
-            this.model.card = '[![' + result.altText + '](' + result.url + ' "'
-              + result.description + '")](' + result.url + ')\n' + this.model.card;
+            const snackBarRef = this.snackBar.open('You did not select a valid image file', 'Close', {
+              duration: 3000
+            });
           }
-      }
+        }
+      });
+  }
+
+  openPicturesDialog() {
+    const dialogRef = this.dialog.open(PicturesDialogComponent);
+    let filledSlots: number[] = [];
+
+    if (this.post.additional_images !== []) {
+      filledSlots = this.post.additional_images.map(image => image.num);
+    }
+
+    dialogRef.componentInstance.nums_taken = filledSlots;
+    dialogRef.componentInstance.post = this.post;
+    dialogRef.componentInstance.area = this.currentArea;
+
+    dialogRef.afterClosed()
+      .takeUntil(this.componentDestroyed)
+      .subscribe(result => {
+        if (result.bool) {
+          if (result.picture) {
+            if (this.post.id === null) {
+              this.postService.createPost(this.currentArea, this.post.text + '.', this.post.anonym, '', true, this.post.id)
+                .takeUntil(this.componentDestroyed)
+                .subscribe(result3 => {
+                  this.postService.setDraftPictures(result.picture, result3, this.currentArea, result.comment, result.slot)
+                    .takeUntil(this.componentDestroyed)
+                    .subscribe(result4 => {
+                      if (result4) {
+                        this.post.additional_images.splice(result.slot, 0, result4);
+                        this.router.navigateByUrl('/create/' + result3.id);
+                      } else {
+                        if (result4 === null) {
+                          const snackBarRef = this.snackBar.open(
+                            'You have reached the maximum number of images allowed. Please delete some before continuing',
+                            'Close', {
+                            duration: 3000
+                          });
+                        } else {
+                        const snackBarRef = this.snackBar.open('Your image file must be below 1MB in size', 'Close', {
+                          duration: 3000
+                        });
+                      }
+                    }
+                  });
+                });
+            } else {
+              this.postService.setDraftPictures(result.picture, this.post, this.currentArea, result.comment, result.slot)
+                .takeUntil(this.componentDestroyed)
+                .subscribe(result2 => {
+                  if (result2) {
+                    this.post.additional_images.splice(result.slot, 0, result2);
+                  } else {
+                    if (result2 === null) {
+                      const snackBarRef = this.snackBar.open(
+                        'You have reached the maximum number of images allowed. Please delete some before continuing',
+                        'Close', {
+                        duration: 3000
+                      });
+                    } else {
+                    const snackBarRef = this.snackBar.open('Your image file must be below 1MB in size', 'Close', {
+                      duration: 3000
+                    });
+                  }
+                }
+              });
+            }
+          } else {
+            const snackBarRef = this.snackBar.open('You did not select a valid image file', 'Close', {
+              duration: 3000
+            });
+          }
+        }
       });
   }
 
@@ -255,14 +411,73 @@ export class CreatePostComponent implements OnInit, OnDestroy {
             result.url = result.url.slice(0, result.url.indexOf('?'));
           }
 
-          if (this.model.card === undefined) {
-            this.model.card = '[![' + result.altText + '](https://img.youtube.com/vi/'
+          if (this.post.text === undefined) {
+            this.post.text = '[![' + result.altText + '](https://img.youtube.com/vi/'
             + result.url + '/0.jpg)](https://www.youtube.com/watch?v=' + result.url + ')\n';
           } else {
-            this.model.card = '[![' + result.altText + '](https://img.youtube.com/vi/'
-            + result.url + '/0.jpg)](https://www.youtube.com/watch?v=' + result.url + ')\n' + this.model.card;
+            this.post.text = '[![' + result.altText + '](https://img.youtube.com/vi/'
+            + result.url + '/0.jpg)](https://www.youtube.com/watch?v=' + result.url + ')\n' + this.post.text;
           }
       }
       });
+  }
+
+  runImageCheck(): boolean {
+    let valid = true;
+    const linkMatch = this.getImageMatchesByGroup(1, this.post.text, C.WF_IMAGE_REGEX);
+    const usedMarkdownIndexes: string[] = [];
+    const invalidMatch = this.getImageMatchesByGroup(2, this.post.text, /(\[img: (\d)\])/gm);
+
+    // Find duplicates and invalids
+    if (linkMatch.length <= 4) {
+      if (!(linkMatch.length > 0 && this.post.additional_images.length === 0)) {
+        if (invalidMatch.length > this.post.additional_images.length) {
+          valid = false;
+          const snackBarRef = this.snackBar.open(
+            'This markdown does not work here',
+             'Close', {
+            duration: 3000
+          });
+        } else {
+          for (let i = 0; i < invalidMatch.length; i++) {
+            if (Number.parseInt(invalidMatch[i]) !== this.post.additional_images[i].num) {
+              valid = false;
+              const snackBarRef = this.snackBar.open(
+                'This markdown does not work here',
+                 'Close', {
+                duration: 3000
+              });
+            }
+          }
+        }
+        for (let z = 0; z < linkMatch.length; z++) {
+          if (valid) {
+            if (usedMarkdownIndexes.indexOf(linkMatch[z]) !== -1) {
+              valid = false;
+              const snackBarRef = this.snackBar.open(
+                'It appears as if you have duplicate image markdown, we do not allow this',
+                 'Close', {
+                duration: 3000
+              });
+            } else {
+              usedMarkdownIndexes.push(linkMatch[z]);
+            }
+          }
+        }
+      } else {
+        valid = false;
+        const snackBarRef = this.snackBar.open(
+          'This markdown does not work here',
+           'Close', {
+          duration: 3000
+        });
+      }
+    } else {
+      valid = false;
+      const snackBarRef = this.snackBar.open('You have to much image markdown in your text, the limit is 4', 'Close', {
+        duration: 3000
+      });
+    }
+    return valid;
   }
 }

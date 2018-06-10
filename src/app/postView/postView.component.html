@@ -1,7 +1,8 @@
 <md-spinner *ngIf="loading"></md-spinner>
 <md-card class="example-card" *ngIf="!loading">
   <button id="topNavBack" md-button (click)="back()"><i class="material-icons">arrow_back</i></button>
-  <span class="mainText" [innerHTML]="post?.text | marked"></span>
+  {{post?.image}}
+  <span class="mainText" innerHTML="{{post?.text | marked: post}}"></span>
   <md-card (click)="gotoUser(post?.author?.user)" class="parentContainer1">
     <div class="parentContainer">
       <img class="pfp2" (click)="gotoUser(post?.author?.user)" *ngIf="post?.author?.avatar" [src]="post?.author?.avatar" alt="Avatar of {{post?.author?.name}}"/>
@@ -29,7 +30,7 @@
 </md-card>
 
 <div *ngIf="expanded && loggedIn" id="focusTouchZone" (click)="contractBox()"></div>
-<textarea [style.bottom]="styleTextBottom" *ngIf="loggedIn" [style.height]="heightText" class="commentBox" (click)="expandBox()" name="comment" rows="{{rowsExapanded}}" cols="40" type="text" name="comment" [(ngModel)]="model.comment" #comment="ngModel" placeholder="Post a Comment"></textarea>
+<textarea [style.bottom]="styleTextBottom" *ngIf="loggedIn" [style.height]="heightText" class="commentBox" (click)="expandBox()" name="comment" rows="{{rowsExapanded}}" cols="40" type="text" [(ngModel)]="model.comment" #comment="ngModel" placeholder="Post a Comment"></textarea>
 <button [style.bottom]="styleEditorBottom" *ngIf="expanded && loggedIn" id="editorButton" (click)="$event.stopPropagation();" md-button color="accent" [disabled]="loading" [mdMenuTriggerFor]="commentMenu"><i class="material-icons">text_format</i></button>
 <button [style.bottom]="styleCommentBottom" *ngIf="loggedIn" id="commentButton" md-button color="accent" [disabled]="loading" (click)="postComment()"><i class="material-icons">send</i></button>
 
@@ -38,7 +39,9 @@
   <button md-menu-item (click)="addItalics()"><i class="material-icons">format_italic</i> Italic</button>
   <button md-menu-item (click)="addStrikethrough()"><i class="material-icons">strikethrough_s</i> Strikethrough</button>
   <button md-menu-item (click)="addBlockQoutes()"><i class="material-icons">format_quote</i> Quote</button>
-</md-menu> 
+  <button *ngIf="imageData === null" md-menu-item (click)="addImage()"><i class="material-icons">image</i> Add Image</button>
+  <button *ngIf="imageData !== null" md-menu-item (click)="deleteImage()"><i class="material-icons">image</i> Delete Image</button>
+</md-menu>
 
 <md-list>
   <div *ngFor="let comment of post?.comments">
@@ -51,8 +54,8 @@
           <button *ngIf="!(comment.author?.user == userID) && loggedIn" md-menu-item (click)="openFlagDialog(post, comment, typeOfReport.Comment)"><md-icon>flag</md-icon>Flag Comment</button>
         </md-menu>
       </div>
-      <div class="commentText" [innerHTML]="comment.text | marked"></div>
-
+      <div class="commentText" innerHTML="{{comment.text | marked: post : comment}}"></div>
+      <a target="_blank" rel="noopener" href="{{comment?.image}}"><img class="wfImages" *ngIf="comment?.image" src="{{comment?.image}}" /></a>
       <md-card (click)="gotoUser(comment.author?.user)" class="parentContainer1">
         <div class="parentContainer">
           <img class="pfp2" (click)="gotoUser(comment.author?.user)" *ngIf="comment.author?.avatar" [src]="comment.author?.avatar" alt="Avatar of {{comment.author?.name}}"/>

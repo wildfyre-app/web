@@ -3,10 +3,12 @@ import { MdDialog, MdDialogRef, MdSnackBar } from '@angular/material';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs/Subject';
 import { ConfirmDeletionDialogComponent } from '../_dialogs/confirmDeletion.dialog.component';
+import { PictureDialogComponent } from '../_dialogs/picture.dialog.component';
 import { ShareDialogComponent } from '../_dialogs/share.dialog.component';
 import { AreaList } from '../_models/areaList';
 import { Author } from '../_models/author';
 import { Comment } from '../_models/comment';
+import * as C from '../_models/constants';
 import { Link } from '../_models/link';
 import { Post } from '../_models/post';
 import { Reputation } from '../_models/reputation';
@@ -34,8 +36,9 @@ export class HomeComponent implements OnInit, OnDestroy {
   currentArea: string;
   expanded = false;
   fakePost: Post = new Post(0, this.systemAuthor, false, false, Date(), false,
-    'No more posts in this area, try creating one?', []);
+    'No more posts in this area, try creating one?', null, null, []);
   heightText: string;
+  imageData: any = null;
   isCopied = false;
   loading = true;
   model: any = {};
@@ -98,6 +101,25 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.addLineBreak('**Example**');
   }
 
+  addImage() {
+  const dialogRef = this.dialog.open(PictureDialogComponent);
+  dialogRef.componentInstance.postID = this.post.id;
+  dialogRef.afterClosed()
+    .takeUntil(this.componentDestroyed)
+    .subscribe(result => {
+      if (result.bool) {
+        this.imageData = result.picture;
+        const snackBarRef = this.snackBar.open('Image added successfully', 'Close', {
+          duration: 3000
+        });
+      } else {
+        const snackBarRef = this.snackBar.open('You did not select a valid image file', 'Close', {
+          duration: 3000
+        });
+      }
+    });
+}
+
   addItalics() {
     this.addLineBreak('_Example_');
   }
@@ -120,6 +142,13 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.styleCommentBottom = '44px';
       this.heightText = '40px';
     }
+  }
+
+  deleteImage() {
+    this.imageData = null;
+    const snackBarRef = this.snackBar.open('Image removed successfully', 'Close', {
+      duration: 3000
+    });
   }
 
   expandBox() {
@@ -149,6 +178,18 @@ export class HomeComponent implements OnInit, OnDestroy {
     } else {
       return nLength.toString();
     }
+  }
+
+  getImageMatchesByGroup(index: number): string[] {
+    let match: any;
+    const matches: string[] = [];
+    // Find any occurence of image markdown
+    while ((match = C.IMAGE_REGEX.exec(this.model.comment))) {
+      if (match[index] !== undefined) {
+        matches.push(match[index]);
+      }
+    }
+    return matches;
   }
 
   gotoUser(user: string) {
@@ -192,13 +233,36 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   postComment() {
     this.cdRef.detectChanges();
-    this.postService.comment(this.currentArea, this.post, this.model.comment)
-      .takeUntil(this.componentDestroyed)
-      .subscribe();
-    this.cdRef.detectChanges();
-    this.contractBox();
-    this.commentCount += 1;
-    this.model.comment = '';
+    if (this.model.comment !== '') {
+      if (this.imageData) {
+        this.postService.setPicture(this.imageData, this.post, this.currentArea, false)
+          .takeUntil(this.componentDestroyed)
+          .subscribe(result2 => {
+            if (!result2.getError()) {
+              this.post.comments.push(result2);
+            } else {
+              const snackBarRef = this.snackBar.open('Your image file must be below 512KiB in size', 'Close', {
+                duration: 3000
+              });
+            }
+        });
+      } else {
+        this.postService.comment(this.currentArea, this.post, this.model.comment)
+          .takeUntil(this.componentDestroyed)
+          .subscribe();
+      }
+      this.imageData = null;
+      this.model.comment = '';
+      this.contractBox();
+      this.commentCount += 1;
+      this.cdRef.detectChanges();
+    } else {
+      const snackBarRef = this.snackBar.open(
+        'Please enter something'
+        , 'Close', {
+        duration: 3000
+      });
+    }
   }
 
   refresh(reload: boolean) {
@@ -220,7 +284,7 @@ export class HomeComponent implements OnInit, OnDestroy {
                 this.cdRef.detectChanges();
               } else {
                 this.fakePost = new Post(0, this.systemAuthor, false, false,
-                  Date(), false, 'No more posts in this area, try creating one?', []);
+                  Date(), false, 'No more posts in this area, try creating one?', null, null, []);
                 this.post = this.fakePost;
                 this.commentCount = 0;
                 this.loading = false;
@@ -229,7 +293,7 @@ export class HomeComponent implements OnInit, OnDestroy {
               }
           });
         } else {
-          this.postService.getPost(this.currentArea, this.post.id.toString(), false)
+          this.postService.getPost(this.currentArea, this.post.id, false)
             .takeUntil(this.componentDestroyed)
             .subscribe(post => {
               this.post =  post;
@@ -302,7 +366,7 @@ export class HomeComponent implements OnInit, OnDestroy {
           this.cdRef.detectChanges();
         } else {
           this.fakePost = new Post(0, this.systemAuthor, false, false,
-            Date(), false, 'No more posts in this area, try creating one?', []);
+            Date(), false, 'No more posts in this area, try creating one?', null, null, []);
           this.post = this.fakePost;
           this.loading = false;
           this.cdRef.detectChanges();

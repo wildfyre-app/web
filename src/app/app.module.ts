@@ -34,6 +34,7 @@ import { EmailDialogComponent } from './_dialogs/email.dialog.component';
 import { LogoutDialogComponent  } from './_dialogs/logout.dialog.component';
 import { PasswordDialogComponent } from './_dialogs/password.dialog.component';
 import { PictureDialogComponent } from './_dialogs/picture.dialog.component';
+import { PicturesDialogComponent } from './_dialogs/pictures.dialog.component';
 import { ShareDialogComponent } from './_dialogs/share.dialog.component';
 import { YouTubeDialogComponent } from './_dialogs/youtube.dialog.component';
 
@@ -132,6 +133,7 @@ import { ShareModule } from 'ng2share/share.module';
     LogoutDialogComponent,
     PasswordDialogComponent,
     PictureDialogComponent,
+    PicturesDialogComponent,
     ShareDialogComponent,
     YouTubeDialogComponent,
 
@@ -162,6 +164,7 @@ import { ShareModule } from 'ng2share/share.module';
     LogoutDialogComponent,
     PasswordDialogComponent,
     PictureDialogComponent,
+    PicturesDialogComponent,
     ShareDialogComponent,
     YouTubeDialogComponent
   ],

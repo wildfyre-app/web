@@ -1,57 +1,65 @@
 import { Component, ViewChild } from '@angular/core';
 import { MdDialogRef, MdSnackBar } from '@angular/material';
-import { Author } from '../_models/author';
+import { Post } from '../_models/post';
 import { ImageCropperComponent, CropperSettings, Bounds } from 'ng2-img-cropper';
+import { PostService } from '../_services/post.service';
 
 @Component({
   template: `
-  <h1 md-dialog-title>Change Avatar</h1>
-
+  <h1 md-dialog-title>Upload Your Pictures</h1>
   <img-cropper [image]="data" [settings]="cropperSettings" (onCrop)="cropped($event)"></img-cropper>
   <span class="result" *ngIf="data.image">
     <img [src]="data.image" [width]="croppedWidth" [height]="croppedHeight">
   </span>
+  Comment:
+  <md-input-container>
+    <input mdInput type="text" name="comment" [(ngModel)]="model.comment" #comment="ngModel" />
+  </md-input-container>
 
   <div md-dialog-actions>
-    <button md-button md-dialog-close="true" (click)="returnInformation(true)">Change Avatar</button>
+    <button md-button md-dialog-close="true" (click)="returnInformation(true)">Add additional image</button>
     <button md-button md-dialog-close="false" (click)="returnInformation(false)">Cancel</button>
   </div>
   `
 })
-export class AvatarDialogComponent {
+export class PicturesDialogComponent {
   @ViewChild('cropper', undefined) cropper: ImageCropperComponent;
-  author: Author;
+  area = '';
   croppedHeight: number;
   croppedWidth: number;
   cropperSettings: CropperSettings;
   data: any;
   model: any = {};
-  profilePicture: any;
+  nums_taken: number[] = [];
+  post: Post = new Post(null, null, false, null, null, null, 's', null, [], []);
+  picture: any;
 
   constructor(
-    public dialogRef: MdDialogRef<AvatarDialogComponent>,
-    public snackBar: MdSnackBar
+    public dialogRef: MdDialogRef<PicturesDialogComponent>,
+    public snackBar: MdSnackBar,
+    private postService: PostService
     ) {
       this.cropperSettings = new CropperSettings();
-      this.cropperSettings.width = 200;
-      this.cropperSettings.height = 200;
+      this.cropperSettings.width = 920;
+      this.cropperSettings.height = 580;
 
-      this.cropperSettings.croppedWidth = 200;
-      this.cropperSettings.croppedHeight = 200;
+      this.cropperSettings.croppedWidth = 1920;
+      this.cropperSettings.croppedHeight = 1080;
 
-      this.cropperSettings.canvasWidth = 200;
+      this.cropperSettings.canvasWidth = 300;
       this.cropperSettings.canvasHeight = 200;
 
       this.cropperSettings.minWidth = 10;
       this.cropperSettings.minHeight = 10;
 
       this.cropperSettings.rounded = false;
-      this.cropperSettings.keepAspect = true;
+      this.cropperSettings.keepAspect = false;
 
       this.cropperSettings.cropperDrawSettings.strokeColor = 'rgb(191, 63, 127)';
       this.cropperSettings.cropperDrawSettings.strokeWidth = 3;
 
       this.data = {};
+      this.model.comment = '';
     }
 
     cropped(bounds: Bounds) {
@@ -72,14 +80,14 @@ export class AvatarDialogComponent {
         }
 
         // Create a blob that looks like a file.
-        this.profilePicture = new Blob([ab], {'type': mimeString });
-        this.profilePicture['name'] = this.author.name;
-        switch (this.profilePicture.type) {
+        this.picture = new Blob([ab], {'type': mimeString });
+        this.picture['name'] = this.post.id;
+        switch (this.picture.type) {
           case 'image/jpeg':
-            this.profilePicture['name'] += '.jpg';
+            this.picture['name'] += '.jpg';
           break;
           case 'image/png':
-            this.profilePicture['name'] += '.png';
+            this.picture['name'] += '.png';
           break;
         }
       } else {
@@ -90,11 +98,20 @@ export class AvatarDialogComponent {
     }
 
     returnInformation(bool: boolean) {
-      const message = {
-        'profilePicture': this.profilePicture,
-        'bool': bool
-      };
+      let availableSlot: number = this.nums_taken.length;
 
+      for (let i = 0; i < this.nums_taken.length; i++) {
+        if (this.nums_taken[i] !== i) {
+          availableSlot = i;
+          break;
+        }
+      }
+      const message = {
+        'picture': this.picture,
+        'bool': bool,
+        'comment': this.model.comment,
+        'slot': availableSlot
+      };
       this.dialogRef.close(message);
     }
 }
