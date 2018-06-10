@@ -1,40 +1,3 @@
-<md-sidenav-container>
-    <md-sidenav class="sideNav" align="end" #sidenav>
-      <md-nav-list>
-        <a md-list-item href="https://wildfyre.net/index.php/about-us/">
-          About Us
-        </a>
-        <a md-list-item href="https://wildfyre.net/index.php/frequently-asked-questions/">
-          FAQ
-        </a>
-        <a md-list-item href="https://wildfyre.net/index.php/terms-and-conditions/">
-          Terms and Conditions
-        </a>
-        <a md-list-item href="https://wildfyre.net/index.php/privacy-policy/">
-          Privacy Policy
-        </a>
-        <a md-list-item *ngIf="loggedIn" (click)="openLogoutDialog()">
-          Logout
-        </a>
-        <hr>
-        <a href="https://wildfyre.net/">
-          <img class="sideNavlogo" width="200px" height="200px" src="https://static.wildfyre.net/wildfyre.png" alt="WildFyre">
-        </a>
-        <div class="iconContainer">
-          <a href="https://www.facebook.com/wildfyreapp/"><img class="icons" width="32px" height="32px" src="../assets/Facebook.png" alt="WildFyre Facebook"></a>
-          <a href="https://twitter.com/wildfyreapp"><img class="icons" width="32px" height="32px" src="../assets/Twitter.png" alt="WildFyre Telegram"></a>
-          <a href="https://t.me/WildFyreChat"><img class="icons" width="32px" height="32px" src="../assets/Telegram.png" alt="WildFyre Twitter"></a>
-        </div>
-        <br>
-        <a href="mailto:bugs@wildfyre.net">
-          <em>Please report any and all bugs to bugs@wildfyre.net</em>
-        </a>
-        <hr>
-        <div class="iconContainer">
-          <em>Copyright © 2017-2018 WildFyre</em>
-        </div>
-      </md-nav-list>
-    </md-sidenav>
 <nav id="topNav" md-tab-nav-bar aria-label="Navigation links">
   <md-select *ngIf="areaVisible" [(ngModel)]="currentArea" (ngModelChange)="onChange($event)">
     <md-option *ngFor="let area of areas" [value]="area.name">{{area.getDisplayName()}} - {{area.spread}}.{{area.rep}}<img style="width:32px;height:32px" width="32px" height="32px" src="../assets/logo.png" alt="WildFyre"></md-option>
@@ -63,6 +26,58 @@
     <div class="numberCircle" *ngIf="(i === 1) && notificationLength !== 0">{{getNotificationLength(notificationLength)}}</div>
   </a>
 </nav>
+
+<div *ngIf="expanded && loggedIn && stylePage" id="focusTouchZone" (click)="contractBox()"></div>
+<textarea [style.height]="styleHeightTextarea" [style.bottom]="styleBottomTextarea" *ngIf="loggedIn && stylePage" class="commentBox" (click)="expandBox()" name="comment" rows="{{rowsExapanded}}" cols="40" type="text" [(ngModel)]="comment.comment" placeholder="Post a Comment"></textarea>
+<button [style.height]="styleHeightEditor" [style.bottom]="styleBottomEditor" *ngIf="expanded && loggedIn && stylePage" id="editorButton" (click)="$event.stopPropagation();" md-button color="accent" [disabled]="loading" [mdMenuTriggerFor]="commentMenu"><i class="material-icons">text_format</i></button>
+<button [style.height]="styleHeightSend" [style.bottom]="styleBottomSend" *ngIf="loggedIn && stylePage" id="commentButton" md-button color="accent" [disabled]="loading" (click)="postComment()"><i class="material-icons">send</i></button>
+
+<md-menu #commentMenu="mdMenu">
+  <button md-menu-item (click)="addBold()"><i class="material-icons">format_bold</i> Bold</button>
+  <button md-menu-item (click)="addItalics()"><i class="material-icons">format_italic</i> Italic</button>
+  <button md-menu-item (click)="addStrikethrough()"><i class="material-icons">strikethrough_s</i> Strikethrough</button>
+  <button md-menu-item (click)="addBlockQoutes()"><i class="material-icons">format_quote</i> Quote</button>
+  <button *ngIf="comment.image === null" md-menu-item (click)="addImage()"><i class="material-icons">image</i> Add Image</button>
+  <button *ngIf="comment.image !== null" md-menu-item (click)="deleteImage()"><i class="material-icons">image</i> Delete Image</button>
+</md-menu>
+
+<md-sidenav-container>
+  <md-sidenav class="sideNav" align="end" #sidenav>
+    <md-nav-list>
+      <a md-list-item href="https://wildfyre.net/index.php/about-us/">
+        About Us
+      </a>
+      <a md-list-item href="https://wildfyre.net/index.php/frequently-asked-questions/">
+        FAQ
+      </a>
+      <a md-list-item href="https://wildfyre.net/index.php/terms-and-conditions/">
+        Terms and Conditions
+      </a>
+      <a md-list-item href="https://wildfyre.net/index.php/privacy-policy/">
+        Privacy Policy
+      </a>
+      <a md-list-item *ngIf="loggedIn" (click)="openLogoutDialog()">
+        Logout
+      </a>
+      <hr>
+      <a href="https://wildfyre.net/">
+        <img class="sideNavlogo" width="200px" height="200px" src="https://static.wildfyre.net/wildfyre.png" alt="WildFyre">
+      </a>
+      <div class="iconContainer">
+        <a href="https://www.facebook.com/wildfyreapp/"><img class="icons" width="32px" height="32px" src="../assets/Facebook.png" alt="WildFyre Facebook"></a>
+        <a href="https://twitter.com/wildfyreapp"><img class="icons" width="32px" height="32px" src="../assets/Twitter.png" alt="WildFyre Telegram"></a>
+        <a href="https://t.me/WildFyreChat"><img class="icons" width="32px" height="32px" src="../assets/Telegram.png" alt="WildFyre Twitter"></a>
+      </div>
+      <br>
+      <a href="mailto:bugs@wildfyre.net">
+        <em>Please report any and all bugs to bugs@wildfyre.net</em>
+      </a>
+      <hr>
+      <div class="iconContainer">
+        <em>Copyright © 2017-2018 WildFyre</em>
+      </div>
+    </md-nav-list>
+  </md-sidenav>
 <br><br><br>
 <router-outlet></router-outlet>
 </md-sidenav-container>

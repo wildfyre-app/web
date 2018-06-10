@@ -1,6 +1,5 @@
 import { Component, ViewChild, OnInit } from '@angular/core';
 import { MdDialogRef, MdSnackBar } from '@angular/material';
-import { Post } from '../_models/post';
 import { ImageCropperComponent, CropperSettings, Bounds } from 'ng2-img-cropper';
 
 @Component({
@@ -27,7 +26,6 @@ export class PictureDialogComponent implements OnInit {
   data: any;
   model: any = {};
   picture: any;
-  postID = 0;
 
   constructor(
     public dialogRef: MdDialogRef<PictureDialogComponent>,
@@ -81,7 +79,7 @@ export class PictureDialogComponent implements OnInit {
 
         // Create a blob that looks like a file.
         this.picture = new Blob([ab], {'type': mimeString });
-        this.picture['name'] = this.postID;
+        this.picture['name'] = 'imageFile';
         switch (this.picture.type) {
           case 'image/jpeg':
             this.picture['name'] += '.jpg';
@@ -91,7 +89,7 @@ export class PictureDialogComponent implements OnInit {
           break;
         }
       } else {
-        const snackBarRef = this.snackBar.open('You did not select a valid image file', 'Close', {
+        this.snackBar.open('You did not select a valid image file', 'Close', {
           duration: 3000
         });
       }

@@ -1,16 +1,16 @@
 import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
-import { MdDialog, MdDialogRef, MdSnackBar } from '@angular/material';
+import { MdDialog, MdSnackBar } from '@angular/material';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs/Subject';
 import { ConfirmDeletionDialogComponent } from '../_dialogs/confirmDeletion.dialog.component';
-import { PictureDialogComponent } from '../_dialogs/picture.dialog.component';
+import { FlagDialogComponent } from '../_dialogs/flag.dialog.component';
 import { ShareDialogComponent } from '../_dialogs/share.dialog.component';
 import { Author } from '../_models/author';
 import { Comment } from '../_models/comment';
+import { CommentData } from '../_models/commentData';
 import * as C from '../_models/constants';
 import { Link } from '../_models/link';
 import { Post } from '../_models/post';
-import { AuthenticationService } from '../_services/authentication.service';
 import { CommentService } from '../_services/comment.service';
 import { FlagService } from '../_services/flag.service';
 import { NavBarService } from '../_services/navBar.service';
@@ -27,25 +27,17 @@ enum TypeOfReport {
   templateUrl: 'postView.component.html',
 })
 export class PostViewComponent implements OnInit, OnDestroy {
-  private typeOfReport = TypeOfReport;
   commentCount = 0;
   componentDestroyed: Subject<boolean> = new Subject();
   currentArea: string;
-  editName: string;
-  expanded = false;
-  heightText: string;
   isCopied = false;
   imageData: any = null;
   loading: boolean;
-  loggedIn = false;
-  model: any = {};
+  loggedIn: boolean;
   parsedCommentArray: string[] = [];
   post: Post;
-  rowsExapanded = 2;
-  styleCommentBottom: string;
-  styleEditorBottom: string;
-  styleTextBottom: string;
   userID: number;
+  wait = true;
 
   constructor(
     private cdRef: ChangeDetectorRef,
@@ -53,7 +45,6 @@ export class PostViewComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private snackBar: MdSnackBar,
-    private authenticationService: AuthenticationService,
     private commentService: CommentService,
     private flagService: FlagService,
     private navBarService: NavBarService,
@@ -64,24 +55,49 @@ export class PostViewComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.loading = true;
-    this.model.comment = '';
 
-    if (window.screen.width > 600) {
-      this.styleTextBottom = '0px';
-      this.styleCommentBottom = '-1px';
-    } else {
-      this.styleTextBottom = '42px';
-      this.styleCommentBottom = '44px';
-    }
+    this.profileService.getSelf()
+      .takeUntil(this.componentDestroyed)
+      .subscribe( (author: Author) => {
+        this.userID = author.user;
+        this.loggedIn = true;
+      });
 
-    if (this.authenticationService.token) {
-      this.profileService.getSelf()
-        .takeUntil(this.componentDestroyed)
-        .subscribe( (author: Author) => {
-          this.userID = author.user;
-          this.loggedIn = true;
-        });
-    }
+    this.navBarService.comment
+      .takeUntil(this.componentDestroyed)
+      .subscribe((comment: CommentData) => {
+        this.cdRef.detectChanges();
+        if (!this.wait) {
+          if (comment.comment !== '' && this.runImageCheck(comment.comment)) {
+            if (comment.image) {
+              this.postService.setPicture(comment.image, this.post, this.currentArea, false, comment.comment)
+                .takeUntil(this.componentDestroyed)
+                .subscribe(result2 => {
+                  if (!result2.getError()) {
+                    this.post.comments.push(result2);
+                  } else {
+                    this.snackBar.open('Your image file must be below 512KiB in size', 'Close', {
+                      duration: 3000
+                    });
+                  }
+              });
+            } else {
+              this.postService.comment(this.currentArea, this.post, comment.comment)
+                .takeUntil(this.componentDestroyed)
+                .subscribe();
+            }
+            this.commentCount += 1;
+            this.cdRef.detectChanges();
+          } else {
+            this.snackBar.open(
+              'Please enter something'
+              , 'Close', {
+              duration: 3000
+            });
+          }
+      }
+      this.wait = false;
+    });
 
     this.route.params
       .takeUntil(this.componentDestroyed)
@@ -111,53 +127,9 @@ export class PostViewComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.contractBox();
     this.cdRef.detach();
     this.componentDestroyed.next(true);
     this.componentDestroyed.complete();
-  }
-
-  private addLineBreak(s: string) {
-    if (this.model.comment !== '') {
-      this.model.comment += '\n';
-    }
-    this.model.comment += s;
-  }
-
-  addBlockQoutes() {
-    this.addLineBreak('> Blockquote example');
-  }
-
-  addBold() {
-    this.addLineBreak('**Example**');
-  }
-
-  addImage() {
-    const dialogRef = this.dialog.open(PictureDialogComponent);
-    dialogRef.componentInstance.postID = this.post.id;
-    dialogRef.componentInstance.comment = true;
-    dialogRef.afterClosed()
-      .takeUntil(this.componentDestroyed)
-      .subscribe(result => {
-        if (result.bool) {
-          this.imageData = result.picture;
-          const snackBarRef = this.snackBar.open('Image added successfully', 'Close', {
-            duration: 3000
-          });
-        } else {
-          const snackBarRef = this.snackBar.open('You did not select a valid image file', 'Close', {
-            duration: 3000
-          });
-        }
-      });
-  }
-
-  addItalics() {
-    this.addLineBreak('_Example_');
-  }
-
-  addStrikethrough() {
-    this.addLineBreak('~~Example~~');
   }
 
   back() {
@@ -165,46 +137,6 @@ export class PostViewComponent implements OnInit, OnDestroy {
       this.router.navigateByUrl('');
     } else {
       this.router.navigateByUrl(this.routeService.getNextRoute());
-    }
-  }
-
-  contractBox() {
-    this.expanded = false;
-    this.rowsExapanded = 2;
-    this.navBarService.isVisibleSource.next('');
-
-    if (window.screen.width > 600) {
-      this.styleTextBottom = '0px';
-      this.styleCommentBottom = '-1px';
-      this.heightText = '56px';
-    } else {
-      this.styleTextBottom = '42px';
-      this.styleCommentBottom = '44px';
-      this.heightText = '40px';
-    }
-  }
-
-  deleteImage() {
-    this.imageData = null;
-    const snackBarRef = this.snackBar.open('Image removed successfully', 'Close', {
-      duration: 3000
-    });
-  }
-
-  expandBox() {
-    this.expanded = true;
-    this.rowsExapanded = 3;
-    this.navBarService.isVisibleSource.next('none');
-    if (window.screen.width > 600) {
-      this.styleTextBottom = '0px';
-      this.styleCommentBottom = '-5px';
-      this.styleEditorBottom = '30px';
-      this.heightText = '71px';
-    } else {
-      this.styleTextBottom = '0px';
-      this.styleCommentBottom = '0px';
-      this.styleEditorBottom = '33px';
-      this.heightText = '71px';
     }
   }
 
@@ -257,26 +189,25 @@ export class PostViewComponent implements OnInit, OnDestroy {
             c
           );
           this.commentCount -= 1;
-          const snackBarRef = this.snackBar.open('Comment deleted successfully', 'Close', {
+          this.snackBar.open('Comment deleted successfully', 'Close', {
             duration: 3000
           });
         }
       });
   }
 
-  openFlagDialog(post: Post, comment: Comment, typeOfFlagReport: TypeOfReport) {
-    this.contractBox();
+  openFlagDialog(comment: Comment, typeOfFlagReport: TypeOfReport) {
     this.flagService.currentComment = comment;
-    this.flagService.currentPost = post;
+    this.flagService.currentPost = this.post;
 
-    switch (typeOfFlagReport) {
-      case TypeOfReport.Post:
-        this.flagService.openDialog(TypeOfReport.Post);
-        break;
-      case TypeOfReport.Comment:
-        this.flagService.openDialog(TypeOfReport.Comment);
-        break;
-    }
+    const dialogRef = this.dialog.open(FlagDialogComponent);
+    dialogRef.componentInstance.typeOfReport = typeOfFlagReport;
+
+    dialogRef.afterClosed()
+      .takeUntil(this.componentDestroyed)
+      .subscribe(result => {
+        this.flagService.sendFlagReport(result.typeOfReport, result.report, result.choice, result.area);
+      });
   }
 
   openPostDeleteDialog() {
@@ -286,7 +217,7 @@ export class PostViewComponent implements OnInit, OnDestroy {
       .subscribe(result => {
         if (result.bool) {
           this.postService.deletePost(this.currentArea, this.post.id, false);
-          const snackBarRef = this.snackBar.open('Post deleted successfully', 'Close', {
+          this.snackBar.open('Post deleted successfully', 'Close', {
             duration: 3000
           });
           this.router.navigateByUrl(this.routeService.getNextRoute());
@@ -294,44 +225,9 @@ export class PostViewComponent implements OnInit, OnDestroy {
       });
   }
 
-  postComment() {
+  runImageCheck(comment: string): boolean {
     this.cdRef.detectChanges();
-    if (this.model.comment !== '' && this.runImageCheck()) {
-      if (this.imageData) {
-        this.postService.setPicture(this.imageData, this.post, this.currentArea, false, this.model.comment)
-          .takeUntil(this.componentDestroyed)
-          .subscribe(result2 => {
-            if (!result2.getError()) {
-              this.post.comments.push(result2);
-            } else {
-              const snackBarRef = this.snackBar.open('Your image file must be below 512KiB in size', 'Close', {
-                duration: 3000
-              });
-            }
-        });
-      } else {
-        this.postService.comment(this.currentArea, this.post, this.model.comment)
-          .takeUntil(this.componentDestroyed)
-          .subscribe();
-      }
-      this.imageData = null;
-      this.model.comment = '';
-      this.contractBox();
-      this.commentCount += 1;
-      this.cdRef.detectChanges();
-    } else {
-      const snackBarRef = this.snackBar.open(
-        'Please enter something or remove markdown'
-        , 'Close', {
-        duration: 3000
-      });
-    }
-  }
-
-  runImageCheck(): boolean {
-    this.cdRef.detectChanges();
-    const valid = true;
-    const linkMatch = this.getImageMatchesByGroup(1, this.model.comment, C.WF_IMAGE_REGEX);
+    const linkMatch = this.getImageMatchesByGroup(1, comment, C.WF_IMAGE_REGEX);
     // Find duplicates and invalids
     if (linkMatch.length > 0) {
       return false;
@@ -365,7 +261,7 @@ export class PostViewComponent implements OnInit, OnDestroy {
       .takeUntil(this.componentDestroyed)
       .subscribe(result => {
         if (result.isLink) {
-          const snackBarRef = this.snackBar.open('Link copied successfully', 'Close', {
+          this.snackBar.open('Link copied successfully', 'Close', {
             duration: 3000
           });
         }

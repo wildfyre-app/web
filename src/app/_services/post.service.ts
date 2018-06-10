@@ -8,7 +8,7 @@ import { Comment, CommentError } from '../_models/comment';
 import { Image, ImageError } from '../_models/image';
 import { Post, PostError } from '../_models/post';
 import { SuperPost } from '../_models/superPost';
-import { AreaService } from './area.service';
+import { NavBarService } from './navBar.service';
 import { HttpService } from './http.service';
 
 @Injectable()
@@ -18,7 +18,8 @@ export class PostService {
   superPosts: { [area: string]: SuperPost; } = {};
 
   constructor(
-    private httpService: HttpService
+    private httpService: HttpService,
+    private navBarService: NavBarService
   ) { }
 
   private getPosts(area: string): Observable<Post[]> {
@@ -53,6 +54,7 @@ export class PostService {
         const comment = Comment.parse(response.json());
 
         post.comments.push(comment);
+        this.navBarService.clearInputs.next(true);
         return comment;
       })
       .catch((err) => {
@@ -243,6 +245,7 @@ export class PostService {
       formData.append('text', commentText + '.');
       return this.httpService.POST_IMAGE('/areas/' + area + '/' + post.id +  '/', formData)
         .map((response: Response) => {
+          this.navBarService.clearInputs.next(true);
           return Comment.parse(response.json());
         }).catch((err) => {
           return Observable.of(new CommentError(

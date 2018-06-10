@@ -1,14 +1,12 @@
 import { Component, OnInit, OnDestroy, ChangeDetectorRef, NgZone, ViewChild } from '@angular/core';
-import { NgModule } from '@angular/core';
-import { BrowserModule  } from '@angular/platform-browser';
-import { FormsModule } from '@angular/forms';
-import { MdSidenav, MdDialogRef, MdDialog, MdSnackBar } from '@angular/material';
+import { MdSidenav, MdDialog, MdSnackBar } from '@angular/material';
 import { Observable } from 'rxjs/Rx';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs/Subject';
 import { LogoutDialogComponent } from '../_dialogs/logout.dialog.component';
+import { PictureDialogComponent } from '../_dialogs/picture.dialog.component';
 import { AreaList } from '../_models/areaList';
-import { Notification } from '../_models/notification';
+import { CommentData } from '../_models/commentData';
 import { AreaService } from '../_services/area.service';
 import { AuthenticationService } from '../_services/authentication.service';
 import { NavBarService } from '../_services/navBar.service';
@@ -27,14 +25,25 @@ export class NavBarComponent implements OnInit, OnDestroy {
   areaReputation: { [area: string]: number; } = { };
   areaSpread: { [area: string]: number; } = { };
   areaVisible = true;
+  comment: CommentData = new CommentData('', null);
   componentDestroyed: Subject<boolean> = new Subject();
   currentArea = this.areas[0].name;
+  expanded = false;
+  heightText: string;
   loggedIn = false;
   mobileRouteLinks: any[];
   notificationLength = 0;
   routeLinks: any[];
+  rowsExapanded = 2;
+  styleBottomEditor: string;
+  styleBottomSend: string;
+  styleBottomTextarea: string;
   styleDesktop: string;
+  styleHeightEditor: string;
+  styleHeightSend: string;
+  styleHeightTextarea: string;
   styleMobile: string;
+  stylePage: boolean;
 
   constructor(
     private cdRef: ChangeDetectorRef,
@@ -47,7 +56,6 @@ export class NavBarComponent implements OnInit, OnDestroy {
     private notificationService: NotificationService,
     private navBarService: NavBarService
   ) {
-
     this.routeLinks = [
       {label: 'Profile', link: '/profile/', index: '0'},
       {label: 'Notifications', link: '/notifications/1/', index: '1'},
@@ -73,6 +81,16 @@ export class NavBarComponent implements OnInit, OnDestroy {
         this.cdRef.detectChanges();
     });
 
+    this.navBarService.clearInputs
+      .takeUntil(this.componentDestroyed)
+      .subscribe((action: boolean) => {
+        if (action) {
+          this.comment.comment = '';
+          this.comment.image = null;
+          this.contractBox();
+        }
+    });
+
     this.navBarService.loggedIn
       .takeUntil(this.componentDestroyed)
       .subscribe((loggedIn: boolean) => {
@@ -96,13 +114,98 @@ export class NavBarComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.contractBox();
     this.cdRef.detach();
     this.componentDestroyed.next(true);
     this.componentDestroyed.complete();
   }
 
-  close(reason: string) {
+  private addLineBreak(s: string) {
+    if (this.comment.comment !== '') {
+      this.comment.comment += '\n';
+    }
+    this.comment.comment += s;
+  }
+
+  addBlockQoutes() {
+    this.addLineBreak('> Blockquote example');
+  }
+
+  addBold() {
+    this.addLineBreak('**Example**');
+  }
+
+  addImage() {
+    const dialogRef = this.dialog.open(PictureDialogComponent);
+    dialogRef.componentInstance.comment = true;
+    dialogRef.afterClosed()
+      .takeUntil(this.componentDestroyed)
+      .subscribe(result => {
+        if (result.bool) {
+          this.comment.image = result.picture;
+          this.snackBar.open('Image added successfully', 'Close', {
+            duration: 3000
+          });
+        } else {
+          this.snackBar.open('You did not select a valid image file', 'Close', {
+            duration: 3000
+          });
+        }
+      });
+  }
+
+  addItalics() {
+    this.addLineBreak('_Example_');
+  }
+
+  addStrikethrough() {
+    this.addLineBreak('~~Example~~');
+  }
+
+  close() {
     this.sidenav.close();
+  }
+
+  contractBox() {
+    this.expanded = false;
+    this.rowsExapanded = 2;
+    this.styleMobile = '';
+
+    this.styleHeightTextarea = '56px';
+
+    if (window.screen.width < 600) {
+      this.styleHeightTextarea = '40px';
+      this.styleBottomTextarea = '40px';
+      this.styleBottomEditor = '3px';
+      this.styleHeightEditor = '48px';
+      this.styleBottomSend = '42px';
+      this.styleHeightSend = '38px';
+    }
+  }
+
+  deleteImage() {
+    this.comment.image = null;
+    this.snackBar.open('Image removed successfully', 'Close', {
+      duration: 3000
+    });
+  }
+
+  expandBox() {
+    this.expanded = true;
+    this.rowsExapanded = 3;
+    this.styleMobile = 'none';
+
+    this.styleBottomEditor = '48px';
+    this.styleHeightTextarea = '96px';
+
+    if (window.screen.width < 600) {
+      this.styleHeightTextarea = '118px';
+      this.styleBottomTextarea = '0px';
+      this.styleBottomEditor = '59px';
+      this.styleHeightEditor = '59px';
+      this.styleBottomSend = '0px';
+      this.styleHeightSend = '59px';
+    }
   }
 
   getNotificationLength(nLength: number) {
@@ -206,7 +309,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
           this.componentDestroyed.next(true);
           this.componentDestroyed.complete();
 
-          const snackBarRef = this.snackBar.open('You were logged out successfully', 'Close', {
+          this.snackBar.open('You were logged out successfully', 'Close', {
             duration: 3000
           });
           this.router.navigateByUrl('/login');
@@ -214,36 +317,52 @@ export class NavBarComponent implements OnInit, OnDestroy {
       });
   }
 
+  postComment() {
+    this.navBarService.comment.next(this.comment);
+    this.contractBox();
+  }
+
   setActiveIndex(s: string) {
     if (s === '/profile') {
+      this.stylePage = false;
       this.activeLinkIndex = 0;
       this.navBarService.areaVisible.next(false);
     }  else if (s === '/notifications/archive') {
+      this.stylePage = false;
       this.activeLinkIndex = 1;
       this.navBarService.areaVisible.next(true);
     } else if (s.lastIndexOf('/notifications/archive/') !== -1) {
+      this.stylePage = false;
       this.activeLinkIndex = 1;
       this.navBarService.areaVisible.next(true);
     } else if (s === '/notifications') {
+      this.stylePage = false;
       this.activeLinkIndex = 1;
       this.navBarService.areaVisible.next(false);
     } else if (s.lastIndexOf('/notifications/') !== -1) {
+      this.stylePage = false;
       this.activeLinkIndex = 1;
       this.navBarService.areaVisible.next(false);
     } else if (s === '/') {
       this.activeLinkIndex = 2;
+      this.stylePage = true;
       this.navBarService.areaVisible.next(true);
     } else if (s === '/posts') {
+      this.stylePage = false;
       this.activeLinkIndex = 3;
       this.navBarService.areaVisible.next(true);
     } else if (s.lastIndexOf('/posts/') !== -1) {
+      this.stylePage = false;
       this.navBarService.areaVisible.next(true);
     } else if (s === '/create') {
+      this.stylePage = false;
       this.activeLinkIndex = 4;
       this.navBarService.areaVisible.next(true);
     } else if (s.lastIndexOf('/areas/') !== -1) {
+      this.stylePage = true;
       this.navBarService.areaVisible.next(false);
     } else if (s.lastIndexOf('/user/') !== -1) {
+      this.stylePage = false;
       this.navBarService.areaVisible.next(false);
     }
     this.cdRef.detectChanges();

@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
-import { MdDialog, MdDialogRef, MdSnackBar } from '@angular/material';
+import { MdDialog, MdSnackBar } from '@angular/material';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs/Subject';
 import { ConfirmDeletionDialogComponent } from '../_dialogs/confirmDeletion.dialog.component';
@@ -7,7 +7,6 @@ import { PictureDialogComponent } from '../_dialogs/picture.dialog.component';
 import { PicturesDialogComponent } from '../_dialogs/pictures.dialog.component';
 import { YouTubeDialogComponent } from '../_dialogs/youtube.dialog.component';
 import { AreaList } from '../_models/areaList';
-import { Author } from '../_models/author';
 import * as C from '../_models/constants';
 import { Image } from '../_models/image';
 import { Post, PostError } from '../_models/post';
@@ -162,7 +161,7 @@ export class CreatePostComponent implements OnInit, OnDestroy {
             if (draft) {
               object = 'Draft Saved';
             }
-            const snackBarRef = this.snackBar.open(object + ' Successfully!', 'Close', {
+            this.snackBar.open(object + ' Successfully!', 'Close', {
               duration: 3000
             });
             this.router.navigate(['']);
@@ -174,7 +173,7 @@ export class CreatePostComponent implements OnInit, OnDestroy {
     } else {
       this.loading = false;
       if (this.post.text === '') {
-        const snackBarRef = this.snackBar.open('You did not input anything', 'Close', {
+        this.snackBar.open('You did not input anything', 'Close', {
           duration: 3000
         });
       }
@@ -187,7 +186,7 @@ export class CreatePostComponent implements OnInit, OnDestroy {
       .subscribe(result2 => {
         this.post.image = '';
         this.imageData = null;
-        const snackBarRef = this.snackBar.open('Your image was deleted successfully', 'Close', {
+        this.snackBar.open('Your image was deleted successfully', 'Close', {
           duration: 3000
         });
     });
@@ -202,7 +201,7 @@ export class CreatePostComponent implements OnInit, OnDestroy {
         this.post.text = this.post.text.replace(sourceString, '');
         this.post.text = this.post.text.replace('\n' + sourceString, '');
         this.cdRef.detectChanges();
-        const snackBarRef = this.snackBar.open('Image deleted successfully', 'Close', {
+        this.snackBar.open('Image deleted successfully', 'Close', {
           duration: 3000
         });
         break;
@@ -238,7 +237,7 @@ export class CreatePostComponent implements OnInit, OnDestroy {
       .subscribe(result => {
         if (result.bool) {
           this.postService.deletePost(this.currentArea, this.post.id, true);
-          const snackBarRef = this.snackBar.open('Draft deleted successfully', 'Close', {
+          this.snackBar.open('Draft deleted successfully', 'Close', {
             duration: 3000
           });
           this.router.navigateByUrl('');
@@ -248,7 +247,6 @@ export class CreatePostComponent implements OnInit, OnDestroy {
 
   openPictureDialog() {
     const dialogRef = this.dialog.open(PictureDialogComponent);
-    dialogRef.componentInstance.postID = this.post.id;
     dialogRef.afterClosed()
       .takeUntil(this.componentDestroyed)
       .subscribe(result => {
@@ -266,13 +264,13 @@ export class CreatePostComponent implements OnInit, OnDestroy {
                       this.router.navigateByUrl('/create/' + result3.id);
                     } else {
                       if (result4 === null) {
-                        const snackBarRef = this.snackBar.open(
+                        this.snackBar.open(
                           'You have reached the maximum number of images allowed. Please delete some before continuing',
                           'Close', {
                           duration: 3000
                         });
                       } else {
-                      const snackBarRef = this.snackBar.open('Your image file must be below 512KiB in size', 'Close', {
+                      this.snackBar.open('Your image file must be below 512KiB in size', 'Close', {
                         duration: 3000
                       });
                     }
@@ -286,14 +284,14 @@ export class CreatePostComponent implements OnInit, OnDestroy {
                   if (!result2.getError()) {
                   this.post.image = result2.image;
                 } else {
-                  const snackBarRef = this.snackBar.open('Your image file must be below 512KiB in size', 'Close', {
+                  this.snackBar.open('Your image file must be below 512KiB in size', 'Close', {
                     duration: 3000
                   });
                 }
                 });
             }
           } else {
-            const snackBarRef = this.snackBar.open('You did not select a valid image file', 'Close', {
+            this.snackBar.open('You did not select a valid image file', 'Close', {
               duration: 3000
             });
           }
@@ -330,13 +328,13 @@ export class CreatePostComponent implements OnInit, OnDestroy {
                         this.router.navigateByUrl('/create/' + result3.id);
                       } else {
                         if (result4 === null) {
-                          const snackBarRef = this.snackBar.open(
+                          this.snackBar.open(
                             'You have reached the maximum number of images allowed. Please delete some before continuing',
                             'Close', {
                             duration: 3000
                           });
                         } else {
-                        const snackBarRef = this.snackBar.open('Your image file must be below 1MB in size', 'Close', {
+                        this.snackBar.open('Your image file must be below 1MB in size', 'Close', {
                           duration: 3000
                         });
                       }
@@ -351,13 +349,13 @@ export class CreatePostComponent implements OnInit, OnDestroy {
                     this.post.additional_images.splice(result.slot, 0, result2);
                   } else {
                     if (result2 === null) {
-                      const snackBarRef = this.snackBar.open(
+                      this.snackBar.open(
                         'You have reached the maximum number of images allowed. Please delete some before continuing',
                         'Close', {
                         duration: 3000
                       });
                     } else {
-                    const snackBarRef = this.snackBar.open('Your image file must be below 1MB in size', 'Close', {
+                    this.snackBar.open('Your image file must be below 1MB in size', 'Close', {
                       duration: 3000
                     });
                   }
@@ -365,7 +363,7 @@ export class CreatePostComponent implements OnInit, OnDestroy {
               });
             }
           } else {
-            const snackBarRef = this.snackBar.open('You did not select a valid image file', 'Close', {
+            this.snackBar.open('You did not select a valid image file', 'Close', {
               duration: 3000
             });
           }
@@ -408,14 +406,14 @@ export class CreatePostComponent implements OnInit, OnDestroy {
       this.createPost(true);
       this.postService.publishDraft(this.currentArea, this.post.id);
       this.post.text = '';
-      const snackBarRef = this.snackBar.open('Post Created Successfully!', 'Close', {
+      this.snackBar.open('Post Created Successfully!', 'Close', {
         duration: 3000
       });
       this.router.navigate(['']);
       this.loading = false;
     } else {
       this.loading = false;
-      const snackBarRef = this.snackBar.open('You did not input anything or you have unsupported markdown', 'Close', {
+      this.snackBar.open('You did not input anything or you have unsupported markdown', 'Close', {
         duration: 3000
       });
     }
@@ -432,7 +430,7 @@ export class CreatePostComponent implements OnInit, OnDestroy {
     if (linkMatch.length <= 4) {
       if (linkMatch.length > this.post.additional_images.length) {
         valid = false;
-        const snackBarRef = this.snackBar.open(
+        this.snackBar.open(
           'This markdown does not work here',
            'Close', {
           duration: 3000
@@ -441,7 +439,7 @@ export class CreatePostComponent implements OnInit, OnDestroy {
         for (let i = 0; i < invalidMatch.length; i++) {
           if (Number.parseInt(invalidMatch[i]) !== this.post.additional_images[i].num) {
             valid = false;
-            const snackBarRef = this.snackBar.open(
+            this.snackBar.open(
               'This markdown does not work here',
                'Close', {
               duration: 3000
@@ -453,7 +451,7 @@ export class CreatePostComponent implements OnInit, OnDestroy {
         if (valid) {
           if (usedMarkdownIndexes.indexOf(linkMatch[z]) !== -1) {
             valid = false;
-            const snackBarRef = this.snackBar.open(
+            this.snackBar.open(
               'It appears as if you have duplicate image markdown, we do not allow this',
                'Close', {
               duration: 3000
@@ -465,7 +463,7 @@ export class CreatePostComponent implements OnInit, OnDestroy {
       }
     } else {
       valid = false;
-      const snackBarRef = this.snackBar.open('You have to much image markdown in your text, the limit is 4', 'Close', {
+      this.snackBar.open('You have to much image markdown in your text, the limit is 4', 'Close', {
         duration: 3000
       });
     }

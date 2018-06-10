@@ -1,5 +1,5 @@
-<button *ngIf="!expanded && ((post.id !== 0) && !loading)" class="extinguishButton" (click)="spread(false)" md-raised-button color="warn"><b>Extinguish</b></button>
-<button *ngIf="!expanded && ((post.id !== 0) && !loading)" class="igniteButton" (click)="spread(true)" md-raised-button color="primary"><font color="#000000"><b>Ignite</b></font></button>
+<button *ngIf="(post.id !== 0) && !loading" class="extinguishButton" (click)="spread(false)" md-raised-button color="warn"><b>Extinguish</b></button>
+<button *ngIf="(post.id !== 0) && !loading" class="igniteButton" (click)="spread(true)" md-raised-button color="primary"><font color="#000000"><b>Ignite</b></font></button>
 <md-spinner *ngIf="loading"></md-spinner>
 <div *ngIf="(post.id === 0) && !loading">
   <br><br>
@@ -28,24 +28,11 @@
     <md-menu #appMenu="mdMenu">
       <button md-menu-item type="button" (click)="refresh()"><md-icon>refresh</md-icon>Refresh Post</button>
       <button md-menu-item type="button" (click)="share()"><md-icon>share</md-icon>Share Post</button>
-      <button md-menu-item (click)="openFlagDialog(post, null, typeOfReport.Post)"><md-icon>flag</md-icon>Flag Post</button>
+      <button md-menu-item (click)="openFlagDialog(null, 0)"><md-icon>flag</md-icon>Flag Post</button>
     </md-menu>
   </div>
   <br>
 </md-card>
-<div *ngIf="expanded" id="focusTouchZone" (click)="contractBox()"></div>
-<textarea [style.bottom]="styleTextBottom" [style.height]="heightText" *ngIf="post.id !== 0" class="commentBox" (click)="expandBox()" name="comment" rows="{{rowsExapanded}}" cols="40" type="text" [(ngModel)]="model.comment" #comment="ngModel" placeholder="Post a Comment"></textarea>
-<button [style.bottom]="styleEditorBottom" *ngIf="(post.id !== 0) && expanded" id="editorButton" (click)="$event.stopPropagation();" md-button color="accent" [disabled]="loading" [mdMenuTriggerFor]="commentMenu"><i class="material-icons">text_format</i></button>
-<button [style.bottom]="styleCommentBottom" *ngIf="post.id !== 0" id="commentButton" md-button color="accent" [disabled]="loading" (click)="postComment()"><i class="material-icons">send</i></button>
-
-<md-menu #commentMenu="mdMenu">
-  <button md-menu-item (click)="addBold()"><i class="material-icons">format_bold</i> Bold</button>
-  <button md-menu-item (click)="addItalics()"><i class="material-icons">format_italic</i> Italic</button>
-  <button md-menu-item (click)="addStrikethrough()"><i class="material-icons">strikethrough_s</i> Strikethrough</button>
-  <button md-menu-item (click)="addBlockQoutes()"><i class="material-icons">format_quote</i> Quote</button>
-  <button *ngIf="imageData === null" md-menu-item (click)="addImage()"><i class="material-icons">image</i> Add Image</button>
-  <button *ngIf="imageData !== null" md-menu-item (click)="deleteImage()"><i class="material-icons">image</i> Delete Image</button>
-</md-menu>
 
 <md-list>
   <div *ngFor="let comment of post?.comments">
@@ -55,7 +42,7 @@
         <md-menu #appMenu="mdMenu">
           <button md-menu-item type="button" (click)="share(comment.id)"><md-icon>share</md-icon>Share Comment</button>
           <button *ngIf="comment.author?.user == userID" md-menu-item color="warn" (click)="openCommentDeleteDialog(comment)"><md-icon>delete</md-icon>Delete Comment</button>
-          <button *ngIf="!(comment.author?.user == userID)" md-menu-item (click)="openFlagDialog(post, comment, typeOfReport.Comment)"><md-icon>flag</md-icon>Flag Comment</button>
+          <button *ngIf="!(comment.author?.user == userID)" md-menu-item (click)="openFlagDialog(comment, 1)"><md-icon>flag</md-icon>Flag Comment</button>
         </md-menu>
       </div>
       <div class="commentText" innerHTML="{{comment.text | marked: post : comment}}"></div>

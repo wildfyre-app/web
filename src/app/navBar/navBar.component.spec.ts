@@ -5,14 +5,12 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { ChangeDetectorRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ComponentFixture, ComponentFixtureAutoDetect, TestBed , async} from '@angular/core/testing';
-import { Router, ActivatedRoute, RouterModule, Routes, UrlTree } from '@angular/router';
-import { MdTabsModule, MdDialogModule, MdSidenavModule, MdOptionModule, MdSnackBarModule } from '@angular/material';
+import { Router, ActivatedRoute, RouterModule, Routes } from '@angular/router';
+import { MdTabsModule, MdMenuModule, MdDialogModule, MdSidenavModule, MdOptionModule, MdSnackBarModule } from '@angular/material';
 import { Observable } from 'rxjs';
 import { Author } from '../_models/author';
-import { Comment } from '../_models/comment';
 import { Notification } from '../_models/notification';
 import { NotificationPost } from '../_models/notificationPost';
-import { Post } from '../_models/post';
 import { SuperNotification } from '../_models/superNotification';
 import { NavBarComponent } from './navBar.component';
 import { AreaService } from '../_services/area.service';
@@ -64,9 +62,9 @@ describe('NavBarComponent', () => {
               return Observable.of(
                 new SuperNotification(1, '', '',
                   new Array<Notification>(
-                    new Notification('', 
-                      new NotificationPost(0, 
-                        new Author(0, '', '', '', false), 'test'), 
+                    new Notification('',
+                      new NotificationPost(0,
+                        new Author(0, '', '', '', false), 'test'),
                           new Array<number>(0)))
               ));
             }
@@ -84,7 +82,7 @@ describe('NavBarComponent', () => {
                 { provide: NotificationService, useValue: notificationServiceStub },
                 { provide: ComponentFixtureAutoDetect, useValue: true }
             ],
-            imports: [ MdTabsModule, MdOptionModule, FormsModule, MdSidenavModule, MdSnackBarModule, MdDialogModule, RouterModule.forRoot(routes), BrowserAnimationsModule ],
+            imports: [ MdTabsModule, MdOptionModule, FormsModule, MdSidenavModule, MdMenuModule, MdSnackBarModule, MdDialogModule, RouterModule.forRoot(routes), BrowserAnimationsModule ],
         });
         fixture = TestBed.createComponent(NavBarComponent);
         comp = fixture.componentInstance;

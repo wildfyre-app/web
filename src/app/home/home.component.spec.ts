@@ -9,7 +9,6 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Author } from '../_models/author';
 import { Comment } from '../_models/comment';
-import { Notification } from '../_models/notification';
 import { Post } from '../_models/post';
 import { MarkedPipe } from '../_pipes/marked.pipe';
 import { AreaService } from '../_services/area.service';

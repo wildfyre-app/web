@@ -1,4 +1,4 @@
-import { Http, Headers, RequestOptions, Response } from '@angular/http';
+import { Http, Headers, RequestOptions } from '@angular/http';
 import { Injectable } from '@angular/core';
 import { isDevMode } from '@angular/core';
 import { MdSnackBar } from '@angular/material';
@@ -77,7 +77,7 @@ export class HttpService {
     let onAction: Function;
 
     if (!navigator.onLine) {
-      const snackBarRef2 = this.snackBar.open('Your internet appears to be down', action, {
+      this.snackBar.open('Your internet appears to be down', action, {
         duration: 20000
       });
     }

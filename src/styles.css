@@ -170,6 +170,10 @@ span {
   margin: 0 auto;
 }
 
+span.mat-button-wrapper {
+  display: contents;
+}
+
 span.markdown table {
     border-collapse: collapse;
     width: 100%;
@@ -560,26 +564,26 @@ ul.ngx-pagination {
     button#commentButton.mat-button.mat-accent {
       position: fixed;
       right: -1px;
-      bottom: 45px;
-      z-index: 3;
-      width: 5%;
+      bottom: 42px;
+      z-index: 4;
+      width: 7%;
       height: 38px;
       background-color: #263238;
       color: white;
-      text-align: right;
+      text-align: center;
       border-radius: 0 !important;
     }
 
     button#editorButton.mat-button.mat-accent {
       position: fixed;
       right: -1px;
-      bottom: 80px;
-      z-index: 3;
-      width: 5%;
-      height: 38px;
+      bottom: 3px;
+      z-index: 4;
+      width: 7%;
+      height: 48px;
       background-color: #263238;
       color: white;
-      text-align: right;
+      text-align: center;
       border-radius: 0 !important;
     }
 
@@ -590,6 +594,7 @@ ul.ngx-pagination {
       border: 6px solid #263238;
       width: 85%;
       height: 40px;
+      bottom: 40px;
       overflow-y: scroll;
       border-radius: 0 !important;
       resize: none;
@@ -680,11 +685,10 @@ ul.ngx-pagination {
     button#commentButton.mat-button.mat-accent {
       position: fixed;
       right: -1px;
-      bottom: 17px;
+      bottom: 0px;
       z-index: 3;
       width: 7%;
-      height: 56px;
-      padding-top: 10px;
+      height: 57px;
       background-color: #263238;
       color: white;
       text-align: center;
@@ -697,7 +701,7 @@ ul.ngx-pagination {
       bottom: 3px;
       z-index: 4;
       width: 7%;
-      height: 30px;
+      height: 48px;
       background-color: #263238;
       color: white;
       text-align: center;

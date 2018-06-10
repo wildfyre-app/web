@@ -2,7 +2,6 @@ import { Component, ViewChild } from '@angular/core';
 import { MdDialogRef, MdSnackBar } from '@angular/material';
 import { Post } from '../_models/post';
 import { ImageCropperComponent, CropperSettings, Bounds } from 'ng2-img-cropper';
-import { PostService } from '../_services/post.service';
 
 @Component({
   template: `
@@ -36,8 +35,7 @@ export class PicturesDialogComponent {
 
   constructor(
     public dialogRef: MdDialogRef<PicturesDialogComponent>,
-    public snackBar: MdSnackBar,
-    private postService: PostService
+    public snackBar: MdSnackBar
     ) {
       this.cropperSettings = new CropperSettings();
       this.cropperSettings.width = 920;
@@ -91,7 +89,7 @@ export class PicturesDialogComponent {
           break;
         }
       } else {
-        const snackBarRef = this.snackBar.open('You did not select a valid image file', 'Close', {
+        this.snackBar.open('You did not select a valid image file', 'Close', {
           duration: 3000
         });
       }

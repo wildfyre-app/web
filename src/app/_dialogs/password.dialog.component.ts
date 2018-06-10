@@ -111,22 +111,22 @@ export class PasswordDialogComponent implements OnDestroy {
                           this.model.newPassword2 = '';
                           this.returnInformation(true);
                         } else {
-                          const snackBarRef = this.snackBar.open('Error could not set token', 'Close');
+                          this.snackBar.open('Error could not set token', 'Close');
                         }
                       });
                   } else {
                     this.errors = result2.getError();
-                    const snackBarRef = this.snackBar.open('You did not follow the requirements', 'Close');
+                    this.snackBar.open('You did not follow the requirements', 'Close');
                   }
               });
 
             } else {
               this.errors = result.getError();
-              const snackBarRef = this.snackBar.open('Your new passwords do not match', 'Close');
+              this.snackBar.open('Your new passwords do not match', 'Close');
             }
           } else {
             this.errors = result.getError();
-            const snackBarRef = this.snackBar.open('This is not your current password', 'Close');
+            this.snackBar.open('This is not your current password', 'Close');
           }
       });
       }
