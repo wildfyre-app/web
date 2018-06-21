@@ -22,6 +22,7 @@ export class CreatePostComponent implements OnInit, OnDestroy {
   componentDestroyed: Subject<boolean> = new Subject();
   currentArea: string;
   errors: PostError;
+  imageData: any;
   isDraft = false;
   loading: boolean;
   post: Post = new Post(null, null, false, null, null, null, 's', null, [], []);
@@ -57,7 +58,6 @@ export class CreatePostComponent implements OnInit, OnDestroy {
                 .subscribe(post => {
                   this.post = post;
                   this.loading = false;
-
                   this.cdRef.detectChanges();
               });
             }
@@ -149,25 +149,22 @@ export class CreatePostComponent implements OnInit, OnDestroy {
     this.addLineBreak('* Unordered list can use asterisks\n- Or minuses\n+ Or pluses');
   }
 
-  createPost(draft: boolean, publish: boolean = false) {
+  createPost(draft: boolean) {
     this.loading = true;
+    this.cdRef.detectChanges();
     if (this.post.text !== '' && this.runImageCheck()) {
-      this.postService.createPost(this.currentArea, this.post.text, this.post.anonym, this.post.image, draft, this.post.id)
+      this.postService.createPost(this.currentArea, this.post.text, this.post.anonym, this.imageData, draft, this.post.id)
         .takeUntil(this.componentDestroyed)
         .subscribe(result => {
           if (!result.getError()) {
-            if (publish) {
-              this.publishDraft();
-            } else {
-              this.post.text = '';
-              let object = 'Post Created';
-              if (draft) {
-                object = 'Draft Saved';
-              }
-              const snackBarRef = this.snackBar.open(object + ' Successfully!', 'Close', {
-                duration: 3000
-              });
+            this.post.text = '';
+            let object = 'Post Created';
+            if (draft) {
+              object = 'Draft Saved';
             }
+            const snackBarRef = this.snackBar.open(object + ' Successfully!', 'Close', {
+              duration: 3000
+            });
             this.router.navigate(['']);
           } else {
             this.errors = result.getError();
@@ -188,7 +185,8 @@ export class CreatePostComponent implements OnInit, OnDestroy {
     this.postService.deleteImage(null, this.post.id, this.currentArea, this.post.text)
       .takeUntil(this.componentDestroyed)
       .subscribe(result2 => {
-        this.post.image = result2.image;
+        this.post.image = '';
+        this.imageData = null;
         const snackBarRef = this.snackBar.open('Your image was deleted successfully', 'Close', {
           duration: 3000
         });
@@ -203,6 +201,7 @@ export class CreatePostComponent implements OnInit, OnDestroy {
         this.post.additional_images.splice(i, 1);
         this.post.text = this.post.text.replace(sourceString, '');
         this.post.text = this.post.text.replace('\n' + sourceString, '');
+        this.cdRef.detectChanges();
         const snackBarRef = this.snackBar.open('Image deleted successfully', 'Close', {
           duration: 3000
         });
@@ -230,25 +229,6 @@ export class CreatePostComponent implements OnInit, OnDestroy {
 
   makeAnonymous(value: any) {
     this.post.anonym = value.checked;
-  }
-
-  publishDraft() {
-    this.loading = true;
-    if (this.post.text !== '') {
-      this.createPost(true);
-      this.postService.publishDraft(this.currentArea, this.post.id);
-      this.post.text = '';
-      const snackBarRef = this.snackBar.open('Post Created Successfully!', 'Close', {
-        duration: 3000
-      });
-      this.router.navigate(['']);
-      this.loading = false;
-    } else {
-      this.loading = false;
-      const snackBarRef = this.snackBar.open('You did not input anything', 'Close', {
-        duration: 3000
-      });
-    }
   }
 
   openDraftDeleteDialog() {
@@ -282,7 +262,7 @@ export class CreatePostComponent implements OnInit, OnDestroy {
                   .takeUntil(this.componentDestroyed)
                   .subscribe(result4 => {
                     if (result4) {
-                      this.post.image = result4.image;
+                      this.imageData = result4.image;
                       this.router.navigateByUrl('/create/' + result3.id);
                     } else {
                       if (result4 === null) {
@@ -422,55 +402,66 @@ export class CreatePostComponent implements OnInit, OnDestroy {
       });
   }
 
+    publishDraft() {
+    this.loading = true;
+    if (this.post.text !== '' && this.runImageCheck()) {
+      this.createPost(true);
+      this.postService.publishDraft(this.currentArea, this.post.id);
+      this.post.text = '';
+      const snackBarRef = this.snackBar.open('Post Created Successfully!', 'Close', {
+        duration: 3000
+      });
+      this.router.navigate(['']);
+      this.loading = false;
+    } else {
+      this.loading = false;
+      const snackBarRef = this.snackBar.open('You did not input anything or you have unsupported markdown', 'Close', {
+        duration: 3000
+      });
+    }
+  }
+
   runImageCheck(): boolean {
+    this.cdRef.detectChanges();
     let valid = true;
     const linkMatch = this.getImageMatchesByGroup(1, this.post.text, C.WF_IMAGE_REGEX);
     const usedMarkdownIndexes: string[] = [];
-    const invalidMatch = this.getImageMatchesByGroup(2, this.post.text, /(\[img: (\d)\])/gm);
+    const invalidMatch = this.getImageMatchesByGroup(2, this.post.text, C.WF_IMAGE_REGEX);
 
     // Find duplicates and invalids
     if (linkMatch.length <= 4) {
-      if (!(linkMatch.length > 0 && this.post.additional_images.length === 0)) {
-        if (invalidMatch.length > this.post.additional_images.length) {
-          valid = false;
-          const snackBarRef = this.snackBar.open(
-            'This markdown does not work here',
-             'Close', {
-            duration: 3000
-          });
-        } else {
-          for (let i = 0; i < invalidMatch.length; i++) {
-            if (Number.parseInt(invalidMatch[i]) !== this.post.additional_images[i].num) {
-              valid = false;
-              const snackBarRef = this.snackBar.open(
-                'This markdown does not work here',
-                 'Close', {
-                duration: 3000
-              });
-            }
-          }
-        }
-        for (let z = 0; z < linkMatch.length; z++) {
-          if (valid) {
-            if (usedMarkdownIndexes.indexOf(linkMatch[z]) !== -1) {
-              valid = false;
-              const snackBarRef = this.snackBar.open(
-                'It appears as if you have duplicate image markdown, we do not allow this',
-                 'Close', {
-                duration: 3000
-              });
-            } else {
-              usedMarkdownIndexes.push(linkMatch[z]);
-            }
-          }
-        }
-      } else {
+      if (linkMatch.length > this.post.additional_images.length) {
         valid = false;
         const snackBarRef = this.snackBar.open(
           'This markdown does not work here',
            'Close', {
           duration: 3000
         });
+      } else {
+        for (let i = 0; i < invalidMatch.length; i++) {
+          if (Number.parseInt(invalidMatch[i]) !== this.post.additional_images[i].num) {
+            valid = false;
+            const snackBarRef = this.snackBar.open(
+              'This markdown does not work here',
+               'Close', {
+              duration: 3000
+            });
+          }
+        }
+      }
+      for (let z = 0; z < linkMatch.length; z++) {
+        if (valid) {
+          if (usedMarkdownIndexes.indexOf(linkMatch[z]) !== -1) {
+            valid = false;
+            const snackBarRef = this.snackBar.open(
+              'It appears as if you have duplicate image markdown, we do not allow this',
+               'Close', {
+              duration: 3000
+            });
+          } else {
+            usedMarkdownIndexes.push(linkMatch[z]);
+          }
+        }
       }
     } else {
       valid = false;

@@ -41,11 +41,11 @@ export class UserPostsComponent implements OnInit, OnDestroy {
 
     for (let i = 0; i <= posts.length - 1; i++) {
       // Find image markdown data in post.text - Guarenteed by Regex
-      const indexOfStart = posts[i].text.search(C.IMAGE_REGEX);
+      const indexOfStart = posts[i].text.search(C.WF_IMAGE_REGEX);
       if (indexOfStart !== -1) {
         // Start at index and parse until we find a closing ')' char
         for (let j = indexOfStart; j <= posts[i].text.length; j++) {
-          if (posts[i].text.charAt(j) === ')') {
+          if (posts[i].text.charAt(j) === ']') {
             // Add data to image array in specific area
               this.imageArray[area][i]  = posts[i].text.slice(indexOfStart, j + 1);
           }
@@ -75,7 +75,7 @@ export class UserPostsComponent implements OnInit, OnDestroy {
       .replace(/\[\^.+?\](\: .*?$)?/g, '')
       .replace(/\s{0,2}\[.*?\]: .*?$/g, '')
       // Remove images
-      .replace(C.IMAGE_REGEX, '')
+      .replace(C.WF_IMAGE_REGEX, '')
       // Remove wildfyre images
       .replace(/(\[img: \d\])/gm, '')
       // Remove inline links

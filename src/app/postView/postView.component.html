@@ -1,7 +1,8 @@
 <md-spinner *ngIf="loading"></md-spinner>
+<br>
 <md-card class="example-card" *ngIf="!loading">
   <button id="topNavBack" md-button (click)="back()"><i class="material-icons">arrow_back</i></button>
-  {{post?.image}}
+  <a *ngIf="post?.image" href="{{post?.image}}"><img src="{{post?.image}}" /></a>
   <span class="mainText" innerHTML="{{post?.text | marked: post}}"></span>
   <md-card (click)="gotoUser(post?.author?.user)" class="parentContainer1">
     <div class="parentContainer">

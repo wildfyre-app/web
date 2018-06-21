@@ -65,7 +65,7 @@
       </ul>
     </div>
     <button *ngIf="!post?.id" class="wideButtons" md-raised-button (click)="createPost(false)" color="accent" [disabled]="loading"><b>Create</b></button>
-    <button *ngIf="post?.id" class="wideButtons" md-raised-button (click)="createPost(true, true)" color="accent" [disabled]="loading"><b>Create</b></button>
+    <button *ngIf="post?.id" class="wideButtons" md-raised-button (click)="publishDraft()" color="accent" [disabled]="loading"><b>Create</b></button>
     <br><br>
     <button class="wideButtons" md-raised-button (click)="createPost(true)" color="primary" [disabled]="loading"><b>Save Draft</b></button>
     <br><br>

@@ -220,11 +220,11 @@ export class PostViewComponent implements OnInit, OnDestroy {
     }
   }
 
-  getImageMatchesByGroup(index: number): string[] {
+  getImageMatchesByGroup(index: number, str: string, reg: RegExp): string[] {
     let match: any;
     const matches: string[] = [];
     // Find any occurence of image markdown
-    while ((match = C.IMAGE_REGEX.exec(this.model.comment))) {
+    while ((match = reg.exec(str))) {
       if (match[index] !== undefined) {
         matches.push(match[index]);
       }
@@ -265,6 +265,7 @@ export class PostViewComponent implements OnInit, OnDestroy {
   }
 
   openFlagDialog(post: Post, comment: Comment, typeOfFlagReport: TypeOfReport) {
+    this.contractBox();
     this.flagService.currentComment = comment;
     this.flagService.currentPost = post;
 
@@ -295,7 +296,7 @@ export class PostViewComponent implements OnInit, OnDestroy {
 
   postComment() {
     this.cdRef.detectChanges();
-    if (this.model.comment !== '') {
+    if (this.model.comment !== '' && this.runImageCheck()) {
       if (this.imageData) {
         this.postService.setPicture(this.imageData, this.post, this.currentArea, false, this.model.comment)
           .takeUntil(this.componentDestroyed)
@@ -320,11 +321,22 @@ export class PostViewComponent implements OnInit, OnDestroy {
       this.cdRef.detectChanges();
     } else {
       const snackBarRef = this.snackBar.open(
-        'Please enter something'
+        'Please enter something or remove markdown'
         , 'Close', {
         duration: 3000
       });
     }
+  }
+
+  runImageCheck(): boolean {
+    this.cdRef.detectChanges();
+    const valid = true;
+    const linkMatch = this.getImageMatchesByGroup(1, this.model.comment, C.WF_IMAGE_REGEX);
+    // Find duplicates and invalids
+    if (linkMatch.length > 0) {
+      return false;
+    }
+    return true;
   }
 
   share(commentID: number) {

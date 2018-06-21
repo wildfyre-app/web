@@ -53,7 +53,7 @@ export class PicturesDialogComponent {
       this.cropperSettings.minHeight = 10;
 
       this.cropperSettings.rounded = false;
-      this.cropperSettings.keepAspect = false;
+      this.cropperSettings.keepAspect = true;
 
       this.cropperSettings.cropperDrawSettings.strokeColor = 'rgb(191, 63, 127)';
       this.cropperSettings.cropperDrawSettings.strokeWidth = 3;

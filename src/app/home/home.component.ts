@@ -65,7 +65,6 @@ export class HomeComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    this.cdRef.detectChanges();
     this.loading = true;
     this.model.comment = '';
     this.routeService.resetRoutes();
@@ -104,6 +103,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   addImage() {
   const dialogRef = this.dialog.open(PictureDialogComponent);
   dialogRef.componentInstance.postID = this.post.id;
+  dialogRef.componentInstance.comment = true;
   dialogRef.afterClosed()
     .takeUntil(this.componentDestroyed)
     .subscribe(result => {
@@ -180,11 +180,11 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
   }
 
-  getImageMatchesByGroup(index: number): string[] {
+  getImageMatchesByGroup(index: number, str: string, reg: RegExp): string[] {
     let match: any;
     const matches: string[] = [];
     // Find any occurence of image markdown
-    while ((match = C.IMAGE_REGEX.exec(this.model.comment))) {
+    while ((match = reg.exec(str))) {
       if (match[index] !== undefined) {
         matches.push(match[index]);
       }
@@ -233,7 +233,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   postComment() {
     this.cdRef.detectChanges();
-    if (this.model.comment !== '') {
+    if (this.model.comment !== '' && this.runImageCheck()) {
       if (this.imageData) {
         this.postService.setPicture(this.imageData, this.post, this.currentArea, false)
           .takeUntil(this.componentDestroyed)
@@ -258,7 +258,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.cdRef.detectChanges();
     } else {
       const snackBarRef = this.snackBar.open(
-        'Please enter something'
+        'Please enter something or remove markdown'
         , 'Close', {
         duration: 3000
       });
@@ -314,6 +314,17 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
 
     this.cdRef.detectChanges();
+  }
+
+  runImageCheck(): boolean {
+    this.cdRef.detectChanges();
+    const valid = true;
+    const linkMatch = this.getImageMatchesByGroup(1, this.model.comment, C.WF_IMAGE_REGEX);
+    // Find duplicates and invalids
+    if (linkMatch.length > 0) {
+      return false;
+    }
+    return true;
   }
 
   share(commentID: number) {

@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy, NgModule, ChangeDetectorRef } from '@angu
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs/Subject';
 import { AreaList } from '../_models/areaList';
+import * as C from '../_models/constants';
 import { Notification } from '../_models/notification';
 import { Post } from '../_models/post';
 import { NavBarService } from '../_services/navBar.service';
@@ -43,11 +44,11 @@ export class NotificationArchiveComponent implements OnInit, OnDestroy {
 
     for (let i = 0; i <= posts.length - 1; i++) {
       // Find image markdown data in post.text - Guarenteed by Regex
-      const indexOfStart = posts[i].text.search(/\!\[.*?\][\[\(].*?[\]\)]/g);
+      const indexOfStart = posts[i].text.search(C.WF_IMAGE_REGEX);
       if (indexOfStart !== -1) {
         // Start at index and parse until we find a closing ')' char
         for (let j = indexOfStart; j <= posts[i].text.length; j++) {
-          if (posts[i].text.charAt(j) === ')') {
+          if (posts[i].text.charAt(j) === ']') {
             // Add data to image array in specific area
               this.imageArray[area][i]  = posts[i].text.slice(indexOfStart, j + 1);
           }

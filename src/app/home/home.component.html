@@ -5,7 +5,9 @@
   <br><br>
   <button class="wideButtons" md-button (click)="ngOnInit()">Refresh <i class="material-icons">refresh</i></button>
 </div>
+  <br>
   <md-card class="example-card" *ngIf="post && !loading">
+    <a *ngIf="post?.image" href="{{post?.image}}"><img src="{{post?.image}}" /></a>
     <span class="mainText" [innerHTML]="post.text | marked"></span>
     <md-card (click)="gotoUser(post.author.user)" class="parentContainer1">
     <div class="parentContainer">
