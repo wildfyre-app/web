@@ -3,7 +3,7 @@ import { ChangeDetectorRef } from '@angular/core';
 import { ComponentFixture, ComponentFixtureAutoDetect, TestBed, async } from '@angular/core/testing';
 import { DebugElement } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { MdMenuModule, MdSlideToggleModule, MdDialogRef, MdDialog, MdSnackBarModule } from '@angular/material';
+import { MatCardModule, MatIconModule, MatListModule, MatMenuModule, MatSlideToggleModule, MatDialogRef, MatDialog, MatProgressSpinnerModule, MatSnackBarModule } from '@angular/material';
 import { Router, RouterModule } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
@@ -107,15 +107,15 @@ describe('HomeComponent', () => {
                 { provide: AreaService, useValue: areaServiceStub },
                 { provide: CommentService, useValue: commentServiceStub },
                 { provide: FlagService, useValue: flagServiceStub },
-                { provide: MdDialog, useValue: mdDialogStub },
-                { provide: MdDialogRef, useValue: mdDialogRefStub },
+                { provide: MatDialog, useValue: mdDialogStub },
+                { provide: MatDialogRef, useValue: mdDialogRefStub },
                 { provide: NavBarService, useValue: navBarServiceStub },
                 { provide: PostService, useValue: postServiceStub },
                 { provide: ProfileService, useValue: profileServiceStub },
                 { provide: RouteService, useValue: routeServiceStub },
                 { provide: ComponentFixtureAutoDetect, useValue: true }
             ],
-            imports: [ MdMenuModule, FormsModule, ClipboardModule, MdSlideToggleModule, RouterModule, MdSnackBarModule ]
+            imports: [ MatCardModule, MatIconModule, MatListModule, MatMenuModule, FormsModule, ClipboardModule, MatProgressSpinnerModule, MatSlideToggleModule, RouterModule, MatSnackBarModule ]
         });
         fixture = TestBed.createComponent(HomeComponent);
         comp = fixture.componentInstance;

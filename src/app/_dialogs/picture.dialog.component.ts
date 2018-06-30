@@ -1,19 +1,19 @@
 import { Component, ViewChild, OnInit } from '@angular/core';
-import { MdDialogRef, MdSnackBar } from '@angular/material';
-import { ImageCropperComponent, CropperSettings, Bounds } from 'ng2-img-cropper';
+import { MatDialogRef, MatSnackBar } from '@angular/material';
+import { ImageCropperComponent, CropperSettings, Bounds } from 'ngx-img-cropper';
 
 @Component({
   template: `
-  <h1 md-dialog-title>Upload Your Picture</h1>
+  <h1 mat-dialog-title>Upload Your Picture</h1>
 
   <img-cropper [image]="data" [settings]="cropperSettings" (onCrop)="cropped($event)"></img-cropper>
   <span class="result" *ngIf="data.image">
     <img [src]="data.image" [width]="croppedWidth" [height]="croppedHeight">
   </span>
 
-  <div md-dialog-actions>
-    <button md-button md-dialog-close="true" (click)="returnInformation(true)">Add image</button>
-    <button md-button md-dialog-close="false" (click)="returnInformation(false)">Cancel</button>
+  <div mat-dialog-actions>
+    <button mat-button mat-dialog-close="true" (click)="returnInformation(true)">Add image</button>
+    <button mat-button mat-dialog-close="false" (click)="returnInformation(false)">Cancel</button>
   </div>
   `
 })
@@ -28,8 +28,8 @@ export class PictureDialogComponent implements OnInit {
   picture: any;
 
   constructor(
-    public dialogRef: MdDialogRef<PictureDialogComponent>,
-    public snackBar: MdSnackBar
+    public dialogRef: MatDialogRef<PictureDialogComponent>,
+    public snackBar: MatSnackBar
     ) {
       this.cropperSettings = new CropperSettings();
       this.cropperSettings.width = 920;

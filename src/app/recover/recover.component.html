@@ -1,21 +1,22 @@
-<md-card class="register-card">
+<div id="topNavBackHidden"><i class="material-icons">arrow_back</i></div>
+<mat-card class="register-card">
   <a class="logoLink" routerLink="/" routerLinkActive="active"><img class="logo" src="https://static.wildfyre.net/wildfyre.png" alt="WildFyre"></a>
-  <md-card-content>
+  <mat-card-content>
     <h2>Recover</h2>
-    <md-accordion>
-      <md-expansion-panel hideToggle="true">
-        <md-expansion-panel-header>
-      <md-panel-title>
+    <mat-accordion>
+      <mat-expansion-panel hideToggle="true">
+        <mat-expansion-panel-header>
+      <mat-panel-title>
         <b>Recover your Username</b>
-      </md-panel-title>
-      <md-panel-description>
+      </mat-panel-title>
+      <mat-panel-description>
         <hr>
-        <md-icon>account_circle</md-icon>
-      </md-panel-description>
-    </md-expansion-panel-header>
-    <md-input-container>
-      <input mdInput placeholder="Email" type="email" name="email" [(ngModel)]="model.email" #email="ngModel" autocomplete="email" required/>
-    </md-input-container>
+        <mat-icon>account_circle</mat-icon>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <mat-input-container>
+      <input matInput placeholder="Email" type="email" name="email" [(ngModel)]="model.email" #email="ngModel" autocomplete="email" required/>
+    </mat-input-container>
     <div *ngIf="errors && errors._email" class="help-block has-error">
       <ul *ngFor="let err of errors._email">
         <li>{{err}}</li>
@@ -29,32 +30,32 @@
         </ul>
       </div>
     </div>
-    <md-spinner *ngIf="loading"></md-spinner>
-    <md-action-row>
-      <button class="wideButtons" md-raised-button color="accent" [disabled]="loading" (click)="recoverUsername()">Submit</button>
-    </md-action-row>
-      </md-expansion-panel>
-      <md-expansion-panel hideToggle="true">
-    <md-expansion-panel-header>
-      <md-panel-title>
+    <mat-progress-spinner *ngIf="loading"></mat-progress-spinner>
+    <mat-action-row>
+      <button class="wideButtons" mat-raised-button color="accent" [disabled]="loading" (click)="recoverUsername()">Submit</button>
+    </mat-action-row>
+      </mat-expansion-panel>
+      <mat-expansion-panel hideToggle="true">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
         <b>Recover your Password</b>
-      </md-panel-title>
-      <md-panel-description>
+      </mat-panel-title>
+      <mat-panel-description>
         <hr>
-        <md-icon>lock</md-icon>
-      </md-panel-description>
-    </md-expansion-panel-header>
-    <md-input-container>
-      <input mdInput placeholder="Email" type="email" name="email2" [(ngModel)]="model.email2" #email2="ngModel" autocomplete="email" required/>
-    </md-input-container>
+        <mat-icon>lock</mat-icon>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <mat-input-container>
+      <input matInput placeholder="Email" type="email" name="email2" [(ngModel)]="model.email2" #email2="ngModel" autocomplete="email" required/>
+    </mat-input-container>
     <div *ngIf="errors && errors._email" class="help-block has-error">
       <ul *ngFor="let err of errors._email">
         <li>{{err}}</li>
       </ul>
     </div>
-    <md-input-container>
-      <input mdInput placeholder="Username"  type="text" name="username" [(ngModel)]="model.username" #username="ngModel" autocomplete="username" required/>
-    </md-input-container>
+    <mat-input-container>
+      <input matInput placeholder="Username"  type="text" name="username" [(ngModel)]="model.username" #username="ngModel" autocomplete="username" required/>
+    </mat-input-container>
     <div *ngIf="errors && errors._username" class="help-block has-error">
       <ul *ngFor="let err of errors._username">
         <li>{{err}}</li>
@@ -68,11 +69,11 @@
         </ul>
       </div>
     </div>
-    <md-spinner *ngIf="loading"></md-spinner>
-    <md-action-row>
-      <button class="wideButtons" md-raised-button color="accent" [disabled]="loading" (click)="recoverPassword()">Submit</button>
-    </md-action-row>
-  </md-expansion-panel>
-    </md-accordion>
-  </md-card-content>
-</md-card>
+    <mat-progress-spinner *ngIf="loading"></mat-progress-spinner>
+    <mat-action-row>
+      <button class="wideButtons" mat-raised-button color="accent" [disabled]="loading" (click)="recoverPassword()">Submit</button>
+    </mat-action-row>
+  </mat-expansion-panel>
+    </mat-accordion>
+  </mat-card-content>
+</mat-card>

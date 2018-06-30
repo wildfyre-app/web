@@ -2,7 +2,7 @@ import { By } from '@angular/platform-browser';
 import { ComponentFixture,  ComponentFixtureAutoDetect, TestBed, async } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { NO_ERRORS_SCHEMA, Component } from '@angular/core';
-import { MdCardModule, MdTabsModule, MdSlideToggleModule } from '@angular/material';
+import { MatCardModule, MatTabsModule, MatProgressSpinnerModule, MatSlideToggleModule } from '@angular/material';
 import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Author } from '../_models/author';
@@ -70,7 +70,7 @@ describe('NotificationArchiveComponent', () => {
                 { provide: RouteService, useValue: routeServiceStub },
                 { provide: ComponentFixtureAutoDetect, useValue: true }
             ],
-            imports: [ MdCardModule, RouterModule, MdTabsModule, MdSlideToggleModule, FormsModule, NgxMasonryModule, NgxPaginationModule ],
+            imports: [ MatCardModule, RouterModule, MatTabsModule, MatProgressSpinnerModule, MatSlideToggleModule, FormsModule, NgxMasonryModule, NgxPaginationModule ],
         }).compileComponents();
         fixture = TestBed.createComponent(NotificationArchiveComponent);
         comp = fixture.componentInstance;

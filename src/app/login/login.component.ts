@@ -1,5 +1,5 @@
 ﻿import { Component, OnInit, OnDestroy } from '@angular/core';
-import { MdSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs/Subject';
 import { AuthError } from '../_models/auth';
@@ -19,7 +19,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   constructor(
     private router: Router,
-    public snackBar: MdSnackBar,
+    public snackBar: MatSnackBar,
     private authenticationService: AuthenticationService,
     private navBarService: NavBarService,
     private notificationService: NotificationService,

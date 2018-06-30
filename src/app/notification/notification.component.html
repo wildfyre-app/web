@@ -1,17 +1,18 @@
-<md-card class="example-card">
-  <button class="wideButtons" md-button (click)="loadArchive()"><i class="material-icons">folder</i> Archive</button>
+<div id="topNavBackHidden"><i class="material-icons">arrow_back</i></div>
+<mat-card class="example-card">
+  <button class="wideButtons" mat-button (click)="loadArchive()"><i class="material-icons">folder</i> Archive</button>
   <hr *ngIf="(notifications.length !== 0) && !loading">
-  <button class="wideButtons" (click)="deleteNotifications()" *ngIf="(notifications.length !== 0) && !loading" md-button><i class="material-icons">delete</i>Delete all Notifications</button>
-</md-card>
-<md-card class="content" (click)="ngOnInit()" *ngIf="(notifications.length === 0) && !loading">
+  <button class="wideButtons" (click)="deleteNotifications()" *ngIf="(notifications.length !== 0) && !loading" mat-button><i class="material-icons">delete</i>Delete all Notifications</button>
+</mat-card>
+<mat-card class="content" (click)="ngOnInit()" *ngIf="(notifications.length === 0) && !loading">
     <div class="notifContent">
       No more notifications, try engaging more?
     </div>
-    <button class="wideButtons" md-button>Refresh <i class="material-icons">refresh</i></button>
-</md-card>
-<md-spinner *ngIf="loading"></md-spinner>
+    <button class="wideButtons" mat-button>Refresh <i class="material-icons">refresh</i></button>
+</mat-card>
+<mat-progress-spinner *ngIf="loading"></mat-progress-spinner>
 <div *ngFor="let notification of notifications | paginate: { id: 'server', itemsPerPage: limit, currentPage: index, totalItems: totalCount }">
-  <md-card class="content" (click)="goto(notification.area, notification.post.id, notification.comments)">
+  <mat-card class="content" (click)="goto(notification.area, notification.post.id, notification.comments)">
     <div class="notifCount">
       <h2>{{notification.comments.length}}</h2>
     </div>
@@ -20,6 +21,6 @@
       <br>
       –{{notification.post.author.name}}
     </div>
-  </md-card>
+  </mat-card>
 </div>
   <pagination-controls *ngIf="(notifications.length !== 0)" (pageChange)="getNotifications($event)" id="server"></pagination-controls>

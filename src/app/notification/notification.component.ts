@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
-import { MdDialog, MdDialogRef, MdSnackBar } from '@angular/material';
+import { MatDialog, MatDialogRef, MatSnackBar } from '@angular/material';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs/Subject';
 import { ConfirmDeletionDialogComponent } from '../_dialogs/confirmDeletion.dialog.component';
@@ -26,10 +26,10 @@ export class NotificationComponent implements OnInit, OnDestroy {
 
   constructor(
     private cdRef: ChangeDetectorRef,
-    private dialog: MdDialog,
+    private dialog: MatDialog,
     private route: ActivatedRoute,
     private router: Router,
-    private snackBar: MdSnackBar,
+    private snackBar: MatSnackBar,
     private navBarService: NavBarService,
     private notificationService: NotificationService,
     private routeService: RouteService

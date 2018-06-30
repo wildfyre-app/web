@@ -3,7 +3,7 @@ import { ComponentFixture, ComponentFixtureAutoDetect, TestBed, async } from '@a
 import { DebugElement } from '@angular/core';
 import { NgModel, NgForm } from '@angular/forms';
 import { MarkedPipe } from '../_pipes/marked.pipe';
-import { MdSnackBar, MdMenuModule, MdCardModule, MdDialog } from '@angular/material';
+import { MatIconModule, MatSnackBar, MatMenuModule, MatProgressSpinnerModule, MatCardModule, MatDialog } from '@angular/material';
 import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
@@ -14,7 +14,7 @@ import { AuthenticationService } from '../_services/authentication.service';
 import { ProfileService } from '../_services/profile.service';
 import { RouteService } from '../_services/route.service';
 import { ReasonService } from '../_services/reason.service';
-import { ImageCropperComponent, CropperSettings, Bounds } from 'ng2-img-cropper';
+import { ImageCropperComponent, CropperSettings, Bounds } from 'ngx-img-cropper';
 import { NgxPaginationModule } from 'ngx-pagination';
 
 
@@ -79,8 +79,8 @@ describe('ProfileComponent', () => {
         TestBed.configureTestingModule({
             declarations: [ ProfileComponent, MarkedPipe, NgModel, NgForm, ImageCropperComponent ],
             providers: [
-                { provide: MdDialog, useValue: mdDialogStub },
-                { provide: MdSnackBar, useValue: mdSnackBarStub },
+                { provide: MatDialog, useValue: mdDialogStub },
+                { provide: MatSnackBar, useValue: mdSnackBarStub },
                 { provide: Router, useValue: routerStub },
                 { provide: ActivatedRoute, useValue: activatedRouteStub },
                 { provide: AuthenticationService, useValue: authenticationServiceStub },
@@ -89,7 +89,7 @@ describe('ProfileComponent', () => {
                 { provide: RouteService, useValue: routeServiceStub },
                 { provide: ComponentFixtureAutoDetect, useValue: true }
             ],
-            imports: [ MdMenuModule, MdCardModule, NgxPaginationModule ],
+            imports: [ MatIconModule, MatMenuModule, MatProgressSpinnerModule, MatCardModule, NgxPaginationModule ],
         });
         fixture = TestBed.createComponent(ProfileComponent);
         comp = fixture.componentInstance;

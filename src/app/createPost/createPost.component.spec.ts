@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed, inject } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { MdDialog, MdDialogRef, MdMenuModule, MdSlideToggleModule, MdSnackBarModule } from '@angular/material';
+import { MatDialog, MatDialogRef, MatMenuModule, MatSlideToggleModule, MatSnackBarModule } from '@angular/material';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
@@ -54,16 +54,16 @@ describe('CreatePostComponent', () => {
             declarations: [ CreatePostComponent, MarkedPipe ],
             schemas: [ NO_ERRORS_SCHEMA ],
             providers: [
-                { provide: MdDialog, useValue: mdDialogStub },
+                { provide: MatDialog, useValue: mdDialogStub },
                 { provide: Router, useValue: routerStub },
                 { provide: ActivatedRoute, useValue: activatedRouteStub },
                 { provide: AreaService, useValue: areaServiceStub },
                 { provide: NavBarService, useValue: navBarServiceStub },
                 { provide: PostService, useValue: postServiceStub },
-                { provide: MdDialogRef, useValue: mdDialogRefStub },
+                { provide: MatDialogRef, useValue: mdDialogRefStub },
                 { provide: RouteService, useValue: routeServiceStub }
             ],
-            imports: [ MdMenuModule, MdSlideToggleModule, FormsModule, MdSnackBarModule ],
+            imports: [ MatMenuModule, MatSlideToggleModule, FormsModule, MatSnackBarModule ],
         });
         fixture = TestBed.createComponent(CreatePostComponent);
         comp = fixture.componentInstance;

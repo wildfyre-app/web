@@ -1,11 +1,12 @@
-<md-menu #appMenu="mdMenu">
-  <button md-menu-item (click)="viewProfile()"><md-icon>public</md-icon>View Public Profile</button>
-  <button md-menu-item (click)="openBioDialog()"><md-icon>mode_edit</md-icon>Bio</button>
-  <button md-menu-item (click)="openEmailDialog()"><md-icon>mode_edit</md-icon>Email</button>
-  <button md-menu-item (click)="openPasswordDialog()"><md-icon>mode_edit</md-icon>Password</button>
-  <button md-menu-item (click)="openPictureDialog()"><md-icon>mode_edit</md-icon>Avatar</button>
-</md-menu>
-<md-spinner *ngIf="loading"></md-spinner>
+<div id="topNavBackHidden"><i class="material-icons">arrow_back</i></div>
+<mat-menu #appMenu="matMenu">
+  <button mat-menu-item (click)="viewProfile()"><mat-icon>public</mat-icon>View Public Profile</button>
+  <button mat-menu-item (click)="openBioDialog()"><mat-icon>mode_edit</mat-icon>Bio</button>
+  <button mat-menu-item (click)="openEmailDialog()"><mat-icon>mode_edit</mat-icon>Email</button>
+  <button mat-menu-item (click)="openPasswordDialog()"><mat-icon>mode_edit</mat-icon>Password</button>
+  <button mat-menu-item (click)="openPictureDialog()"><mat-icon>mode_edit</mat-icon>Avatar</button>
+</mat-menu>
+<mat-progress-spinner *ngIf="loading"></mat-progress-spinner>
 <div class="alert alert-danger" *ngIf="author?.banned">
   <h2>You are currently banned</h2>
 </div>
@@ -30,8 +31,8 @@
 </div>
 <pagination-controls *ngIf="(bans.length !== 0)" (pageChange)="getBans($event)" id="server"></pagination-controls>
 
-<md-card class="example-card">
-  <button md-icon-button [mdMenuTriggerFor]="appMenu"><i class="material-icons">more_vert</i></button>
+<mat-card class="example-card">
+  <button mat-icon-button [matMenuTriggerFor]="appMenu"><i class="material-icons">more_vert</i></button>
   <a [href]="author?.avatar"><img class="pfp" *ngIf="author?.avatar" [src]="author?.avatar" alt="Avatar of {{author?.name}}"/></a>
   <a href="/assets/logo.png"><img class="pfp" *ngIf="!author?.avatar" src="/assets/logo.png" alt="Avatar of {{author?.name}}"/></a>
   <div class="parentContainer">
@@ -43,8 +44,8 @@
       </ng-container>
     </div>
   </div>
-</md-card>
-<md-card class="content">
+</mat-card>
+<mat-card class="content">
   <span id="bio" [innerHTML]="author?.bio | marked"></span>
-</md-card>
+</mat-card>
 <div id="userID">ID: {{author?.user}}</div>

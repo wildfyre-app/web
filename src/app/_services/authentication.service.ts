@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { isDevMode } from '@angular/core';
-import { Http, Headers, Response, RequestOptions } from '@angular/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import 'rxjs/add/operator/map';
 import { Auth, AuthError} from '../_models/auth';
@@ -11,7 +11,7 @@ export class AuthenticationService {
   public token: string;
 
   constructor(
-    private http: Http
+    private http: HttpClient
   ) {
     // set token if saved in local storage
     const currentUser = JSON.parse(localStorage.getItem('currentUser'));
@@ -23,16 +23,16 @@ export class AuthenticationService {
   }
 
   login(username: string, password: string): Observable<Auth> {
-    const options = new RequestOptions({headers: new Headers({'Content-Type': 'application/json'})});
+    const options = { headers: new HttpHeaders({ 'Content-Type': 'application/json'}) };
 
     return this.http.post(this.apiURL + '/account/auth/', JSON.stringify({ username: username, password: password }), options)
-      .map((response: Response) => {
+      .map((response: any) => {
         // set token property
-        this.token = response.json().token;
+        this.token = response.token;
         // store username and token in local storage to keep user logged in between page refreshes
         localStorage.setItem('currentUser', JSON.stringify({ username: username, token: this.token }));
 
-        return Auth.parse(response.json());
+        return Auth.parse(response);
       })
       .catch((error) => {
         const body = JSON.parse(error._body);

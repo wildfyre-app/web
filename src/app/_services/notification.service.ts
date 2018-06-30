@@ -29,7 +29,7 @@ export class NotificationService {
   getArchive(area: string, limit: number, offset: number): Observable<SuperPost> {
     return this.httpService.GET('/areas/' + area + '/subscribed/?limit=' + limit + '&offset=' + offset)
       .map((response: Response) => {
-        this.superPosts[area] = SuperPost.parse(response.json());
+        this.superPosts[area] = SuperPost.parse(response);
 
         return this.superPosts[area];
       });
@@ -53,7 +53,7 @@ export class NotificationService {
     }
     return this.httpService.GET('/areas/notification/?limit=' + limit + '&offset=' + offset)
       .map((response: Response) => {
-        this.superNotification = SuperNotification.parse(response.json());
+        this.superNotification = SuperNotification.parse(response);
         return this.superNotification;
       });
   }

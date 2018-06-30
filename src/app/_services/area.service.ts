@@ -22,7 +22,7 @@ export class AreaService {
     } else {
       return this.httpService.GET('/areas/' + area + '/rep/')
         .map((response: Response) => {
-          this.reputation[area] = Reputation.parse(response.json());
+          this.reputation[area] = Reputation.parse(response);
           return this.reputation[area];
         });
     }
@@ -32,12 +32,12 @@ export class AreaService {
     // get areas from api
     if (!this.areas) {
     return this.httpService.GET('/areas/')
-      .map((response: Response) => {
+      .map(response => {
         const areas: Area[] = [];
-        response.json().forEach((area: any) => {
-            areas.push(Area.parse(area));
-            this.areas = areas;
-        });
+        for (let i = 0; i < response.length; i++) {
+          areas.push(Area.parse(response[i]))
+        }
+        this.areas = areas;
         return areas;
       });
     } else {

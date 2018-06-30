@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Response } from '@angular/http';
 import { Observable } from 'rxjs';
 import { HttpService } from './http.service';
 import { Choice } from '../_models/choice';
@@ -15,11 +14,11 @@ export class ReasonService {
   getFlagReasons(): Observable<Choice[]> {
     // get flag reasons from api
     return this.httpService.GET('/choices/flag/reasons/')
-      .map((response: Response) => {
+      .map(response => {
         const choices: Choice[] = [];
-        response.json().forEach((choice: any) => {
-          choices.push(Choice.parse(choice));
-        });
+        for (let i = 0; i < response.length; i++) {
+          choices.push(Choice.parse(response[i]))
+        }
       return choices;
     });
   }

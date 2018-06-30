@@ -1,18 +1,19 @@
 <!-- Removed as of D114
-<md-input-container>
-  <input mdInput placeholder="Search Posts" type="text" name="search" (input)="searchInput()" [(ngModel)]="model.postText" #postText="ngModel" autocomplete="off" />
-</md-input-container>
+<mat-input-container>
+  <input matInput placeholder="Search Posts" type="text" name="search" (input)="searchInput()" [(ngModel)]="model.postText" #postText="ngModel" autocomplete="off" />
+</mat-input-container>
 -->
-<md-card class="refreshButton" (click)="ngOnInit()" *ngIf="totalCount === 0 && !loading">
+<div id="topNavBackHidden"><i class="material-icons">arrow_back</i></div>
+<mat-card class="refreshButton" (click)="ngOnInit()" *ngIf="totalCount === 0 && !loading">
     No posts, try posting?
-    <button class="wideButtons" md-button>Refresh <i class="material-icons">refresh</i></button>
-</md-card>
+    <button class="wideButtons" mat-button>Refresh <i class="material-icons">refresh</i></button>
+</mat-card>
 <br><br>
-<md-spinner *ngIf="loading"></md-spinner>
+<mat-progress-spinner *ngIf="loading"></mat-progress-spinner>
 
 <ngx-masonry [options]="{ horizontalOrder: true }" *ngIf="currentArea">
   <ngx-masonry-item class="brick" *ngFor="let post of backupPosts[currentArea]  | paginate: { id: 'server', itemsPerPage: limit, currentPage: index, totalItems: totalCount }; let i = index">
-      <md-card class="userPostsGrid" (click)="goto(post.id)">
+      <mat-card class="userPostsGrid" (click)="goto(post.id)">
           <font size="0.1">
             <ng-container *ngIf="!post.anonym"><i class="material-icons">visibility_on</i></ng-container>
             <ng-container *ngIf="post.anonym"><i class="material-icons">visibility_off</i></ng-container>
@@ -21,17 +22,17 @@
             <hr>
             {{post.created}}
         </font>
-      </md-card>
+      </mat-card>
   </ngx-masonry-item>
 </ngx-masonry>
 
 <!-- Removed as of D114
 <masonry *ngIf="!checked && searching">
-  <md-card class="userPostsGrid" style="margin: 0 auto; text-align: center;" *ngIf="searchArray.length === 0">
+  <mat-card class="userPostsGrid" style="margin: 0 auto; text-align: center;" *ngIf="searchArray.length === 0">
     No posts match this search
-  </md-card>
+  </mat-card>
   <masonry-brick class="brick" *ngFor="let post of searchArray; let i = index">
-      <md-card class="userPostsGrid" (click)="goto('fun', post.id)">
+      <mat-card class="userPostsGrid" (click)="goto('fun', post.id)">
           <font size="0.1">
             <ng-container *ngIf="funImageArray[i]">
               <h1><i class="material-icons">image</i></h1>
@@ -40,16 +41,16 @@
             <hr>
             {{post.created}}
         </font>
-      </md-card>
+      </mat-card>
   </masonry-brick>
 </masonry>
 
 <masonry *ngIf="checked && searching">
-  <md-card class="userPostsGrid" style="margin: 0 auto; text-align: center;" *ngIf="searchArray.length === 0">
+  <mat-card class="userPostsGrid" style="margin: 0 auto; text-align: center;" *ngIf="searchArray.length === 0">
     No posts match this search
-  </md-card>
+  </mat-card>
   <masonry-brick class="brick" *ngFor="let post of searchArray; let i = index">
-    <md-card class="userPostsGrid" (click)="goto('information', post.id)">
+    <mat-card class="userPostsGrid" (click)="goto('information', post.id)">
       <font size="0.1">
         <ng-container *ngIf="infoImageArray[i]">
           <h1><i class="material-icons">image</i></h1>
@@ -58,7 +59,7 @@
         <hr>
         {{post.created}}
     </font>
-    </md-card>
+    </mat-card>
   </masonry-brick>
 </masonry>
 -->

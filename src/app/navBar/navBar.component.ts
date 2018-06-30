@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, ChangeDetectorRef, NgZone, ViewChild } from '@angular/core';
-import { MdSidenav, MdDialog, MdSnackBar } from '@angular/material';
+import { MatSidenav, MatDialog, MatSnackBar } from '@angular/material';
 import { Observable } from 'rxjs/Rx';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs/Subject';
@@ -18,7 +18,7 @@ import { BootController } from '../../boot-control';
   templateUrl: 'navBar.component.html'
 })
 export class NavBarComponent implements OnInit, OnDestroy {
-  @ViewChild('sidenav') sidenav: MdSidenav;
+  @ViewChild('sidenav') sidenav: MatSidenav;
 
   activeLinkIndex = 2;
   areas = new Array<AreaList>(new AreaList('', 0, 0));
@@ -26,6 +26,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
   areaSpread: { [area: string]: number; } = { };
   areaVisible = true;
   comment: CommentData = new CommentData('', null);
+  commentDisabled = false;
   componentDestroyed: Subject<boolean> = new Subject();
   currentArea = this.areas[0].name;
   expanded = false;
@@ -47,10 +48,10 @@ export class NavBarComponent implements OnInit, OnDestroy {
 
   constructor(
     private cdRef: ChangeDetectorRef,
-    private dialog: MdDialog,
+    private dialog: MatDialog,
     private ngZone: NgZone,
     private router: Router,
-    public snackBar: MdSnackBar,
+    public snackBar: MatSnackBar,
     private areaService: AreaService,
     private authenticationService: AuthenticationService,
     private notificationService: NotificationService,
@@ -88,6 +89,9 @@ export class NavBarComponent implements OnInit, OnDestroy {
           this.comment.comment = '';
           this.comment.image = null;
           this.contractBox();
+          this.commentDisabled = false;
+        } else {
+          this.commentDisabled = false;
         }
     });
 
@@ -318,16 +322,19 @@ export class NavBarComponent implements OnInit, OnDestroy {
   }
 
   postComment() {
+    this.commentDisabled = true;
     this.navBarService.comment.next(this.comment);
-    this.contractBox();
   }
 
   setActiveIndex(s: string) {
+    if (s === undefined) {
+      s = '/';
+    }
     if (s === '/profile') {
       this.stylePage = false;
       this.activeLinkIndex = 0;
       this.navBarService.areaVisible.next(false);
-    }  else if (s === '/notifications/archive') {
+    } else if (s === '/notifications/archive') {
       this.stylePage = false;
       this.activeLinkIndex = 1;
       this.navBarService.areaVisible.next(true);

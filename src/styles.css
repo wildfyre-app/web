@@ -30,20 +30,20 @@ canvas {
   width: 100%;
 }
 
-div div md-option#md-option-1.mat-option {
+div div mat-option#mat-option-1.mat-option {
   font-size: 20px;
 }
 
-div div md-option#md-option-1.mat-option.mat-selected {
+div div mat-option#mat-option-1.mat-option.mat-selected {
   color: #ed763e;
   font-size: 20px;
 }
 
-div div md-option#md-option-2.mat-option {
+div div mat-option#mat-option-2.mat-option {
   font-size: 20px;
 }
 
-div div md-option#md-option-2.mat-option.mat-selected {
+div div mat-option#mat-option-2.mat-option.mat-selected {
   color: #ed763e;
   font-size: 20px;
 }
@@ -59,6 +59,10 @@ div.creationEditor {
 
 div.mat-dialog-actions {
   float: right;
+}
+
+div.mat-select-arrow {
+  color: #ed763e;
 }
 
 div.mat-slide-toggle-bar {
@@ -109,29 +113,35 @@ masonry {
   width: 100%;
 }
 
-masonry.md-card.font.span.span.span {
+masonry.mat-card.font.span.span.span {
   font-size: 5px;
 }
 
-md-card#404page.mat-card {
+mat-card#404page.mat-card {
   margin-top: 1%;
   margin-bottom: 1%;
   margin-right: 1%;
   margin-left: 1%;
 }
 
-md-input-container.mat-input-container {
+mat-input-container.mat-input-container {
   width: 100%;
   height: 100%;
   margin: 0 auto;
 }
 
-md-select div.mat-select-trigger {
-  width: 200px;
-  margin-top: -5px;
+mat-select {
+  margin-top: 15px;
 }
 
-md-sidenav.sideNav {
+mat-select div.mat-select-trigger {
+  width: 200px;
+  margin-top: -5px;
+  padding-bottom: 4px;
+  border-bottom: 2px solid #ed763e;
+}
+
+mat-sidenav.sideNav {
   z-index: 10;
   width: 200px;
   min-width: 200px;
@@ -140,11 +150,11 @@ md-sidenav.sideNav {
   top: 0px;
 }
 
-md-sidenav-container.mat-drawer-container.mat-sidenav-container.mat-drawer-transition {
+mat-sidenav-container.mat-drawer-container.mat-sidenav-container.mat-drawer-transition {
   background-color: white;
 }
 
-md-spinner {
+mat-spinner {
   margin: 0 auto;
 }
 
@@ -230,6 +240,10 @@ ul.ngx-pagination {
   width: 100%;
   text-align: center;
   margin: 0 auto;
+}
+
+.areaSelect {
+  padding-right: 10%;
 }
 
 .brick {
@@ -404,7 +418,7 @@ ul.ngx-pagination {
   height: 50px
 }
 
-.parentContainer1.mat-card, md-card.parentContainer1.mat-card {
+.parentContainer1.mat-card, mat-card.parentContainer1.mat-card {
   padding: initial;
 }
 
@@ -495,6 +509,13 @@ ul.ngx-pagination {
   zoom: 0.5;
 }
 
+#createPostInput {
+  width: 100%;
+  border-left: 6px solid #263238;
+  padding-bottom: 5vh;
+  margin-bottom: 2vh;
+}
+
 #focusTouchZone {
   position: fixed;
   left: 0px;
@@ -511,8 +532,8 @@ ul.ngx-pagination {
   color: white;
   position: fixed;
   top: 0px;
-  left: 0px;
-  width: 100%;
+  right: 0px;
+  width: 90%;
   z-index: 5;
 }
 
@@ -524,10 +545,30 @@ ul.ngx-pagination {
 
 #topNavBack {
   position: fixed;
-  left: -20px;
-  top: 7px;
+  left: 0px;
+  top: 0px;
   color: white;
   z-index: 6;
+  background-color: #263238;
+  height: 50px;
+  width: 10%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#topNavBackHidden {
+  position: fixed;
+  left: 0px;
+  top: 0px;
+  color: #263238;
+  z-index: 6;
+  background-color: #263238;
+  height: 50px;
+  width: 10%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 #userID {
@@ -764,7 +805,7 @@ ul.ngx-pagination {
       text-align: center;
     }
 
-    .login-card.mat-card md-card-content{
+    .login-card.mat-card mat-card-content{
       float: left;
       width: 50%;
       height: 100%;
@@ -820,7 +861,7 @@ ul.ngx-pagination {
       text-align: center;
     }
 
-    .register-card.mat-card md-card-content{
+    .register-card.mat-card mat-card-content{
       float: left;
       width: 50%;
       height: 100%;

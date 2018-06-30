@@ -1,31 +1,31 @@
 import { Component } from '@angular/core';
-import { MdDialogRef } from '@angular/material';
+import { MatDialogRef } from '@angular/material';
 
 @Component({
   template: `
-  <h1 md-dialog-title>Enter in the YouTube information</h1>
+  <h1 mat-dialog-title>Enter in the YouTube information</h1>
 
-    <div md-dialog-actions>
-      <md-input-container>
-        <input mdInput name="comment" type="text" name="url"
+    <div mat-dialog-actions>
+      <mat-input-container>
+        <input matInput name="comment" type="text" name="url"
         [(ngModel)]="model.url" #url="ngModel" placeholder="Url of full youtube link">
-      </md-input-container>
-      <md-input-container>
-        <input mdInput name="comment" type="text" name="altText"
+      </mat-input-container>
+      <mat-input-container>
+        <input matInput name="comment" type="text" name="altText"
         [(ngModel)]="model.altText" #altText="ngModel" placeholder="Alt text if the video gets removed">
-      </md-input-container>
+      </mat-input-container>
     </div>
     <br>
-  <div md-dialog-actions>
-    <button md-button md-dialog-close="true" (click)="sendYouTubeInformation()">Ok</button>
-    <button md-button md-dialog-close="false">Cancel</button>
+  <div mat-dialog-actions>
+    <button mat-button mat-dialog-close="true" (click)="sendYouTubeInformation()">Ok</button>
+    <button mat-button mat-dialog-close="false">Cancel</button>
   </div>
   `
 })
 export class YouTubeDialogComponent {
   model: any = {};
   constructor(
-    public dialogRef: MdDialogRef<YouTubeDialogComponent>
+    public dialogRef: MatDialogRef<YouTubeDialogComponent>
     ) { }
 
     sendYouTubeInformation() {

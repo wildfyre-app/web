@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { MdDialog, MdDialogRef } from '@angular/material';
+import { MatDialog, MatDialogRef } from '@angular/material';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs/Subject';
 import { ShareDialogComponent } from '../_dialogs/share.dialog.component';
@@ -18,7 +18,7 @@ export class ProfileViewComponent implements OnInit, OnDestroy {
   componentDestroyed: Subject<boolean> = new Subject();
 
   constructor(
-    private dialog: MdDialog,
+    private dialog: MatDialog,
     private route: ActivatedRoute,
     private router: Router,
     private authenticationService: AuthenticationService,

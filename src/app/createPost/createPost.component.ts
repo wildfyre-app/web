@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
-import { MdDialog, MdSnackBar } from '@angular/material';
+import { MatDialog, MatSnackBar } from '@angular/material';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs/Subject';
 import { ConfirmDeletionDialogComponent } from '../_dialogs/confirmDeletion.dialog.component';
@@ -28,8 +28,8 @@ export class CreatePostComponent implements OnInit, OnDestroy {
 
   constructor(
     private cdRef: ChangeDetectorRef,
-    private dialog: MdDialog,
-    private snackBar: MdSnackBar,
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar,
     private route: ActivatedRoute,
     private router: Router,
     private navBarService: NavBarService,

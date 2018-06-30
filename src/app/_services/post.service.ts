@@ -25,7 +25,7 @@ export class PostService {
   private getPosts(area: string): Observable<Post[]> {
     return this.httpService.GET('/areas/' + area + '/?limit=10')
       .map((response: Response) => {
-        const superPost: SuperPost = SuperPost.parse(response.json());
+        const superPost: SuperPost = SuperPost.parse(response);
         const posts: Post[] = [];
 
         superPost.results.forEach((obj: any) => {
@@ -51,7 +51,7 @@ export class PostService {
 
     return this.httpService.POST('/areas/' + area + '/' + post.id + '/', body)
       .map((response: Response) => {
-        const comment = Comment.parse(response.json());
+        const comment = Comment.parse(response);
 
         post.comments.push(comment);
         this.navBarService.clearInputs.next(true);
@@ -88,7 +88,7 @@ export class PostService {
     if (!draft && postID === null) {
         return this.httpService.POST('/areas/' + area + '/', body)
           .map((response: Response) => {
-            return Post.parse(response.json());
+            return Post.parse(response);
           })
           .catch((error) => {
             return Observable.of(new PostError(
@@ -99,7 +99,7 @@ export class PostService {
       } else if (draft && postID === null) {
         return this.httpService.POST('/areas/' + area + '/drafts/', body)
           .map((response: Response) => {
-            return Post.parse(response.json());
+            return Post.parse(response);
           })
           .catch((error) => {
             return Observable.of(new PostError(
@@ -110,7 +110,7 @@ export class PostService {
       } else if (draft && postID !== null) {
         return this.httpService.PATCH('/areas/' + area + '/drafts/' + postID + '/', body)
           .map((response: Response) => {
-            return Post.parse(response.json());
+            return Post.parse(response);
           })
           .catch((error) => {
             return Observable.of(new PostError(
@@ -130,7 +130,7 @@ export class PostService {
     };
     return this.httpService.PUT_IMAGE('/areas/' + area + '/drafts/' + postID +  '/', body)
       .map((response: Response) => {
-        return Post.parse(response.json());
+        return Post.parse(response);
       }).catch((err) => {
         return Observable.of(new PostError(
           JSON.parse(err._body).non_field_errors,
@@ -158,7 +158,7 @@ export class PostService {
   getDrafts(area: string, limit: number, offset: number): Observable<SuperPost> {
       return this.httpService.GET('/areas/' + area + '/drafts/?limit=' + limit + '&offset=' + offset)
         .map((response: Response) => {
-          this.superPosts[area] = SuperPost.parse(response.json());
+          this.superPosts[area] = SuperPost.parse(response);
 
           return this.superPosts[area];
       });
@@ -203,7 +203,7 @@ export class PostService {
   getOwnPosts(area: string, limit: number, offset: number): Observable<SuperPost> {
       return this.httpService.GET('/areas/' + area + '/own/?limit=' + limit + '&offset=' + offset)
         .map((response: Response) => {
-          this.superPosts[area] = SuperPost.parse(response.json());
+          this.superPosts[area] = SuperPost.parse(response);
 
           return this.superPosts[area];
       });
@@ -218,7 +218,7 @@ export class PostService {
 
     return this.httpService.GET(url + postID + '/')
       .map((response: Response) => {
-        return Post.parse(response.json());
+        return Post.parse(response);
       });
   }
 
@@ -234,7 +234,7 @@ export class PostService {
       formData.append('text', post.text + '.');
       return this.httpService.PUT_IMAGE('/areas/' + area + '/drafts/' + post.id +  '/', formData)
         .map((response: Response) => {
-          return Post.parse(response.json());
+          return Post.parse(response);
         }).catch((err) => {
           return Observable.of(new PostError(
             JSON.parse(err._body).non_field_errors,
@@ -246,7 +246,7 @@ export class PostService {
       return this.httpService.POST_IMAGE('/areas/' + area + '/' + post.id +  '/', formData)
         .map((response: Response) => {
           this.navBarService.clearInputs.next(true);
-          return Comment.parse(response.json());
+          return Comment.parse(response);
         }).catch((err) => {
           return Observable.of(new CommentError(
             JSON.parse(err._body).non_field_errors,
@@ -264,7 +264,7 @@ export class PostService {
     formData.append('comment', comment);
     return this.httpService.PUT_IMAGE('/areas/' + area + '/drafts/' + post.id + '/img/' + slot + '/', formData)
       .map((response: Response) => {
-        return Image.parse(response.json());
+        return Image.parse(response);
       }).catch((err) => {
         if (err.status === 404 || err.status === 0) {
           return Observable.of(null);

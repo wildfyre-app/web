@@ -1,5 +1,5 @@
 import { Injectable, OnDestroy } from '@angular/core';
-import { MdSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material';
 import { Subject } from 'rxjs/Subject';
 import { Comment } from '../_models/comment';
 import { HttpService } from './http.service';
@@ -17,7 +17,7 @@ export class FlagService implements OnDestroy {
   public currentPost: Post;
 
   constructor(
-    private snackBar: MdSnackBar,
+    private snackBar: MatSnackBar,
     private httpService: HttpService
   ) { }
 

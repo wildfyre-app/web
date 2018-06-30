@@ -1,6 +1,7 @@
-<md-card class="register-card">
+<div id="topNavBackHidden"><i class="material-icons">arrow_back</i></div>
+<mat-card class="register-card">
   <a class="logoLink" routerLink="/" routerLinkActive="active"><img class="logo" src="https://static.wildfyre.net/wildfyre.png" alt="WildFyre"></a>
-  <md-card-content>
+  <mat-card-content>
     <div class="alert alert-info">
       Usernames must use Letters, Digits and @/./+/-/_ only.<br>
       Passwords must contain at least 8 characters and be alphanumeric (At least 1 letter and 1 number)
@@ -14,9 +15,9 @@
       </div>
 
       <div class="form" [ngClass]="{ 'has-error': f.submitted && (!username.valid || (errors && errors._username)) }">
-        <md-input-container>
-          <input mdInput placeholder="Username" type="text" name="username" [(ngModel)]="model.username" #username="ngModel" autocomplete="on" required />
-        </md-input-container>
+        <mat-input-container>
+          <input matInput placeholder="Username" type="text" name="username" [(ngModel)]="model.username" #username="ngModel" autocomplete="on" required />
+        </mat-input-container>
         <div *ngIf="f.submitted && !username.valid" class="help-block">Username is required</div>
         <div *ngIf="errors && errors._username" class="help-block">
           <ul *ngFor="let err of errors._username">
@@ -26,9 +27,9 @@
       </div>
 
       <div class="form" [ngClass]="{ 'has-error': f.submitted && (!email.valid || (errors && errors._email)) }">
-        <md-input-container>
-          <input mdInput placeholder="Email" type="email" name="email" [(ngModel)]="model.email" #email="ngModel" autocomplete="on" required />
-        </md-input-container>
+        <mat-input-container>
+          <input matInput placeholder="Email" type="email" name="email" [(ngModel)]="model.email" #email="ngModel" autocomplete="on" required />
+        </mat-input-container>
         <div *ngIf="f.submitted && !email.valid" class="help-block">Email is required</div>
         <div *ngIf="errors && errors._email" class="help-block">
           <ul *ngFor="let err of errors._email">
@@ -38,9 +39,9 @@
       </div>
 
       <div class="form" [ngClass]="{ 'has-error': f.submitted && (!password.valid || (errors && errors._password)) }">
-        <md-input-container>
-          <input mdInput placeholder="Password" type="password" name="password" [(ngModel)]="model.password" #password="ngModel" autocomplete="on" required />
-        </md-input-container>
+        <mat-input-container>
+          <input matInput placeholder="Password" type="password" name="password" [(ngModel)]="model.password" #password="ngModel" autocomplete="on" required />
+        </mat-input-container>
         <div *ngIf="f.submitted && !password.valid" class="help-block">Password is required</div>
         <div *ngIf="errors && errors._password" class="help-block">
           <ul *ngFor="let err of errors._password">
@@ -50,9 +51,9 @@
       </div>
 
       <div class="form" [ngClass]="{ 'has-error': f.submitted && (!password2.valid || (errors && errors._password)) }">
-        <md-input-container>
-          <input mdInput placeholder="Password (repeat)" type="password" name="password2" [(ngModel)]="model.password2" #password2="ngModel" autocomplete="on" required />
-        </md-input-container>
+        <mat-input-container>
+          <input matInput placeholder="Password (repeat)" type="password" name="password2" [(ngModel)]="model.password2" #password2="ngModel" autocomplete="on" required />
+        </mat-input-container>
         <div *ngIf="f.submitted && !password2.valid" class="help-block">Second password is required</div>
         <div *ngIf="errors && errors._password" class="help-block">
           <ul *ngFor="let err of errors._password">
@@ -73,9 +74,9 @@
       <div class="form">
         By clicking Register, you agree to our <a href="https://wildfyre.net/index.php/terms-and-conditions/">Terms</a>
           and that you have read our <a href="https://wildfyre.net/index.php/privacy-policy/">Privacy Policy</a>.
-        <button class="wideButtons" md-raised-button color="accent" [disabled]="loading">Register</button>
-        <md-spinner *ngIf="loading"></md-spinner>
+        <button class="wideButtons" mat-raised-button color="accent" [disabled]="loading">Register</button>
+        <mat-progress-spinner *ngIf="loading"></mat-progress-spinner>
       </div>
     </form>
-  </md-card-content>
-</md-card>
+  </mat-card-content>
+</mat-card>

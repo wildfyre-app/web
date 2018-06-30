@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed, inject } from '@angular/core/testing';
 import { NgModel, NgForm } from '@angular/forms';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { MdSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
 import { RegistrationService } from '../_services/registration.service';
@@ -32,7 +32,7 @@ describe('RecoverPasswordComponent', () => {
             declarations: [ RecoverPasswordComponent, NgForm, NgModel ],
             schemas: [ NO_ERRORS_SCHEMA ],
             providers: [
-                { provide: MdSnackBar, useValue: mdSnackBarStub },
+                { provide: MatSnackBar, useValue: mdSnackBarStub },
                 { provide: Router, useValue: routerStub },
                 { provide: ActivatedRoute, useValue: activatedRouteStub },
                 { provide: RegistrationService, useValue: registrationServiceStub }

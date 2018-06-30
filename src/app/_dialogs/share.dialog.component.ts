@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { MdDialogRef, MdSnackBar } from '@angular/material';
+import { MatDialogRef, MatSnackBar } from '@angular/material';
 import { Observable } from 'rxjs/Rx';
 import { Subject } from 'rxjs/Subject';
 import { Link } from '../_models/link';
@@ -7,16 +7,16 @@ import { NavBarService } from '../_services/navBar.service';
 
 @Component({
   template: `
-  <h1 md-dialog-title>Grow the fyre!</h1>
-  <share-container
+  <h1 mat-dialog-title>Grow the fyre!</h1>
+  <app-share-container
 		direction="horizontal"
 		[expandable]="false"
 		[textEnabled]="false"
     [properties]='{title:getPostDescription(), url: link.url, via:"WildFyreApp", hashtags:"WildFyre"}'
 		[platforms]="['reddit','twitter','facebook','stumbleUpon']" (click)="returnInformation(false)">
-	</share-container>
-  <button md-menu-item type="button" ngxClipboard [cbContent]="getPostLink()" (click)="returnInformation(true)">
-  <md-icon>link</md-icon>Clipboard</button>
+	</app-share-container>
+  <button mat-menu-item type="button" ngxClipboard [cbContent]="getPostLink()" (click)="returnInformation(true)">
+  <mat-icon>link</mat-icon>Clipboard</button>
   `
 })
 export class ShareDialogComponent implements OnInit, OnDestroy {
@@ -25,8 +25,8 @@ export class ShareDialogComponent implements OnInit, OnDestroy {
   shoe = 2;
 
   constructor(
-    public dialogRef: MdDialogRef<ShareDialogComponent>,
-    public snackBar: MdSnackBar,
+    public dialogRef: MatDialogRef<ShareDialogComponent>,
+    public snackBar: MatSnackBar,
     private navBarService: NavBarService
     ) { }
 

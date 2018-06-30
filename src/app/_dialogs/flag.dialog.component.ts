@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { MdDialogRef } from '@angular/material';
+import { MatDialogRef } from '@angular/material';
 import { Choice } from '../_models/choice';
 import { AreaService } from '../_services/area.service';
 import { ReasonService } from '../_services/reason.service';
@@ -11,25 +11,25 @@ enum TypeOfReport {
 
 @Component({
   template: `
-  <h1 md-dialog-title>Please choose a flag reason:</h1>
+  <h1 mat-dialog-title>Please choose a flag reason:</h1>
 
-  <div md-dialog-actions>
-    <md-radio-group class="radio-group" [(ngModel)]="clickedChoice">
-      <md-radio-button class="example-radio-button" *ngFor="let choice of flagChoices" [value]="choice.key">
+  <div mat-dialog-actions>
+    <mat-radio-group class="radio-group" [(ngModel)]="clickedChoice">
+      <mat-radio-button class="example-radio-button" *ngFor="let choice of flagChoices" [value]="choice.key">
         {{choice.value}}
         <br>
-      </md-radio-button>
-    </md-radio-group>
+      </mat-radio-button>
+    </mat-radio-group>
 
-    <md-input-container>
-      <textarea mdInput name="comment" rows="3" cols="40" type="text" name="report"
+    <mat-input-container>
+      <textarea matInput name="comment" rows="3" cols="40" type="text" name="report"
       [(ngModel)]="model.report" #report="ngModel" placeholder="Explain what is wrong.."></textarea>
-    </md-input-container>
+    </mat-input-container>
   </div>
   <br>
-  <div md-dialog-actions>
-    <button md-button md-dialog-close="true" (click)="sendReport()">Ok</button>
-    <button md-button md-dialog-close="false">Cancel</button>
+  <div mat-dialog-actions>
+    <button mat-button mat-dialog-close="true" (click)="sendReport()">Ok</button>
+    <button mat-button mat-dialog-close="false">Cancel</button>
   </div>
   `
 })
@@ -40,7 +40,7 @@ export class FlagDialogComponent {
   typeOfReport: TypeOfReport;
 
   constructor(
-    public dialogRef: MdDialogRef<FlagDialogComponent>,
+    public dialogRef: MatDialogRef<FlagDialogComponent>,
     private reasonService: ReasonService,
     private areaService: AreaService
     ) {

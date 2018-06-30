@@ -2,9 +2,10 @@
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
-import { HttpModule } from '@angular/http';
-import { MaterialModule, MdButtonModule, MdCheckboxModule, MdTabsModule, MdCardModule,
-  MdMenuModule, MdInputModule, MdListModule, MdSlideToggleModule, MdDialogModule, MdRadioModule } from '@angular/material';
+import { HttpClientModule } from '@angular/common/http';
+import { MatButtonModule, MatCardModule, MatCheckboxModule, MatDialogModule, MatExpansionModule,
+  MatIconModule, MatInputModule, MatListModule, MatMenuModule, MatProgressSpinnerModule, MatRadioModule,
+  MatSelectModule, MatSidenavModule, MatSlideToggleModule, MatSnackBarModule, MatTabsModule } from '@angular/material';
 import { NgModule } from '@angular/core';
 
 // Core Components
@@ -41,6 +42,7 @@ import { YouTubeDialogComponent } from './_dialogs/youtube.dialog.component';
 
 // Core Modules
 import { NgxMasonryModule } from './_modules/ngx-masonry/ngx-masonry.module';
+import { ShareModule } from './_modules/ng2share/share.module';
 
 // Core Pipes
 import { MarkedPipe } from './_pipes/marked.pipe';
@@ -65,10 +67,9 @@ import { Routing } from './app.routing';
 import { Angulartics2Module, Angulartics2Piwik } from 'angulartics2';
 import { ClipboardModule } from 'ngx-clipboard';
 import 'hammerjs';
-import { ImageCropperModule } from 'ng2-img-cropper';
+import { ImageCropperModule } from 'ngx-img-cropper';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { ReCaptchaModule } from 'angular2-recaptcha';
-import { ShareModule } from 'ng2share/share.module';
 
 @NgModule({
   imports: [
@@ -82,19 +83,24 @@ import { ShareModule } from 'ng2share/share.module';
     BrowserAnimationsModule,
     BrowserModule,
     FormsModule,
-    HttpModule,
+    HttpClientModule,
     ImageCropperModule,
-    MaterialModule,
-    MdButtonModule,
-    MdCardModule,
-    MdCheckboxModule,
-    MdDialogModule,
-    MdInputModule,
-    MdListModule,
-    MdMenuModule,
-    MdRadioModule,
-    MdTabsModule,
-    MdSlideToggleModule,
+    MatButtonModule,
+    MatCardModule,
+    MatCheckboxModule,
+    MatDialogModule,
+    MatExpansionModule,
+    MatIconModule,
+    MatInputModule,
+    MatListModule,
+    MatMenuModule,
+    MatProgressSpinnerModule,
+    MatRadioModule,
+    MatSelectModule,
+    MatSidenavModule,
+    MatSlideToggleModule,
+    MatSnackBarModule,
+    MatTabsModule,
     Routing,
 
     // Third Party Modules

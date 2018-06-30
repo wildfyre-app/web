@@ -6,7 +6,7 @@ import { ChangeDetectorRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ComponentFixture, ComponentFixtureAutoDetect, TestBed , async} from '@angular/core/testing';
 import { Router, ActivatedRoute, RouterModule, Routes } from '@angular/router';
-import { MdTabsModule, MdMenuModule, MdDialogModule, MdSidenavModule, MdOptionModule, MdSnackBarModule } from '@angular/material';
+import { MatTabsModule, MatListModule, MatMenuModule, MatDialogModule, MatSelectModule, MatSidenavModule, MatOptionModule, MatSnackBarModule } from '@angular/material';
 import { Observable } from 'rxjs';
 import { Author } from '../_models/author';
 import { Notification } from '../_models/notification';
@@ -82,7 +82,7 @@ describe('NavBarComponent', () => {
                 { provide: NotificationService, useValue: notificationServiceStub },
                 { provide: ComponentFixtureAutoDetect, useValue: true }
             ],
-            imports: [ MdTabsModule, MdOptionModule, FormsModule, MdSidenavModule, MdMenuModule, MdSnackBarModule, MdDialogModule, RouterModule.forRoot(routes), BrowserAnimationsModule ],
+            imports: [ MatTabsModule, MatListModule, MatOptionModule, FormsModule, MatSelectModule, MatSidenavModule, MatMenuModule, MatSnackBarModule, MatDialogModule, RouterModule.forRoot(routes), BrowserAnimationsModule ],
         });
         fixture = TestBed.createComponent(NavBarComponent);
         comp = fixture.componentInstance;

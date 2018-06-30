@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, ViewChild, ChangeDetectorRef } from '@angular/core';
-import { MdDialog, MdDialogRef, MdSnackBar } from '@angular/material';
+import { MatDialog, MatDialogRef, MatSnackBar } from '@angular/material';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs/Subject';
 import { AvatarDialogComponent } from '../_dialogs/avatar.dialog.component';
@@ -37,10 +37,10 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   constructor(
     private cdRef: ChangeDetectorRef,
-    private dialog: MdDialog,
+    private dialog: MatDialog,
     private route: ActivatedRoute,
     private router: Router,
-    public snackBar: MdSnackBar,
+    public snackBar: MatSnackBar,
     private authenticationService: AuthenticationService,
     private profileService: ProfileService,
     private reasonService: ReasonService,

@@ -1,5 +1,5 @@
 import { Component, OnDestroy } from '@angular/core';
-import { MdDialogRef, MdSnackBar } from '@angular/material';
+import { MatDialogRef, MatSnackBar } from '@angular/material';
 import { Subject } from 'rxjs/Subject';
 import { Account } from '../_models/account';
 import { Author } from '../_models/author';
@@ -9,7 +9,7 @@ import { ProfileService } from '../_services/profile.service';
 
 @Component({
   template: `
-  <h1 md-dialog-title>Change Password</h1>
+  <h1 mat-dialog-title>Change Password</h1>
   <div class="alert alert-info">
     Passwords must contain at least 8 characters and be alphanumeric (At least 1 letter and 1 number)
   </div>
@@ -29,10 +29,10 @@ import { ProfileService } from '../_services/profile.service';
       [(ngModel)]="author.name" #username="ngModel" autocomplete="on" readonly />
 
     <div class="form" [ngClass]="{ 'has-error': f.submitted && (!oldPassword.valid || (errors && errors._oldPassword)) }">
-      <md-input-container>
-        <input mdInput placeholder="Old Password" type="password" name="oldPassword"
+      <mat-input-container>
+        <input matInput placeholder="Old Password" type="password" name="oldPassword"
           [(ngModel)]="model.oldPassword" #oldPassword="ngModel" autocomplete="current-password" required />
-      </md-input-container>
+      </mat-input-container>
       <div *ngIf="f.submitted && !oldPassword.valid" class="help-block">Password is required</div>
       <div *ngIf="errors && errors._oldPassword" class="help-block">
         <ul *ngFor="let err of errors._oldPassword">
@@ -42,10 +42,10 @@ import { ProfileService } from '../_services/profile.service';
     </div>
 
     <div class="form" [ngClass]="{ 'has-error': f.submitted && (!newPassword1.valid || (errors && errors._newPassword1)) }">
-      <md-input-container>
-        <input mdInput placeholder="New Password" type="password" name="newPassword1"
+      <mat-input-container>
+        <input matInput placeholder="New Password" type="password" name="newPassword1"
           [(ngModel)]="model.newPassword1" #newPassword1="ngModel" autocomplete="new-password" required />
-      </md-input-container>
+      </mat-input-container>
       <div *ngIf="f.submitted && !newPassword1.valid" class="help-block">Password is required</div>
       <div *ngIf="errors && errors._newPassword1" class="help-block">
         <ul *ngFor="let err of errors._newPassword1">
@@ -55,10 +55,10 @@ import { ProfileService } from '../_services/profile.service';
     </div>
 
     <div class="form" [ngClass]="{ 'has-error': f.submitted && (!newPassword2.valid || (errors && errors._newPassword2)) }">
-      <md-input-container>
-        <input mdInput placeholder="New Password (repeat)" type="password" name="newPassword2"
+      <mat-input-container>
+        <input matInput placeholder="New Password (repeat)" type="password" name="newPassword2"
           [(ngModel)]="model.newPassword2" #newPassword2="ngModel" autocomplete="new-password" required />
-      </md-input-container>
+      </mat-input-container>
       <div *ngIf="f.submitted && !newPassword2.valid" class="help-block">Password is required</div>
       <div *ngIf="errors && errors._newPassword2" class="help-block">
         <ul *ngFor="let err of errors._newPassword2">
@@ -67,9 +67,9 @@ import { ProfileService } from '../_services/profile.service';
       </div>
     </div>
   </form>
-  <div md-dialog-actions>
-    <button md-button (click)="submitEditPassword()">Change Password</button>
-    <button md-button md-dialog-close="false" (click)="returnInformation(false)">Cancel</button>
+  <div mat-dialog-actions>
+    <button mat-button (click)="submitEditPassword()">Change Password</button>
+    <button mat-button mat-dialog-close="false" (click)="returnInformation(false)">Cancel</button>
   </div>
   `
 })
@@ -81,8 +81,8 @@ export class PasswordDialogComponent implements OnDestroy {
   model: any = {};
 
   constructor(
-    public dialogRef: MdDialogRef<PasswordDialogComponent>,
-    public snackBar: MdSnackBar,
+    public dialogRef: MatDialogRef<PasswordDialogComponent>,
+    public snackBar: MatSnackBar,
     private authenticationService: AuthenticationService,
     private profileService: ProfileService,
     ) { }

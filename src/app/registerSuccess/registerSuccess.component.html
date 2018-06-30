@@ -1,5 +1,6 @@
-<md-card class="example-card">
-  <md-card-content>
+<div id="topNavBackHidden"><i class="material-icons">arrow_back</i></div>
+<mat-card class="example-card">
+  <mat-card-content>
     <a routerLink="/" routerLinkActive="active"><img class="logo" src="https://static.wildfyre.net/wildfyre.png" alt="WildFyre"></a>
     <div class="alert alert-info">
       Registration Successful!<br>
@@ -8,7 +9,7 @@
     </div>
     <br>
     <div class="form">
-      <button md-raised-button color="accent" [disabled]="loading" (click)="letsGo()">Lets Go!</button>
+      <button mat-raised-button color="accent" [disabled]="loading" (click)="letsGo()">Lets Go!</button>
     </div>
-  </md-card-content>
-</md-card>
+  </mat-card-content>
+</mat-card>

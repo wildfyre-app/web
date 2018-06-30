@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed, inject } from '@angular/core/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { MdSnackBarModule } from '@angular/material';
+import { MatSnackBarModule } from '@angular/material';
 import { Response, ResponseOptions, ResponseOptionsArgs } from '@angular/http';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
@@ -63,7 +63,7 @@ describe('LoginComponent', () => {
                 { provide: NotificationService, useValue: notificationServiceStub },
                 { provide: RouteService, useValue: routeServiceStub }
             ],
-            imports: [ FormsModule, MdSnackBarModule, BrowserAnimationsModule ]
+            imports: [ FormsModule, MatSnackBarModule, BrowserAnimationsModule ]
         });
         fixture = TestBed.createComponent(LoginComponent);
         comp = fixture.componentInstance;

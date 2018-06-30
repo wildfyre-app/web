@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { MdSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material';
 import { Response } from '@angular/http';
 import { Observable } from 'rxjs';
 import { Registration, RegistrationError } from '../_models/registration';
@@ -10,7 +10,7 @@ import { HttpService } from './http.service';
 @Injectable()
 export class RegistrationService {
   constructor(
-    private snackBar: MdSnackBar,
+    private snackBar: MatSnackBar,
     private httpService: HttpService
   ) { }
 
@@ -24,7 +24,7 @@ export class RegistrationService {
     return this.httpService.POST('/account/recover/', body)
       .map((response: Response) => {
         // Step 1 successful
-        return RecoverTransaction.parse(response.json());
+        return RecoverTransaction.parse(response);
       })
       .catch((error) => {
         return Observable.of(
@@ -48,7 +48,7 @@ export class RegistrationService {
     return this.httpService.POST('/account/recover/reset/', body)
       .map((response: Response) => {
         // Password reset successful
-        return Reset.parse(response.json());
+        return Reset.parse(response);
       })
       .catch((error) => {
         return Observable.of(
@@ -72,7 +72,7 @@ export class RegistrationService {
     return this.httpService.POST('/account/recover/', body)
       .map((response: Response) => {
         // Usernames sent successfully
-        return RecoverTransaction.parse(response.json());
+        return RecoverTransaction.parse(response);
       })
       .catch((error) => {
         return Observable.of(
@@ -97,7 +97,7 @@ export class RegistrationService {
     return this.httpService.POST('/account/register/', body)
       .map((response: Response) => {
         // Registration successful
-        return Registration.parse(response.json());
+        return Registration.parse(response);
       })
       .catch((error) => {
         return Observable.of(

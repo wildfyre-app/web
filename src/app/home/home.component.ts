@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
-import { MdDialog, MdSnackBar } from '@angular/material';
+import { MatDialog, MatSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs/Subject';
 import { ConfirmDeletionDialogComponent } from '../_dialogs/confirmDeletion.dialog.component';
@@ -46,9 +46,9 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   constructor(
     private cdRef: ChangeDetectorRef,
-    private dialog: MdDialog,
+    private dialog: MatDialog,
     private router: Router,
-    private snackBar: MdSnackBar,
+    private snackBar: MatSnackBar,
     private commentService: CommentService,
     private flagService: FlagService,
     private navBarService: NavBarService,
@@ -73,6 +73,7 @@ export class HomeComponent implements OnInit, OnDestroy {
                 .subscribe(result2 => {
                   if (!result2.getError()) {
                     this.post.comments.push(result2);
+                    this.navBarService.clearInputs.next(true);
                   } else {
                     this.snackBar.open('Your image file must be below 512KiB in size', 'Close', {
                       duration: 3000
@@ -83,6 +84,7 @@ export class HomeComponent implements OnInit, OnDestroy {
               this.postService.comment(this.currentArea, this.post, comment.comment)
                 .takeUntil(this.componentDestroyed)
                 .subscribe();
+                this.navBarService.clearInputs.next(true);
             }
             this.commentCount += 1;
             this.cdRef.detectChanges();
@@ -92,6 +94,7 @@ export class HomeComponent implements OnInit, OnDestroy {
               , 'Close', {
               duration: 3000
             });
+            this.navBarService.clearInputs.next(false);
         }
       }
       this.wait = false;

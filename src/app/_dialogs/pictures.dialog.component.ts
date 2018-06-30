@@ -1,23 +1,23 @@
 import { Component, ViewChild } from '@angular/core';
-import { MdDialogRef, MdSnackBar } from '@angular/material';
+import { MatDialogRef, MatSnackBar } from '@angular/material';
 import { Post } from '../_models/post';
-import { ImageCropperComponent, CropperSettings, Bounds } from 'ng2-img-cropper';
+import { ImageCropperComponent, CropperSettings, Bounds } from 'ngx-img-cropper';
 
 @Component({
   template: `
-  <h1 md-dialog-title>Upload Your Pictures</h1>
+  <h1 mat-dialog-title>Upload Your Pictures</h1>
   <img-cropper [image]="data" [settings]="cropperSettings" (onCrop)="cropped($event)"></img-cropper>
   <span class="result" *ngIf="data.image">
     <img [src]="data.image" [width]="croppedWidth" [height]="croppedHeight">
   </span>
   Comment:
-  <md-input-container>
-    <input mdInput type="text" name="comment" [(ngModel)]="model.comment" #comment="ngModel" />
-  </md-input-container>
+  <mat-input-container>
+    <input matInput type="text" name="comment" [(ngModel)]="model.comment" #comment="ngModel" />
+  </mat-input-container>
 
-  <div md-dialog-actions>
-    <button md-button md-dialog-close="true" (click)="returnInformation(true)">Add additional image</button>
-    <button md-button md-dialog-close="false" (click)="returnInformation(false)">Cancel</button>
+  <div mat-dialog-actions>
+    <button mat-button mat-dialog-close="true" (click)="returnInformation(true)">Add additional image</button>
+    <button mat-button mat-dialog-close="false" (click)="returnInformation(false)">Cancel</button>
   </div>
   `
 })
@@ -34,8 +34,8 @@ export class PicturesDialogComponent {
   picture: any;
 
   constructor(
-    public dialogRef: MdDialogRef<PicturesDialogComponent>,
-    public snackBar: MdSnackBar
+    public dialogRef: MatDialogRef<PicturesDialogComponent>,
+    public snackBar: MatSnackBar
     ) {
       this.cropperSettings = new CropperSettings();
       this.cropperSettings.width = 920;

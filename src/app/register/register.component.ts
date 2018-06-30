@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { MdSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs/Subject';
 import { ViewChild } from '@angular/core';
@@ -21,7 +21,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
   token: any;
 
   constructor(
-    private snackBar: MdSnackBar,
+    private snackBar: MatSnackBar,
     private router: Router,
     private authenticationService: AuthenticationService,
     private registrationService: RegistrationService

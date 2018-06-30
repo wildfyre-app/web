@@ -1,20 +1,20 @@
 import { Component, ViewChild } from '@angular/core';
-import { MdDialogRef, MdSnackBar } from '@angular/material';
+import { MatDialogRef, MatSnackBar } from '@angular/material';
 import { Author } from '../_models/author';
-import { ImageCropperComponent, CropperSettings, Bounds } from 'ng2-img-cropper';
+import { ImageCropperComponent, CropperSettings, Bounds } from 'ngx-img-cropper';
 
 @Component({
   template: `
-  <h1 md-dialog-title>Change Avatar</h1>
+  <h1 mat-dialog-title>Change Avatar</h1>
 
   <img-cropper [image]="data" [settings]="cropperSettings" (onCrop)="cropped($event)"></img-cropper>
   <span class="result" *ngIf="data.image">
     <img [src]="data.image" [width]="croppedWidth" [height]="croppedHeight">
   </span>
 
-  <div md-dialog-actions>
-    <button md-button md-dialog-close="true" (click)="returnInformation(true)">Change Avatar</button>
-    <button md-button md-dialog-close="false" (click)="returnInformation(false)">Cancel</button>
+  <div mat-dialog-actions>
+    <button mat-button mat-dialog-close="true" (click)="returnInformation(true)">Change Avatar</button>
+    <button mat-button mat-dialog-close="false" (click)="returnInformation(false)">Cancel</button>
   </div>
   `
 })
@@ -29,8 +29,8 @@ export class AvatarDialogComponent {
   profilePicture: any;
 
   constructor(
-    public dialogRef: MdDialogRef<AvatarDialogComponent>,
-    public snackBar: MdSnackBar
+    public dialogRef: MatDialogRef<AvatarDialogComponent>,
+    public snackBar: MatSnackBar
     ) {
       this.cropperSettings = new CropperSettings();
       this.cropperSettings.width = 200;

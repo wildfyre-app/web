@@ -1,7 +1,7 @@
-import { Http, Headers, RequestOptions } from '@angular/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { isDevMode } from '@angular/core';
-import { MdSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { AuthenticationService } from './authentication.service';
@@ -11,9 +11,9 @@ export class HttpService {
   private apiURL: string;
 
   constructor(
-    private http: Http,
+    private http: HttpClient,
     private router: Router,
-    private snackBar: MdSnackBar,
+    private snackBar: MatSnackBar,
     private authenticationService: AuthenticationService
   ) {
     this.apiURL = 'https://api.wildfyre.net';
@@ -142,34 +142,12 @@ export class HttpService {
     return Observable.throw(error);
   }
 
-  getOptions(headers?: Headers|null): RequestOptions {
-    headers = headers || new Headers();
-
-    // Set Content-Type to JSON if not already set
-    if (!headers.has('Content-Type')) {
-      headers.append('Content-Type', 'application/json');
-    }
-
-    // Add Token if available
-    if (this.authenticationService.token != null) {
-      headers.append('Authorization', 'Token ' + this.authenticationService.token);
-    }
-
-    return new RequestOptions({
-      headers: headers
-    });
+  getOptions(): any {
+    return { headers: new HttpHeaders({ 'Content-Type': 'application/json',
+     'Authorization': 'Token ' + this.authenticationService.token}) };
   }
 
-  getOptionsForImage(headers?: Headers|null): RequestOptions {
-    headers = headers || new Headers();
-
-    // Add Token if available
-    if (this.authenticationService.token != null) {
-      headers.append('Authorization', 'Token ' + this.authenticationService.token);
-    }
-
-    return new RequestOptions({
-      headers: headers
-    });
+  getOptionsForImage(): any {
+    return { headers: new HttpHeaders({ 'Authorization': 'Token ' + this.authenticationService.token}) };
   }
 }

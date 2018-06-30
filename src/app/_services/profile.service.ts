@@ -24,7 +24,7 @@ export class ProfileService {
     } else {
     return this.httpService.GET('/account/')
       .map((response: Response) => {
-        this.account = Account.parse(response.json()); // cache
+        this.account = Account.parse(response); // cache
         return this.account;
       });
     }
@@ -33,7 +33,7 @@ export class ProfileService {
   getBans(limit: number, offset: number): Observable<SuperBan> {
     return this.httpService.GET('/bans/?limit=' + limit + '&offset=' + offset)
       .map((response: Response) => {
-        this.superBans = SuperBan.parse(response.json()); // cache
+        this.superBans = SuperBan.parse(response); // cache
         return this.superBans;
       });
   }
@@ -44,7 +44,7 @@ export class ProfileService {
     } else {
       return this.httpService.GET('/users/')
         .map((response: Response) => {
-          this.self = Author.parse(response.json());  // cache
+          this.self = Author.parse(response);  // cache
           return this.self;
         });
     }
@@ -56,7 +56,7 @@ export class ProfileService {
     } else {
     return this.httpService.GET('/users/' + id)
       .map((response: Response) => {
-        this.userArray[Number(id)] = Author.parse(response.json()); // cache
+        this.userArray[Number(id)] = Author.parse(response); // cache
         return this.userArray[Number(id)];
       });
     }
@@ -73,7 +73,7 @@ export class ProfileService {
       .map((response: Response) => {
         console.log('You leveled up some stats');
 
-        return Author.parse(response.json());
+        return Author.parse(response);
       }).catch((err) => {
         return Observable.of(new AuthorError(
           JSON.parse(err._body).non_field_errors,
@@ -91,7 +91,7 @@ export class ProfileService {
       .map((response: Response) => {
         console.log('You have mail!');
 
-        return Account.parse(response.json());
+        return Account.parse(response);
       }).catch((err) => {
         return Observable.of(new AccountError(
           JSON.parse(err._body).non_field_errors,
@@ -109,7 +109,7 @@ export class ProfileService {
       .map((response: Response) => {
         console.log('You have been securely encryptified');
 
-        return Account.parse(response.json());
+        return Account.parse(response);
       }).catch((err) => {
         return Observable.of(new AccountError(
           JSON.parse(err._body).non_field_errors,
@@ -125,7 +125,7 @@ export class ProfileService {
     return this.httpService.PUT_IMAGE('/users/', formData)
       .map((response: Response) => {
         console.log('You looked in the mirror and got frightened');
-        return Profile.parse(response.json());
+        return Profile.parse(response);
       }).catch((err) => {
         return Observable.of(new ProfileError(
           JSON.parse(err._body).non_field_errors,

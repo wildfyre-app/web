@@ -1,10 +1,10 @@
-<md-spinner *ngIf="loading"></md-spinner>
+<mat-progress-spinner *ngIf="loading"></mat-progress-spinner>
 <br>
-<md-card class="example-card" *ngIf="!loading">
-  <button id="topNavBack" md-button (click)="back()"><i class="material-icons">arrow_back</i></button>
+<mat-card class="example-card" *ngIf="!loading">
+  <div id="topNavBack" (click)="back()"><i class="material-icons">arrow_back</i></div>
   <a *ngIf="post?.image" href="{{post?.image}}"><img src="{{post?.image}}" /></a>
   <span class="mainText" innerHTML="{{post?.text | marked: post}}"></span>
-  <md-card (click)="gotoUser(post?.author?.user)" class="parentContainer1">
+  <mat-card (click)="gotoUser(post?.author?.user)" class="parentContainer1">
     <div class="parentContainer">
       <img class="pfp2" (click)="gotoUser(post?.author?.user)" *ngIf="post?.author?.avatar" [src]="post?.author?.avatar" alt="Avatar of {{post?.author?.name}}"/>
       <img class="pfp2" (click)="gotoUser(post?.author?.user)" *ngIf="!post?.author?.avatar" src="/assets/logo.png" alt="Avatar of {{post?.author?.name}}"/>
@@ -13,37 +13,37 @@
       <i><small><a routerLink="/user/{{post?.author?.user}}" class="dateText" (click)="gotoUser(post?.author?.user)" routerLinkActive="active">{{post?.author?.name}}</a><br> <p>{{post?.created}}</p></small></i>
     </ng-container>
     </div>
-  </md-card>
+  </mat-card>
 
   <div class="postEditing">
     <div class="commentCircle" *ngIf="post?.comments?.length !== 0">{{getCommentLength(post?.comments?.length)}}</div>
-    <button *ngIf="!post?.subscribed" md-icon-button (click)="subscribe(true)"><i class="material-icons">turned_in_not</i></button>
-    <button *ngIf="post?.subscribed" md-icon-button (click)="subscribe(false)"><i class="material-icons">turned_in</i></button>
-    <button md-icon-button [mdMenuTriggerFor]="appMenu"><i class="material-icons">more_vert</i></button>
-    <md-menu #appMenu="mdMenu">
-      <button md-menu-item type="button" (click)="ngOnInit()"><md-icon>refresh</md-icon>Refresh Post</button>
-      <button md-menu-item type="button" (click)="share()"><md-icon>share</md-icon>Share Post</button>
-      <button *ngIf="post?.author?.user == userID" md-menu-item color="warn" (click)="openPostDeleteDialog()"><md-icon>delete</md-icon>Delete Post</button>
-      <button *ngIf="!(post?.author?.user == userID) && loggedIn" md-menu-item (click)="openFlagDialog(null, 0)"><md-icon>flag</md-icon>Flag Post</button>
-    </md-menu>
+    <button *ngIf="!post?.subscribed" mat-icon-button (click)="subscribe(true)"><i class="material-icons">turned_in_not</i></button>
+    <button *ngIf="post?.subscribed" mat-icon-button (click)="subscribe(false)"><i class="material-icons">turned_in</i></button>
+    <button mat-icon-button [matMenuTriggerFor]="appMenu"><i class="material-icons">more_vert</i></button>
+    <mat-menu #appMenu="matMenu">
+      <button mat-menu-item type="button" (click)="ngOnInit()"><mat-icon>refresh</mat-icon>Refresh Post</button>
+      <button mat-menu-item type="button" (click)="share()"><mat-icon>share</mat-icon>Share Post</button>
+      <button *ngIf="post?.author?.user == userID" mat-menu-item color="warn" (click)="openPostDeleteDialog()"><mat-icon>delete</mat-icon>Delete Post</button>
+      <button *ngIf="!(post?.author?.user == userID) && loggedIn" mat-menu-item (click)="openFlagDialog(null, 0)"><mat-icon>flag</mat-icon>Flag Post</button>
+    </mat-menu>
   </div>
   <br>
-</md-card>
+</mat-card>
 
-<md-list>
+<mat-list>
   <div *ngFor="let comment of post?.comments">
-    <md-card [style.border]="notificationIndication(comment?.id)" class="content">
+    <mat-card [style.border]="notificationIndication(comment?.id)" class="content">
       <div class="commentEditing">
-        <button md-icon-button [mdMenuTriggerFor]="appMenu"><i class="material-icons">more_vert</i></button>
-        <md-menu #appMenu="mdMenu">
-          <button md-menu-item type="button" (click)="share(comment.id)"><md-icon>share</md-icon>Share Comment</button>
-          <button *ngIf="comment.author?.user == userID" md-menu-item color="warn" (click)="openCommentDeleteDialog(comment)"><md-icon>delete</md-icon>Delete Comment</button>
-          <button *ngIf="!(comment.author?.user == userID) && loggedIn" md-menu-item (click)="openFlagDialog(comment, 1)"><md-icon>flag</md-icon>Flag Comment</button>
-        </md-menu>
+        <button mat-icon-button [matMenuTriggerFor]="appMenu"><i class="material-icons">more_vert</i></button>
+        <mat-menu #appMenu="matMenu">
+          <button mat-menu-item type="button" (click)="share(comment.id)"><mat-icon>share</mat-icon>Share Comment</button>
+          <button *ngIf="comment.author?.user == userID" mat-menu-item color="warn" (click)="openCommentDeleteDialog(comment)"><mat-icon>delete</mat-icon>Delete Comment</button>
+          <button *ngIf="!(comment.author?.user == userID) && loggedIn" mat-menu-item (click)="openFlagDialog(comment, 1)"><mat-icon>flag</mat-icon>Flag Comment</button>
+        </mat-menu>
       </div>
       <div class="commentText" innerHTML="{{comment.text | marked: post : comment}}"></div>
       <a target="_blank" rel="noopener" href="{{comment?.image}}"><img class="wfImages" *ngIf="comment?.image" src="{{comment?.image}}" /></a>
-      <md-card (click)="gotoUser(comment.author?.user)" class="parentContainer1">
+      <mat-card (click)="gotoUser(comment.author?.user)" class="parentContainer1">
         <div class="parentContainer">
           <img class="pfp2" (click)="gotoUser(comment.author?.user)" *ngIf="comment.author?.avatar" [src]="comment.author?.avatar" alt="Avatar of {{comment.author?.name}}"/>
           <img class="pfp2" (click)="gotoUser(comment.author?.user)" *ngIf="!comment.author?.avatar" src="/assets/logo.png" alt="Avatar of {{comment.author?.name}}"/>
@@ -52,12 +52,12 @@
             <i><small><a class="dateText" routerLink="/user/{{comment.author?.user}}" (click)="gotoUser(comment.author?.user)" routerLinkActive="active">{{comment.author?.name}}</a><br> <p>{{comment.created}}</p></small></i>
           </ng-container>
         </div>
-      </md-card>
-    </md-card>
+      </mat-card>
+    </mat-card>
   </div>
-</md-list>
+</mat-list>
 
-<md-card class="refreshButton" (click)="ngOnInit()" *ngIf="(commentCount === 0) && !loading">
+<mat-card class="refreshButton" (click)="ngOnInit()" *ngIf="(commentCount === 0) && !loading">
     No comments, try commenting?
-    <button class="wideButtons" md-button>Refresh <i class="material-icons">refresh</i></button>
-</md-card>
+    <button class="wideButtons" mat-button>Refresh <i class="material-icons">refresh</i></button>
+</mat-card>

@@ -1,7 +1,7 @@
 import { By } from '@angular/platform-browser';
 import { ComponentFixture, ComponentFixtureAutoDetect, TestBed, async } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
-import { MdCardModule, MdSlideToggleModule } from '@angular/material';
+import { MatCardModule, MatProgressSpinnerModule, MatSlideToggleModule } from '@angular/material';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Author } from '../_models/author';
@@ -67,7 +67,7 @@ describe('DraftsComponent', () => {
                 { provide: RouteService, useValue: routeServiceStub },
                 { provide: ComponentFixtureAutoDetect, useValue: true }
             ],
-            imports: [ MdCardModule, MdSlideToggleModule, FormsModule, NgxMasonryModule, NgxPaginationModule ],
+            imports: [ MatCardModule, MatProgressSpinnerModule, MatSlideToggleModule, FormsModule, NgxMasonryModule, NgxPaginationModule ],
         });
         fixture = TestBed.createComponent(DraftsComponent);
         comp = fixture.componentInstance;
