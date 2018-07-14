@@ -1,4 +1,3 @@
-<div id="topNavBackHidden"><i class="material-icons">arrow_back</i></div>
 <mat-card class="login-card">
   <a class="logoLink" routerLink="/" routerLinkActive="active"><img class="logo" src="https://static.wildfyre.net/wildfyre.png" alt="WildFyre"></a>
   <mat-card-content>
@@ -8,10 +7,8 @@
     </div>
     <h2>Login</h2>
     <form name="form" (ngSubmit)="f.form.valid && login()" #f="ngForm" novalidate>
-      <div *ngIf="errors && errors.non_field_errors" class="alert alert-danger">
-        <ul *ngFor="let err of errors.non_field_errors">
-          <li>{{err}}</li>
-        </ul>
+      <div *ngIf="errors" class="alert alert-danger">
+        {{errors}}
       </div>
 
       <div *ngIf="!loading" class="form" [ngClass]="{ 'has-error': f.submitted && !username.valid }">
@@ -32,7 +29,7 @@
         <button *ngIf="!loading" class="wideButtons" mat-raised-button color="accent" [disabled]="loading"><b>Login</b></button>
         <br>
         <mat-progress-spinner *ngIf="loading"></mat-progress-spinner>
-        </div>
+      </div>
     </form>
     Can't login? <a routerLink="/recover" routerLinkActive="active">Recover it Here</a><br>
     Don't have an account? <a routerLink="/register" routerLinkActive="active">Register Here</a>

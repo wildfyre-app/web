@@ -1,6 +1,7 @@
 ﻿import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
+import 'rxjs/add/operator/catch';
 import { Subject } from 'rxjs/Subject';
 import { AuthError } from '../_models/auth';
 import { AuthenticationService } from '../_services/authentication.service';
@@ -13,7 +14,7 @@ import { RouteService } from '../_services/route.service';
 })
 export class LoginComponent implements OnInit, OnDestroy {
   componentDestroyed: Subject<boolean> = new Subject();
-  errors: AuthError;
+  errors: string;
   loading = false;
   model: any = {};
 
@@ -58,10 +59,10 @@ export class LoginComponent implements OnInit, OnDestroy {
           this.navBarService.areaVisible.next(true);
           this.router.navigate(['/']);
           this.loading = false;
-        } else {
-          this.errors = result.getError();
-          this.loading = false;
         }
+    }, err  => {
+      this.errors = 'Unable to log in with provided credentials.';
+      this.loading = false;
     });
   }
 }

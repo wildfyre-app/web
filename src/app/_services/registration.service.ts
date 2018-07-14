@@ -94,7 +94,7 @@ export class RegistrationService {
       'captcha': captchaResponse
     };
 
-    return this.httpService.POST('/account/register/', body)
+    return this.httpService.POST_REGISTER('/account/register/', body)
       .map((response: Response) => {
         // Registration successful
         return Registration.parse(response);

@@ -45,6 +45,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
   styleHeightTextarea: string;
   styleMobile: string;
   stylePage: boolean;
+  width: string;
 
   constructor(
     private cdRef: ChangeDetectorRef,
@@ -327,6 +328,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
   }
 
   setActiveIndex(s: string) {
+    this.width = '100%';
     if (s === undefined) {
       s = '/';
     }
@@ -336,10 +338,12 @@ export class NavBarComponent implements OnInit, OnDestroy {
       this.navBarService.areaVisible.next(false);
     } else if (s === '/notifications/archive') {
       this.stylePage = false;
+      this.width = '90%';
       this.activeLinkIndex = 1;
       this.navBarService.areaVisible.next(true);
     } else if (s.lastIndexOf('/notifications/archive/') !== -1) {
       this.stylePage = false;
+      this.width = '90%';
       this.activeLinkIndex = 1;
       this.navBarService.areaVisible.next(true);
     } else if (s === '/notifications') {
@@ -351,8 +355,8 @@ export class NavBarComponent implements OnInit, OnDestroy {
       this.activeLinkIndex = 1;
       this.navBarService.areaVisible.next(false);
     } else if (s === '/') {
-      this.activeLinkIndex = 2;
       this.stylePage = true;
+      this.activeLinkIndex = 2;
       this.navBarService.areaVisible.next(true);
     } else if (s === '/posts') {
       this.stylePage = false;
@@ -360,16 +364,30 @@ export class NavBarComponent implements OnInit, OnDestroy {
       this.navBarService.areaVisible.next(true);
     } else if (s.lastIndexOf('/posts/') !== -1) {
       this.stylePage = false;
+      this.activeLinkIndex = 3;
       this.navBarService.areaVisible.next(true);
     } else if (s === '/create') {
       this.stylePage = false;
       this.activeLinkIndex = 4;
       this.navBarService.areaVisible.next(true);
+    } else if (s.lastIndexOf('/create/') !== -1) {
+      this.stylePage = false;
+      this.activeLinkIndex = 4;
+      this.navBarService.areaVisible.next(false);
+    } else if (s === '/drafts') {
+      this.stylePage = false;
+      this.width = '90%';
+      this.activeLinkIndex = 4;
+      this.navBarService.areaVisible.next(true);
     } else if (s.lastIndexOf('/areas/') !== -1) {
       this.stylePage = true;
+      this.width = '90%';
+      this.activeLinkIndex = 2;
       this.navBarService.areaVisible.next(false);
     } else if (s.lastIndexOf('/user/') !== -1) {
       this.stylePage = false;
+      this.width = '90%';
+      this.activeLinkIndex = 0;
       this.navBarService.areaVisible.next(false);
     }
     this.cdRef.detectChanges();

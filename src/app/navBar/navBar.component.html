@@ -1,5 +1,5 @@
-<nav id="topNav" mat-tab-nav-bar aria-label="Navigation links">
-  <mat-select class="areaSelect" *ngIf="areaVisible" [(ngModel)]="currentArea" (ngModelChange)="onChange($event)">
+<nav [style.width]="width" id="topNav" mat-tab-nav-bar aria-label="Navigation links">
+  <mat-select id="areaSelect" *ngIf="areaVisible" [(ngModel)]="currentArea" (ngModelChange)="onChange($event)">
     <mat-option *ngFor="let area of areas" [value]="area.name">{{area.getDisplayName()}} - {{area.spread}}.{{area.rep}}<img style="width:32px;height:32px" width="32px" height="32px" src="../assets/logo.png" alt="WildFyre"></mat-option>
   </mat-select>
   <button id="topNavMenu" mat-button (click)="sidenav.open()"><i class="material-icons">menu</i></button>
@@ -46,6 +46,9 @@
     <mat-nav-list>
       <a mat-list-item href="https://wildfyre.net/index.php/about-us/">
         About Us
+      </a>
+      <a mat-list-item href="https://phabricator.wildfyre.net">
+        Open Source!
       </a>
       <a mat-list-item href="https://wildfyre.net/index.php/frequently-asked-questions/">
         FAQ

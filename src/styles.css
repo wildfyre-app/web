@@ -8,6 +8,10 @@ a.mat-tab-link {
   opacity: 1.0;
 }
 
+body {
+  background: #fafafa;
+}
+
 button[type="submit"] {
     white-space: normal;
     width: 100%;
@@ -96,6 +100,10 @@ hr {
   background-color: #333; /* Modern Browsers */
 }
 
+html {
+  background: #fafafa;
+}
+
 img {
   height: 100%;
   width: 100%;
@@ -136,7 +144,7 @@ mat-select {
 
 mat-select div.mat-select-trigger {
   width: 200px;
-  margin-top: -5px;
+  margin-top: 11px;
   padding-bottom: 4px;
   border-bottom: 2px solid #ed763e;
 }
@@ -148,6 +156,7 @@ mat-sidenav.sideNav {
   position: fixed;
   right: 0px;
   top: 0px;
+  padding-top: 85px;
 }
 
 mat-sidenav-container.mat-drawer-container.mat-sidenav-container.mat-drawer-transition {
@@ -182,6 +191,10 @@ span {
 
 span.mat-button-wrapper {
   display: contents;
+}
+
+span.markdown p a {
+  display: flex;
 }
 
 span.markdown table {
@@ -240,10 +253,6 @@ ul.ngx-pagination {
   width: 100%;
   text-align: center;
   margin: 0 auto;
-}
-
-.areaSelect {
-  padding-right: 10%;
 }
 
 .brick {
@@ -356,6 +365,10 @@ ul.ngx-pagination {
   text-align: left;
   width: 100%;
   margin: 0 auto;
+}
+
+.mat-form-field-required-marker {
+  display: contents;
 }
 
 .mat-raised-button:hover {
@@ -499,6 +512,11 @@ ul.ngx-pagination {
   float: right;
 }
 
+#areaSelect {
+  padding-right: 10%;
+  display: contents;
+}
+
 #captcha {
   margin: 0 auto;
   width: 304px;
@@ -514,6 +532,8 @@ ul.ngx-pagination {
   border-left: 6px solid #263238;
   padding-bottom: 5vh;
   margin-bottom: 2vh;
+  text-align: left;
+  padding-left: 5px;
 }
 
 #focusTouchZone {
@@ -533,7 +553,7 @@ ul.ngx-pagination {
   position: fixed;
   top: 0px;
   right: 0px;
-  width: 90%;
+  width: 100%;
   z-index: 5;
 }
 
@@ -555,6 +575,7 @@ ul.ngx-pagination {
   display: flex;
   justify-content: center;
   align-items: center;
+  cursor: pointer;
 }
 
 #topNavBackHidden {
@@ -729,7 +750,7 @@ ul.ngx-pagination {
       bottom: 0px;
       z-index: 3;
       width: 7%;
-      height: 57px;
+      height: 56px;
       background-color: #263238;
       color: white;
       text-align: center;
@@ -877,7 +898,7 @@ ul.ngx-pagination {
 
     #navB {
       position: fixed;
-      top: 61px;
+      top: 59px;
       width: 100%;
       float: left;
       z-index: 5;
