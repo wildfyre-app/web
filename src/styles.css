@@ -34,7 +34,7 @@ canvas {
   width: 100%;
 }
 
-div div mat-option#mat-option-1.mat-option {
+div div mat-option span {
   font-size: 20px;
 }
 
@@ -43,11 +43,32 @@ div div mat-option#mat-option-1.mat-option.mat-selected {
   font-size: 20px;
 }
 
-div div mat-option#mat-option-2.mat-option {
+div div mat-option#mat-option-2.mat-option.mat-selected {
+  color: #ed763e;
   font-size: 20px;
 }
 
-div div mat-option#mat-option-2.mat-option.mat-selected {
+div div mat-option#mat-option-3.mat-option.mat-selected {
+  color: #ed763e;
+  font-size: 20px;
+}
+
+div div mat-option#mat-option-4.mat-option.mat-selected {
+  color: #ed763e;
+  font-size: 20px;
+}
+
+div div mat-option#mat-option-5.mat-option.mat-selected {
+  color: #ed763e;
+  font-size: 20px;
+}
+
+div div mat-option#mat-option-6.mat-option.mat-selected {
+  color: #ed763e;
+  font-size: 20px;
+}
+
+div div mat-option#mat-option-7.mat-option.mat-selected {
   color: #ed763e;
   font-size: 20px;
 }

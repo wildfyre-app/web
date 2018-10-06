@@ -10,7 +10,7 @@ export class Post {
       obj.id,
       (() => {
         if (obj.author === null) {
-          return  new Author(498, 'Anonymous', 'https://upload.wildfyre.net/api/avatar/ic_visibility_off_black_24dp.png', null, false);
+          return  new Author(498, 'Anonymous', 'https://static.wildfyre.net/anonym.svg', null, false);
         }
         return Author.parse(obj.author);
       })(), // Call method
