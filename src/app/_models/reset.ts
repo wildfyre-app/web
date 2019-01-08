@@ -11,10 +11,10 @@ export class Reset {
 export class ResetError extends Reset {
   constructor(
     public non_field_errors?: string[],
-    public _new_password?: string[],
-    public _token?: string[],
-    public _transaction?: string[],
-    public _captcha?: string[]
+    public new_password?: string[],
+    public token?: string[],
+    public transaction?: string[],
+    public captcha?: string[]
   ) { super(); }
 
   getError(): ResetError {

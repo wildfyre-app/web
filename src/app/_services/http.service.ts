@@ -58,9 +58,9 @@ export class HttpService {
       .catch((error: any) => this.handleError(error));
   }
 
-  POST_REGISTER(passedUrl: string, body: any): Observable<any> {
-    // POST to api
-    return this.http.post(this.apiURL + passedUrl, body, this.getOptionsForRegister())
+  POST_NO_TOKEN(passedUrl: string, body: any): Observable<any> {
+    // POST to api without an Authorization header
+    return this.http.post(this.apiURL + passedUrl, body, this.getOptionsNoToken())
       .catch((error: any) => this.handleError(error));
   }
 
@@ -157,7 +157,7 @@ export class HttpService {
     return { headers: new HttpHeaders({ 'Authorization': 'Token ' + this.authenticationService.token}) };
   }
 
-  getOptionsForRegister(): any {
+  getOptionsNoToken(): any {
     return { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
   }
 }

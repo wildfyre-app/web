@@ -21,7 +21,7 @@ export class RegistrationService {
       'captcha': captchaResponse
     };
 
-    return this.httpService.POST('/account/recover/', body)
+    return this.httpService.POST_NO_TOKEN('/account/recover/', body)
       .map((response: Response) => {
         // Step 1 successful
         return RecoverTransaction.parse(response);
@@ -29,9 +29,9 @@ export class RegistrationService {
       .catch((error) => {
         return Observable.of(
           new RecoverTransactionError(
-            JSON.parse(error._body).non_field_errors,
-            JSON.parse(error._body).email,
-            JSON.parse(error._body).captcha
+            error.non_field_errors,
+            error.email,
+            error.captcha
           )
         );
       });
@@ -45,7 +45,7 @@ export class RegistrationService {
       'captcha': captchaResponse
     };
 
-    return this.httpService.POST('/account/recover/reset/', body)
+    return this.httpService.POST_NO_TOKEN('/account/recover/reset/', body)
       .map((response: Response) => {
         // Password reset successful
         return Reset.parse(response);
@@ -53,11 +53,11 @@ export class RegistrationService {
       .catch((error) => {
         return Observable.of(
           new ResetError(
-            JSON.parse(error._body).non_field_errors,
-            JSON.parse(error._body).new_password,
-            JSON.parse(error._body).token,
-            JSON.parse(error._body).transaction,
-            JSON.parse(error._body).captcha
+            error.non_field_errors,
+            error.new_password,
+            error.token,
+            error.transaction,
+            error.captcha
           )
         );
       });
@@ -69,7 +69,7 @@ export class RegistrationService {
       'captcha': captchaResponse
     };
 
-    return this.httpService.POST('/account/recover/', body)
+    return this.httpService.POST_NO_TOKEN('/account/recover/', body)
       .map((response: Response) => {
         // Usernames sent successfully
         return RecoverTransaction.parse(response);
@@ -77,10 +77,10 @@ export class RegistrationService {
       .catch((error) => {
         return Observable.of(
           new RecoverTransactionError(
-            JSON.parse(error._body).non_field_errors,
-            JSON.parse(error._body).username,
-            JSON.parse(error._body).email,
-            JSON.parse(error._body).captcha
+            error.non_field_errors,
+            error.username,
+            error.email,
+            error.captcha
           )
         );
       });
@@ -94,7 +94,7 @@ export class RegistrationService {
       'captcha': captchaResponse
     };
 
-    return this.httpService.POST_REGISTER('/account/register/', body)
+    return this.httpService.POST_NO_TOKEN('/account/register/', body)
       .map((response: Response) => {
         // Registration successful
         return Registration.parse(response);
@@ -102,11 +102,11 @@ export class RegistrationService {
       .catch((error) => {
         return Observable.of(
           new RegistrationError(
-            JSON.parse(error._body).non_field_errors,
-            JSON.parse(error._body).username,
-            JSON.parse(error._body).email,
-            JSON.parse(error._body).password,
-            JSON.parse(error._body).captcha
+            error.non_field_errors,
+            error.username,
+            error.email,
+            error.password,
+            error.captcha
           )
         );
       });
