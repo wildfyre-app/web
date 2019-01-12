@@ -16,15 +16,15 @@
     <mat-input-container>
       <input matInput placeholder="Email" type="email" name="email" [(ngModel)]="model.email" #email="ngModel" autocomplete="email" required/>
     </mat-input-container>
-    <div *ngIf="errors && errors._email" class="help-block has-error">
-      <ul *ngFor="let err of errors._email">
+    <div *ngIf="errors && errors.email" class="help-block has-error">
+      <ul *ngFor="let err of errors.email">
         <li>{{err}}</li>
       </ul>
     </div>
     <div class="captcha" style="transform:scale(0.80);transform-origin:0 0">
       <re-captcha (captchaResponse)="setCaptchaResponse($event)" site_key="6LcXViIUAAAAABZF263l-SJh3rZAe95Sx2LPN-Dc"></re-captcha>
-      <div *ngIf="errors && errors._captcha" class="help-block has-error">
-        <ul *ngFor="let err of errors._captcha">
+      <div *ngIf="errors && errors.captcha" class="help-block has-error">
+        <ul *ngFor="let err of errors.captcha">
           <li>{{err}}</li>
         </ul>
       </div>
@@ -47,23 +47,23 @@
     <mat-input-container>
       <input matInput placeholder="Email" type="email" name="email2" [(ngModel)]="model.email2" #email2="ngModel" autocomplete="email" required/>
     </mat-input-container>
-    <div *ngIf="errors && errors._email" class="help-block has-error">
-      <ul *ngFor="let err of errors._email">
+    <div *ngIf="errors && errors.email" class="help-block has-error">
+      <ul *ngFor="let err of errors.email">
         <li>{{err}}</li>
       </ul>
     </div>
     <mat-input-container>
       <input matInput placeholder="Username"  type="text" name="username" [(ngModel)]="model.username" #username="ngModel" autocomplete="username" required/>
     </mat-input-container>
-    <div *ngIf="errors && errors._username" class="help-block has-error">
-      <ul *ngFor="let err of errors._username">
+    <div *ngIf="errors && errors.username" class="help-block has-error">
+      <ul *ngFor="let err of errors.username">
         <li>{{err}}</li>
       </ul>
     </div>
     <div class="captcha" style="transform:scale(0.80);transform-origin:0 0">
       <re-captcha (captchaResponse)="setCaptchaResponse($event)" site_key="6LcXViIUAAAAABZF263l-SJh3rZAe95Sx2LPN-Dc"></re-captcha>
-      <div *ngIf="errors && errors._captcha" class="help-block has-error">
-        <ul *ngFor="let err of errors._captcha">
+      <div *ngIf="errors && errors.captcha" class="help-block has-error">
+        <ul *ngFor="let err of errors.captcha">
           <li>{{err}}</li>
         </ul>
       </div>
