@@ -1,9 +1,8 @@
 import { Component, OnInit, OnDestroy, NgModule, ChangeDetectorRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs/Subject';
-import { AreaList } from '../_models/areaList';
+import { Area } from '../_models/area';
 import * as C from '../_models/constants';
-import { Notification } from '../_models/notification';
 import { Post } from '../_models/post';
 import { NavBarService } from '../_services/navBar.service';
 import { NotificationService } from '../_services/notification.service';
@@ -112,7 +111,7 @@ export class NotificationArchiveComponent implements OnInit, OnDestroy {
 
         this.navBarService.currentArea
           .takeUntil(this.componentDestroyed)
-          .subscribe((currentArea: AreaList) => {
+          .subscribe((currentArea: Area) => {
             this.currentArea = currentArea.name;
             if (!this.superPosts[currentArea.name]) {
               this.superPosts[currentArea.name] = [];

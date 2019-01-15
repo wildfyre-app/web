@@ -6,7 +6,7 @@ import { ConfirmDeletionDialogComponent } from '../_dialogs/confirmDeletion.dial
 import { PictureDialogComponent } from '../_dialogs/picture.dialog.component';
 import { PicturesDialogComponent } from '../_dialogs/pictures.dialog.component';
 import { YouTubeDialogComponent } from '../_dialogs/youtube.dialog.component';
-import { AreaList } from '../_models/areaList';
+import { Area } from '../_models/area';
 import * as C from '../_models/constants';
 import { Image } from '../_models/image';
 import { Post, PostError } from '../_models/post';
@@ -43,7 +43,7 @@ export class CreatePostComponent implements OnInit, OnDestroy {
 
     this.navBarService.currentArea
       .takeUntil(this.componentDestroyed)
-      .subscribe((currentArea: AreaList) => {
+      .subscribe((currentArea: Area) => {
         this.currentArea = currentArea.name;
 
         this.route.params

@@ -1,7 +1,11 @@
 <nav [style.width]="width" id="topNav" mat-tab-nav-bar aria-label="Navigation links">
-  <mat-select id="areaSelect" *ngIf="areaVisible" [(ngModel)]="currentArea" (ngModelChange)="onChange($event)">
-    <mat-option *ngFor="let area of areas" [value]="area.name">{{area.getDisplayName()}} - {{area.spread}}.{{area.rep}}<img style="width:32px;height:32px" width="32px" height="32px" src="../assets/logo.png" alt="WildFyre"></mat-option>
+  <mat-select id="areaSelect" *ngIf="loggedIn" [disabled]="!areaVisible" [(ngModel)]="currentArea" (ngModelChange)="onChange($event)">
+    <mat-option *ngFor="let area of areas" [value]="area">{{area.displayname}}</mat-option>
   </mat-select>
+  <div id="spreadRep" *ngIf="loggedIn">
+    {{currentArea.spread}}<i class="material-icons">settings_input_antenna</i>
+    {{currentArea.rep}}<i class="material-icons">stars</i>
+  </div>
   <button id="topNavMenu" mat-button (click)="sidenav.open()"><i class="material-icons">menu</i></button>
 </nav>
 
@@ -77,7 +81,7 @@
       </a>
       <hr>
       <div class="iconContainer">
-        <em>Copyright © 2017-2018 WildFyre</em>
+        <em>Copyright © 2017-2019 WildFyre</em>
       </div>
     </mat-nav-list>
   </mat-sidenav>

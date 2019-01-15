@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { AreaList } from '../_models/areaList';
+import { Area } from '../_models/area';
 import { CommentData } from '../_models/commentData';
 import { Link } from '../_models/link';
 
@@ -9,7 +9,7 @@ export class NavBarService {
   areaVisible: BehaviorSubject<boolean> = new BehaviorSubject(false);
   clearInputs: BehaviorSubject<boolean> = new BehaviorSubject(false);
   comment: BehaviorSubject<CommentData> = new BehaviorSubject(new CommentData('', null));
-  currentArea: BehaviorSubject<AreaList> = new BehaviorSubject(new AreaList('fun', 0, 0));
+  currentArea: BehaviorSubject<Area> = new BehaviorSubject(new Area('', '', 0, 0));
   isVisibleSource: BehaviorSubject<string> = new BehaviorSubject('');
   link: BehaviorSubject<Link> = new BehaviorSubject(new Link('', '', ''));
   loggedIn: BehaviorSubject<boolean> = new BehaviorSubject(false);

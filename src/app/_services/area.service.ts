@@ -8,7 +8,7 @@ import { Reputation } from '../_models/reputation';
 @Injectable()
 export class AreaService {
   public areas: Area[];
-  public currentAreaName = 'fun';
+  public currentAreaName = '';
   public isAreaChecked = false;
   private reputation: { [area: string]: Reputation; } = { };
 
@@ -38,6 +38,7 @@ export class AreaService {
           areas.push(Area.parse(response[i]))
         }
         this.areas = areas;
+        this.currentAreaName = this.areas[0].name;
         return areas;
       });
     } else {

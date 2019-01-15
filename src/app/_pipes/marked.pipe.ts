@@ -28,8 +28,6 @@ export class MarkedPipe implements PipeTransform {
   }
 
   transform(value: string, post: Post, comment: Comment): string {
-    md.inline.ruler.disable(['autolink', 'image']);
-
     md.use(markdownItRegex, {
       name: 'customImage',
       regex: /(\[img: \d\])/gm,

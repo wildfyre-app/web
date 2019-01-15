@@ -5,7 +5,7 @@ import { Subject } from 'rxjs/Subject';
 import { ConfirmDeletionDialogComponent } from '../_dialogs/confirmDeletion.dialog.component';
 import { FlagDialogComponent } from '../_dialogs/flag.dialog.component';
 import { ShareDialogComponent } from '../_dialogs/share.dialog.component';
-import { AreaList } from '../_models/areaList';
+import { Area } from '../_models/area';
 import { Author } from '../_models/author';
 import { Comment } from '../_models/comment';
 import { CommentData } from '../_models/commentData';
@@ -183,10 +183,10 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.loading = true;
     this.navBarService.currentArea
       .takeUntil(this.componentDestroyed)
-      .subscribe((currentArea: AreaList) => {
+      .subscribe((currentArea: Area) => {
         this.currentArea = currentArea.name;
 
-        if (reload === true || this.areaCheck !== currentArea.name) {
+        if ((reload === true || this.areaCheck !== currentArea.name) && currentArea.name !== '') {
           this.postService.getNextPost(currentArea.name)
             .takeUntil(this.componentDestroyed)
             .subscribe(nextPost => {
@@ -206,6 +206,7 @@ export class HomeComponent implements OnInit, OnDestroy {
                 this.cdRef.detectChanges();
               }
           });
+        } else if (currentArea.name === '') {
         } else {
           this.postService.getPost(this.currentArea, this.post.id, false)
             .takeUntil(this.componentDestroyed)

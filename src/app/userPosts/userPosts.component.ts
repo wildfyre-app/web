@@ -1,10 +1,9 @@
 import { Component, OnInit, OnDestroy, NgModule, ChangeDetectorRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs/Subject';
-import { AreaList } from '../_models/areaList';
+import { Area } from '../_models/area';
 import * as C from '../_models/constants';
 import { Post } from '../_models/post';
-import { AreaService } from '../_services/area.service';
 import { NavBarService } from '../_services/navBar.service';
 import { PostService } from '../_services/post.service';
 import { RouteService } from '../_services/route.service';
@@ -112,7 +111,7 @@ export class UserPostsComponent implements OnInit, OnDestroy {
 
     this.navBarService.currentArea
       .takeUntil(this.componentDestroyed)
-      .subscribe((currentArea: AreaList) => {
+      .subscribe((currentArea: Area) => {
         this.currentArea = currentArea.name;
         if (!this.superPosts[currentArea.name]) {
           this.superPosts[currentArea.name] = [];

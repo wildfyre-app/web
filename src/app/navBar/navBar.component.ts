@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { Subject } from 'rxjs/Subject';
 import { LogoutDialogComponent } from '../_dialogs/logout.dialog.component';
 import { PictureDialogComponent } from '../_dialogs/picture.dialog.component';
-import { AreaList } from '../_models/areaList';
+import { Area } from '../_models/area';
 import { CommentData } from '../_models/commentData';
 import { AreaService } from '../_services/area.service';
 import { AuthenticationService } from '../_services/authentication.service';
@@ -21,14 +21,14 @@ export class NavBarComponent implements OnInit, OnDestroy {
   @ViewChild('sidenav') sidenav: MatSidenav;
 
   activeLinkIndex = 2;
-  areas = new Array<AreaList>(new AreaList('', 0, 0));
+  areas = new Array<Area>(new Area('', '', 0, 0));
   areaReputation: { [area: string]: number; } = { };
   areaSpread: { [area: string]: number; } = { };
   areaVisible = true;
   comment: CommentData = new CommentData('', null);
   commentDisabled = false;
   componentDestroyed: Subject<boolean> = new Subject();
-  currentArea = this.areas[0].name;
+  currentArea: Area = this.areas[0];
   expanded = false;
   heightText: string;
   loggedIn = false;
@@ -270,34 +270,36 @@ export class NavBarComponent implements OnInit, OnDestroy {
     this.areaService.getAreas()
       .takeUntil(this.componentDestroyed)
       .subscribe(areas => {
-        let area;
         this.areas = [];
 
         for (let i = 0; i < areas.length; i++) {
           this.areaService.getAreaRep(areas[i].name)
             .takeUntil(this.componentDestroyed)
             .subscribe(result => {
-              area = new AreaList(
+              let area;
+              area = new Area(
                 areas[i].name,
+                areas[i].displayname,
                 result.reputation,
                 result.spread
               );
+
               this.areas.push(area);
+
+              this.currentArea = this.areas[0];
+              this.areaService.currentAreaName = this.currentArea.name;
+              this.navBarService.currentArea.next(this.currentArea);
+              this.cdRef.detectChanges();
           });
         }
-
-        this.currentArea = areas[0].name;
-        this.cdRef.detectChanges();
       });
       this.loggedIn = true;
   }
 
-  onChange(area: string) {
-    for (let i = 0; i <= this.areas.length - 1; i++) {
-      if (this.areas[i].name === area) {
-        this.navBarService.currentArea.next(this.areas[i]);
-      }
-    }
+  onChange(area: Area) {
+    this.currentArea = area;
+    this.areaService.currentAreaName = this.currentArea.name;
+    this.navBarService.currentArea.next(this.currentArea);
   }
 
   openLogoutDialog() {
