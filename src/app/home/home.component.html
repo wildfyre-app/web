@@ -20,7 +20,7 @@
     </div>
   </mat-card>
 
-  <div class="postEditing">
+  <div *ngIf="(post.id !== 0) && !loading" class="postEditing">
     <div class="commentCircle" *ngIf="post?.comments?.length !== 0">{{getCommentLength(post?.comments?.length)}}</div>
     <button *ngIf="!post?.subscribed" mat-icon-button (click)="subscribe(true)"><i class="material-icons">turned_in_not</i></button>
     <button *ngIf="post?.subscribed" mat-icon-button (click)="subscribe(false)"><i class="material-icons">turned_in</i></button>

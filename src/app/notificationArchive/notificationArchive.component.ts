@@ -112,36 +112,38 @@ export class NotificationArchiveComponent implements OnInit, OnDestroy {
         this.navBarService.currentArea
           .takeUntil(this.componentDestroyed)
           .subscribe((currentArea: Area) => {
-            this.currentArea = currentArea.name;
-            if (!this.superPosts[currentArea.name]) {
-              this.superPosts[currentArea.name] = [];
-            }
-            if (!this.backupPosts[currentArea.name]) {
-              this.backupPosts[currentArea.name] = [];
-            }
-            this.loading = true;
-            const posts: Post[] = [];
-
-          this.notificationService.getArchive(currentArea.name, this.limit, 0)
-            .takeUntil(this.componentDestroyed)
-            .subscribe(superPost => {
-              superPost.results.forEach((obj: any) => {
-                posts.push(Post.parse(obj));
-              });
-
-              // Removes binding to original 'superPost' variable
-              this.superPosts[currentArea.name] = JSON.parse(JSON.stringify(posts));
-              this.backupPosts[currentArea.name] = posts;
-              this.totalCount = superPost.count;
-
-              this.imageInPosts(this.superPosts[currentArea.name], currentArea.name);
-
-              for (let i = 0; i <= this.backupPosts[currentArea.name].length - 1; i++) {
-                this.backupPosts[currentArea.name][i].text = this.removeMarkdown(this.backupPosts[currentArea.name][i].text);
+            if (currentArea.name !== '') {
+              this.currentArea = currentArea.name;
+              if (!this.superPosts[currentArea.name]) {
+                this.superPosts[currentArea.name] = [];
               }
-              this.cdRef.detectChanges();
-              this.loading = false;
-            });
+              if (!this.backupPosts[currentArea.name]) {
+                this.backupPosts[currentArea.name] = [];
+              }
+              this.loading = true;
+              const posts: Post[] = [];
+
+            this.notificationService.getArchive(currentArea.name, this.limit, 0)
+              .takeUntil(this.componentDestroyed)
+              .subscribe(superPost => {
+                superPost.results.forEach((obj: any) => {
+                  posts.push(Post.parse(obj));
+                });
+
+                // Removes binding to original 'superPost' variable
+                this.superPosts[currentArea.name] = JSON.parse(JSON.stringify(posts));
+                this.backupPosts[currentArea.name] = posts;
+                this.totalCount = superPost.count;
+
+                this.imageInPosts(this.superPosts[currentArea.name], currentArea.name);
+
+                for (let i = 0; i <= this.backupPosts[currentArea.name].length - 1; i++) {
+                  this.backupPosts[currentArea.name][i].text = this.removeMarkdown(this.backupPosts[currentArea.name][i].text);
+                }
+                this.cdRef.detectChanges();
+                this.loading = false;
+              });
+            }
         });
   }
 

@@ -231,7 +231,7 @@ export class PostService {
     const formData: FormData = new FormData();
     formData.append('image', image, image.name);
     if (draft) {
-      formData.append('text', post.text + '.');
+      formData.append('text', post.text);
       return this.httpService.PUT_IMAGE('/areas/' + area + '/drafts/' + post.id +  '/', formData)
         .map((response: Response) => {
           return Post.parse(response);
@@ -242,7 +242,7 @@ export class PostService {
           ));
         });
     } else {
-      formData.append('text', commentText + '.');
+      formData.append('text', commentText);
       return this.httpService.POST_IMAGE('/areas/' + area + '/' + post.id +  '/', formData)
         .map((response: Response) => {
           this.navBarService.clearInputs.next(true);

@@ -19,7 +19,7 @@ import { RouteService } from '../_services/route.service';
 })
 export class CreatePostComponent implements OnInit, OnDestroy {
   componentDestroyed: Subject<boolean> = new Subject();
-  currentArea: string;
+  currentArea: Area;
   errors: PostError;
   imageData: any;
   isDraft = false;
@@ -44,23 +44,25 @@ export class CreatePostComponent implements OnInit, OnDestroy {
     this.navBarService.currentArea
       .takeUntil(this.componentDestroyed)
       .subscribe((currentArea: Area) => {
-        this.currentArea = currentArea.name;
+        if (currentArea.name !== '') {
+          this.currentArea = currentArea;
 
-        this.route.params
-          .takeUntil(this.componentDestroyed)
-          .subscribe(params => {
-            if (params['id'] !== undefined) {
-              this.isDraft = true;
+          this.route.params
+            .takeUntil(this.componentDestroyed)
+            .subscribe(params => {
+              if (params['id'] !== undefined) {
+                this.isDraft = true;
 
-              this.postService.getPost(this.currentArea, params['id'], true)
-                .takeUntil(this.componentDestroyed)
-                .subscribe(post => {
-                  this.post = post;
-                  this.loading = false;
-                  this.cdRef.detectChanges();
-              });
-            }
-        });
+                this.postService.getPost(this.currentArea.name, params['id'], true)
+                  .takeUntil(this.componentDestroyed)
+                  .subscribe(post => {
+                    this.post = post;
+                    this.loading = false;
+                    this.cdRef.detectChanges();
+                });
+              }
+          });
+        }
     });
   }
 
@@ -71,10 +73,7 @@ export class CreatePostComponent implements OnInit, OnDestroy {
   }
 
   private addLineBreak(s: string) {
-    if (this.post.text !== '') {
-      this.post.text += '\n';
-    }
-    this.post.text += s;
+    this.post.text = this.post.text !== '' ? this.post.text += `${s}\n` : this.post.text = `${s}\n`;
   }
 
   addBlockQoutes() {
@@ -124,7 +123,7 @@ export class CreatePostComponent implements OnInit, OnDestroy {
   }
 
   addImage(image: Image) {
-    this.addLineBreak('[img: ' + image.num  + ']\n');
+    this.addLineBreak(`[img: ${image.num}]\n`);
   }
 
   addItalics() {
@@ -152,7 +151,7 @@ export class CreatePostComponent implements OnInit, OnDestroy {
     this.loading = true;
     this.cdRef.detectChanges();
     if (this.post.text !== '' && this.runImageCheck()) {
-      this.postService.createPost(this.currentArea, this.post.text, this.post.anonym, this.imageData, draft, this.post.id)
+      this.postService.createPost(this.currentArea.name, this.post.text, this.post.anonym, this.imageData, draft, this.post.id)
         .takeUntil(this.componentDestroyed)
         .subscribe(result => {
           if (!result.getError()) {
@@ -181,7 +180,7 @@ export class CreatePostComponent implements OnInit, OnDestroy {
   }
 
   deleteImage() {
-    this.postService.deleteImage(null, this.post.id, this.currentArea, this.post.text)
+    this.postService.deleteImage(null, this.post.id, this.currentArea.name, this.post.text)
       .takeUntil(this.componentDestroyed)
       .subscribe(result2 => {
         this.post.image = '';
@@ -194,12 +193,11 @@ export class CreatePostComponent implements OnInit, OnDestroy {
 
   deleteImages(image: Image) {
     const sourceString = '[img: ' + image.num + ']\n';
-    this.postService.deleteImages(this.post.id, this.currentArea, image.num);
+    this.postService.deleteImages(this.post.id, this.currentArea.name, image.num);
     for (let i = 0; i < this.post.additional_images.length; i++) {
       if (this.post.additional_images[i].num === image.num) {
         this.post.additional_images.splice(i, 1);
-        this.post.text = this.post.text.replace(sourceString, '');
-        this.post.text = this.post.text.replace('\n' + sourceString, '');
+        this.post.text = this.post.text.replace(sourceString, '').replace('\n' + sourceString, '');
         this.cdRef.detectChanges();
         this.snackBar.open('Image deleted successfully', 'Close', {
           duration: 3000
@@ -236,7 +234,7 @@ export class CreatePostComponent implements OnInit, OnDestroy {
       .takeUntil(this.componentDestroyed)
       .subscribe(result => {
         if (result.bool) {
-          this.postService.deletePost(this.currentArea, this.post.id, true);
+          this.postService.deletePost(this.currentArea.name, this.post.id, true);
           this.snackBar.open('Draft deleted successfully', 'Close', {
             duration: 3000
           });
@@ -250,13 +248,16 @@ export class CreatePostComponent implements OnInit, OnDestroy {
     dialogRef.afterClosed()
       .takeUntil(this.componentDestroyed)
       .subscribe(result => {
+        if (this.post.text === '') {
+          this.post.text += '.';
+        }
         if (result.bool) {
           if (result.picture) {
             if (this.post.id === null) {
-              this.postService.createPost(this.currentArea, this.post.text + '.', this.post.anonym, '', true, this.post.id)
+              this.postService.createPost(this.currentArea.name, this.post.text, this.post.anonym, '', true, this.post.id)
               .takeUntil(this.componentDestroyed)
               .subscribe(result3 => {
-                this.postService.setPicture(result.picture, result3, this.currentArea)
+                this.postService.setPicture(result.picture, result3, this.currentArea.name)
                   .takeUntil(this.componentDestroyed)
                   .subscribe(result4 => {
                     if (result4) {
@@ -278,7 +279,7 @@ export class CreatePostComponent implements OnInit, OnDestroy {
                 });
               });
             } else {
-              this.postService.setPicture(result.picture, this.post, this.currentArea)
+              this.postService.setPicture(result.picture, this.post, this.currentArea.name)
                 .takeUntil(this.componentDestroyed)
                 .subscribe(result2 => {
                   if (!result2.getError()) {
@@ -309,18 +310,21 @@ export class CreatePostComponent implements OnInit, OnDestroy {
 
     dialogRef.componentInstance.nums_taken = filledSlots;
     dialogRef.componentInstance.post = this.post;
-    dialogRef.componentInstance.area = this.currentArea;
+    dialogRef.componentInstance.area = this.currentArea.name;
 
     dialogRef.afterClosed()
       .takeUntil(this.componentDestroyed)
       .subscribe(result => {
+        if (this.post.text === '') {
+          this.post.text += '.';
+        }
         if (result.bool) {
           if (result.picture) {
             if (this.post.id === null) {
-              this.postService.createPost(this.currentArea, this.post.text + '.', this.post.anonym, '', true, this.post.id)
+              this.postService.createPost(this.currentArea.name, this.post.text, this.post.anonym, '', true, this.post.id)
                 .takeUntil(this.componentDestroyed)
                 .subscribe(result3 => {
-                  this.postService.setDraftPictures(result.picture, result3, this.currentArea, result.comment, result.slot)
+                  this.postService.setDraftPictures(result.picture, result3, this.currentArea.name, result.comment, result.slot)
                     .takeUntil(this.componentDestroyed)
                     .subscribe(result4 => {
                       if (result4) {
@@ -342,7 +346,7 @@ export class CreatePostComponent implements OnInit, OnDestroy {
                   });
                 });
             } else {
-              this.postService.setDraftPictures(result.picture, this.post, this.currentArea, result.comment, result.slot)
+              this.postService.setDraftPictures(result.picture, this.post, this.currentArea.name, result.comment, result.slot)
                 .takeUntil(this.componentDestroyed)
                 .subscribe(result2 => {
                   if (result2) {
@@ -377,34 +381,32 @@ export class CreatePostComponent implements OnInit, OnDestroy {
       .takeUntil(this.componentDestroyed)
       .subscribe(result => {
         if (result.url) {
-          result.url = result.url.replace('https://', '');
-          result.url = result.url.replace('http://', '');
-          result.url = result.url.replace('www.', '');
-          result.url = result.url.replace('m.', '');
-          result.url = result.url.replace('youtube.com/watch?v=', '');
-          result.url = result.url.replace('youtu.be/', '');
-          result.url = result.url.replace('youtube.com/', '');
+          result.url = result.url
+          .replace('https://', '')
+          .replace('http://', '')
+          .replace('http://', '')
+          .replace('www.', '')
+          .replace('m.', '')
+          .replace('youtube.com/watch?v=', '')
+          .replace('youtu.be/', '')
+          .replace('youtube.com/', '')
 
           if (result.url.indexOf('?') !== -1) {
             result.url = result.url.slice(0, result.url.indexOf('?'));
           }
-
-          if (this.post.text === undefined) {
-            this.post.text = '[![' + result.altText + '](https://img.youtube.com/vi/'
-            + result.url + '/0.jpg)](https://www.youtube.com/watch?v=' + result.url + ')\n';
-          } else {
-            this.post.text = '[![' + result.altText + '](https://img.youtube.com/vi/'
-            + result.url + '/0.jpg)](https://www.youtube.com/watch?v=' + result.url + ')\n' + this.post.text;
-          }
+          this.post.text = this.post.text === undefined ?
+          `[![${result.altText}](https://img.youtube.com/vi/${result.url}/0.jpg)](https://www.youtube.com/watch?v=${result.url})\n`
+          :
+  `[![${result.altText}](https://img.youtube.com/vi/${result.url}/0.jpg)](https://www.youtube.com/watch?v=${result.url})\n${this.post.text}`
       }
       });
   }
 
-    publishDraft() {
+  publishDraft() {
     this.loading = true;
     if (this.post.text !== '' && this.runImageCheck()) {
       this.createPost(true);
-      this.postService.publishDraft(this.currentArea, this.post.id);
+      this.postService.publishDraft(this.currentArea.name, this.post.id);
       this.post.text = '';
       this.snackBar.open('Post Created Successfully!', 'Close', {
         duration: 3000

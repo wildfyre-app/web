@@ -35,9 +35,6 @@ export class PictureDialogComponent implements OnInit {
       this.cropperSettings.width = 920;
       this.cropperSettings.height = 580;
 
-      this.cropperSettings.croppedWidth = 1920;
-      this.cropperSettings.croppedHeight = 1080;
-
       this.cropperSettings.canvasWidth = 300;
       this.cropperSettings.canvasHeight = 200;
 
@@ -45,10 +42,23 @@ export class PictureDialogComponent implements OnInit {
       this.cropperSettings.minHeight = 10;
 
       this.cropperSettings.rounded = false;
-      this.cropperSettings.keepAspect = true;
+      this.cropperSettings.keepAspect = false;
 
       this.cropperSettings.cropperDrawSettings.strokeColor = 'rgb(191, 63, 127)';
       this.cropperSettings.cropperDrawSettings.strokeWidth = 3;
+
+      // touch
+      this.cropperSettings.touchRadius = 60;
+      this.cropperSettings.centerTouchRadius = 60;
+      this.cropperSettings.markerSizeMultiplier = 3;
+      this.cropperSettings.showCenterMarker = true;
+
+      // resulting output image size / quality (500x500px with 80% quality == ~45k jpeg)
+      this.cropperSettings.croppedWidth = 500;
+      this.cropperSettings.croppedHeight = 500;
+      this.cropperSettings.compressRatio = 0.8;
+      this.cropperSettings.preserveSize = false; // false: use croppedWidth, croppedHeight
+      this.cropperSettings.minWithRelativeToResolution = true;
 
       this.data = {};
     }

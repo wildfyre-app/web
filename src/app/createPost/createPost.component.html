@@ -63,6 +63,8 @@
         <li>{{err}}</li>
       </ul>
     </div>
+    Current Area: {{currentArea?.displayname}}
+    <br><br>
     <button *ngIf="!post?.id" class="wideButtons" mat-raised-button (click)="createPost(false)" color="accent" [disabled]="loading"><b>Create</b></button>
     <button *ngIf="post?.id" class="wideButtons" mat-raised-button (click)="publishDraft()" color="accent" [disabled]="loading"><b>Create</b></button>
     <br><br>

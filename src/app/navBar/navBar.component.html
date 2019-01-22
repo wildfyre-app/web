@@ -32,9 +32,9 @@
 </nav>
 
 <div *ngIf="expanded && loggedIn && stylePage" id="focusTouchZone" (click)="contractBox()"></div>
-<textarea [class.disabled]="commentDisabled" [style.height]="styleHeightTextarea" [style.bottom]="styleBottomTextarea" *ngIf="loggedIn && stylePage" class="commentBox" (click)="expandBox()" name="comment" rows="{{rowsExapanded}}" cols="40" type="text" [(ngModel)]="comment.comment" placeholder="Post a Comment"></textarea>
-<button [style.height]="styleHeightEditor" [style.bottom]="styleBottomEditor" *ngIf="expanded && loggedIn && stylePage" id="editorButton" (click)="$event.stopPropagation();" mat-button color="accent" [disabled]="loading" [matMenuTriggerFor]="commentMenu"><i class="material-icons">text_format</i></button>
-<button [style.height]="styleHeightSend" [style.bottom]="styleBottomSend" *ngIf="loggedIn && stylePage" id="commentButton" mat-button color="accent" [disabled]="loading" (click)="postComment()"><i class="material-icons">send</i></button>
+<textarea [class.disabled]="commentDisabled" [style.height]="styleHeightTextarea" [style.bottom]="styleBottomTextarea" *ngIf="loggedIn && stylePage && hasPost" class="commentBox" (click)="expandBox()" name="comment" rows="{{rowsExapanded}}" cols="40" type="text" [(ngModel)]="comment.comment" placeholder="Post a Comment"></textarea>
+<button [style.height]="styleHeightEditor" [style.bottom]="styleBottomEditor" *ngIf="expanded && loggedIn && stylePage && hasPost" id="editorButton" (click)="$event.stopPropagation();" mat-button color="accent" [disabled]="loading" [matMenuTriggerFor]="commentMenu"><i class="material-icons">text_format</i></button>
+<button [style.height]="styleHeightSend" [style.bottom]="styleBottomSend" *ngIf="loggedIn && stylePage && hasPost" id="commentButton" mat-button color="accent" [disabled]="loading" (click)="postComment()"><i class="material-icons">send</i></button>
 
 <mat-menu #commentMenu="matMenu">
   <button mat-menu-item (click)="addBold()"><i class="material-icons">format_bold</i> Bold</button>

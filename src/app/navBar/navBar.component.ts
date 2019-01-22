@@ -30,6 +30,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
   componentDestroyed: Subject<boolean> = new Subject();
   currentArea: Area = this.areas[0];
   expanded = false;
+  hasPost = false;
   heightText: string;
   loggedIn = false;
   mobileRouteLinks: any[];
@@ -80,6 +81,13 @@ export class NavBarComponent implements OnInit, OnDestroy {
       .takeUntil(this.componentDestroyed)
       .subscribe((visible: boolean) => {
         this.areaVisible = visible;
+        this.cdRef.detectChanges();
+    });
+
+    this.navBarService.hasPost
+      .takeUntil(this.componentDestroyed)
+      .subscribe((has: boolean) => {
+        this.hasPost = has;
         this.cdRef.detectChanges();
     });
 

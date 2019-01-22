@@ -184,39 +184,44 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.navBarService.currentArea
       .takeUntil(this.componentDestroyed)
       .subscribe((currentArea: Area) => {
-        this.currentArea = currentArea.name;
+        if (currentArea.name !== '') {
+          this.currentArea = currentArea.name;
 
-        if ((reload === true || this.areaCheck !== currentArea.name) && currentArea.name !== '') {
-          this.postService.getNextPost(currentArea.name)
-            .takeUntil(this.componentDestroyed)
-            .subscribe(nextPost => {
-              if (nextPost) {
-                this.post = nextPost;
+          if ((reload === true || this.areaCheck !== currentArea.name) && currentArea.name !== '') {
+            this.postService.getNextPost(currentArea.name)
+              .takeUntil(this.componentDestroyed)
+              .subscribe(nextPost => {
+                if (nextPost) {
+                  this.post = nextPost;
+                  this.commentCount = this.post.comments.length;
+                  this.loading = false;
+                  this.areaCheck = this.currentArea;
+                  this.navBarService.hasPost.next(true);
+                  this.cdRef.detectChanges();
+                } else {
+                  this.fakePost = new Post(0, this.systemAuthor, false, false,
+                    Date(), false, 'No more posts in this area, try creating one?', null, null, []);
+                  this.post = this.fakePost;
+                  this.commentCount = 0;
+                  this.loading = false;
+                  this.areaCheck = this.currentArea;
+                  this.navBarService.hasPost.next(false);
+                  this.cdRef.detectChanges();
+                }
+            });
+          } else if (currentArea.name === '') {
+          } else {
+            this.postService.getPost(this.currentArea, this.post.id, false)
+              .takeUntil(this.componentDestroyed)
+              .subscribe(post => {
+                this.post =  post;
                 this.commentCount = this.post.comments.length;
                 this.loading = false;
                 this.areaCheck = this.currentArea;
+                this.navBarService.hasPost.next(true);
                 this.cdRef.detectChanges();
-              } else {
-                this.fakePost = new Post(0, this.systemAuthor, false, false,
-                  Date(), false, 'No more posts in this area, try creating one?', null, null, []);
-                this.post = this.fakePost;
-                this.commentCount = 0;
-                this.loading = false;
-                this.areaCheck = this.currentArea;
-                this.cdRef.detectChanges();
-              }
-          });
-        } else if (currentArea.name === '') {
-        } else {
-          this.postService.getPost(this.currentArea, this.post.id, false)
-            .takeUntil(this.componentDestroyed)
-            .subscribe(post => {
-              this.post =  post;
-              this.commentCount = this.post.comments.length;
-              this.loading = false;
-              this.areaCheck = this.currentArea;
-              this.cdRef.detectChanges();
-          });
+            });
+          }
         }
     });
 

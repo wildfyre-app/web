@@ -113,6 +113,7 @@ export class PostViewComponent implements OnInit, OnDestroy {
             this.post =  post;
             this.commentCount = this.post.comments.length;
             this.loading = false;
+            this.navBarService.hasPost.next(true);
             this.cdRef.detectChanges();
         });
 
