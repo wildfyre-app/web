@@ -102,11 +102,11 @@ export class RegistrationService {
       .catch((error) => {
         return Observable.of(
           new RegistrationError(
-            error.non_field_errors,
-            error.username,
-            error.email,
-            error.password,
-            error.captcha
+            error.error.non_field_errors,
+            error.error.username,
+            error.error.email,
+            error.error.password,
+            error.error.captcha
           )
         );
       });

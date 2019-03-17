@@ -13,49 +13,49 @@
         </ul>
       </div>
 
-      <div class="form" [ngClass]="{ 'has-error': f.submitted && (!username.valid || (errors && errors._username)) }">
+      <div class="form" [ngClass]="{ 'has-error': f.submitted && (!username.valid || (errors && errors.username)) }">
         <mat-input-container>
           <input matInput placeholder="Username" type="text" name="username" [(ngModel)]="model.username" #username="ngModel" autocomplete="on" required />
         </mat-input-container>
         <div *ngIf="f.submitted && !username.valid" class="help-block">Username is required</div>
-        <div *ngIf="errors && errors._username" class="help-block">
-          <ul *ngFor="let err of errors._username">
+        <div *ngIf="errors && errors.username" class="help-block">
+          <ul *ngFor="let err of errors.username">
             <li>{{err}}</li>
           </ul>
         </div>
       </div>
 
-      <div class="form" [ngClass]="{ 'has-error': f.submitted && (!email.valid || (errors && errors._email)) }">
+      <div class="form" [ngClass]="{ 'has-error': f.submitted && (!email.valid || (errors && errors.email)) }">
         <mat-input-container>
           <input matInput placeholder="Email" type="email" name="email" [(ngModel)]="model.email" #email="ngModel" autocomplete="on" required />
         </mat-input-container>
         <div *ngIf="f.submitted && !email.valid" class="help-block">Email is required</div>
-        <div *ngIf="errors && errors._email" class="help-block">
-          <ul *ngFor="let err of errors._email">
+        <div *ngIf="errors && errors.email" class="help-block">
+          <ul *ngFor="let err of errors.email">
             <li>{{err}}</li>
           </ul>
         </div>
       </div>
 
-      <div class="form" [ngClass]="{ 'has-error': f.submitted && (!password.valid || (errors && errors._password)) }">
+      <div class="form" [ngClass]="{ 'has-error': f.submitted && (!password.valid || (errors && errors.password)) }">
         <mat-input-container>
           <input matInput placeholder="Password" type="password" name="password" [(ngModel)]="model.password" #password="ngModel" autocomplete="on" required />
         </mat-input-container>
         <div *ngIf="f.submitted && !password.valid" class="help-block">Password is required</div>
-        <div *ngIf="errors && errors._password" class="help-block">
-          <ul *ngFor="let err of errors._password">
+        <div *ngIf="errors && errors.password" class="help-block">
+          <ul *ngFor="let err of errors.password">
             <li>{{err}}</li>
           </ul>
         </div>
       </div>
 
-      <div class="form" [ngClass]="{ 'has-error': f.submitted && (!password2.valid || (errors && errors._password)) }">
+      <div class="form" [ngClass]="{ 'has-error': f.submitted && (!password2.valid || (errors && errors.password)) }">
         <mat-input-container>
           <input matInput placeholder="Password (repeat)" type="password" name="password2" [(ngModel)]="model.password2" #password2="ngModel" autocomplete="on" required />
         </mat-input-container>
         <div *ngIf="f.submitted && !password2.valid" class="help-block">Second password is required</div>
-        <div *ngIf="errors && errors._password" class="help-block">
-          <ul *ngFor="let err of errors._password">
+        <div *ngIf="errors && errors.password" class="help-block">
+          <ul *ngFor="let err of errors.password">
             <li>{{err}}</li>
           </ul>
         </div>
@@ -63,8 +63,8 @@
 
       <div id="captcha">
         <re-captcha (captchaResponse)="setCaptchaResponse($event)" site_key="6LcXViIUAAAAABZF263l-SJh3rZAe95Sx2LPN-Dc"></re-captcha>
-        <div *ngIf="errors && errors._captcha" class="help-block has-error">
-          <ul *ngFor="let err of errors._captcha">
+        <div *ngIf="errors && errors.captcha" class="help-block has-error">
+          <ul *ngFor="let err of errors.captcha">
             <li>{{err}}</li>
           </ul>
         </div>

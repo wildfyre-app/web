@@ -11,10 +11,10 @@ export class Registration {
 export class RegistrationError extends Registration {
   constructor(
     public non_field_errors?: string[],
-    public _username?: string[],
-    public _email?: string[],
-    public _password?: string[],
-    public _captcha?: string[]
+    public username?: string[],
+    public email?: string[],
+    public password?: string[],
+    public captcha?: string[]
   ) { super(); }
 
   getError(): RegistrationError {
