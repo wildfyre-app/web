@@ -59,8 +59,10 @@ export class PostViewComponent implements OnInit, OnDestroy {
     this.loading = true;
 
     this.blockedUsers = [];
-    this.blockedUsers = window.localStorage.getItem('blockedUsers').split(',');
-    this.blockedUsers.pop();
+    if (window.localStorage.getItem('blockedUsers')) {
+      this.blockedUsers = window.localStorage.getItem('blockedUsers').split(',');
+      this.blockedUsers.pop();
+    }
 
     this.profileService.getSelf()
       .takeUntil(this.componentDestroyed)
