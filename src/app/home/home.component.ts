@@ -31,6 +31,8 @@ enum TypeOfReport {
 export class HomeComponent implements OnInit, OnDestroy {
   private systemAuthor: Author = new Author(375, 'WildFyre', '', '', false);
   areaCheck: string;
+  blockedUsers: string[];
+  blanketText = `<span class="markdown fyre-blanket"><p>Fyre Blanket</p></span>`;
   commentCount = 0;
   componentDestroyed: Subject<boolean> = new Subject();
   currentArea: string;
@@ -59,6 +61,11 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.loading = true;
+
+    this.blockedUsers = [];
+    this.blockedUsers = window.localStorage.getItem('blockedUsers').split(',');
+    this.blockedUsers.pop();
+
     this.routeService.resetRoutes();
 
     this.navBarService.comment
@@ -116,6 +123,36 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.componentDestroyed.complete();
   }
 
+  blockUser(id: number) {
+    const dialogRef = this.dialog.open(ConfirmDeletionDialogComponent);
+    dialogRef.afterClosed()
+      .takeUntil(this.componentDestroyed)
+      .subscribe(result => {
+        if (result.bool) {
+          if (window.localStorage.getItem('blockedUsers')) {
+            window.localStorage.setItem('blockedUsers', window.localStorage.getItem('blockedUsers') + String(id + ','));
+          } else {
+            window.localStorage.setItem('blockedUsers', String(id + ','));
+          }
+          this.ngOnInit();
+        }
+      });
+  }
+
+  unblockUser(id: number) {
+    const dialogRef = this.dialog.open(ConfirmDeletionDialogComponent);
+    dialogRef.afterClosed()
+      .takeUntil(this.componentDestroyed)
+      .subscribe(result => {
+        if (result.bool) {
+          if (window.localStorage.getItem('blockedUsers')) {
+            window.localStorage.setItem('blockedUsers', window.localStorage.getItem('blockedUsers').replace(id + ',', ''));
+          }
+          this.ngOnInit();
+        }
+      });
+  }
+
   getCommentLength(nLength: number) {
     if (nLength.toString().length === 4) {
       return nLength.toString().slice(0, 1) + 'K';
@@ -143,6 +180,10 @@ export class HomeComponent implements OnInit, OnDestroy {
   gotoUser(user: string) {
     this.routeService.addNextRoute(this.router.url);
     this.router.navigateByUrl('/user/' + user);
+  }
+
+  isBlockedUser(c: number) {
+    return this.blockedUsers.includes(String(c));
   }
 
   openCommentDeleteDialog(c: Comment) {
@@ -214,7 +255,7 @@ export class HomeComponent implements OnInit, OnDestroy {
             this.postService.getPost(this.currentArea, this.post.id, false)
               .takeUntil(this.componentDestroyed)
               .subscribe(post => {
-                this.post =  post;
+                this.post = post;
                 this.commentCount = this.post.comments.length;
                 this.loading = false;
                 this.areaCheck = this.currentArea;

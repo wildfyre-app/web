@@ -326,6 +326,11 @@ ul.ngx-pagination {
   background-color: white;
 }
 
+.fyre-blanket {
+  background-color: #263238 !important;
+  color: #ffffff !important;
+}
+
 .login-card {
   margin-top: 5%;
   margin-bottom: 5%;
