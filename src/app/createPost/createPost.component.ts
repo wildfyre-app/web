@@ -404,15 +404,23 @@ export class CreatePostComponent implements OnInit, OnDestroy {
 
   publishDraft() {
     this.loading = true;
+    this.cdRef.detectChanges();
     if (this.post.text !== '' && this.runImageCheck()) {
-      this.createPost(true);
-      this.postService.publishDraft(this.currentArea.name, this.post.id);
-      this.post.text = '';
-      this.snackBar.open('Post Created Successfully!', 'Close', {
-        duration: 3000
-      });
-      this.router.navigate(['']);
-      this.loading = false;
+      this.postService.createPost(this.currentArea.name, this.post.text, this.post.anonym, this.imageData, true, this.post.id)
+        .takeUntil(this.componentDestroyed)
+        .subscribe(result => {
+          if (!result.getError()) {
+            this.postService.publishDraft(this.currentArea.name, this.post.id);
+            this.post.text = '';
+            this.snackBar.open('Post Created Successfully!', 'Close', {
+              duration: 3000
+            });
+            this.router.navigate(['']);
+          } else {
+            this.errors = result.getError();
+            this.loading = false;
+          }
+        });
     } else {
       this.loading = false;
       this.snackBar.open('You did not input anything or you have unsupported markdown', 'Close', {
