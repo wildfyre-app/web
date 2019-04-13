@@ -34,14 +34,23 @@ export class MarkedPipe implements PipeTransform {
       replace: (match: string) => {
         const index = Number.parseInt(this.getImageMatchesByGroup(2, match, /(\[img: (\d)\])/gm)[0]);
 
-        if (!post.additional_images[index]) {
-          return '';
-        } else if (comment) {
+        if (post) {
+          if (!post.additional_images[index]) {
+            return '';
+          }
+        }
+
+        if (comment) {
           return comment.text;
         }
-        return `<a target="_blank" rel="noopener" href="${post.additional_images[index].image}">
-        <img class="wfImages" alt="${post.additional_images[index].comment}" src="${post.additional_images[index].image}">
-        </a>`;
+
+        if (post) {
+          return `<a target="_blank" rel="noopener" href="${post.additional_images[index].image}">
+          <img class="wfImages" alt="${post.additional_images[index].comment}" src="${post.additional_images[index].image}">
+          </a>`;
+        } else {
+          return '';
+        }
       }
     });
     return '<span class="markdown">' + md.render(value || '') + '</span>';

@@ -33,7 +33,7 @@
 </mat-card>
 <mat-card class="example-card" *ngIf="post && !loading && !isBlockedUser(post.author?.user)">
     <a *ngIf="post?.image" href="{{post?.image}}"><img src="{{post?.image}}" /></a>
-    <span class="mainText" [innerHTML]="post.text | marked"></span>
+    <span class="mainText" [innerHTML]="post.text | marked: post"></span>
     <mat-card (click)="gotoUser(post.author.user)" class="parentContainer1">
     <div class="parentContainer">
       <img class="pfp2" (click)="gotoUser(post.author.user)" *ngIf="post.author.avatar" [src]="post.author.avatar" alt="Avatar of {{post.author.name}}"/>
