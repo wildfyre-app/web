@@ -125,7 +125,6 @@ html {
 }
 
 img {
-  height: 100%;
   width: 100%;
 }
 
@@ -210,10 +209,6 @@ span {
 
 span.mat-button-wrapper {
   display: contents;
-}
-
-span.markdown p a {
-  display: flex;
 }
 
 span.markdown table {

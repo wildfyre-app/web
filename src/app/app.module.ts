@@ -67,7 +67,6 @@ import { Routing } from './app.routing';
 import { Angulartics2Module, Angulartics2Piwik } from 'angulartics2';
 import { ClipboardModule } from 'ngx-clipboard';
 import 'hammerjs';
-import { ImageCropperModule } from 'ngx-img-cropper';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { ReCaptchaModule } from 'angular2-recaptcha';
 
@@ -84,7 +83,6 @@ import { ReCaptchaModule } from 'angular2-recaptcha';
     BrowserModule,
     FormsModule,
     HttpClientModule,
-    ImageCropperModule,
     MatButtonModule,
     MatCardModule,
     MatCheckboxModule,
@@ -105,7 +103,6 @@ import { ReCaptchaModule } from 'angular2-recaptcha';
 
     // Third Party Modules
     ClipboardModule,
-    ImageCropperModule,
     NgxPaginationModule,
     ReCaptchaModule,
     ShareModule
