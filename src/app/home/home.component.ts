@@ -336,6 +336,7 @@ export class HomeComponent implements OnInit, OnDestroy {
           this.loading = false;
           this.cdRef.detectChanges();
         }
+        window.scrollTo(0, 0);
       });
   }
 

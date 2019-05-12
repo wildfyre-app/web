@@ -35,6 +35,7 @@ export class PostViewComponent implements OnInit, OnDestroy {
   isCopied = false;
   imageData: any = null;
   loading: boolean;
+  lock = false;
   loggedIn: boolean;
   parsedCommentArray: string[] = [];
   post: Post;
@@ -217,6 +218,11 @@ export class PostViewComponent implements OnInit, OnDestroy {
 
   notificationIndication(commentID: number) {
     if (this.parsedCommentArray.indexOf(commentID.toString()) !== -1) {
+      if (document.getElementsByClassName('toNotif')[0] && !this.lock) {
+        document.getElementsByClassName('toNotif')[0].scrollIntoView();
+        this.lock = true;
+      }
+
       return '2px solid #ed763e';
     } else {
       return '';

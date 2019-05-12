@@ -31,6 +31,10 @@ export class AppComponent implements OnDestroy {
         this.navBarService.areaVisible.next(false);
         this.loading = false;
       }
+
+      window.onbeforeunload = function () {
+        window.scrollTo(0, 0);
+      }
   }
 
   ngOnDestroy() {

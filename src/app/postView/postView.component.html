@@ -59,6 +59,7 @@
 
 <mat-list>
   <div *ngFor="let comment of post?.comments">
+    <div [class]="notificationIndication(comment?.id) ? 'toNotif': ''"></div>
     <mat-card *ngIf="isBlockedUser(comment.author?.user)" [style.border]="notificationIndication(comment?.id)" style="background: #263238;" class="content">
       <div class="commentEditing" style="background: #263238;">
         <button mat-icon-button [matMenuTriggerFor]="appMenu"><i class="material-icons" style="color: #ffffff;">more_vert</i></button>
