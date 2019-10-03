@@ -1,14 +1,13 @@
 import { APP_BASE_HREF } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { By } from '@angular/platform-browser';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { BehaviorSubject ,  Observable } from 'rxjs';
 import { ChangeDetectorRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ComponentFixture, ComponentFixtureAutoDetect, TestBed , async} from '@angular/core/testing';
 import { Router, ActivatedRoute, RouterModule, Routes } from '@angular/router';
 import { MatTabsModule, MatListModule, MatMenuModule, MatDialogModule, MatSelectModule,
   MatSidenavModule, MatOptionModule, MatSnackBarModule } from '@angular/material';
-import { Observable } from 'rxjs';
 import { Author } from '../_models/author';
 import { Notification } from '../_models/notification';
 import { NotificationPost } from '../_models/notificationPost';

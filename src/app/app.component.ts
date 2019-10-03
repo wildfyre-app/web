@@ -1,5 +1,5 @@
 import { Component, OnDestroy, ChangeDetectorRef } from '@angular/core';
-import { Subject } from 'rxjs/Subject';
+import { Subject } from 'rxjs';
 import { AreaService } from './_services/area.service';
 import { AuthenticationService } from './_services/authentication.service';
 import { NavBarService } from './_services/navBar.service';

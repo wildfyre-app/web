@@ -1,8 +1,9 @@
+
+import {throwError as observableThrowError,  Observable } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { isDevMode } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
-import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { AuthenticationService } from './authentication.service';
 
@@ -134,7 +135,7 @@ export class HttpService {
         break;
 
       default:
-        return Observable.throw(error);
+        return observableThrowError(error);
     }
 
     // Show snack Snackbar
@@ -147,7 +148,7 @@ export class HttpService {
     }
 
     // Throw the Observable for the request
-    return Observable.throw(error);
+    return observableThrowError(error);
   }
 
   getOptions(): any {

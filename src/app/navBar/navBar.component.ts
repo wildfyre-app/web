@@ -1,8 +1,7 @@
 import { Component, OnInit, OnDestroy, ChangeDetectorRef, NgZone, ViewChild } from '@angular/core';
 import { MatSidenav, MatDialog, MatSnackBar } from '@angular/material';
-import { Observable } from 'rxjs/Rx';
+import { Observable ,  Subject } from 'rxjs';
 import { Router } from '@angular/router';
-import { Subject } from 'rxjs/Subject';
 import { LogoutDialogComponent } from '../_dialogs/logout.dialog.component';
 import { PictureDialogComponent } from '../_dialogs/picture.dialog.component';
 import { Area } from '../_models/area';

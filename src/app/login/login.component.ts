@@ -1,9 +1,9 @@
-﻿import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
-import 'rxjs/add/operator/catch';
-import { Subject } from 'rxjs/Subject';
+
+import { Subject } from 'rxjs';
 import { AuthenticationService } from '../_services/authentication.service';
 import { NavBarService } from '../_services/navBar.service';
 import { NotificationService } from '../_services/notification.service';
