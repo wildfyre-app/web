@@ -1,8 +1,6 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "downlevelIteration": true,
-    "importHelpers": true,
     "outDir": "./dist/out-tsc",
     "sourceMap": true,
     "declaration": false,
@@ -12,11 +10,8 @@
     "experimentalDecorators": true,
     "lib": [
       "es6",
-      "dom",
+	    "dom",
       "es2017"
-    ],
-    "module": "esnext",
-    "baseUrl": "./"
-  ,    "target": "es2015"
-}
+    ]
+  }
 }

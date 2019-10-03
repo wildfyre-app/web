@@ -1,0 +1,107 @@
+<!-- Profile Component -->
+<div id="profile" fxLayout="column" fxLayoutAlign="center center">
+  <div class="profile-image">
+    <img *ngIf="author?.avatar" [src]="author?.avatar" alt="Avatar of {{author?.name}}" style="object-fit: cover;" />
+    <img *ngIf="!author?.avatar" src="/assets/logo.png" alt="Avatar of {{author?.name}}" style="object-fit: cover;" />
+  </div>
+  <div fxLayout="column" class="profile-container">
+    <div fxLayout="row" fxFlexOffset="2rem" fxLayoutAlign="space-between start" (click)="goto('image')" style="width: 100%;height: 30vh;cursor: pointer;">
+      <!-- <i class="material-icons" style="font-size: 40px;">keyboard_arrow_left</i> -->
+      <div></div>
+      <div>
+        <h2 class="profile-subtitle" (click)="goto('password')">Password</h2>
+        <h2 fxLayout="row" class="profile-subtitle" fxFlexOffset="1rem" (click)="info($event)">Info</h2>
+      </div>
+    </div>
+
+    <div fxLayout="column" style="height: 50vh;">
+      <div fxLayout="row" fxLayoutAlign="start center">
+        <h1 class="profile-title" (click)="infoNo()">{{author?.name}}</h1>
+      </div>
+
+      <div fxLayout="row" fxFlexOffset="0.5rem" class="profile-input" [formGroup]="emailForm">
+        <input matInput placeholder="Email" class="profile-input" style="font-size: 2rem;font-weight: 300;" type="email" autocomplete="current-email" formControlName="email" required />
+      </div>
+
+      <div *ngIf="(emailForm.controls.email && account?.email !== emailForm.controls.email.value) || editBio" fxLayout="column" class="profile-button-group">
+        <div *ngIf="emailForm.controls.email && account?.email !== emailForm.controls.email.value" fxLayout="row" class="profile-button" fxFlexOffset="1rem">
+          <button mat-flat-button class="profile-button" style="background: #EA6C40;" [disabled]="loading || editBio" (click)="setEmail()">Send Email</button>
+        </div>
+        <div *ngIf="emailForm.controls.email && account?.email !== emailForm.controls.email.value" fxLayout="row" class="profile-button" fxFlexOffset="1rem">
+          <button mat-stroked-button class="profile-button" [disabled]="loading || editBio" (click)="undoEmail()">Undo</button>
+        </div>
+
+        <div *ngIf="editBio" fxLayout="row" class="profile-button" fxFlexOffset="1rem">
+          <button mat-flat-button class="profile-button" style="background: #EA6C40;" [disabled]="loading || (emailForm.controls.email && account?.email !== emailForm.controls.email.value)" (click)="setBio()">Save Bio</button>
+        </div>
+        <div *ngIf="editBio" fxLayout="row" class="profile-button" fxFlexOffset="1rem">
+          <button mat-stroked-button class="profile-button" [disabled]="loading || (emailForm.controls.email && account?.email !== emailForm.controls.email.value)" (click)="toggleBio()">Undo</button>
+        </div>
+      </div>
+
+      <div *ngIf="editBio" fxLayout="row" fxFlexOffset="1rem" class="profile-input" [formGroup]="bioForm">
+        <textarea matInput placeholder="Bio" class="profile-input" style="font-size: 100%;height: 35vh;overflow-y: scroll;" type="text" formControlName="bio" required></textarea>
+      </div>
+      <div *ngIf="!editBio" fxLayout="column" fxFlexOffset="1rem" class="profile-input">
+        <p [innerHTML]="author?.bio | marked" (click)="toggleBio()"></p>
+      </div>
+      <div *ngIf="errors && errors.non_field_errors" fxLayout="column" fxFlexOffset="2rem" class="alert alert-danger">
+        <div *ngFor="let err of errors.non_field_errors">
+          <p>{{err}}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--
+<mat-menu #appMenu="matMenu">
+  <button mat-menu-item (click)="viewProfile()"><mat-icon>public</mat-icon>View Public Profile</button>
+  <button mat-menu-item (click)="openBioDialog()"><mat-icon>mode_edit</mat-icon>Bio</button>
+  <button mat-menu-item (click)="openEmailDialog()"><mat-icon>mode_edit</mat-icon>Email</button>
+  <button mat-menu-item (click)="openPasswordDialog()"><mat-icon>mode_edit</mat-icon>Password</button>
+  <button mat-menu-item (click)="openPictureDialog()"><mat-icon>mode_edit</mat-icon>Avatar</button>
+</mat-menu>
+<mat-progress-spinner *ngIf="loading"></mat-progress-spinner>
+<div class="alert alert-danger" *ngIf="author?.banned">
+  <h2>You are currently banned</h2>
+</div>
+<br *ngIf="author?.banned">
+<div *ngFor="let ban of bans | paginate: { id: 'server', itemsPerPage: limit, currentPage: index, totalItems: totalCount }">
+  <div class="alert alert-danger" *ngIf="author?.banned">
+    Reason: {{getReason(ban.reason)}}<br>
+    <ng-container>{{ban.comment}}</ng-container><br>
+    You can not
+    <ng-container *ngIf="ban.ban_all || (ban.ban_post && ban.ban_comment && ban.ban_flag)"> post, comment, or flag.</ng-container>
+    <ng-container *ngIf="ban.ban_post && !(ban.ban_all || (ban.ban_post && ban.ban_comment && ban.ban_flag))"> post</ng-container>
+    <ng-container *ngIf="((ban.ban_post && ban.ban_comment) || (ban.ban_post && ban.ban_flag)) && !(ban.ban_all || (ban.ban_post && ban.ban_comment && ban.ban_flag))"> or</ng-container>
+    <ng-container *ngIf="ban.ban_comment && !(ban.ban_all || (ban.ban_post && ban.ban_comment && ban.ban_flag))"> comment</ng-container>
+    <ng-container *ngIf="(ban.ban_flag && ban.ban_comment) && !(ban.ban_all || (ban.ban_post && ban.ban_comment && ban.ban_flag))"> or</ng-container>
+    <ng-container *ngIf="ban.ban_flag && !(ban.ban_all || (ban.ban_post && ban.ban_comment && ban.ban_flag))"> flag</ng-container><ng-container *ngIf="!(ban.ban_all || (ban.ban_post && ban.ban_comment && ban.ban_flag))">.</ng-container>
+    <br>
+    <ng-container>{{ban.timestamp}}</ng-container><br>
+    <hr>
+    Expires: {{ban.expiry}}
+  </div>
+  <br>
+</div>
+<pagination-controls *ngIf="(bans.length !== 0)" (pageChange)="getBans($event)" id="server"></pagination-controls>
+
+<mat-card class="example-card">
+  <button mat-icon-button [matMenuTriggerFor]="appMenu"><i class="material-icons">more_vert</i></button>
+  <a [href]="author?.avatar"><img class="pfp" *ngIf="author?.avatar" [src]="author?.avatar" alt="Avatar of {{author?.name}}"/></a>
+  <a href="/assets/logo.png"><img class="pfp" *ngIf="!author?.avatar" src="/assets/logo.png" alt="Avatar of {{author?.name}}"/></a>
+  <div class="parentContainer">
+    <div class="user">
+      <br>
+      <font id="name" size="5">{{author?.name}}</font><br>
+      <ng-container>
+        <span id="email"><a href="mailto:{{account?.email}}">{{account?.email}}</a></span>
+      </ng-container>
+    </div>
+  </div>
+</mat-card>
+<mat-card class="content">
+  <span id="bio" [innerHTML]="author?.bio | marked"></span>
+</mat-card>
+<div id="userID">ID: {{author?.user}}</div> -->

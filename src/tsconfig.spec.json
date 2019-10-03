@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "downlevelIteration": true,
     "sourceMap": true,
     "declaration": false,
     "moduleResolution": "node",
@@ -12,8 +11,8 @@
       "es2017"
     ],
     "outDir": "../out-tsc/spec",
-    "module": "esnext",
-    "target": "es2015",
+    "module": "commonjs",
+    "target": "es5",
     "baseUrl": "",
     "types": [
       "jasmine",
@@ -21,8 +20,7 @@
     ]
   },
   "files": [
-    "test.ts",    "polyfills.ts"
-
+    "test.ts"
   ],
   "include": [
     "**/*.spec.ts"

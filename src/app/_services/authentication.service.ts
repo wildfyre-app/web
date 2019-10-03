@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { isDevMode } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-
+import 'rxjs/add/operator/map';
 import { Auth, AuthError} from '../_models/auth';
 
 @Injectable()

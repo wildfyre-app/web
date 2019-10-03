@@ -1,0 +1,28 @@
+<!-- Area List Component -->
+<div id="notifications">
+  <div fxLayout="column" class="home-container">
+    <div fxLayout="column" style="margin-top: 3vh;">
+      <h2 class="home-title">Notifications</h2>
+      <div fxLayout="row" class="login-button" fxFlexOffset="2rem">
+        <button mat-stroked-button class="login-button" [disabled]="loading">Notification Archive</button>
+      </div>
+      <div fxLayout="row" class="login-button" fxFlexOffset="2rem">
+        <button mat-flat-button class="login-button" style="background: #EA6C40;" [disabled]="loading">Delete All Notifications</button>
+      </div>
+      <div *ngFor="let notification of notifications">
+        <div fxLayout="row">
+          <div class="home-area-card" (click)="goto(notification)" fxLayoutAlign="space-evenly center">
+            <div fxLayout="column">
+              <p style="color: #ffffff;margin: 0;">{{notification.post.text | slice:0:15}}<ng-container *ngIf="notification.post.text.length > 15">…</ng-container></p>
+              <p style="color: #ffffff;margin: 0;">- {{notification.post.author.name}}</p>
+            </div>
+            <p style="color: #ffffff;margin: 0;">{{notification.comments.length}}</p>
+          </div>
+          <div (click)="goto(area, true)" class="home-area-card-add" fxLayoutAlign="center center">
+            <i style="color: #ffffff;" class="material-icons">delete</i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

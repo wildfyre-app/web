@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MatDialogRef, MatSnackBar } from '@angular/material';
-import { Observable ,  Subject } from 'rxjs';
+import { Observable } from 'rxjs/Rx';
+import { Subject } from 'rxjs/Subject';
 import { Link } from '../_models/link';
 import { NavBarService } from '../_services/navBar.service';
 

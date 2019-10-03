@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Response } from '@angular/http';
-import { Observable } from 'rxjs';
-
-
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/mergeMap';
 import { Area } from '../_models/area';
 import { Comment, CommentError } from '../_models/comment';
 import { Image, ImageError } from '../_models/image';
