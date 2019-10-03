@@ -20,7 +20,6 @@
     "@angular/core": "^5.2.11",
     "@angular/flex-layout": "^5.0.0-beta.15",
     "@angular/forms": "^5.2.11",
-    "@angular/http": "^5.2.11",
     "@angular/material": "^5.2.5",
     "@angular/platform-browser": "^5.2.11",
     "@angular/platform-browser-dynamic": "^5.2.11",
@@ -43,15 +42,17 @@
     "ngx-img-cropper": "^0.11.0",
     "ngx-pagination": "^3.0.3",
     "rxjs": "^5.5.11",
+    "tslib": "^1.10.0",
     "uglify-es": "^3.3.9",
-    "zone.js": "^0.8.26"
+    "zone.js": "~0.9.1"
   },
   "devDependencies": {
+    "@angular-devkit/build-angular": "~0.803.8",
     "@angular/cli": "^8.3.8",
     "@angular/compiler-cli": "^5.2.11",
     "@types/jasmine": "2.5.38",
     "@types/node": "^6.0.88",
-    "codelyzer": "^4.4.1",
+    "codelyzer": "^5.0.1",
     "jasmine-core": "~2.5.2",
     "jasmine-spec-reporter": "~3.2.0",
     "karma": "^2.0.2",
