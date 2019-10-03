@@ -1,5 +1,6 @@
 import { Component, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { AreaService } from './_services/area.service';
 import { AuthenticationService } from './_services/authentication.service';
 import { NavBarService } from './_services/navBar.service';
@@ -21,8 +22,8 @@ export class AppComponent implements OnDestroy {
     angulartics2Piwik: Angulartics2Piwik
   ) {
       if (this.authenticationService.token) {
-        this.areaService.getAreas()
-          .takeUntil(this.componentDestroyed)
+        this.areaService.getAreas().pipe(
+          takeUntil(this.componentDestroyed))
           .subscribe(() => {
             this.loading = false;
             this.cdRef.detectChanges();
