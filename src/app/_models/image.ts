@@ -21,7 +21,7 @@ export class Image {
 export class ImageError extends Image {
   constructor(
     public non_field_errors?: string[],
-    public _text?: string[]
+    public text?: string[]
   ) {
     super(null, null, null);
   }

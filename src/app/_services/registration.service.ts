@@ -29,9 +29,9 @@ export class RegistrationService {
       .catch((error) => {
         return Observable.of(
           new RecoverTransactionError(
-            error.non_field_errors,
-            error.email,
-            error.captcha
+            error.error.non_field_errors,
+            error.error.email,
+            error.error.captcha
           )
         );
       });
@@ -53,11 +53,11 @@ export class RegistrationService {
       .catch((error) => {
         return Observable.of(
           new ResetError(
-            error.non_field_errors,
-            error.new_password,
-            error.token,
-            error.transaction,
-            error.captcha
+            error.error.non_field_errors,
+            error.error.new_password,
+            error.error.token,
+            error.error.transaction,
+            error.error.captcha
           )
         );
       });
@@ -77,10 +77,10 @@ export class RegistrationService {
       .catch((error) => {
         return Observable.of(
           new RecoverTransactionError(
-            error.non_field_errors,
-            error.username,
-            error.email,
-            error.captcha
+            error.error.non_field_errors,
+            error.error.username,
+            error.error.email,
+            error.error.captcha
           )
         );
       });

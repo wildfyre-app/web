@@ -25,7 +25,7 @@ export class Profile {
 export class ProfileError extends Profile {
   constructor(
     public non_field_errors?: string[],
-    public _text?: string[]
+    public text?: string[]
   ) {
     super(null, null, null, null, null);
   }

@@ -22,10 +22,9 @@ export class SuperPost {
     public previous: string,
     public results: Post[]
   ) {
-
     // Sort posts
     results.sort((a: Post, b: Post) => {
-      return b.created.getTime() - a.created.getTime();
+      return new Date(b.created).getTime() - new Date(a.created).getTime();
     });
    }
 
@@ -37,7 +36,7 @@ export class SuperPost {
 export class SuperPostError extends SuperPost {
   constructor(
     public non_field_errors?: string[],
-    public _text?: string[]
+    public text?: string[]
   ) {
     super(null, null, null, null);
   }

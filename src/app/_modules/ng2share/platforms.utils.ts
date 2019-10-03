@@ -104,4 +104,4 @@ export const platforms: Platforms = {
     logo: 'mail',
     text: 'Mail',
   }
-}
+};

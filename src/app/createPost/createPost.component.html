@@ -1,4 +1,87 @@
-<mat-card class="example-card" (click)="loadDrafts()">
+<div id="create" *ngIf="!preview">
+  <div fxLayout="column" class="home-container">
+    <div fxLayout="row" fxLayoutAlign="space-between center" style="width: 100%;height: 10vh;cursor: pointer;">
+      <div fxLayout="row" fxLayoutAlign="center center" >
+        <i class="material-icons" style="font-size: 40px;" (click)="back()">keyboard_arrow_left</i>
+        <h2 *ngIf="currentArea" class="home-subtitle">{{currentArea.displayname}}</h2>
+      </div>
+
+      <div fxLayoutAlign="center center">
+          <i class="material-icons" style="font-size: 40px;" (click)="previewDraft()">save</i>
+      </div>
+    </div>
+
+    <div fxLayout="row">
+      <i class="material-icons" [matMenuTriggerFor]="appMenu">text_fields</i>
+      <mat-menu #appMenu="matMenu">
+        <button mat-menu-item (click)="addHeader(1)"><p [innerHTML]="'# h1' | marked"></p></button>
+        <button mat-menu-item (click)="addHeader(2)"><p [innerHTML]="'## h2' | marked"></p></button>
+        <button mat-menu-item (click)="addHeader(3)"><p [innerHTML]="'### h3' | marked"></p></button>
+        <button mat-menu-item (click)="addHeader(4)"><p [innerHTML]="'#### h4' | marked"></p></button>
+        <button mat-menu-item (click)="addHeader(5)"><p [innerHTML]="'##### h5' | marked"></p></button>
+        <button mat-menu-item (click)="addHeader(6)"><p [innerHTML]="'###### h6' | marked"></p></button>
+      </mat-menu>
+      <i class="material-icons" (click)="addBold()" fxFlexOffset="1rem">format_bold</i>
+      <i class="material-icons" (click)="addItalics()" fxFlexOffset="1rem">format_italic</i>
+      <i class="material-icons" (click)="addStrikethrough()" fxFlexOffset="1rem">strikethrough_s</i>
+      <i class="material-icons" (click)="addUnorderedList()" fxFlexOffset="1rem">format_list_bulleted</i>
+      <i class="material-icons" (click)="addOrderedList()" fxFlexOffset="1rem">format_list_numbered</i>
+      <i class="material-icons" (click)="addBlockQoutes()" fxFlexOffset="1rem">format_quote</i>
+    </div>
+
+    <div fxLayout="row" fxFlexOffset="1rem">
+      <i class="material-icons" (click)="addCode()">code</i>
+      <i class="material-icons" (click)="addTable()" fxFlexOffset="1rem">border_all</i>
+      <i class="material-icons" (click)="addHorizontalRule()" fxFlexOffset="1rem">remove</i>
+      <i class="material-icons" (click)="openPictureDialog()" fxFlexOffset="1rem">insert_photo</i>
+      <i class="material-icons" (click)="openPicturesDialog()" fxFlexOffset="1rem">collections</i>
+      <i class="material-icons" (click)="openYoutubeDialog()" fxFlexOffset="1rem">slideshow</i>
+    </div>
+
+    <div *ngIf="!loading" fxLayout="row" fxFlexOffset="1rem" class="home-input"  [formGroup]="postForm">
+      <textarea matInput placeholder="What's on your mind?" class="home-input" style="font-size: 100%;height: 35vh;overflow-y: scroll;" type="text" formControlName="post" required></textarea>
+    </div>
+
+    <div fxLayout="row" fxFlexOffset="2rem" fxLayoutAlign="space-between center">
+      <div fxLayout="row">
+        <p style="margin: auto 0;">Anonymous Post</p>
+        <i class="material-icons" style="font-size: 40px;" fxFlexOffset="1rem">info</i>
+      </div>
+      <mat-slide-toggle></mat-slide-toggle>
+    </div>
+
+    <div fxLayout="row" fxFlexOffset="2rem">
+      <h2 class="home-title">Drafts</h2>
+    </div>
+    <app-drafts></app-drafts>
+  </div>
+</div>
+
+<div id="preview" *ngIf="preview">
+  <div id="post" style="margin-bottom:25vh;">
+    <div *ngIf="post.image" class="home-content-image">
+      <img src="{{post.image}}" />
+    </div>
+
+    <div style="background: transparent;padding-left: 2rem;padding-right: 2rem;margin-top: 10vh;" [innerHTML]="postForm.controls.post.value | marked"></div>
+  </div>
+
+  <div fxLayout="column" class="home-container" style="position: fixed; top: 0; left: 0;">
+    <div fxLayout="row" fxLayoutAlign="space-between center" style="width: 100%;height: 10vh;cursor: pointer;">
+      <div fxLayout="row" fxLayoutAlign="center center">
+        <i class="material-icons" style="font-size: 40px;" (click)="draftEditor()">keyboard_arrow_left</i>
+        <h2 *ngIf="currentArea" class="home-subtitle">{{currentArea.displayname}}</h2>
+      </div>
+
+      <div fxLayoutAlign="center center">
+        <i class="material-icons" style="font-size: 40px;" (click)="publishDraft()">send</i>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- <mat-card class="example-card" (click)="loadDrafts()">
   <button class="wideButtons" mat-button><i class="material-icons">folder</i> Drafts</button>
 </mat-card>
 <mat-card class="example-card">
@@ -73,4 +156,4 @@
     <button *ngIf="isDraft" class="wideButtons" mat-raised-button (click)="openDraftDeleteDialog()" color="warn" [disabled]="loading"><b>Delete</b></button>
     <mat-progress-spinner *ngIf="loading"></mat-progress-spinner>
   </div>
-</mat-card>
+</mat-card> -->

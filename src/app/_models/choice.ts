@@ -19,7 +19,7 @@ export class Choice {
 export class ChoiceError extends Choice {
   constructor(
     public non_field_errors?: string[],
-    public _text?: string[]
+    public text?: string[]
   ) {
     super(null, null);
   }

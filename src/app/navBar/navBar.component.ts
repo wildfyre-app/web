@@ -15,12 +15,13 @@ import { BootController } from '../../boot-control';
 
 @Component({
   selector: 'app-nav-bar',
-  templateUrl: 'navBar.component.html'
+  templateUrl: 'navBar.component.html',
+  styleUrls: ['./navBar.component.scss']
 })
 export class NavBarComponent implements OnInit, OnDestroy {
   @ViewChild('sidenav') sidenav: MatSidenav;
 
-  activeLinkIndex = 2;
+  activeLinkIndex = 1;
   areas = new Array<Area>(new Area('', '', 0, 0));
   areaReputation: { [area: string]: number; } = { };
   areaSpread: { [area: string]: number; } = { };
@@ -58,52 +59,14 @@ export class NavBarComponent implements OnInit, OnDestroy {
     private authenticationService: AuthenticationService,
     private notificationService: NotificationService,
     private navBarService: NavBarService
-  ) {
-    this.routeLinks = [
-      {label: 'Profile', link: '/profile/', index: '0'},
-      {label: 'Notifications', link: '/notifications/1/', index: '1'},
-      {label: 'Home', link: '/', index: '2'},
-      {label: 'My Posts', link: '/posts/1/', index: '3'},
-      {label: 'Create a Post', link: '/create/', index: '4'}
-    ];
-
-    this.mobileRouteLinks = [
-      {label: '<i class="material-icons">perm_identity</i>', link: '/profile/', index: '0'},
-      {label: '<i class="material-icons">notifications_none</i>', link: '/notifications/1/', index: '1'},
-      {label: '<i class="material-icons">home</i>', link: '/', index: '2'},
-      {label: '<i class="material-icons">content_copy</i>', link: '/posts/1/', index: '3'},
-      {label: '<i class="material-icons">create</i>', link: '/create/', index: '4'}
-    ];
-  }
+  ) { }
 
   ngOnInit() {
-    this.navBarService.areaVisible
+    this.router.events
       .takeUntil(this.componentDestroyed)
-      .subscribe((visible: boolean) => {
-        this.areaVisible = visible;
-        this.cdRef.detectChanges();
+      .subscribe((url: any) => {
+        this.setActiveIndex(url.url);
     });
-
-    this.navBarService.hasPost
-      .takeUntil(this.componentDestroyed)
-      .subscribe((has: boolean) => {
-        this.hasPost = has;
-        this.cdRef.detectChanges();
-    });
-
-    this.navBarService.clearInputs
-      .takeUntil(this.componentDestroyed)
-      .subscribe((action: boolean) => {
-        if (action) {
-          this.comment.comment = '';
-          this.comment.image = null;
-          this.contractBox();
-          this.commentDisabled = false;
-        } else {
-          this.commentDisabled = false;
-        }
-    });
-
     this.navBarService.loggedIn
       .takeUntil(this.componentDestroyed)
       .subscribe((loggedIn: boolean) => {
@@ -127,98 +90,9 @@ export class NavBarComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.contractBox();
     this.cdRef.detach();
     this.componentDestroyed.next(true);
     this.componentDestroyed.complete();
-  }
-
-  private addLineBreak(s: string) {
-    if (this.comment.comment !== '') {
-      this.comment.comment += '\n';
-    }
-    this.comment.comment += s;
-  }
-
-  addBlockQoutes() {
-    this.addLineBreak('> Blockquote example');
-  }
-
-  addBold() {
-    this.addLineBreak('**Example**');
-  }
-
-  addImage() {
-    const dialogRef = this.dialog.open(PictureDialogComponent);
-    dialogRef.componentInstance.comment = true;
-    dialogRef.afterClosed()
-      .takeUntil(this.componentDestroyed)
-      .subscribe(result => {
-        if (result.bool) {
-          this.comment.image = result.picture;
-          this.snackBar.open('Image added successfully', 'Close', {
-            duration: 3000
-          });
-        } else {
-          this.snackBar.open('You did not select a valid image file', 'Close', {
-            duration: 3000
-          });
-        }
-      });
-  }
-
-  addItalics() {
-    this.addLineBreak('_Example_');
-  }
-
-  addStrikethrough() {
-    this.addLineBreak('~~Example~~');
-  }
-
-  close() {
-    this.sidenav.close();
-  }
-
-  contractBox() {
-    this.expanded = false;
-    this.rowsExapanded = 2;
-    this.styleMobile = '';
-
-    this.styleHeightTextarea = '56px';
-
-    if (window.screen.width < 600) {
-      this.styleHeightTextarea = '40px';
-      this.styleBottomTextarea = '40px';
-      this.styleBottomEditor = '3px';
-      this.styleHeightEditor = '48px';
-      this.styleBottomSend = '42px';
-      this.styleHeightSend = '38px';
-    }
-  }
-
-  deleteImage() {
-    this.comment.image = null;
-    this.snackBar.open('Image removed successfully', 'Close', {
-      duration: 3000
-    });
-  }
-
-  expandBox() {
-    this.expanded = true;
-    this.rowsExapanded = 3;
-    this.styleMobile = 'none';
-
-    this.styleBottomEditor = '48px';
-    this.styleHeightTextarea = '96px';
-
-    if (window.screen.width < 600) {
-      this.styleHeightTextarea = '118px';
-      this.styleBottomTextarea = '0px';
-      this.styleBottomEditor = '59px';
-      this.styleHeightEditor = '59px';
-      this.styleBottomSend = '0px';
-      this.styleHeightSend = '59px';
-    }
   }
 
   getNotificationLength(nLength: number) {
@@ -251,13 +125,6 @@ export class NavBarComponent implements OnInit, OnDestroy {
         this.cdRef.detectChanges();
     });
 
-    this.navBarService.isVisibleSource
-      .takeUntil(this.componentDestroyed)
-      .subscribe((isVisible: string) => {
-        this.styleMobile = isVisible;
-        this.cdRef.detectChanges();
-    });
-
     Observable.interval(2000 * 60)
       .takeUntil(this.componentDestroyed)
       .subscribe(x => {
@@ -267,12 +134,6 @@ export class NavBarComponent implements OnInit, OnDestroy {
             this.navBarService.notifications.next(superNotification.count);
             this.cdRef.detectChanges();
         });
-    });
-
-    this.router.events
-      .takeUntil(this.componentDestroyed)
-      .subscribe((url: any) => {
-        this.setActiveIndex(url.url);
     });
 
     this.areaService.getAreas()
@@ -344,62 +205,48 @@ export class NavBarComponent implements OnInit, OnDestroy {
     }
     if (s === '/profile') {
       this.stylePage = false;
-      this.activeLinkIndex = 0;
-      this.navBarService.areaVisible.next(false);
+      this.activeLinkIndex = 4;
     } else if (s === '/notifications/archive') {
       this.stylePage = false;
-      this.width = '90%';
-      this.activeLinkIndex = 1;
-      this.navBarService.areaVisible.next(true);
+      this.activeLinkIndex = 2;
     } else if (s.lastIndexOf('/notifications/archive/') !== -1) {
       this.stylePage = false;
-      this.width = '90%';
-      this.activeLinkIndex = 1;
-      this.navBarService.areaVisible.next(true);
+      this.activeLinkIndex = 2;
     } else if (s === '/notifications') {
-      this.stylePage = false;
-      this.activeLinkIndex = 1;
-      this.navBarService.areaVisible.next(false);
+      this.activeLinkIndex = 2;
     } else if (s.lastIndexOf('/notifications/') !== -1) {
-      this.stylePage = false;
-      this.activeLinkIndex = 1;
-      this.navBarService.areaVisible.next(false);
+      this.activeLinkIndex = 2;
     } else if (s === '/') {
-      this.stylePage = true;
-      this.activeLinkIndex = 2;
-      this.navBarService.areaVisible.next(true);
+      this.activeLinkIndex = 1;
     } else if (s === '/posts') {
-      this.stylePage = false;
       this.activeLinkIndex = 3;
-      this.navBarService.areaVisible.next(true);
     } else if (s.lastIndexOf('/posts/') !== -1) {
-      this.stylePage = false;
       this.activeLinkIndex = 3;
-      this.navBarService.areaVisible.next(true);
     } else if (s === '/create') {
-      this.stylePage = false;
-      this.activeLinkIndex = 4;
-      this.navBarService.areaVisible.next(true);
+      this.activeLinkIndex = -1;
     } else if (s.lastIndexOf('/create/') !== -1) {
-      this.stylePage = false;
-      this.activeLinkIndex = 4;
-      this.navBarService.areaVisible.next(false);
+      this.activeLinkIndex = -1;
     } else if (s === '/drafts') {
-      this.stylePage = false;
-      this.width = '90%';
-      this.activeLinkIndex = 4;
-      this.navBarService.areaVisible.next(true);
+      this.activeLinkIndex = -1;
     } else if (s.lastIndexOf('/areas/') !== -1) {
-      this.stylePage = true;
-      this.width = '90%';
-      this.activeLinkIndex = 2;
-      this.navBarService.areaVisible.next(false);
+      this.activeLinkIndex = -1;
     } else if (s.lastIndexOf('/user/') !== -1) {
-      this.stylePage = false;
-      this.width = '90%';
-      this.activeLinkIndex = 0;
-      this.navBarService.areaVisible.next(false);
+      this.activeLinkIndex = -1;
+    } else if (s.lastIndexOf('/login') !== -1) {
+      this.activeLinkIndex = -1;
     }
     this.cdRef.detectChanges();
+  }
+
+  switchRoute(s: string) {
+    if (s === 'home') {
+      this.router.navigateByUrl('/');
+    } else if (s === 'profile') {
+      this.router.navigateByUrl('/profile');
+    } else if (s === 'notifications') {
+      this.router.navigateByUrl('/notifications');
+    } else if (s === 'my-posts') {
+      this.router.navigateByUrl('/posts');
+    }
   }
 }

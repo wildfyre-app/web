@@ -39,7 +39,7 @@ export class Ban {
 export class BanError extends Ban {
   constructor(
     public non_field_errors?: string[],
-    public _text?: string[]
+    public text?: string[]
   ) {
     super(null, null, null, null, null, null, null, null, null);
   }

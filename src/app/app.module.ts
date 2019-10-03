@@ -1,47 +1,41 @@
 // Angular Modules
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule } from '@angular/forms';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { MatButtonModule, MatCardModule, MatCheckboxModule, MatDialogModule, MatExpansionModule,
   MatIconModule, MatInputModule, MatListModule, MatMenuModule, MatProgressSpinnerModule, MatRadioModule,
-  MatSelectModule, MatSidenavModule, MatSlideToggleModule, MatSnackBarModule, MatTabsModule } from '@angular/material';
+  MatSelectModule, MatSidenavModule, MatSlideToggleModule, MatSnackBarModule, MatTabsModule, MatTooltipModule } from '@angular/material';
 import { NgModule } from '@angular/core';
 
 // Core Components
 import { AppComponent } from './app.component';
 import { Component404Component } from './404component/404.component';
 import { CreatePostComponent } from './createPost/createPost.component';
-import { DraftsComponent } from './drafts/drafts.component';
-import { HomeComponent } from './home/home.component';
+import { PostViewComponent } from './_shared/postView/postView.component';
 import { LoginComponent } from './login/login.component';
 import { NavBarComponent } from './navBar/navBar.component';
-import { NotificationArchiveComponent } from './notificationArchive/notificationArchive.component';
-import { NotificationComponent } from './notification/notification.component';
-import { PostViewComponent } from './postView/postView.component';
-import { ProfileComponent } from './profile/profile.component';
-import { ProfileViewComponent } from './profileView/profileView.component';
-import { RecoverComponent } from './recover/recover.component';
-import { RecoverPasswordComponent } from './recoverPassword/recoverPassword.component';
-import { RegisterComponent } from './register/register.component';
-import { RegisterSuccessComponent } from './registerSuccess/registerSuccess.component';
-import { UserPostsComponent } from './userPosts/userPosts.component';
+
+// Shared Components
+import { AreaListComponent } from './_shared/areaList/areaList.component';
+import { DraftsComponent } from './_shared/drafts/drafts.component';
+import { ImageUploadComponent } from './_shared/imageUpload/imageUpload.component';
+import { MyPostsComponent } from './_shared/myPosts/myPosts.component';
+import { NotificationsComponent } from './_shared/notifcations/notifications.component';
+import { PasswordComponent } from './_shared/password/password.component';
+import { ProfileComponent } from './_shared/profile/profile.component';
 
 // Core Dialogs
-import { AvatarDialogComponent } from './_dialogs/avatar.dialog.component';
-import { BioDialogComponent } from './_dialogs/bio.dialog.component';
 import { ConfirmDeletionDialogComponent } from './_dialogs/confirmDeletion.dialog.component';
-import { EmailDialogComponent } from './_dialogs/email.dialog.component';
 import { FlagDialogComponent } from './_dialogs/flag.dialog.component';
 import { LogoutDialogComponent  } from './_dialogs/logout.dialog.component';
-import { PasswordDialogComponent } from './_dialogs/password.dialog.component';
 import { PictureDialogComponent } from './_dialogs/picture.dialog.component';
 import { PicturesDialogComponent } from './_dialogs/pictures.dialog.component';
 import { ShareDialogComponent } from './_dialogs/share.dialog.component';
 import { YouTubeDialogComponent } from './_dialogs/youtube.dialog.component';
 
 // Core Modules
-import { NgxMasonryModule } from './_modules/ngx-masonry/ngx-masonry.module';
 import { ShareModule } from './_modules/ng2share/share.module';
 
 // Core Pipes
@@ -68,6 +62,7 @@ import { Angulartics2Module, Angulartics2Piwik } from 'angulartics2';
 import { ClipboardModule } from 'ngx-clipboard';
 import 'hammerjs';
 import { ImageCropperModule } from 'ngx-img-cropper';
+import { NgxImageCompressService } from 'ngx-image-compress';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { ReCaptchaModule } from 'angular2-recaptcha';
 
@@ -76,13 +71,11 @@ import { ReCaptchaModule } from 'angular2-recaptcha';
     // forRoot
     Angulartics2Module.forRoot([ Angulartics2Piwik ]),
 
-    // Core Modules
-    NgxMasonryModule,
-
     // Modules
     BrowserAnimationsModule,
     BrowserModule,
     FormsModule,
+    FlexLayoutModule,
     HttpClientModule,
     ImageCropperModule,
     MatButtonModule,
@@ -101,6 +94,8 @@ import { ReCaptchaModule } from 'angular2-recaptcha';
     MatSlideToggleModule,
     MatSnackBarModule,
     MatTabsModule,
+    MatTooltipModule,
+    ReactiveFormsModule,
     Routing,
 
     // Third Party Modules
@@ -115,30 +110,24 @@ import { ReCaptchaModule } from 'angular2-recaptcha';
     // Components
     AppComponent,
     Component404Component,
-    DraftsComponent,
     CreatePostComponent,
-    HomeComponent,
     LoginComponent,
     NavBarComponent,
-    NotificationArchiveComponent,
-    NotificationComponent,
+
+    // Shared Components
+    AreaListComponent,
+    DraftsComponent,
+    ImageUploadComponent,
+    MyPostsComponent,
+    NotificationsComponent,
+    PasswordComponent,
     PostViewComponent,
     ProfileComponent,
-    ProfileViewComponent,
-    RecoverComponent,
-    RecoverPasswordComponent,
-    RegisterComponent,
-    RegisterSuccessComponent,
-    UserPostsComponent,
 
     // Dialogs
-    AvatarDialogComponent,
-    BioDialogComponent,
     ConfirmDeletionDialogComponent,
-    EmailDialogComponent,
     FlagDialogComponent,
     LogoutDialogComponent,
-    PasswordDialogComponent,
     PictureDialogComponent,
     PicturesDialogComponent,
     ShareDialogComponent,
@@ -146,7 +135,7 @@ import { ReCaptchaModule } from 'angular2-recaptcha';
 
     // Pipes
     MarkedPipe
-    ],
+  ],
   providers: [
     AreaService,
     AuthGuard,
@@ -155,6 +144,7 @@ import { ReCaptchaModule } from 'angular2-recaptcha';
     FlagService,
     HttpService,
     NavBarService,
+    NgxImageCompressService,
     NotificationService,
     PostService,
     ProfileService,
@@ -163,13 +153,9 @@ import { ReCaptchaModule } from 'angular2-recaptcha';
     RouteService
   ],
   entryComponents: [
-    AvatarDialogComponent,
-    BioDialogComponent,
     ConfirmDeletionDialogComponent,
-    EmailDialogComponent,
     FlagDialogComponent,
     LogoutDialogComponent,
-    PasswordDialogComponent,
     PictureDialogComponent,
     PicturesDialogComponent,
     ShareDialogComponent,

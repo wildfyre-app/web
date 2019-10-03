@@ -74,10 +74,10 @@ export class ProfileService {
         console.log('You leveled up some stats');
 
         return Author.parse(response);
-      }).catch((err) => {
+      }).catch((error) => {
         return Observable.of(new AuthorError(
-          JSON.parse(err._body).non_field_errors,
-          JSON.parse(err._body).text
+          error.error.non_field_errors,
+          error.error.text
         ));
       });
   }
@@ -92,10 +92,10 @@ export class ProfileService {
         console.log('You have mail!');
 
         return Account.parse(response);
-      }).catch((err) => {
+      }).catch((error) => {
         return Observable.of(new AccountError(
-          JSON.parse(err._body).non_field_errors,
-          JSON.parse(err._body).text
+          error.error.non_field_errors,
+          error.error.text
         ));
       });
   }
@@ -110,26 +110,26 @@ export class ProfileService {
         console.log('You have been securely encryptified');
 
         return Account.parse(response);
-      }).catch((err) => {
+      }).catch((error) => {
         return Observable.of(new AccountError(
-          JSON.parse(err._body).non_field_errors,
-          JSON.parse(err._body).text
+          error.error.non_field_errors,
+          error.error.text
         ));
       });
   }
 
   setProfilePicture(image: any): Observable<Profile> {
-     const formData: FormData = new FormData();
-     formData.append('avatar', image, image.name);
+    const formData: FormData = new FormData();
+    formData.append('avatar', image, image.name);
 
     return this.httpService.PUT_IMAGE('/users/', formData)
       .map((response: Response) => {
         console.log('You looked in the mirror and got frightened');
         return Profile.parse(response);
-      }).catch((err) => {
+      }).catch((error) => {
         return Observable.of(new ProfileError(
-          JSON.parse(err._body).non_field_errors,
-          JSON.parse(err._body).text
+          error.error.non_field_errors,
+          error.error.text
         ));
       });
   }

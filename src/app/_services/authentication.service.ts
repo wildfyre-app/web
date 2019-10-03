@@ -35,12 +35,11 @@ export class AuthenticationService {
         return Auth.parse(response);
       })
       .catch((error) => {
-        const body = JSON.parse(error._body);
         return Observable.of(
           new AuthError(
-            body.non_field_errors || null,
-            body.username || null,
-            body.password || null
+            error.error.non_field_errors,
+            error.error.username,
+            error.error.password,
           )
         );
       });

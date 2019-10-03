@@ -1,8 +1,6 @@
 import {Author} from './author';
 
 export class Comment {
-  public created: Date;
-
   static parse(obj: any) {
     return new Comment(
       obj.id,
@@ -16,11 +14,13 @@ export class Comment {
   constructor(
     public id: number,
     public author: Author,
-    created: string,
+    public created: string,
     public text: string,
     public image: string
   ) {
-    this.created = new Date(created);
+    const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+    const time = new Date(created);
+    this.created = time.toLocaleDateString(undefined, options);
   }
 
   getError(): CommentError {

@@ -3,8 +3,6 @@ import { Comment } from './comment';
 import { Image } from './image';
 
 export class Post {
-  public created: Date;
-
   static parse(obj: any) {
     return new Post(
       obj.id,
@@ -47,14 +45,16 @@ export class Post {
     public author: Author,
     public anonym: boolean,
     public subscribed: boolean,
-    created: string,
+    public created: string,
     public active: boolean,
     public text: string,
     public image: string,
     public additional_images: Image[],
     public comments: Comment[]
   ) {
-    this.created = new Date(created);
+    const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+    const time = new Date(created);
+    this.created = time.toLocaleDateString(undefined, options);
   }
 
   getError(): PostError {

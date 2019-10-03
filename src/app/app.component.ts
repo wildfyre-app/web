@@ -23,7 +23,7 @@ export class AppComponent implements OnDestroy {
       if (this.authenticationService.token) {
         this.areaService.getAreas()
           .takeUntil(this.componentDestroyed)
-          .subscribe(result => {
+          .subscribe(() => {
             this.loading = false;
             this.cdRef.detectChanges();
           });

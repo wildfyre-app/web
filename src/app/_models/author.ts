@@ -25,7 +25,7 @@ export class Author {
 export class AuthorError extends Author {
   constructor(
     public non_field_errors?: string[],
-    public _text?: string[]
+    public text?: string[]
   ) {
     super(null, null, null, null, null);
   }

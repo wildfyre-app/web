@@ -31,7 +31,7 @@ export class SuperBan {
 export class SuperBanError extends SuperBan {
   constructor(
     public non_field_errors?: string[],
-    public _text?: string[]
+    public text?: string[]
   ) {
     super(null, null, null, null);
   }

@@ -1,37 +1,390 @@
-<mat-card class="login-card">
-  <a class="logoLink" routerLink="/" routerLinkActive="active"><img class="logo" src="https://static.wildfyre.net/wildfyre.png" alt="WildFyre"></a>
-  <mat-card-content>
-    <div class="alert alert-info">
-      Welcome to WildFyre!<br />
-      Try not to get burned
+<!-- Landing Component -->
+<div id="landing">
+  <div fxLayout="column" class="login-container" fxLayoutAlign="center center">
+    <div fxLayout="row" fxFlexOffset="2rem">
+      <h1 class="login-title">Welcome to WildFyre!</h1>
     </div>
-    <h2>Login</h2>
-    <form name="form" (ngSubmit)="f.form.valid && login()" #f="ngForm" novalidate>
-      <div *ngIf="errors" class="alert alert-danger">
-        {{errors}}
+    <div fxLayout="row">
+      <h1 class="login-subtitle">Explore the fair side of social media</h1>
+    </div>
+    <div fxLayout="row" class="login-button" fxFlexOffset="2rem">
+      <button mat-flat-button class="login-button" style="background: #EA6C40;" (click)="switchView('register')">Register</button>
+    </div>
+    <div fxLayout="row" class="login-button" fxFlexOffset="1rem">
+      <button mat-stroked-button class="login-button" [disabled]="loading" (click)="switchView('login')">Log In</button>
+    </div>
+    <div fxLayout="row" fxFlexOffset="2rem" fxLayoutAlign="start center" style="width: 100%">
+      <a target="_blank" rel="noopener" href="https://wildfyre.net/terms-and-conditions/" style="padding-right: 2rem">Terms and Conditions</a>
+      <a target="_blank" rel="noopener" href="https://wildfyre.net/privacy-policy/">Privacy Policy</a>
+    </div>
+  </div>
+</div>
+
+<!-- Login  Component -->
+<div id="login">
+  <div fxLayout="column" class="login-container">
+    <div fxLayout="row" fxFlexOffset="2rem" style="width: 100%;margin-left: -1rem;" (click)="switchView('landing')">
+      <i class="material-icons" style="font-size: 40px;">keyboard_arrow_left</i>
+    </div>
+    <div fxLayout="row" fxFlexOffset="2rem">
+      <h1 class="login-title">Login</h1>
+    </div>
+    <div fxLayout="column" fxLayoutAlign="start center" *ngIf="loginForm" [formGroup]="loginForm">
+      <div *ngIf="errors && errors.non_field_errors" fxLayout="column" fxFlexOffset="2rem" class="alert alert-danger">
+        <div *ngFor="let err of errors.non_field_errors">
+          <p>{{err}}</p>
+        </div>
       </div>
 
-      <div *ngIf="!loading" class="form" [ngClass]="{ 'has-error': f.submitted && !username.valid }">
-        <mat-input-container>
-          <input matInput placeholder="Username" type="text" name="username" [(ngModel)]="model.username" #username="ngModel" autocomplete="username" required />
-        </mat-input-container>
-        <div *ngIf="f.submitted && !username.valid" class="help-block">Username is required</div>
+      <div *ngIf="!loading" fxLayout="row" fxFlexOffset="2rem" class="login-input">
+        <input matInput placeholder="Username" class="login-input login-title" style="font-size: 4rem;" type="text" autocomplete="username" formControlName="usernamel" required />
+      </div>
+      <div *ngIf="submitted && !loginForm.controls.usernamel.valid">
+        <p>Username is required</p>
+      </div>
+      <div *ngIf="errors && errors.username" fxLayout="column" fxFlexOffset="2rem" class="alert alert-danger">
+        <div *ngFor="let err of errors.username">
+          <p>{{err}}</p>
+        </div>
       </div>
 
-      <div *ngIf="!loading" class="form" [ngClass]="{ 'has-error': f.submitted && !password.valid }">
-        <mat-input-container>
-          <input matInput placeholder="Password" type="password" name="password" [(ngModel)]="model.password" #password="ngModel" autocomplete="current-password" required />
-        </mat-input-container>
-        <div *ngIf="f.submitted && !password.valid" class="help-block">Password is required</div>
+      <div *ngIf="!loading" fxLayout="row" fxFlexOffset="1rem" class="login-input">
+        <input matInput placeholder="Password" class="login-input login-title" style="font-size: 4rem;" type="password" autocomplete="current-password" formControlName="passwordl" required />
+      </div>
+      <div *ngIf="submitted && !loginForm.controls.passwordl.valid">
+        <p>Password is required</p>
+      </div>
+      <div *ngIf="errors && errors.password" fxLayout="column" fxFlexOffset="2rem" class="alert alert-danger">
+        <div *ngFor="let err of errors.password">
+          <p>{{err}}</p>
+        </div>
       </div>
 
-      <div class="form-group">
-        <button *ngIf="!loading" class="wideButtons" mat-raised-button color="accent" [disabled]="loading"><b>Login</b></button>
-        <br>
-        <mat-progress-spinner *ngIf="loading"></mat-progress-spinner>
+      <div fxLayout="row" class="login-button" fxFlexOffset="2rem" *ngIf="!loading">
+        <button mat-flat-button [disabled]="loading" class="login-button" style="background: #EA6C40;" [disabled]="loading" (click)="login()">Let's Go!</button>
       </div>
-    </form>
-    Can't login? <a routerLink="/recover" routerLinkActive="active">Recover it Here</a><br>
-    Don't have an account? <a routerLink="/register" routerLinkActive="active">Register Here</a>
-  </mat-card-content>
-</mat-card>
+      <div *ngIf="loading" fxLayoutAlign="center center" fxFlexOffset="2rem">
+        <mat-progress-spinner></mat-progress-spinner>
+      </div>
+      <div fxLayout="row" fxFlexOffset="2rem" fxLayoutAlign="start center" style="width: 100%">
+        <a (click)="switchView('recover-username')" style="padding-right: 2rem">Forgot Username?</a>
+        <a (click)="switchView('recover-password')">Forgot Password?</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Register  Component -->
+<div id="register">
+  <div fxLayout="column" class="login-container">
+    <div fxLayout="row" fxFlexOffset="2rem" style="width: 100%;margin-left: -1rem;" (click)="switchView('landing')">
+      <i class="material-icons" style="font-size: 40px;">keyboard_arrow_left</i>
+    </div>
+    <div fxLayout="row" fxFlexOffset="2rem">
+      <h1 class="login-title">Register</h1>
+    </div>
+    <div fxLayout="column" fxLayoutAlign="start center" *ngIf="registerForm" [formGroup]="registerForm">
+      <div *ngIf="errors && errors.non_field_errors" fxLayout="column" fxFlexOffset="2rem" class="alert alert-danger">
+        <div *ngFor="let err of errors.non_field_errors">
+          <p>{{err}}</p>
+        </div>
+      </div>
+
+      <div *ngIf="!loading" fxLayout="row" fxFlexOffset="2rem" class="login-input">
+        <input matInput placeholder="Username" class="login-input login-title" style="font-size: 4rem;" type="text" autocomplete="username" formControlName="usernamer" required />
+      </div>
+      <div *ngIf="submitted && !registerForm.controls.usernamer.valid">
+        <p>Username is required</p>
+      </div>
+      <div *ngIf="errors && errors.username" fxLayout="column" fxFlexOffset="2rem" class="alert alert-danger">
+        <div *ngFor="let err of errors.username">
+          <p>{{err}}</p>
+        </div>
+      </div>
+
+      <div *ngIf="!loading" fxLayout="row" fxFlexOffset="1rem" class="login-input">
+        <input matInput placeholder="Email" class="login-input login-title" style="font-size: 4rem;" type="email" autocomplete="current-email" formControlName="emailr" required />
+      </div>
+      <div *ngIf="submitted && !registerForm.controls.emailr.valid">
+        <p>Email is required</p>
+      </div>
+      <div *ngIf="errors && errors.email" fxLayout="column" fxFlexOffset="2rem" class="alert alert-danger">
+        <div *ngFor="let err of errors.email">
+          <p>{{err}}</p>
+        </div>
+      </div>
+
+      <div *ngIf="!loading" fxLayout="row" fxFlexOffset="1rem" class="login-input">
+        <input matInput placeholder="Password" class="login-input login-title" style="font-size: 4rem;" type="password" autocomplete="current-password" formControlName="passwordr" required />
+      </div>
+      <div *ngIf="submitted && !registerForm.controls.passwordr.valid">
+        <p>Password is required</p>
+      </div>
+      <div *ngIf="errors && errors.password" fxLayout="column" fxFlexOffset="2rem" class="alert alert-danger">
+        <div *ngFor="let err of errors.password">
+          <p>{{err}}</p>
+        </div>
+      </div>
+
+      <div *ngIf="!loading" fxLayout="row" fxFlexOffset="1rem" class="login-input">
+        <input matInput placeholder="Password again" class="login-input login-title" style="font-size: 4rem;" type="password" autocomplete="current-password" formControlName="password2r" required />
+      </div>
+      <div *ngIf="submitted && !registerForm.controls.password2r.valid">
+        <p>Second password is required</p>
+      </div>
+      <div *ngIf="errors && errors.password" fxLayout="column" fxFlexOffset="2rem" class="alert alert-danger">
+        <div *ngFor="let err of errors.password">
+          <p>{{err}}</p>
+        </div>
+      </div>
+
+      <div *ngIf="!loading" fxLayout="column" fxFlexOffset="1rem" class="login-input">
+        <re-captcha (captchaResponse)="setCaptchaResponse($event)" site_key="6LcXViIUAAAAABZF263l-SJh3rZAe95Sx2LPN-Dc"></re-captcha>
+        <div *ngIf="errors && errors.captcha" fxLayout="column" fxFlexOffset="2rem" class="alert alert-danger">
+          <div *ngFor="let err of errors.captcha">
+            <p>{{err}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div fxLayout="column" fxFlexOffset="2rem">
+      <p>Usernames must use Letters, Digits, Spaces, @, /, ., /, +, /, -, and _ only.</p>
+      <p>Passwords must contain at least 8 characters and be alphanumeric (At least 1 letter and 1 number)</p>
+      <p>By logging in, you agree to our <a target="_blank" rel="noopener" style="color: #EA6C40;" href="https://wildfyre.net/terms-and-conditions/">Terms and Conditions</a>
+         and that you have read our <a target="_blank" rel="noopener" style="color: #EA6C40;" href="https://wildfyre.net/privacy-policy/">Privacy Policy</a>.</p>
+    </div>
+
+    <div *ngIf="!loading" fxLayout="row" class="login-button" fxFlexOffset="2rem" style="margin-bottom: 2rem;" >
+      <button mat-flat-button class="login-button" style="background: #EA6C40;" [disabled]="loading" (click)="register()">Let's Go!</button>
+    </div>
+    <div *ngIf="loading" fxLayoutAlign="center center" fxFlexOffset="2rem">
+      <mat-progress-spinner></mat-progress-spinner>
+    </div>
+  </div>
+</div>
+
+<!-- Recover Username Component -->
+<div id="recover-username">
+  <div fxLayout="column" class="login-container">
+    <div fxLayout="row" fxFlexOffset="2rem" style="width: 100%;margin-left: -1rem;" (click)="switchView('login')">
+      <i class="material-icons" style="font-size: 40px;">keyboard_arrow_left</i>
+    </div>
+    <div fxLayout="row" fxFlexOffset="2rem">
+      <h1 class="login-title">Recover Username</h1>
+    </div>
+    <div fxLayout="column" fxLayoutAlign="start center" *ngIf="recoverUsernameForm" [formGroup]="recoverUsernameForm">
+      <div *ngIf="errors && errors.non_field_errors" fxLayout="column" fxFlexOffset="2rem" class="alert alert-danger">
+        <div *ngFor="let err of errors.non_field_errors">
+          <p>{{err}}</p>
+        </div>
+      </div>
+      <div *ngIf="!loading" fxLayout="row" fxFlexOffset="2rem" class="login-input">
+        <input matInput placeholder="Email" class="login-input login-title" style="font-size: 4rem;" type="email" autocomplete="current-email" formControlName="emailru" required />
+      </div>
+      <div *ngIf="submitted && !recoverUsernameForm.controls.emailru.valid">
+        <p>Email is required</p>
+      </div>
+      <div *ngIf="errors && errors.email" fxLayout="column" fxFlexOffset="2rem" class="alert alert-danger">
+        <div *ngFor="let err of errors.email">
+          <p>{{err}}</p>
+        </div>
+      </div>
+
+      <div *ngIf="!loading" fxLayout="column" fxFlexOffset="2rem" class="login-input">
+        <re-captcha (captchaResponse)="setCaptchaResponse($event)" site_key="6LcXViIUAAAAABZF263l-SJh3rZAe95Sx2LPN-Dc"></re-captcha>
+        <div *ngIf="errors && errors.captcha" fxLayout="column" fxFlexOffset="2rem" class="alert alert-danger">
+          <div *ngFor="let err of errors.captcha">
+            <p>{{err}}</p>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="!loading" fxLayout="row" class="login-button" fxFlexOffset="2rem">
+        <button mat-flat-button class="login-button" style="background: #EA6C40;" [disabled]="loading" (click)="recoverUsername()">Send Email</button>
+      </div>
+      <div *ngIf="loading" fxLayoutAlign="center center" fxFlexOffset="2rem">
+        <mat-progress-spinner></mat-progress-spinner>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Recover Password Component -->
+<div id="recover-password">
+  <div fxLayout="column" class="login-container">
+    <div fxLayout="row" fxFlexOffset="2rem" style="width: 100%;margin-left: -1rem;" (click)="switchView('login')">
+      <i class="material-icons" style="font-size: 40px;">keyboard_arrow_left</i>
+    </div>
+    <div fxLayout="row" fxFlexOffset="2rem">
+      <h1 class="login-title">Recover Password</h1>
+    </div>
+    <div fxLayout="column" fxLayoutAlign="start center" *ngIf="recoverPasswordForm" [formGroup]="recoverPasswordForm">
+      <div *ngIf="errors && errors.non_field_errors" fxLayout="column" fxFlexOffset="2rem" class="alert alert-danger">
+        <div *ngFor="let err of errors.non_field_errors">
+          <p>{{err}}</p>
+        </div>
+      </div>
+
+      <div *ngIf="!loading" fxLayout="row" fxFlexOffset="2rem" class="login-input">
+        <input matInput placeholder="Email" class="login-input login-title" style="font-size: 4rem;" type="email" autocomplete="current-email" formControlName="emailrp" required />
+      </div>
+      <div *ngIf="submitted && !recoverPasswordForm.controls.emailrp.valid">
+        <p>Email is required</p>
+      </div>
+      <div *ngIf="errors && errors.email" fxLayout="column" fxFlexOffset="2rem" class="alert alert-danger">
+        <div *ngFor="let err of errors.email">
+          <p>{{err}}</p>
+        </div>
+      </div>
+
+      <div *ngIf="!loading" fxLayout="row" fxFlexOffset="2rem"class="login-input">
+        <input matInput placeholder="Username" class="login-input login-title" style="font-size: 4rem;" type="text" autocomplete="username" formControlName="usernamerp" required />
+      </div>
+      <div *ngIf="submitted && !recoverPasswordForm.controls.usernamerp.valid">
+        <p>Username is required</p>
+      </div>
+      <div *ngIf="errors && errors.username" fxLayout="column" fxFlexOffset="2rem" class="alert alert-danger">
+        <div *ngFor="let err of errors.username">
+          <p>{{err}}</p>
+        </div>
+      </div>
+
+      <div *ngIf="!loading" fxLayout="column" fxFlexOffset="2rem" class="login-input">
+        <re-captcha (captchaResponse)="setCaptchaResponse($event)" site_key="6LcXViIUAAAAABZF263l-SJh3rZAe95Sx2LPN-Dc"></re-captcha>
+        <div *ngIf="errors && errors.captcha" fxLayout="column" fxFlexOffset="2rem" class="alert alert-danger">
+          <div *ngFor="let err of errors.captcha">
+            <p>{{err}}</p>
+          </div>
+        </div>
+      </div>
+
+      <div fxLayout="row" class="login-button" fxFlexOffset="2rem">
+        <button mat-flat-button class="login-button" style="background: #EA6C40;" (click)="recoverPassword()">Send Email</button>
+      </div>
+      <div *ngIf="loading" fxLayoutAlign="center center" fxFlexOffset="2rem">
+        <mat-progress-spinner></mat-progress-spinner>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Recover Username Component -->
+<div id="recover-username">
+    <div fxLayout="column" class="login-container">
+      <div fxLayout="row" fxFlexOffset="2rem" style="width: 100%;margin-left: -1rem;" (click)="switchView('login')">
+        <i class="material-icons" style="font-size: 40px;">keyboard_arrow_left</i>
+      </div>
+      <div fxLayout="row" fxFlexOffset="2rem">
+        <h1 class="login-title">Recover Username</h1>
+      </div>
+      <div fxLayout="column" fxLayoutAlign="start center" *ngIf="recoverUsernameForm" [formGroup]="recoverUsernameForm">
+        <div *ngIf="errors && errors.non_field_errors" fxLayout="column" fxFlexOffset="2rem" class="alert alert-danger">
+          <div *ngFor="let err of errors.non_field_errors">
+            <p>{{err}}</p>
+          </div>
+        </div>
+        <div *ngIf="!loading" fxLayout="row" fxFlexOffset="2rem" class="login-input">
+          <input matInput placeholder="Email" class="login-input login-title" style="font-size: 4rem;" type="email" autocomplete="current-email" formControlName="emailru" required />
+        </div>
+        <div *ngIf="submitted && !recoverUsernameForm.controls.emailru.valid">
+          <p>Email is required</p>
+        </div>
+        <div *ngIf="errors && errors.email" fxLayout="column" fxFlexOffset="2rem" class="alert alert-danger">
+          <div *ngFor="let err of errors.email">
+            <p>{{err}}</p>
+          </div>
+        </div>
+
+        <div *ngIf="!loading" fxLayout="column" fxFlexOffset="2rem" class="login-input">
+          <re-captcha (captchaResponse)="setCaptchaResponse($event)" site_key="6LcXViIUAAAAABZF263l-SJh3rZAe95Sx2LPN-Dc"></re-captcha>
+          <div *ngIf="errors && errors.captcha" fxLayout="column" fxFlexOffset="2rem" class="alert alert-danger">
+            <div *ngFor="let err of errors.captcha">
+              <p>{{err}}</p>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="!loading" fxLayout="row" class="login-button" fxFlexOffset="2rem">
+          <button mat-flat-button class="login-button" style="background: #EA6C40;" [disabled]="loading" (click)="recoverUsername()">Send Email</button>
+        </div>
+        <div *ngIf="loading" fxLayoutAlign="center center" fxFlexOffset="2rem">
+          <mat-progress-spinner></mat-progress-spinner>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recover Password Step 2 Component -->
+  <div id="recover-password2">
+    <div fxLayout="column" class="login-container">
+      <div fxLayout="row" fxFlexOffset="2rem" style="width: 100%;margin-left: -1rem;" (click)="switchView('recover-password')">
+        <i class="material-icons" style="font-size: 40px;">keyboard_arrow_left</i>
+      </div>
+      <div fxLayout="row" fxFlexOffset="2rem">
+        <h1 class="login-title">Recover Password</h1>
+      </div>
+      <div fxLayout="column" fxFlexOffset="2rem" class="alert alert-danger">
+        <p>Do not close this webpage or you will have to restart!</p>
+        <p>We sent a Password Reset Token to you via the information provided.</p>
+        <p>You must have it in order to continue using this form!</p>
+      </div>
+      <div fxLayout="column" fxLayoutAlign="start center" *ngIf="recoverPasswordForm2" [formGroup]="recoverPasswordForm2">
+        <div *ngIf="errors && errors.non_field_errors" fxLayout="row" fxFlexOffset="2rem" class="alert alert-danger">
+          <div *ngFor="let err of errors.non_field_errors">
+            <p>{{err}}</p>
+          </div>
+        </div>
+        <div *ngIf="!loading" fxLayout="row" fxFlexOffset="2rem" class="login-input">
+          <input matInput placeholder="Reset Token" class="login-input login-title" style="font-size: 4rem;" type="text" formControlName="tokenrp2" required />
+        </div>
+        <div *ngIf="submitted && !recoverPasswordForm2.controls.tokenrp2.valid">
+          <p>Email is required</p>
+        </div>
+        <div *ngIf="errors && errors.token" fxLayout="column" fxFlexOffset="2rem" class="alert alert-danger">
+          <div *ngFor="let err of errors.token">
+            <p>{{err}}</p>
+          </div>
+        </div>
+
+        <div *ngIf="!loading" fxLayout="row" fxFlexOffset="2rem" class="login-input">
+          <input matInput placeholder="Password" class="login-input login-title" style="font-size: 4rem;" type="password" autocomplete="current-password" formControlName="passwordrp2" required />
+        </div>
+        <div *ngIf="submitted && !recoverPasswordForm2.controls.passwordrp2.valid">
+          <p>Password is required</p>
+        </div>
+        <div *ngIf="errors && errors.new_password" fxLayout="column" fxFlexOffset="2rem" class="alert alert-danger">
+          <div *ngFor="let err of errors.new_password">
+            <p>{{err}}</p>
+          </div>
+        </div>
+
+        <div *ngIf="!loading" fxLayout="row" fxFlexOffset="2rem" class="login-input">
+          <input matInput placeholder="Password again" class="login-input login-title" style="font-size: 4rem;" type="password" autocomplete="current-password" formControlName="password2rp2" required />
+        </div>
+        <div *ngIf="submitted && !recoverPasswordForm2.controls.password2rp2.valid">
+          <p>Password is required</p>
+        </div>
+        <div *ngIf="errors && errors.new_password" fxLayout="column" fxFlexOffset="2rem" class="alert alert-danger">
+          <div *ngFor="let err of errors.new_password">
+            <p>{{err}}</p>
+          </div>
+        </div>
+
+        <div *ngIf="!loading" fxLayout="column" fxFlexOffset="2rem" class="login-input">
+          <re-captcha (captchaResponse)="setCaptchaResponse($event)" site_key="6LcXViIUAAAAABZF263l-SJh3rZAe95Sx2LPN-Dc"></re-captcha>
+          <div *ngIf="errors && errors.captcha" fxLayout="column" fxFlexOffset="2rem" class="alert alert-danger">
+            <div *ngFor="let err of errors.captcha">
+              <p>{{err}}</p>
+            </div>
+          </div>
+        </div>
+
+        <div fxLayout="row" class="login-button" fxFlexOffset="2rem">
+          <button mat-flat-button class="login-button" style="background: #EA6C40;" (click)="resetPassword()">Send Email</button>
+        </div>
+        <div *ngIf="loading" fxLayoutAlign="center center" fxFlexOffset="2rem">
+          <mat-progress-spinner></mat-progress-spinner>
+        </div>
+      </div>
+    </div>
+  </div>

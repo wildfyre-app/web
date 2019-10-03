@@ -46,9 +46,9 @@ describe('LoginComponent', () => {
               return Observable.of(
                 new SuperNotification(1, '', '',
                   new Array<Notification>(
-                    new Notification('', 
-                      new NotificationPost(0, 
-                        new Author(0, '', '', '', false), 'test'), 
+                    new Notification('',
+                      new NotificationPost(0,
+                        new Author(0, '', '', '', false), 'test'),
                           new Array<number>(0)))
               ));
             }

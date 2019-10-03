@@ -17,7 +17,7 @@ export class ReasonService {
       .map(response => {
         const choices: Choice[] = [];
         for (let i = 0; i < response.length; i++) {
-          choices.push(Choice.parse(response[i]))
+          choices.push(Choice.parse(response[i]));
         }
       return choices;
     });

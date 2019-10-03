@@ -17,6 +17,7 @@ export class AreaService {
   ) { }
 
   getAreaRep(area: string): Observable<Reputation> {
+    // Get area rep from api, cache response
     if (this.reputation[area]) {
       return Observable.of(this.reputation[area]);
     } else {
@@ -29,20 +30,43 @@ export class AreaService {
   }
 
   getAreas(): Observable<Area[]> {
-    // get areas from api
+    // Get areas from api, cache response
     if (!this.areas) {
-    return this.httpService.GET('/areas/')
-      .map(response => {
-        const areas: Area[] = [];
-        for (let i = 0; i < response.length; i++) {
-          areas.push(Area.parse(response[i]))
-        }
-        this.areas = areas;
-        this.currentAreaName = this.areas[0].name;
-        return areas;
-      });
+      return this.httpService.GET('/areas/')
+        .map(response => {
+          const areas: Area[] = [];
+          for (let i = 0; i < response.length; i++) {
+            areas.push(Area.parse(response[i]));
+          }
+          this.areas = areas;
+          return areas;
+        });
     } else {
       return Observable.of(this.areas);
+    }
+  }
+
+  getArea(s: string): Observable<Area> {
+    if (s === '_') {
+      return Observable.of(new Area('_', 'All Posts', 0, 0));
+    }
+    if (!this.areas) {
+      return this.getAreas()
+        .map(areas => {
+          if (areas) {
+            for (let i = 0; i < areas.length; i++) {
+              if (areas[i].name === s) {
+                return areas[i];
+              }
+            }
+          }
+        });
+    } else {
+      for (let i = 0; i < this.areas.length; i++) {
+        if (this.areas[i].name === s) {
+          return Observable.of(this.areas[i]);
+        }
+      }
     }
   }
 }

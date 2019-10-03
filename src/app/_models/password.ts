@@ -11,10 +11,10 @@ export class Password {
 export class PasswordError extends Password {
   constructor(
     public non_field_errors?: string[],
-    public _text?: string[],
-    public _oldPassword?: string[],
-    public _newPassword1?: string[],
-    public _newPassword2?: string[]
+    public text?: string[],
+    public oldPassword?: string[],
+    public newPassword1?: string[],
+    public newPassword2?: string[]
   ) { super(); }
 
   getError(): PasswordError {

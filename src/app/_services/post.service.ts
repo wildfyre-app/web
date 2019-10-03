@@ -57,10 +57,10 @@ export class PostService {
         this.navBarService.clearInputs.next(true);
         return comment;
       })
-      .catch((err) => {
+      .catch((error) => {
         return Observable.of(new CommentError(
-          JSON.parse(err._body).non_field_errors,
-          JSON.parse(err._body).text
+          error.error.non_field_errors,
+          error.error.text
         ));
       });
   }
@@ -92,8 +92,8 @@ export class PostService {
           })
           .catch((error) => {
             return Observable.of(new PostError(
-              JSON.parse(error._body).non_field_errors,
-              JSON.parse(error._body)._text
+              error.error.non_field_errors,
+              error.error._text
             ));
           });
       } else if (draft && postID === null) {
@@ -103,8 +103,8 @@ export class PostService {
           })
           .catch((error) => {
             return Observable.of(new PostError(
-              JSON.parse(error._body).non_field_errors,
-              JSON.parse(error._body)._text
+              error.error.non_field_errors,
+              error.error._text
             ));
           });
       } else if (draft && postID !== null) {
@@ -114,8 +114,8 @@ export class PostService {
           })
           .catch((error) => {
             return Observable.of(new PostError(
-              JSON.parse(error._body).non_field_errors,
-              JSON.parse(error._body)._text
+              error.error.non_field_errors,
+              error.error._text
             ));
           });
       } else {

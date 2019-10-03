@@ -21,7 +21,7 @@ export class Account {
 export class AccountError extends Account {
   constructor(
     public non_field_errors?: string[],
-    public _text?: string[]
+    public text?: string[]
   ) {
     super(null, null, null);
   }

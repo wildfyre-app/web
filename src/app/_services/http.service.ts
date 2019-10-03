@@ -78,6 +78,8 @@ export class HttpService {
 
   // Handling methods
   private handleError(error: any): Observable<any> {
+    console.error(error);
+
     let message: string;
     let action = 'Close';
     let onAction: Function;

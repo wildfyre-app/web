@@ -24,7 +24,9 @@
         "../node_modules/font-awesome/css/font-awesome.css",
         "theme.scss"
       ],
-      "scripts": [],
+      "scripts": [
+        "../node_modules/compressorjs/dist/compressor.min.js"
+      ],
       "environmentSource": "environments/environment.ts",
       "environments": {
         "dev": "environments/environment.ts",

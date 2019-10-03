@@ -1,7 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { Comment } from '../_models/comment';
 import { Post } from '../_models/post';
-import * as C from '../_models/constants'
+import * as C from '../_models/constants';
 import * as marked from 'markdown-it';
 import markdownItRegex from 'markdown-it-regex';
 
@@ -32,7 +32,7 @@ export class MarkedPipe implements PipeTransform {
       name: 'customImage',
       regex: /(\[img: \d\])/gm,
       replace: (match: string) => {
-        const index = Number.parseInt(this.getImageMatchesByGroup(2, match, /(\[img: (\d)\])/gm)[0]);
+        const index = parseInt(this.getImageMatchesByGroup(2, match, /(\[img: (\d)\])/gm)[0], 10);
 
         if (post) {
           if (!post.additional_images[index]) {
