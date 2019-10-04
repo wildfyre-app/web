@@ -151,6 +151,9 @@ export class MyPostsComponent implements OnInit, OnDestroy {
 
                 for (let i = 0; i <= this.backupPosts[this.currentArea.name].length - 1; i++) {
                   this.backupPosts[this.currentArea.name][i].text = this.removeMarkdown(this.backupPosts[this.currentArea.name][i].text);
+                  if (this.backupPosts[this.currentArea.name][i].text.length > 250) {
+                    this.backupPosts[this.currentArea.name][i].text = this.backupPosts[this.currentArea.name][i].text.slice(0, 250) + '...';
+                  }
                 }
 
                 this.cdRef.detectChanges();
@@ -196,6 +199,9 @@ export class MyPostsComponent implements OnInit, OnDestroy {
 
         for (let i = 0; i <= this.backupPosts[this.currentArea.name].length - 1; i++) {
           this.backupPosts[this.currentArea.name][i].text = this.removeMarkdown(this.backupPosts[this.currentArea.name][i].text);
+          if (this.backupPosts[this.currentArea.name][i].text.length > 250) {
+            this.backupPosts[this.currentArea.name][i].text = this.backupPosts[this.currentArea.name][i].text.slice(0, 250) + '...';
+          }
         }
         this.index = page;
         this.totalCount = superPost.count;

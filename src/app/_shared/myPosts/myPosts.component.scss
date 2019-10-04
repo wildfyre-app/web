@@ -56,7 +56,7 @@
     }
     &-card {
       width: 47.5%;
-      height: 15vh;
+      height: 250px;
       padding-left: 2%;
       padding-right: 2%;
       margin-bottom: 5%;
@@ -94,10 +94,6 @@
   flex-direction: column;
   place-content: center;
   align-items: center;
-}
-
-.marked {
-  overflow-y: scroll;
 }
 
 span.markdown {

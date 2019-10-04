@@ -10,14 +10,14 @@
 <!-- Home Component -->
 <div id="home">
   <div fxLayout="column" class="home-content-container">
-    <div fxLayout="row" fxLayoutAlign="space-between center" style="width: 100%;height: 10vh;cursor: pointer;padding-left: 2rem;padding-right: 2rem;">
+    <div fxLayout="row" fxLayoutAlign="space-between center" style="width: 100%;height: 10vh;padding-left: 2rem;padding-right: 2rem;">
       <!-- <i class="material-icons" style="font-size: 40px;">keyboard_arrow_left</i> -->
-      <div fxLayout="row" fxLayoutAlign="center center" (click)="switchRoute('home')">
+      <div fxLayout="row" fxLayoutAlign="center center" (click)="switchRoute('home')" style="cursor: pointer;">
         <i class="material-icons" style="font-size: 40px;">keyboard_arrow_left</i>
         <h2 *ngIf="currentArea" class="home-subtitle">{{currentArea.displayname}}</h2>
       </div>
       <div fxLayoutAlign="center center">
-          <h2 fxLayout="row" class="home-subtitle" fxFlexOffset="1rem" (click)="info($event)">Info</h2>
+          <h2 fxLayout="row" class="home-subtitle" fxFlexOffset="1rem" (click)="info($event)" style="cursor: pointer;">Info</h2>
       </div>
     </div>
 
@@ -26,18 +26,18 @@
 
     <!-- Post Identity -->
     <div fxLayout="row" fxLayoutAlign="space-between center" [className]="hasPostId ? 'hideEndorse' : ''" style="margin-top:65vh;border-top-left-radius: 30px;border-top-right-radius: 30px;height: 10vh;background: #ffffff;padding-left: 2rem;padding-right: 2rem;">
-      <i *ngIf="post.id !== 0" class="material-icons" style="font-size: 40px;">outlined_flag</i>
-      <img style="width: 40px;height: 40px;border-radius: 20px;background: #d3d3d3;" (click)="gotoUser(post.author.user)" *ngIf="post.author.avatar" [src]="post.author.avatar" alt="Avatar of {{post.author.name}}"/>
-      <img style="width: 40px;height: 40px;border-radius: 20px;background: #d3d3d3;" (click)="gotoUser(post.author.user)" *ngIf="!post.author.avatar" src="/assets/logo.png" alt="Avatar of {{post.author.name}}"/>
-      <div fxLayout="column" (click)="gotoUser(post.author.user)">
+      <i *ngIf="post.id !== 0" class="material-icons" style="font-size: 40px;cursor: pointer;">outlined_flag</i>
+      <img style="cursor: pointer;width: 40px;height: 40px;border-radius: 20px;background: #d3d3d3;" (click)="gotoUser(post.author.user)" *ngIf="post.author.avatar" [src]="post.author.avatar" alt="Avatar of {{post.author.name}}"/>
+      <img style="cursor: pointer;width: 40px;height: 40px;border-radius: 20px;background: #d3d3d3;" (click)="gotoUser(post.author.user)" *ngIf="!post.author.avatar" src="/assets/logo.png" alt="Avatar of {{post.author.name}}"/>
+      <div fxLayout="column" (click)="gotoUser(post.author.user)" style="cursor: pointer;">
         <h2 class="home-subtitle">{{post.author.name}}</h2>
         <div fxLayout="row" fxLayoutAlign="center center">
           <p>{{post.created}}</p>
         </div>
       </div>
-      <i class="material-icons" style="font-size: 40px;">info</i>
-      <i *ngIf="post.id !== 0 && !post?.subscribed" class="material-icons" (click)="subscribe(true)" style="font-size: 40px;">bookmark_border</i>
-      <i *ngIf="post.id !== 0 && post?.subscribed" class="material-icons" (click)="subscribe(false)" style="font-size: 40px;">bookmark</i>
+      <i class="material-icons" style="font-size: 40px;cursor: pointer;">info</i>
+      <i *ngIf="post.id !== 0 && !post?.subscribed" class="material-icons" (click)="subscribe(true)" style="font-size: 40px;cursor: pointer;">bookmark_border</i>
+      <i *ngIf="post.id !== 0 && post?.subscribed" class="material-icons" (click)="subscribe(false)" style="font-size: 40px;cursor: pointer;">bookmark</i>
     </div>
 
     <!-- Post Options -->

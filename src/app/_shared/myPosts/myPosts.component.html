@@ -15,14 +15,13 @@
           <div fxLayout="row" fxLayoutAlign="start center">
             <i class="material-icons" style="width: 24px;zoom: 0.7;color: #ffffff;margin-right: 1rem;" *ngIf="imageArray[currentArea.name][i] || post.image">image</i>
             <i class="material-icons" style="width: 24px;zoom: 0.7;color: #ffffff;" *ngIf="post.active">hourglass_full</i>
-            <i class="material-icons" style="width: 24px;zoom: 0.7;color: #ffffff;" fxFlexOffset="1rem" *ngIf="!post.active">hourglass_empty</i>
+            <i class="material-icons" style="width: 24px;zoom: 0.7;color: #ffffff;" *ngIf="!post.active">hourglass_empty</i>
             <i class="material-icons" style="width: 24px;zoom: 0.7;color: #ffffff;" fxFlexOffset="1rem" *ngIf="!post.anonym">visibility_on</i>
             <i class="material-icons" style="width: 24px;zoom: 0.7;color: #ffffff;" fxFlexOffset="1rem" *ngIf="post.anonym">visibility_off</i>
             <i class="material-icons" style="width: 24px;zoom: 0.7;color: #ffffff;" fxFlexOffset="1rem">filter_none</i>
             <h5 style="color: #ffffff" fxFlexOffset="0.5rem">{{post.comments.length}}</h5>
           </div>
-          <p class="marked" style="color: #ffffff;" innerHTML="{{post.text | slice:0:200 | marked: post}}"></p>
-          <ng-container style="color: #ffffff;" *ngIf="post.text.length > 200">...</ng-container>
+          <p class="marked" style="color: #ffffff;" innerHTML="{{post.text | marked: post}}"></p>
         </div>
       </div>
     </div>

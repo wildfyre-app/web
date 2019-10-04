@@ -1032,3 +1032,7 @@ ng-component {
 .navBar-container div {
   cursor: pointer;
 }
+
+#social a:hover {
+  color: #EA6C40;
+}
