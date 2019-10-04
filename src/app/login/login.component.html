@@ -33,7 +33,7 @@
 <div id="login">
   <div fxLayout="column" class="login-container">
     <div fxLayout="row" fxFlexOffset="2rem" style="width: 100%;margin-left: -1rem;" (click)="switchView('landing')">
-      <i class="material-icons" style="font-size: 40px;">keyboard_arrow_left</i>
+      <i class="material-icons" style="font-size: 40px;cursor: pointer;">keyboard_arrow_left</i>
     </div>
     <div fxLayout="row" fxFlexOffset="2rem">
       <h1 class="login-title">Login</h1>
@@ -70,14 +70,14 @@
       </div>
 
       <div fxLayout="row" class="login-button" fxFlexOffset="2rem" *ngIf="!loading">
-        <button mat-flat-button [disabled]="loading" class="login-button" style="background: #EA6C40;" [disabled]="loading" (click)="login()">Let's Go!</button>
+        <button mat-flat-button [disabled]="loading" class="login-button" style="background: #EA6C40;color: #ffffff;" [disabled]="loading" (click)="login()">Let's Go!</button>
       </div>
       <div *ngIf="loading" fxLayoutAlign="center center" fxFlexOffset="2rem">
         <mat-progress-spinner></mat-progress-spinner>
       </div>
       <div fxLayout="row" fxFlexOffset="2rem" fxLayoutAlign="start center" style="width: 100%">
-        <a (click)="switchView('recover-username')" style="padding-right: 2rem">Forgot Username?</a>
-        <a (click)="switchView('recover-password')">Forgot Password?</a>
+        <a (click)="switchView('recover-username')" style="padding-right: 2rem;cursor: pointer;">Forgot Username?</a>
+        <a (click)="switchView('recover-password')" style=";cursor: pointer;">Forgot Password?</a>
       </div>
     </div>
   </div>

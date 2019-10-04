@@ -57,7 +57,7 @@ export class ProfileService {
       return of(this.userArray[Number(id)]);
     } else {
       console.log('a')
-    return this.httpService.GET('/users/' + id).pipe(
+    return this.httpService.GET(`/users/${id}/`).pipe(
       map((response) => {
         console.log(response)
         this.userArray[Number(id)] = Author.parse(response); // cache
