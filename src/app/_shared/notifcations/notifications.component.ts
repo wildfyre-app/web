@@ -81,7 +81,7 @@ export class NotificationsComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.loading = true;
     this.routeService.resetRoutes();
-    this.routeService.addNextRoute('/notification/' + this.index);
+    this.routeService.addNextRoute('/notifications/' + this.index);
 
     this.route.params.pipe(
       takeUntil(this.componentDestroyed))

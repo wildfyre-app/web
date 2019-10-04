@@ -1,16 +1,20 @@
 <!-- Profile Component -->
-<div id="profile" fxLayout="column" fxLayoutAlign="center center">
+<div id="profile" fxLayout="column" fxLayoutAlign="center center" style="height: 100%;padding-bottom: 10vh;">
   <div class="profile-image">
     <img *ngIf="author?.avatar" [src]="author?.avatar" alt="Avatar of {{author?.name}}" style="object-fit: cover;" />
     <img *ngIf="!author?.avatar" src="/assets/logo.png" alt="Avatar of {{author?.name}}" style="object-fit: cover;" />
   </div>
   <div fxLayout="column" class="profile-container">
     <div fxLayout="row" fxFlexOffset="2rem" fxLayoutAlign="space-between start" (click)="goto('image')" style="width: 100%;height: 30vh;cursor: pointer;">
-      <!-- <i class="material-icons" style="font-size: 40px;">keyboard_arrow_left</i> -->
-      <div></div>
+      <!-- <i class="mate  rial-icons" style="font-size: 40px;">keyboard_arrow_left</i> -->
+      <div fxLayout="row" fxLayoutAlign="center center" (click)="backOrLogout()">
+        <i class="material-icons" style="font-size: 40px;">keyboard_arrow_left</i>
+        <h2 class="home-title">Profile</h2>
+      </div>
       <div>
-        <h2 class="profile-subtitle" (click)="goto('password')">Password</h2>
-        <h2 fxLayout="row" class="profile-subtitle" fxFlexOffset="1rem" (click)="info($event)">Info</h2>
+        <h2 *ngIf="self" class="profile-subtitle" (click)="goto('password')">Password</h2>
+        <h2 *ngIf="self" fxLayout="row" class="profile-subtitle" fxFlexOffset="1rem" (click)="info($event)">Info</h2>
+        <h2 *ngIf="!self" fxLayout="row" class="profile-subtitle" fxFlexOffset="1rem" (click)="goto('report')">Report</h2>
       </div>
     </div>
 
@@ -19,11 +23,11 @@
         <h1 class="profile-title" (click)="infoNo()">{{author?.name}}</h1>
       </div>
 
-      <div fxLayout="row" fxFlexOffset="0.5rem" class="profile-input" [formGroup]="emailForm">
+      <div *ngIf="self" fxLayout="row" fxFlexOffset="0.5rem" class="profile-input" [formGroup]="emailForm">
         <input matInput placeholder="Email" class="profile-input" style="font-size: 2rem;font-weight: 300;" type="email" autocomplete="current-email" formControlName="email" required />
       </div>
 
-      <div *ngIf="(emailForm.controls.email && account?.email !== emailForm.controls.email.value) || editBio" fxLayout="column" class="profile-button-group">
+      <div *ngIf="((emailForm.controls.email && account?.email !== emailForm.controls.email.value) || editBio) && self" fxLayout="column" class="profile-button-group">
         <div *ngIf="emailForm.controls.email && account?.email !== emailForm.controls.email.value" fxLayout="row" class="profile-button" fxFlexOffset="1rem">
           <button mat-flat-button class="profile-button" style="background: #EA6C40;" [disabled]="loading || editBio" (click)="setEmail()">Send Email</button>
         </div>

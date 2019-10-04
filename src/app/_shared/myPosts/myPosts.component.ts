@@ -12,7 +12,6 @@ import { Choice } from '../../_models/choice';
 import * as C from '../../_models/constants';
 import { Post } from '../../_models/post';
 import { AreaService } from '../../_services/area.service';
-import { NavBarService } from '../../_services/navBar.service';
 import { PostService } from '../../_services/post.service';
 import { RouteService } from '../../_services/route.service';
 
@@ -49,7 +48,6 @@ export class MyPostsComponent implements OnInit, OnDestroy {
     private router: Router,
     public snackBar: MatSnackBar,
     private areaService: AreaService,
-    private navBarService: NavBarService,
     private postService: PostService,
     private routeService: RouteService
   ) { }

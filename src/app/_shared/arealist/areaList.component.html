@@ -3,11 +3,11 @@
   <div fxLayout="column" class="home-container">
     <div style="margin-top: 3vh;">
       <h2 class="home-title">{{title}}</h2>
-      <div *ngIf="currentView === view().home" fxLayout="row">
+      <!-- <div *ngIf="currentView === view().home" fxLayout="row">
         <div class="home-area-card" (click)="goto(allArea)" fxLayoutAlign="center center">
           <h4 style="color: #ffffff;">All Areas</h4>
         </div>
-      </div>
+      </div> -->
       <div *ngFor="let area of areas">
         <div fxLayout="row">
           <div class="home-area-card" (click)="goto(area)" fxLayoutAlign="center center">

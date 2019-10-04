@@ -999,8 +999,12 @@ input:-webkit-autofill:active  {
   flex-direction: row;
 }
 
-.ngx-pagination li {
+.ngx-pagination li:not(.small-screen) {
   display: flex !important;
+}
+
+li.small-screen {
+  display: none;
 }
 
 .navBar-container {
@@ -1018,4 +1022,13 @@ input:-webkit-autofill:active  {
 
 .mat-slide-toggle.mat-checked:not(.mat-disabled) .mat-slide-toggle-bar {
   background-color: #A2A2A2 !important;
+}
+
+ng-component {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.navBar-container div {
+  cursor: pointer;
 }

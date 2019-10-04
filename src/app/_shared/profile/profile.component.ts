@@ -19,6 +19,7 @@ declare const Compressor: any;
   styleUrls: ['./profile.component.scss']
 })
 export class ProfileComponent implements OnInit, OnDestroy {
+  accId = '-1';
   account: Account;
   author: Author;
   bans: Ban[] = [];
@@ -49,10 +50,57 @@ export class ProfileComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
+    this.loading = true;
     this.route.url
       .subscribe(r => {
         if (r[0]) {
           this.path = r[0].path;
+        }
+
+        if (r[1]) {
+          this.self = false;
+          this.accId = r[1].path;
+          this.profileService.getUser(this.accId).pipe(
+            takeUntil(this.componentDestroyed))
+          .subscribe((self: Author) => {
+            this.author = self;
+            if (this.author.bio === '') {
+              this.author.bio = '*No Bio*';
+            }
+            this.loading = false;
+            this.bioForm.controls.bio.setValue(this.author.bio);
+          });
+        } else {
+          this.self = true;
+          this.profileService.getSelf().pipe(
+            takeUntil(this.componentDestroyed))
+          .subscribe((self: Author) => {
+            this.author = self;
+            if (this.author.bio === '') {
+              this.author.bio = '*No Bio*';
+            }
+            this.loading = false;
+            this.bioForm.controls.bio.setValue(this.author.bio);
+          });
+
+          this.profileService.getAccount().pipe(
+            takeUntil(this.componentDestroyed))
+            .subscribe((self: Account) => {
+              this.account = self;
+              if (this.account.email === '') {
+                this.account.email = '*Please verify your email*';
+              }
+              this.emailForm.controls.email.setValue(this.account.email);
+            });
+
+          this.profileService.getBans(this.limit, (this.index * this.limit) - this.limit).pipe(
+            takeUntil(this.componentDestroyed))
+            .subscribe((superBan: SuperBan) => {
+              superBan.results.forEach((obj: any) => {
+                this.bans.push(Ban.parse(obj));
+              });
+              this.totalCount = superBan.count;
+            });
         }
       });
 
@@ -63,41 +111,23 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.bioForm = new FormGroup({
       'bio': new FormControl(''),
     });
-
-    this.profileService.getSelf().pipe(
-      takeUntil(this.componentDestroyed))
-    .subscribe((self: Author) => {
-      this.author = self;
-      if (this.author.bio === '') {
-        this.author.bio = '*No Bio*';
-      }
-      this.loading = false;
-      this.bioForm.controls.bio.setValue(this.author.bio);
-    });
-
-    this.profileService.getAccount().pipe(
-      takeUntil(this.componentDestroyed))
-      .subscribe((self: Account) => {
-        this.account = self;
-        if (this.account.email === '') {
-          this.account.email = '*Please verify your email*';
-        }
-        this.emailForm.controls.email.setValue(this.account.email);
-      });
-
-    this.profileService.getBans(this.limit, (this.index * this.limit) - this.limit).pipe(
-      takeUntil(this.componentDestroyed))
-      .subscribe((superBan: SuperBan) => {
-        superBan.results.forEach((obj: any) => {
-          this.bans.push(Ban.parse(obj));
-        });
-        this.totalCount = superBan.count;
-      });
   }
 
   ngOnDestroy() {
     this.componentDestroyed.next(true);
     this.componentDestroyed.complete();
+  }
+
+  backOrLogout() {
+    if (this.self) {
+
+    } else {
+      if (this.routeService.routes.length === 0) {
+        this.router.navigateByUrl('');
+      } else {
+        this.router.navigateByUrl(this.routeService.getNextRoute());
+      }
+    }
   }
 
   getBans(page: number) {
@@ -120,52 +150,61 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   goto(s: string) {
-    this.routeService.addNextRoute(this.path);
-
     if (s === 'password') {
+      this.routeService.addNextRoute(this.path);
       this.router.navigateByUrl('/tools/password');
-    } else {
+    } else if (s === 'report') {
+      this.routeService.addNextRoute(this.path);
+      this.router.navigateByUrl(`/tools/report/${this.accId}`);
+    } else if (this.self) {
+      this.routeService.addNextRoute(this.path);
       this.router.navigateByUrl('/tools/image-upload');
     }
   }
 
   info(event: any) {
-    event.stopPropagation();
-    this.snackBar.open('Touch the item you want to edit', 'Close', {
-      duration: 3000
-    });
+    if (this.self) {
+      event.stopPropagation();
+      this.snackBar.open('Touch the item you want to edit', 'Close', {
+        duration: 3000
+      });
+    }
   }
 
   infoNo() {
-    this.snackBar.open('You can not edit this', 'Close', {
-      duration: 3000
-    });
+    if (this.self) {
+      this.snackBar.open('You can not edit this', 'Close', {
+        duration: 3000
+      });
+    }
   }
 
   setBio() {
-    this.loading = true;
+    if (this.self) {
+      this.loading = true;
 
-    if (this.bioForm.valid) {
-      this.profileService.setBio(this.author, this.bioForm.controls.bio.value).pipe(
-        takeUntil(this.componentDestroyed))
-      .subscribe(result => {
-        if (!result.getError()) {
-          this.author = result;
-          this.snackBar.open('Bio changed successfully', 'Close', {
-            duration: 3000
-          });
-          this.toggleBio();
-          this.loading = false;
-        } else {
-          this.errors = result.getError();
-          this.loading = false;
-        }
-      });
-    } else {
-      this.loading = false;
-      this.snackBar.open('Your information is incorrect', 'Close', {
-        duration: 3000
-      });
+      if (this.bioForm.valid) {
+        this.profileService.setBio(this.author, this.bioForm.controls.bio.value).pipe(
+          takeUntil(this.componentDestroyed))
+        .subscribe(result => {
+          if (!result.getError()) {
+            this.author = result;
+            this.snackBar.open('Bio changed successfully', 'Close', {
+              duration: 3000
+            });
+            this.toggleBio();
+            this.loading = false;
+          } else {
+            this.errors = result.getError();
+            this.loading = false;
+          }
+        });
+      } else {
+        this.loading = false;
+        this.snackBar.open('Your information is incorrect', 'Close', {
+          duration: 3000
+        });
+      }
     }
   }
 
@@ -196,10 +235,12 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   toggleBio() {
-    this.editBio = !this.editBio;
+    if (this.self) {
+      this.editBio = !this.editBio;
 
-    if (!this.editBio) {
-      this.bioForm.controls.bio.setValue(this.author.bio);
+      if (!this.editBio) {
+        this.bioForm.controls.bio.setValue(this.author.bio);
+      }
     }
   }
 

@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef, NgZone, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef, NgZone, ViewChild, DoCheck } from '@angular/core';
 import { MatSidenav, MatDialog, MatSnackBar } from '@angular/material';
 import { interval, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -17,7 +17,7 @@ import { BootController } from '../../boot-control';
   templateUrl: 'navBar.component.html',
   styleUrls: ['./navBar.component.scss']
 })
-export class NavBarComponent implements OnInit, OnDestroy {
+export class NavBarComponent implements OnInit, OnDestroy, DoCheck {
   @ViewChild('sidenav', {static: true}) sidenav: MatSidenav;
 
   activeLinkIndex = 1;
@@ -61,11 +61,8 @@ export class NavBarComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    this.router.events.pipe(
-      takeUntil(this.componentDestroyed))
-      .subscribe((url: any) => {
-        this.setActiveIndex(url.url);
-    });
+    this.setActiveIndex(this.router.url);
+
     this.navBarService.loggedIn.pipe(
       takeUntil(this.componentDestroyed))
       .subscribe((loggedIn: boolean) => {
@@ -87,6 +84,11 @@ export class NavBarComponent implements OnInit, OnDestroy {
       this.cdRef.detectChanges();
     }
   }
+
+  ngDoCheck()	{
+    this.setActiveIndex(this.router.url);
+  }
+
 
   ngOnDestroy() {
     this.cdRef.detach();
