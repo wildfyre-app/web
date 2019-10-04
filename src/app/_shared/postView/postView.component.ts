@@ -323,49 +323,54 @@ export class PostViewComponent implements OnInit, OnDestroy {
   refresh(reload: boolean) {
     this.wait = true;
     this.loading = true;
-    this.navBarService.currentArea.pipe(
-      takeUntil(this.componentDestroyed))
-      .subscribe((currentArea: Area) => {
-        if (currentArea.name !== '') {
-          this.currentArea = currentArea;
 
-          if ((reload === true || this.areaCheck !== currentArea.name) && currentArea.name !== '') {
-            this.postService.getNextPost(currentArea.name).pipe(
-              takeUntil(this.componentDestroyed))
-              .subscribe(nextPost => {
-                if (nextPost) {
-                  this.post = nextPost;
-                  this.commentCount = this.post.comments.length;
-                  this.loading = false;
-                  this.areaCheck = this.currentArea.name;
-                  this.navBarService.hasPost.next(true);
-                  this.cdRef.detectChanges();
-                } else {
-                  this.fakePost = new Post(0, this.systemAuthor, false, false,
-                    Date(), false, 'No more posts in this area, try creating one?', null, null, []);
-                  this.post = this.fakePost;
-                  this.commentCount = 0;
-                  this.loading = false;
-                  this.areaCheck = this.currentArea.name;
-                  this.navBarService.hasPost.next(false);
-                  this.cdRef.detectChanges();
-                }
-            });
-          } else if (currentArea.name === '') {
-          } else {
-            this.postService.getPost(this.currentArea.name, this.post.id, false).pipe(
-              takeUntil(this.componentDestroyed))
-              .subscribe(post => {
-                this.post = post;
-                this.commentCount = this.post.comments.length;
-                this.loading = false;
-                this.areaCheck = this.currentArea.name;
-                this.navBarService.hasPost.next(true);
-                this.cdRef.detectChanges();
-            });
-          }
+    this.route.params.pipe(
+      takeUntil(this.componentDestroyed))
+      .subscribe(params => {
+        if (params['area'] !== undefined) {
+          this.areaService.getArea(params['area'])
+          .subscribe(currentArea => {
+            if (currentArea.name !== '') {
+              this.currentArea = currentArea;
+
+              if ((reload === true || this.areaCheck !== currentArea.name) && currentArea.name !== '') {
+                this.postService.getNextPost(currentArea.name).pipe(
+                  takeUntil(this.componentDestroyed))
+                  .subscribe(nextPost => {
+                    if (nextPost) {
+                      this.post = nextPost;
+                      this.commentCount = this.post.comments.length;
+                      this.loading = false;
+                      this.areaCheck = this.currentArea.name;
+                      this.navBarService.hasPost.next(true);
+                      this.cdRef.detectChanges();
+                    } else {
+                      this.fakePost = new Post(0, this.systemAuthor, false, false,
+                        Date(), false, 'No more posts in this area, try creating one?', null, null, []);
+                      this.post = this.fakePost;
+                      this.commentCount = 0;
+                      this.loading = false;
+                      this.areaCheck = this.currentArea.name;
+                      this.navBarService.hasPost.next(false);
+                      this.cdRef.detectChanges();
+                    }
+                });
+              } else {
+                this.postService.getPost(this.currentArea.name, this.post.id, false).pipe(
+                  takeUntil(this.componentDestroyed))
+                  .subscribe(post => {
+                    this.post = post;
+                    this.commentCount = this.post.comments.length;
+                    this.loading = false;
+                    this.areaCheck = this.currentArea.name;
+                    this.navBarService.hasPost.next(true);
+                    this.cdRef.detectChanges();
+                });
+              }
+            }
+          });
         }
-    });
+      });
 
     this.cdRef.detectChanges();
   }

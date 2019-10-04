@@ -47,7 +47,7 @@
     </div>
 
     <!-- Comment CTA -->
-    <div *ngIf="post.id !== 0" (click)="switchView('comment')" fxLayout="row" fxLayoutAlign="space-between center" style="height: 5vh;background: #ffffff;padding-left: 2rem;padding-right: 2rem;box-shadow: 0px -1px 50px rgba(0, 0, 0, 0.25);">
+    <div *ngIf="post.id !== 0" (click)="switchView('comment')" fxLayout="row" fxLayoutAlign="space-between center" style="cursor: pointer;height: 5vh;background: #ffffff;padding-left: 2rem;padding-right: 2rem;box-shadow: 0px -1px 50px rgba(0, 0, 0, 0.25);">
       <p style="margin: 0;">Comments: {{post.comments.length}}</p>
       <i class="material-icons" style="font-size: 40px;">keyboard_arrow_up</i>
     </div>
@@ -58,7 +58,7 @@
 <div id="comment">
   <div fxLayout="column" fxLayoutAlign="center center">
     <div fxLayout="column" class="home-comment-container">
-      <div id="comment-tab" (click)="switchView('home')" fxLayout="row" fxLayoutAlign="space-between center">
+      <div id="comment-tab" (click)="switchView('home')" fxLayout="row" fxLayoutAlign="space-between center" style="cursor: pointer;">
         <p style="margin: 0;">Comments: {{post.comments.length}}</p>
         <i class="material-icons" style="font-size: 40px;">keyboard_arrow_down</i>
       </div>
@@ -97,7 +97,7 @@
           </div>
         </div>
         <!-- <p style="margin: 0;" (click)="openComment()">What's on your mind?</p> -->
-        <p style="margin: 0;" (click)="postComment()">Send</p>
+        <p style="margin: 0;cursor: pointer;" (click)="postComment()">Send</p>
       </div>
     </div>
   </div>
