@@ -75,9 +75,11 @@ export class ProfileComponent implements OnInit, OnDestroy {
         if (r[1]) {
           this.self = false;
           this.accId = r[1].path;
+          console.log(this.accId)
           this.profileService.getUser(this.accId).pipe(
             takeUntil(this.componentDestroyed))
           .subscribe((self: Author) => {
+            console.log(self)
             this.author = self;
             if (this.author.bio === '') {
               this.author.bio = '*No Bio*';

@@ -25,54 +25,81 @@ export class HttpService {
   // HTTP Requests
   DELETE(passedUrl: string): Observable<void> {
     // DELETE to api
+    if (!passedUrl.endsWith('/')) {
+      passedUrl = `${passedUrl}/`;
+    }
     return this.http.delete(this.apiURL + passedUrl, this.getOptions()).pipe(
       catchError((error: any) => this.handleError(error)));
   }
 
   GET(passedUrl: string): Observable<any> {
     // get GET from api
+    if (!passedUrl.endsWith('/')) {
+      passedUrl = `${passedUrl}/`;
+    }
     return this.http.get(this.apiURL + passedUrl, this.getOptions()).pipe(
       catchError((error: any) => this.handleError(error)));
   }
 
   OPTIONS(passedUrl: string): Observable<any> {
     // OPTIONS to api
+    if (!passedUrl.endsWith('/')) {
+      passedUrl = `${passedUrl}/`;
+    }
     return this.http.options(this.apiURL + passedUrl, this.getOptions()).pipe(
       catchError((error: any) => this.handleError(error)));
   }
 
   PATCH(passedUrl: string, body: any): Observable<any> {
     // PATCH to api
+    if (!passedUrl.endsWith('/')) {
+      passedUrl = `${passedUrl}/`;
+    }
     return this.http.patch(this.apiURL + passedUrl, JSON.stringify(body), this.getOptions()).pipe(
       catchError((error: any) => this.handleError(error)));
   }
 
   POST(passedUrl: string, body: any): Observable<any> {
     // POST to api
+    if (!passedUrl.endsWith('/')) {
+      passedUrl = `${passedUrl}/`;
+    }
     return this.http.post(this.apiURL + passedUrl, JSON.stringify(body), this.getOptions()).pipe(
       catchError((error: any) => this.handleError(error)));
   }
 
   POST_IMAGE(passedUrl: string, body: any): Observable<any> {
     // POST to api
+    if (!passedUrl.endsWith('/')) {
+      passedUrl = `${passedUrl}/`;
+    }
     return this.http.post(this.apiURL + passedUrl, body, this.getOptionsForImage()).pipe(
       catchError((error: any) => this.handleError(error)));
   }
 
   POST_NO_TOKEN(passedUrl: string, body: any): Observable<any> {
     // POST to api without an Authorization header
+    if (!passedUrl.endsWith('/')) {
+      passedUrl = `${passedUrl}/`;
+    }
     return this.http.post(this.apiURL + passedUrl, body, this.getOptionsNoToken()).pipe(
       catchError((error: any) => this.handleError(error)));
   }
 
   PUT(passedUrl: string, body: any): Observable<any> {
     // PUT to api
+    if (!passedUrl.endsWith('/')) {
+      passedUrl = `${passedUrl}/`;
+    }
     return this.http.put(this.apiURL + passedUrl, JSON.stringify(body), this.getOptions()).pipe(
       catchError((error: any) => this.handleError(error)));
   }
 
   PUT_IMAGE(passedUrl: string, body: any): Observable<any> {
     // PUT to api
+    if (!passedUrl.endsWith('/')) {
+      passedUrl = `${passedUrl}/`;
+    }
     return this.http.put(this.apiURL + passedUrl, body, this.getOptionsForImage()).pipe(
       catchError((error: any) => this.handleError(error)));
   }
@@ -152,8 +179,12 @@ export class HttpService {
   }
 
   getOptions(): any {
-    return { headers: new HttpHeaders({ 'Content-Type': 'application/json',
-     'Authorization': 'Token ' + this.authenticationService.token}) };
+    let json = `{ "Content-Type": "application/json" }`;
+    if (this.authenticationService.token) {
+      json = `{ "Content-Type": "application/json",
+      "Authorization": "Token " + this.authenticationService.token }`;
+    }
+    return { headers: new HttpHeaders(JSON.parse(json)) };
   }
 
   getOptionsForImage(): any {
