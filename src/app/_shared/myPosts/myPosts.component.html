@@ -1,11 +1,7 @@
 <div fxLayout="column">
-  <div fxLayout="row" fxFlexOffset="2rem" fxLayoutAlign="space-between start" (click)="back()" style="width: 100%;margin-left: 2rem;cursor: pointer;">
-    <i class="material-icons" style="font-size: 40px;">keyboard_arrow_left</i>
-    <div>
-    </div>
-  </div>
   <div fxLayout="column" style="margin-top: 2rem;" class="profile-container">
-    <div fxLayout="row" fxLayoutAlign="start center">
+    <div fxLayout="row" fxLayoutAlign="start center" (click)="back()" style="width: 100%;cursor: pointer;">
+      <i class="material-icons" style="font-size: 40px;">keyboard_arrow_left</i>
       <h1 class="profile-title">My Posts</h1>
       <h1 class="profile-title" fxFlexOffset="1rem" style="margin: 0;color: #A2A2A2"><ng-container *ngIf="currentArea">{{currentArea.displayname}}</ng-container></h1>
     </div>

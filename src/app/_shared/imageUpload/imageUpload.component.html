@@ -9,11 +9,11 @@
       <img *ngIf="!author?.avatar" src="/assets/logo.png" alt="Avatar of {{author?.name}}" style="border-radius: 50%;background: #d3d3d3;" />
     </div>
     <div fxLayout="row" class="imageUpload-button" fxFlexOffset="2rem">
-      <button mat-flat-button class="imageUpload-button" style="background: #EA6C40;" [disabled]="loading">Upload Image</button>
+      <button mat-flat-button class="imageUpload-button" style="background: #EA6C40;color: #ffffff;" [disabled]="loading">Upload Image</button>
       <input id="imageUpload-upload" type="file" accept="image/jpg, image/jpeg, image/png" (change)="uploadImage()" hidden/>
     </div>
     <!-- <div *ngIf="editBio" fxLayout="row" class="imageUpload-button" fxFlexOffset="2rem">
-      <button mat-flat-button class="imageUpload-button" style="background: #EA6C40;" [disabled]="loading" (click)="toggleBio()">Save</button>
+      <button mat-flat-button class="imageUpload-button" style="background: #EA6C40;color: #ffffff;" [disabled]="loading" (click)="toggleBio()">Save</button>
     </div> -->
 
     <div *ngIf="loading" fxLayoutAlign="center center" fxFlexOffset="2rem">

@@ -1,13 +1,13 @@
 <!-- Area List Component -->
 <div id="notifications">
   <div fxLayout="column" class="home-container">
-    <div fxLayout="column" style="margin-top: 3vh;">
+    <div fxLayout="column" style="margin-top: 2rem;">
       <h2 class="home-title">Notifications</h2>
       <div fxLayout="row" class="login-button" fxFlexOffset="2rem">
         <button mat-stroked-button class="login-button" [disabled]="loading">Notification Archive</button>
       </div>
       <div fxLayout="row" class="login-button" fxFlexOffset="2rem">
-        <button mat-flat-button class="login-button" style="background: #EA6C40;" [disabled]="loading">Delete All Notifications</button>
+        <button mat-flat-button class="login-button" style="background: #EA6C40;color: #ffffff;" [disabled]="loading">Delete All Notifications</button>
       </div>
       <div *ngFor="let notification of notifications">
         <div fxLayout="row">

@@ -16,14 +16,14 @@
     <div fxLayout="row" fxFlexOffset="2rem" fxLayoutAlign="space-between center" style="width: 100%">
       <div fxLayout="row" fxLayoutAlign="start center" style="width: 100%">
         <a target="_blank" rel="noopener" href="https://wildfyre.net/terms-and-conditions/" style="padding-right: 2rem">Terms and Conditions</a>
-        <a target="_blank" rel="noopener" href="https://wildfyre.net/privacy-policy/">Privacy Policy</a>
+        <a target="_blank" rel="noopener" href="https://wildfyre.net/privacy-policy/" style="padding-right: 2rem">Privacy Policy</a>
       </div>
       <div id="social" fxLayout="row" fxFlexOffset="2rem" fxLayoutAlign="end center" style="width: 100%">
-        <a target="_blank" rel="noopener" href="https://twitter.com/wildfyreapp" style="padding-right: 2rem"><i class="fab fa-twitter"></i></a>
-        <a target="_blank" rel="noopener" href="https://www.facebook.com/wildfyreapp/" style="padding-right: 2rem"><i class="fab fa-facebook-f"></i></a>
-        <a target="_blank" rel="noopener" href="https://www.instagram.com/wildfyreapp" style="padding-right: 2rem"><i class="fab fa-instagram"></i></a>
-        <a target="_blank" rel="noopener" href="https://linkedin.com/company/wildfyreapp" style="padding-right: 2rem"><i class="fab fa-linkedin-in"></i></a>
-        <a rel="noopener" href="mailto:hello@wildfyre.net" style="padding-right: 2rem"><i class="fas fa-envelope"></i></a>
+        <a target="_blank" rel="noopener" href="https://twitter.com/wildfyreapp" style="padding-left: 2rem"><i class="fab fa-twitter"></i></a>
+        <a target="_blank" rel="noopener" href="https://www.facebook.com/wildfyreapp/" style="padding-left: 2rem"><i class="fab fa-facebook-f"></i></a>
+        <a target="_blank" rel="noopener" href="https://www.instagram.com/wildfyreapp" style="padding-left: 2rem"><i class="fab fa-instagram"></i></a>
+        <a target="_blank" rel="noopener" href="https://linkedin.com/company/wildfyreapp" style="padding-left: 2rem"><i class="fab fa-linkedin-in"></i></a>
+        <a rel="noopener" href="mailto:hello@wildfyre.net" style="padding-left: 2rem"><i class="fas fa-envelope"></i></a>
       </div>
     </div>
   </div>
@@ -164,7 +164,7 @@
     </div>
 
     <div *ngIf="!loading" fxLayout="row" class="login-button" fxFlexOffset="2rem" style="margin-bottom: 2rem;" >
-      <button mat-flat-button class="login-button" style="background: #EA6C40;" [disabled]="loading" (click)="register()">Let's Go!</button>
+      <button mat-flat-button class="login-button" style="background: #EA6C40;color: #ffffff;" [disabled]="loading" (click)="register()">Let's Go!</button>
     </div>
     <div *ngIf="loading" fxLayoutAlign="center center" fxFlexOffset="2rem">
       <mat-progress-spinner></mat-progress-spinner>
@@ -209,7 +209,7 @@
       </div>
 
       <div *ngIf="!loading" fxLayout="row" class="login-button" fxFlexOffset="2rem">
-        <button mat-flat-button class="login-button" style="background: #EA6C40;" [disabled]="loading" (click)="recoverUsername()">Send Email</button>
+        <button mat-flat-button class="login-button" style="background: #EA6C40;color: #ffffff;" [disabled]="loading" (click)="recoverUsername()">Send Email</button>
       </div>
       <div *ngIf="loading" fxLayoutAlign="center center" fxFlexOffset="2rem">
         <mat-progress-spinner></mat-progress-spinner>
@@ -268,7 +268,7 @@
       </div>
 
       <div fxLayout="row" class="login-button" fxFlexOffset="2rem">
-        <button mat-flat-button class="login-button" style="background: #EA6C40;" (click)="recoverPassword()">Send Email</button>
+        <button mat-flat-button class="login-button" style="background: #EA6C40;color: #ffffff;" (click)="recoverPassword()">Send Email</button>
       </div>
       <div *ngIf="loading" fxLayoutAlign="center center" fxFlexOffset="2rem">
         <mat-progress-spinner></mat-progress-spinner>
@@ -314,7 +314,7 @@
         </div>
 
         <div *ngIf="!loading" fxLayout="row" class="login-button" fxFlexOffset="2rem">
-          <button mat-flat-button class="login-button" style="background: #EA6C40;" [disabled]="loading" (click)="recoverUsername()">Send Email</button>
+          <button mat-flat-button class="login-button" style="background: #EA6C40;color: #ffffff;" [disabled]="loading" (click)="recoverUsername()">Send Email</button>
         </div>
         <div *ngIf="loading" fxLayoutAlign="center center" fxFlexOffset="2rem">
           <mat-progress-spinner></mat-progress-spinner>
@@ -389,7 +389,7 @@
         </div>
 
         <div fxLayout="row" class="login-button" fxFlexOffset="2rem">
-          <button mat-flat-button class="login-button" style="background: #EA6C40;" (click)="resetPassword()">Send Email</button>
+          <button mat-flat-button class="login-button" style="background: #EA6C40;color: #ffffff;" (click)="resetPassword()">Send Email</button>
         </div>
         <div *ngIf="loading" fxLayoutAlign="center center" fxFlexOffset="2rem">
           <mat-progress-spinner></mat-progress-spinner>

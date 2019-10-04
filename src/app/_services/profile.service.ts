@@ -51,15 +51,11 @@ export class ProfileService {
   }
 
   getUser(id: string): Observable<Author> {
-    console.log(id)
     if (this.userArray[Number(id)]) {
-      console.log('s')
       return of(this.userArray[Number(id)]);
     } else {
-      console.log('a')
     return this.httpService.GET(`/users/${id}/`).pipe(
       map((response) => {
-        console.log(response)
         this.userArray[Number(id)] = Author.parse(response); // cache
         return this.userArray[Number(id)];
       }));
