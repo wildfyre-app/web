@@ -78,6 +78,8 @@ export class HttpService {
 
   // Handling methods
   private handleError(error: any): Observable<any> {
+    console.error(error);
+
     let message: string;
     let action = 'Close';
     let onAction: Function;
@@ -149,8 +151,13 @@ export class HttpService {
   }
 
   getOptions(): any {
-    return { headers: new HttpHeaders({ 'Content-Type': 'application/json',
-     'Authorization': 'Token ' + this.authenticationService.token}) };
+    const header: { [name: string]: string | string[]; } = {};
+    header['Content-Type'] = 'application/json';
+    if (this.authenticationService.token ) {
+      header['Authorization'] = `Token ${this.authenticationService.token}`;
+    }
+
+    return { headers: new HttpHeaders(header) };
   }
 
   getOptionsForImage(): any {
