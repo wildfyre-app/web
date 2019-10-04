@@ -2,7 +2,8 @@ import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subject } from 'rxjs/Subject';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { Account } from '../../_models/account';
 import { Author } from '../../_models/author';
 import { Ban } from '../../_models/ban';
@@ -63,8 +64,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
       'bio': new FormControl(''),
     });
 
-    this.profileService.getSelf()
-    .takeUntil(this.componentDestroyed)
+    this.profileService.getSelf().pipe(
+      takeUntil(this.componentDestroyed))
     .subscribe((self: Author) => {
       this.author = self;
       if (this.author.bio === '') {
@@ -74,8 +75,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
       this.bioForm.controls.bio.setValue(this.author.bio);
     });
 
-    this.profileService.getAccount()
-      .takeUntil(this.componentDestroyed)
+    this.profileService.getAccount().pipe(
+      takeUntil(this.componentDestroyed))
       .subscribe((self: Account) => {
         this.account = self;
         if (this.account.email === '') {
@@ -84,8 +85,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
         this.emailForm.controls.email.setValue(this.account.email);
       });
 
-    this.profileService.getBans(this.limit, (this.index * this.limit) - this.limit)
-      .takeUntil(this.componentDestroyed)
+    this.profileService.getBans(this.limit, (this.index * this.limit) - this.limit).pipe(
+      takeUntil(this.componentDestroyed))
       .subscribe((superBan: SuperBan) => {
         superBan.results.forEach((obj: any) => {
           this.bans.push(Ban.parse(obj));
@@ -103,8 +104,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.loading = true;
     this.bans = [];
 
-    this.profileService.getBans(this.limit, (this.offset * page) - this.limit)
-      .takeUntil(this.componentDestroyed)
+    this.profileService.getBans(this.limit, (this.offset * page) - this.limit).pipe(
+      takeUntil(this.componentDestroyed))
       .subscribe(superBan => {
 
         superBan.results.forEach((obj: any) => {
@@ -145,8 +146,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.loading = true;
 
     if (this.bioForm.valid) {
-      this.profileService.setBio(this.author, this.bioForm.controls.bio.value)
-      .takeUntil(this.componentDestroyed)
+      this.profileService.setBio(this.author, this.bioForm.controls.bio.value).pipe(
+        takeUntil(this.componentDestroyed))
       .subscribe(result => {
         if (!result.getError()) {
           this.author = result;
@@ -171,8 +172,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
   setEmail() {
     this.loading = true;
     if (this.bioForm.valid) {
-      this.profileService.setEmail(this.emailForm.controls.email.value)
-      .takeUntil(this.componentDestroyed)
+      this.profileService.setEmail(this.emailForm.controls.email.value).pipe(
+        takeUntil(this.componentDestroyed))
       .subscribe(result => {
         if (!result.getError()) {
           this.account = result;

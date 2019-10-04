@@ -1,10 +1,9 @@
 import { Component, OnInit, OnDestroy, ChangeDetectorRef, NgZone, ViewChild } from '@angular/core';
 import { MatSidenav, MatDialog, MatSnackBar } from '@angular/material';
-import { Observable } from 'rxjs/Rx';
+import { interval, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { Router } from '@angular/router';
-import { Subject } from 'rxjs/Subject';
 import { LogoutDialogComponent } from '../_dialogs/logout.dialog.component';
-import { PictureDialogComponent } from '../_dialogs/picture.dialog.component';
 import { Area } from '../_models/area';
 import { CommentData } from '../_models/commentData';
 import { AreaService } from '../_services/area.service';
@@ -19,7 +18,7 @@ import { BootController } from '../../boot-control';
   styleUrls: ['./navBar.component.scss']
 })
 export class NavBarComponent implements OnInit, OnDestroy {
-  @ViewChild('sidenav') sidenav: MatSidenav;
+  @ViewChild('sidenav', {static: true}) sidenav: MatSidenav;
 
   activeLinkIndex = 1;
   areas = new Array<Area>(new Area('', '', 0, 0));
@@ -62,13 +61,13 @@ export class NavBarComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    this.router.events
-      .takeUntil(this.componentDestroyed)
+    this.router.events.pipe(
+      takeUntil(this.componentDestroyed))
       .subscribe((url: any) => {
         this.setActiveIndex(url.url);
     });
-    this.navBarService.loggedIn
-      .takeUntil(this.componentDestroyed)
+    this.navBarService.loggedIn.pipe(
+      takeUntil(this.componentDestroyed))
       .subscribe((loggedIn: boolean) => {
         if (loggedIn === true) {
           this.login();
@@ -108,8 +107,8 @@ export class NavBarComponent implements OnInit, OnDestroy {
   }
 
   login() {
-    this.notificationService.getSuperNotification(10, 0)
-      .takeUntil(this.componentDestroyed)
+    this.notificationService.getSuperNotification(10, 0).pipe(
+      takeUntil(this.componentDestroyed))
       .subscribe(superNotification => {
         this.navBarService.notifications.next(superNotification.count);
         this.cdRef.detectChanges();
@@ -118,32 +117,32 @@ export class NavBarComponent implements OnInit, OnDestroy {
     this.styleMobile = '';
     this.styleDesktop = '';
 
-    this.navBarService.notifications
-      .takeUntil(this.componentDestroyed)
+    this.navBarService.notifications.pipe(
+      takeUntil(this.componentDestroyed))
       .subscribe(num => {
         this.notificationLength = num;
         this.cdRef.detectChanges();
     });
 
-    Observable.interval(2000 * 60)
-      .takeUntil(this.componentDestroyed)
+    interval(2000 * 60).pipe(
+      takeUntil(this.componentDestroyed))
       .subscribe(x => {
-        this.notificationService.getSuperNotification(10, 0)
-          .takeUntil(this.componentDestroyed)
+        this.notificationService.getSuperNotification(10, 0).pipe(
+          takeUntil(this.componentDestroyed))
           .subscribe(superNotification => {
             this.navBarService.notifications.next(superNotification.count);
             this.cdRef.detectChanges();
         });
     });
 
-    this.areaService.getAreas()
-      .takeUntil(this.componentDestroyed)
+    this.areaService.getAreas().pipe(
+      takeUntil(this.componentDestroyed))
       .subscribe(areas => {
         this.areas = [];
 
         for (let i = 0; i < areas.length; i++) {
-          this.areaService.getAreaRep(areas[i].name)
-            .takeUntil(this.componentDestroyed)
+          this.areaService.getAreaRep(areas[i].name).pipe(
+            takeUntil(this.componentDestroyed))
             .subscribe(result => {
               let area;
               area = new Area(
@@ -173,8 +172,8 @@ export class NavBarComponent implements OnInit, OnDestroy {
 
   openLogoutDialog() {
     const dialogRef = this.dialog.open(LogoutDialogComponent);
-    dialogRef.afterClosed()
-      .takeUntil(this.componentDestroyed)
+    dialogRef.afterClosed().pipe(
+      takeUntil(this.componentDestroyed))
       .subscribe(result => {
         if (result.bool) {
           this.loggedIn = false;

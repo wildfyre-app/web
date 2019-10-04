@@ -1,7 +1,8 @@
 import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
-import { MatDialog, MatDialogRef, MatSnackBar } from '@angular/material';
+import { MatDialog, MatSnackBar } from '@angular/material';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Subject } from 'rxjs/Subject';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { ConfirmDeletionDialogComponent } from '../../_dialogs/confirmDeletion.dialog.component';
 import { Notification } from '../../_models/notification';
 import { Post } from '../../_models/post';
@@ -82,15 +83,15 @@ export class NotificationsComponent implements OnInit, OnDestroy {
     this.routeService.resetRoutes();
     this.routeService.addNextRoute('/notification/' + this.index);
 
-    this.route.params
-      .takeUntil(this.componentDestroyed)
+    this.route.params.pipe(
+      takeUntil(this.componentDestroyed))
       .subscribe(params => {
         if (params['index'] !== undefined) {
           this.index = params['index'];
         }
         // get notifications from secure api end point
-        this.notificationService.getSuperNotification(this.limit, (this.index * this.limit) - this.limit)
-          .takeUntil(this.componentDestroyed)
+        this.notificationService.getSuperNotification(this.limit, (this.index * this.limit) - this.limit).pipe(
+          takeUntil(this.componentDestroyed))
           .subscribe(superNotification => {
             this.superNotification = superNotification;
 
@@ -118,8 +119,8 @@ export class NotificationsComponent implements OnInit, OnDestroy {
 
   deleteNotifications() {
     const dialogRef = this.dialog.open(ConfirmDeletionDialogComponent);
-    dialogRef.afterClosed()
-      .takeUntil(this.componentDestroyed)
+    dialogRef.afterClosed().pipe(
+      takeUntil(this.componentDestroyed))
       .subscribe(result => {
         if (result.bool) {
           this.notificationService.deleteNotifications();
@@ -143,8 +144,8 @@ export class NotificationsComponent implements OnInit, OnDestroy {
     this.loading = true;
     this.notifications = [];
 
-    this.notificationService.getSuperNotification(this.limit, (this.offset * page) - this.limit)
-      .takeUntil(this.componentDestroyed)
+    this.notificationService.getSuperNotification(this.limit, (this.offset * page) - this.limit).pipe(
+      takeUntil(this.componentDestroyed))
       .subscribe(superNotification => {
         this.superNotification = superNotification;
 

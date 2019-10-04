@@ -2,7 +2,8 @@ import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatDialog, MatSnackBar } from '@angular/material';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Subject } from 'rxjs/Subject';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { ConfirmDeletionDialogComponent } from '../_dialogs/confirmDeletion.dialog.component';
 import { PictureDialogComponent } from '../_dialogs/picture.dialog.component';
 import { PicturesDialogComponent } from '../_dialogs/pictures.dialog.component';
@@ -55,21 +56,21 @@ export class CreatePostComponent implements OnInit, OnDestroy {
 
     this.routeService.resetRoutes();
 
-    this.route.params
-    .takeUntil(this.componentDestroyed)
+    this.route.params.pipe(
+    takeUntil(this.componentDestroyed))
     .subscribe(params => {
       if (params['area'] !== undefined) {
         this.areaService.getArea(params['area']).subscribe(area => {
           this.currentArea = area;
 
-          this.route.params
-          .takeUntil(this.componentDestroyed)
+          this.route.params.pipe(
+          takeUntil(this.componentDestroyed))
           .subscribe(params2 => {
             if (params2['id'] !== undefined) {
               this.isDraft = true;
 
-              this.postService.getPost(this.currentArea.name, params2['id'], true)
-                .takeUntil(this.componentDestroyed)
+              this.postService.getPost(this.currentArea.name, params2['id'], true).pipe(
+                takeUntil(this.componentDestroyed))
                 .subscribe(post => {
                   this.post = post;
                   this.loading = false;
@@ -246,8 +247,8 @@ export class CreatePostComponent implements OnInit, OnDestroy {
         this.imageData,
         draft,
         this.post.id
-      )
-      .takeUntil(this.componentDestroyed)
+      ).pipe(
+      takeUntil(this.componentDestroyed))
       .subscribe(result => {
         if (!result.getError()) {
           this.postForm.controls.post.setValue('');
@@ -275,8 +276,8 @@ export class CreatePostComponent implements OnInit, OnDestroy {
   }
 
   deleteImage() {
-    this.postService.deleteImage(null, this.post.id, this.currentArea.name, this.postForm.controls.post.value.post.text)
-      .takeUntil(this.componentDestroyed)
+    this.postService.deleteImage(null, this.post.id, this.currentArea.name, this.postForm.controls.post.value.post.text).pipe(
+      takeUntil(this.componentDestroyed))
       .subscribe(result2 => {
         this.post.image = '';
         this.imageData = null;
@@ -315,8 +316,8 @@ export class CreatePostComponent implements OnInit, OnDestroy {
     this.loading = true;
     const posts: Post[] = [];
 
-    this.postService.getDrafts(this.currentArea.name, this.limit, (this.offset * page) - this.limit)
-      .takeUntil(this.componentDestroyed)
+    this.postService.getDrafts(this.currentArea.name, this.limit, (this.offset * page) - this.limit).pipe(
+      takeUntil(this.componentDestroyed))
       .subscribe(superPost => {
         superPost.results.forEach((obj: any) => {
           posts.push(Post.parse(obj));
@@ -355,8 +356,8 @@ export class CreatePostComponent implements OnInit, OnDestroy {
 
   openDraftDeleteDialog() {
     const dialogRef = this.dialog.open(ConfirmDeletionDialogComponent);
-    dialogRef.afterClosed()
-      .takeUntil(this.componentDestroyed)
+    dialogRef.afterClosed().pipe(
+      takeUntil(this.componentDestroyed))
       .subscribe(result => {
         if (result.bool) {
           this.postService.deletePost(this.currentArea.name, this.post.id, true);
@@ -370,8 +371,8 @@ export class CreatePostComponent implements OnInit, OnDestroy {
 
   openPictureDialog() {
     const dialogRef = this.dialog.open(PictureDialogComponent);
-    dialogRef.afterClosed()
-      .takeUntil(this.componentDestroyed)
+    dialogRef.afterClosed().pipe(
+      takeUntil(this.componentDestroyed))
       .subscribe(result => {
         if (this.postForm.controls.post.value === '') {
           this.postForm.controls.post.setValue(this.postForm.controls.post.value + '.');
@@ -386,11 +387,11 @@ export class CreatePostComponent implements OnInit, OnDestroy {
                 '',
                 true,
                 this.post.id
-              )
-              .takeUntil(this.componentDestroyed)
+              ).pipe(
+              takeUntil(this.componentDestroyed))
               .subscribe(result3 => {
-                this.postService.setPicture(result.picture, result3, this.currentArea.name)
-                  .takeUntil(this.componentDestroyed)
+                this.postService.setPicture(result.picture, result3, this.currentArea.name).pipe(
+                  takeUntil(this.componentDestroyed))
                   .subscribe(result4 => {
                     if (result4) {
                       this.imageData = result4.image;
@@ -411,8 +412,8 @@ export class CreatePostComponent implements OnInit, OnDestroy {
                 });
               });
             } else {
-              this.postService.setPicture(result.picture, this.post, this.currentArea.name)
-                .takeUntil(this.componentDestroyed)
+              this.postService.setPicture(result.picture, this.post, this.currentArea.name).pipe(
+                takeUntil(this.componentDestroyed))
                 .subscribe(result2 => {
                   if (!result2.getError()) {
                   this.post.image = result2.image;
@@ -444,8 +445,8 @@ export class CreatePostComponent implements OnInit, OnDestroy {
     dialogRef.componentInstance.post = this.post;
     dialogRef.componentInstance.area = this.currentArea.name;
 
-    dialogRef.afterClosed()
-      .takeUntil(this.componentDestroyed)
+    dialogRef.afterClosed().pipe(
+      takeUntil(this.componentDestroyed))
       .subscribe(result => {
         if (this.postForm.controls.post.value === '') {
           this.postForm.controls.post.setValue(this.postForm.controls.post.value + '.');
@@ -460,11 +461,11 @@ export class CreatePostComponent implements OnInit, OnDestroy {
                 '',
                 true,
                 this.post.id
-              )
-              .takeUntil(this.componentDestroyed)
+              ).pipe(
+              takeUntil(this.componentDestroyed))
               .subscribe(result3 => {
-                this.postService.setDraftPictures(result.picture, result3, this.currentArea.name, result.comment, result.slot)
-                  .takeUntil(this.componentDestroyed)
+                this.postService.setDraftPictures(result.picture, result3, this.currentArea.name, result.comment, result.slot).pipe(
+                  takeUntil(this.componentDestroyed))
                   .subscribe(result4 => {
                     if (result4) {
                       this.post.additional_images.splice(result.slot, 0, result4);
@@ -485,8 +486,8 @@ export class CreatePostComponent implements OnInit, OnDestroy {
                 });
               });
             } else {
-              this.postService.setDraftPictures(result.picture, this.post, this.currentArea.name, result.comment, result.slot)
-                .takeUntil(this.componentDestroyed)
+              this.postService.setDraftPictures(result.picture, this.post, this.currentArea.name, result.comment, result.slot).pipe(
+                takeUntil(this.componentDestroyed))
                 .subscribe(result2 => {
                   if (result2) {
                     this.post.additional_images.splice(result.slot, 0, result2);
@@ -516,8 +517,8 @@ export class CreatePostComponent implements OnInit, OnDestroy {
 
   openYoutubeDialog() {
     const dialogRef = this.dialog.open(YouTubeDialogComponent);
-    dialogRef.afterClosed()
-      .takeUntil(this.componentDestroyed)
+    dialogRef.afterClosed().pipe(
+      takeUntil(this.componentDestroyed))
       .subscribe(result => {
         if (result.url) {
           result.url = result.url
@@ -557,8 +558,8 @@ export class CreatePostComponent implements OnInit, OnDestroy {
         this.imageData,
         true,
         this.post.id
-      )
-      .takeUntil(this.componentDestroyed)
+      ).pipe(
+      takeUntil(this.componentDestroyed))
       .subscribe(result => {
         if (!result.getError()) {
           this.postService.publishDraft(this.currentArea.name, this.post.id);

@@ -1,4 +1,5 @@
-import { Component, Input, OnInit, ViewEncapsulation, trigger, state, style, transition, animate } from '@angular/core';
+import { trigger, state, style, transition, animate } from '@angular/animations';
+import { Component, Input, OnInit } from '@angular/core';
 import { Properties } from '../properties.utils';
 
 @Component({

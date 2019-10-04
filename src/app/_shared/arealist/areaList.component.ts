@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subject } from 'rxjs/Subject';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { Area } from '../../_models/area';
 import { AreaService } from '../../_services/area.service';
 import { NavBarService } from '../../_services/navBar.service';
@@ -46,14 +47,14 @@ export class AreaListComponent implements OnInit, OnDestroy {
         }
       });
 
-    this.areaService.getAreas()
-    .takeUntil(this.componentDestroyed)
+    this.areaService.getAreas().pipe(
+    takeUntil(this.componentDestroyed))
     .subscribe(areas => {
       this.areas = [];
 
       for (let i = 0; i < areas.length; i++) {
-        this.areaService.getAreaRep(areas[i].name)
-          .takeUntil(this.componentDestroyed)
+        this.areaService.getAreaRep(areas[i].name).pipe(
+          takeUntil(this.componentDestroyed))
           .subscribe(result => {
             let area;
             area = new Area(

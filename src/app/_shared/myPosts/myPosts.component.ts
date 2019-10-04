@@ -2,7 +2,8 @@ import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Subject } from 'rxjs/Subject';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { Account } from '../../_models/account';
 import { Area } from '../../_models/area';
 import { Author } from '../../_models/author';
@@ -115,12 +116,12 @@ export class MyPostsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.route.params
-    .takeUntil(this.componentDestroyed)
+    this.route.params.pipe(
+    takeUntil(this.componentDestroyed))
     .subscribe(params => {
       if (params['area'] !== undefined) {
-        this.areaService.getAreas()
-          .takeUntil(this.componentDestroyed)
+        this.areaService.getAreas().pipe(
+          takeUntil(this.componentDestroyed))
           .subscribe((areas) => {
             for (let i = 0; i <= areas.length - 1; i++) {
               if (areas[i].name === params['area']) {
@@ -136,8 +137,8 @@ export class MyPostsComponent implements OnInit, OnDestroy {
             }
             const posts: Post[] = [];
 
-            this.postService.getOwnPosts(this.currentArea.name, this.limit, 0)
-              .takeUntil(this.componentDestroyed)
+            this.postService.getOwnPosts(this.currentArea.name, this.limit, 0).pipe(
+              takeUntil(this.componentDestroyed))
               .subscribe(superPost => {
                 superPost.results.forEach((obj: any) => {
                   posts.push(Post.parse(obj));
@@ -183,8 +184,8 @@ export class MyPostsComponent implements OnInit, OnDestroy {
     this.loading = true;
     const posts: Post[] = [];
 
-    this.postService.getOwnPosts(this.currentArea.name, this.limit, (this.offset * page) - this.limit)
-      .takeUntil(this.componentDestroyed)
+    this.postService.getOwnPosts(this.currentArea.name, this.limit, (this.offset * page) - this.limit).pipe(
+      takeUntil(this.componentDestroyed))
       .subscribe(superPost => {
         superPost.results.forEach((obj: any) => {
           posts.push(Post.parse(obj));

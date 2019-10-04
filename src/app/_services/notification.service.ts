@@ -1,9 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Response } from '@angular/http';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/map';
-import { Notification } from '../_models/notification';
-import { Post } from '../_models/post';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { SuperNotification } from '../_models/superNotification';
 import { SuperPost } from '../_models/superPost';
 import { HttpService } from './http.service';
@@ -27,12 +24,12 @@ export class NotificationService {
   }
 
   getArchive(area: string, limit: number, offset: number): Observable<SuperPost> {
-    return this.httpService.GET('/areas/' + area + '/subscribed/?limit=' + limit + '&offset=' + offset)
-      .map((response: Response) => {
+    return this.httpService.GET('/areas/' + area + '/subscribed/?limit=' + limit + '&offset=' + offset).pipe(
+      map((response) => {
         this.superPosts[area] = SuperPost.parse(response);
 
         return this.superPosts[area];
-      });
+      }));
   }
 
   getNotificationLength() {
@@ -51,10 +48,10 @@ export class NotificationService {
     if (offset === undefined) {
       offset = 0;
     }
-    return this.httpService.GET('/areas/notification/?limit=' + limit + '&offset=' + offset)
-      .map((response: Response) => {
+    return this.httpService.GET('/areas/notification/?limit=' + limit + '&offset=' + offset).pipe(
+      map((response) => {
         this.superNotification = SuperNotification.parse(response);
         return this.superNotification;
-      });
+      }));
   }
 }

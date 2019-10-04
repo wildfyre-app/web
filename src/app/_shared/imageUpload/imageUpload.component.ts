@@ -1,7 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
-import { Subject } from 'rxjs/Subject';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { Author } from '../../_models/author';
 import { ProfileService } from '../../_services/profile.service';
 import { RouteService } from '../../_services/route.service';
@@ -26,8 +27,8 @@ export class ImageUploadComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    this.profileService.getSelf()
-    .takeUntil(this.componentDestroyed)
+    this.profileService.getSelf().pipe(
+    takeUntil(this.componentDestroyed))
     .subscribe((self: Author) => {
       this.author = self;
       if (this.author.bio === '') {
@@ -66,8 +67,8 @@ export class ImageUploadComponent implements OnInit, OnDestroy {
   }
 
   uploadImg(r: Blob) {
-    this.profileService.setProfilePicture(r)
-      .takeUntil(this.componentDestroyed)
+    this.profileService.setProfilePicture(r).pipe(
+      takeUntil(this.componentDestroyed))
       .subscribe((result2: Author)  => {
         if (!result2.getError()) {
           this.author.avatar = result2.avatar;

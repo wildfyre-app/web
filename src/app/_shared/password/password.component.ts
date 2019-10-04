@@ -2,7 +2,8 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
-import { Subject } from 'rxjs/Subject';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { Account } from '../../_models/account';
 import { AuthenticationService } from '../../_services/authentication.service';
 import { ProfileService } from '../../_services/profile.service';
@@ -54,17 +55,17 @@ export class PasswordComponent implements OnInit, OnDestroy {
     this.loading = true;
 
     if (this.passwordForm.valid) {
-      this.authenticationService.login(this.account.username, this.passwordForm.controls.oldPassword.value)
-        .takeUntil(this.componentDestroyed)
+      this.authenticationService.login(this.account.username, this.passwordForm.controls.oldPassword.value).pipe(
+        takeUntil(this.componentDestroyed))
         .subscribe(result => {
           if (!result.getError()) {
             if (this.passwordForm.controls.password.value === this.passwordForm.controls.password2.value) {
-              this.profileService.setPassword(this.passwordForm.controls.password.value)
-                .takeUntil(this.componentDestroyed)
+              this.profileService.setPassword(this.passwordForm.controls.password.value).pipe(
+                takeUntil(this.componentDestroyed))
                 .subscribe(result2 => {
                   if (!result2.getError()) {
-                    this.authenticationService.login(this.account.username, this.passwordForm.controls.password.value)
-                      .takeUntil(this.componentDestroyed)
+                    this.authenticationService.login(this.account.username, this.passwordForm.controls.password.value).pipe(
+                      takeUntil(this.componentDestroyed))
                       .subscribe(result3 => {
                         if (!result3.getError()) {
                           this.loading = false;

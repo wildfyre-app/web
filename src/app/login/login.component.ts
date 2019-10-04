@@ -1,9 +1,9 @@
-﻿import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
-import 'rxjs/add/operator/catch';
-import { Subject } from 'rxjs/Subject';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { AuthenticationService } from '../_services/authentication.service';
 import { NavBarService } from '../_services/navBar.service';
 import { NotificationService } from '../_services/notification.service';
@@ -16,7 +16,7 @@ import { ReCaptchaComponent } from 'angular2-recaptcha';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit, OnDestroy {
-  @ViewChild(ReCaptchaComponent) captcha: ReCaptchaComponent;
+  @ViewChild(ReCaptchaComponent, {static: true}) captcha: ReCaptchaComponent;
 
   componentDestroyed: Subject<boolean> = new Subject();
   errors: any;
@@ -120,12 +120,12 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.submitted = false;
 
     if (this.loginForm.valid) {
-      this.authenticationService.login(this.loginForm.controls.usernamel.value, this.loginForm.controls.passwordl.value)
-        .takeUntil(this.componentDestroyed)
+      this.authenticationService.login(this.loginForm.controls.usernamel.value, this.loginForm.controls.passwordl.value).pipe(
+        takeUntil(this.componentDestroyed))
         .subscribe(result => {
           if (!result.getError()) {
-            this.notificationService.getSuperNotification(10, 0)
-              .takeUntil(this.componentDestroyed)
+            this.notificationService.getSuperNotification(10, 0).pipe(
+              takeUntil(this.componentDestroyed))
               .subscribe(superNotification => {
                 this.navBarService.notifications.next(superNotification.count);
             });
@@ -157,8 +157,8 @@ export class LoginComponent implements OnInit, OnDestroy {
       this.registrationService.recoverPasswordStep1(
         this.recoverPasswordForm.controls.emailrp.value,
         this.recoverPasswordForm.controls.usernamerp.value,
-        this.token)
-        .takeUntil(this.componentDestroyed)
+        this.token).pipe(
+        takeUntil(this.componentDestroyed))
         .subscribe(result => {
           if (!result.getError()) {
             this.router.navigateByUrl('/recover/password/' + result.transaction);
@@ -186,8 +186,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.submitted = false;
 
     if (this.recoverUsernameForm.valid) {
-      this.registrationService.recoverUsername(this.recoverUsernameForm.controls.emailru.value, this.token)
-      .takeUntil(this.componentDestroyed)
+      this.registrationService.recoverUsername(this.recoverUsernameForm.controls.emailru.value, this.token).pipe(
+      takeUntil(this.componentDestroyed))
       .subscribe(result => {
         if (!result.getError()) {
           this.snackBar.open('We will contact you via the information provided', 'Close', {
@@ -221,8 +221,8 @@ export class LoginComponent implements OnInit, OnDestroy {
           this.registerForm.controls.usernamer.value,
           this.registerForm.controls.emailr.value,
           this.registerForm.controls.passwordr.value,
-          this.token)
-          .takeUntil(this.componentDestroyed)
+          this.token).pipe(
+          takeUntil(this.componentDestroyed))
           .subscribe(result => {
             if (!result.getError()) {
               this.router.navigate(['/register/success']);
@@ -257,8 +257,8 @@ export class LoginComponent implements OnInit, OnDestroy {
           this.recoverPasswordForm2.controls.passwordrp2.value,
           this.recoverPasswordForm2.controls.tokenrp2.value,
           this.resetTransaction,
-          this.token)
-          .takeUntil(this.componentDestroyed)
+          this.token).pipe(
+          takeUntil(this.componentDestroyed))
           .subscribe(result => {
             if (!result.getError()) {
               this.snackBar.open('Your new password is now set', 'Close', {
