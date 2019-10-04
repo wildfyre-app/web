@@ -4,7 +4,7 @@ import { takeUntil } from 'rxjs/operators';
 import { AreaService } from './_services/area.service';
 import { AuthenticationService } from './_services/authentication.service';
 import { NavBarService } from './_services/navBar.service';
-import { Angulartics2Piwik } from 'angulartics2';
+import { Angulartics2Piwik } from 'angulartics2/piwik';
 
 @Component({
   selector: 'app-component',
@@ -21,6 +21,7 @@ export class AppComponent implements OnDestroy {
     private navBarService: NavBarService,
     angulartics2Piwik: Angulartics2Piwik
   ) {
+      angulartics2Piwik.startTracking();
       if (this.authenticationService.token) {
         this.areaService.getAreas().pipe(
           takeUntil(this.componentDestroyed))

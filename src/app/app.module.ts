@@ -58,7 +58,8 @@ import { RouteService } from './_services/route.service';
 import { Routing } from './app.routing';
 
 // Third Party Modules
-import { Angulartics2Module, Angulartics2Piwik } from 'angulartics2';
+import { Angulartics2Module } from 'angulartics2';
+import { Angulartics2Piwik } from 'angulartics2/piwik';
 import { ClipboardModule } from 'ngx-clipboard';
 import 'hammerjs';
 import { ImageCropperModule } from 'ngx-img-cropper';
@@ -69,7 +70,7 @@ import { ReCaptchaModule } from 'angular2-recaptcha';
 @NgModule({
   imports: [
     // forRoot
-    Angulartics2Module.forRoot([ Angulartics2Piwik ]),
+    Angulartics2Module.forRoot(),
 
     // Modules
     BrowserAnimationsModule,
