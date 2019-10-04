@@ -7,7 +7,7 @@
   <div fxLayout="column" class="profile-container">
     <div fxLayout="row" fxFlexOffset="2rem" fxLayoutAlign="space-between start" (click)="goto('image')" style="width: 100%;height: 30vh;cursor: pointer;">
       <!-- <i class="mate  rial-icons" style="font-size: 40px;">keyboard_arrow_left</i> -->
-      <div fxLayout="row" fxLayoutAlign="center center" (click)="backOrLogout()">
+      <div fxLayout="row" fxLayoutAlign="center center" (click)="backOrLogout($event)">
         <i class="material-icons" style="font-size: 40px;">keyboard_arrow_left</i>
         <h2 class="home-title">Profile</h2>
       </div>

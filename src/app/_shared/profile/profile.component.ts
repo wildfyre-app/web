@@ -1,16 +1,19 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, NgZone, ChangeDetectorRef, } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar, MatDialog } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { LogoutDialogComponent } from '../../_dialogs/logout.dialog.component';
 import { Account } from '../../_models/account';
 import { Author } from '../../_models/author';
 import { Ban } from '../../_models/ban';
 import { Post } from '../../_models/post';
 import { SuperBan } from '../../_models/superBan';
+import { AuthenticationService } from '../../_services/authentication.service';
 import { ProfileService } from '../../_services/profile.service';
 import { RouteService } from '../../_services/route.service';
+import { BootController } from '../../../boot-control';
 
 declare const Compressor: any;
 
@@ -43,14 +46,26 @@ export class ProfileComponent implements OnInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private cdRef: ChangeDetectorRef,
+    private dialog: MatDialog,
+    private ngZone: NgZone,
     private router: Router,
     public snackBar: MatSnackBar,
+    private authenticationService: AuthenticationService,
     private profileService: ProfileService,
     private routeService: RouteService
   ) { }
 
   ngOnInit() {
     this.loading = true;
+
+    this.emailForm = new FormGroup({
+      'email': new FormControl(''),
+    });
+
+    this.bioForm = new FormGroup({
+      'bio': new FormControl(''),
+    });
+
     this.route.url
       .subscribe(r => {
         if (r[0]) {
@@ -103,14 +118,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
             });
         }
       });
-
-    this.emailForm = new FormGroup({
-      'email': new FormControl(''),
-    });
-
-    this.bioForm = new FormGroup({
-      'bio': new FormControl(''),
-    });
   }
 
   ngOnDestroy() {
@@ -118,9 +125,10 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.componentDestroyed.complete();
   }
 
-  backOrLogout() {
+  backOrLogout(event: any) {
+    event.stopPropagation();
     if (this.self) {
-
+      this.openLogoutDialog();
     } else {
       if (this.routeService.routes.length === 0) {
         this.router.navigateByUrl('');
@@ -150,15 +158,19 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   goto(s: string) {
-    if (s === 'password') {
-      this.routeService.addNextRoute(this.path);
-      this.router.navigateByUrl('/tools/password');
-    } else if (s === 'report') {
-      this.routeService.addNextRoute(this.path);
-      this.router.navigateByUrl(`/tools/report/${this.accId}`);
-    } else if (this.self) {
-      this.routeService.addNextRoute(this.path);
-      this.router.navigateByUrl('/tools/image-upload');
+    if (this.self) {
+      if (s === 'password') {
+        this.routeService.addNextRoute(this.path);
+        this.router.navigateByUrl('/tools/password');
+      } else if (this.self) {
+        this.routeService.addNextRoute(this.path);
+        this.router.navigateByUrl('/tools/image-upload');
+      }
+    } else {
+      if (s === 'report') {
+        this.routeService.addNextRoute(this.path);
+        this.router.navigateByUrl(`/tools/report/${this.accId}`);
+      }
     }
   }
 
@@ -177,6 +189,27 @@ export class ProfileComponent implements OnInit, OnDestroy {
         duration: 3000
       });
     }
+  }
+
+  openLogoutDialog() {
+    const dialogRef = this.dialog.open(LogoutDialogComponent);
+    dialogRef.afterClosed().pipe(
+      takeUntil(this.componentDestroyed))
+      .subscribe(result => {
+        if (result.bool) {
+          this.authenticationService.logout();
+          // Triggers the reboot in main.ts
+          this.ngZone.runOutsideAngular(() => BootController.getbootControl().restart());
+          this.cdRef.detach();
+          this.componentDestroyed.next(true);
+          this.componentDestroyed.complete();
+
+          this.snackBar.open('You were logged out successfully', 'Close', {
+            duration: 3000
+          });
+          this.router.navigateByUrl('/login');
+        }
+      });
   }
 
   setBio() {

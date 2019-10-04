@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
-import { Subject } from 'rxjs';
+import { interval, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { AuthenticationService } from '../_services/authentication.service';
 import { NavBarService } from '../_services/navBar.service';
@@ -128,6 +128,16 @@ export class LoginComponent implements OnInit, OnDestroy {
               takeUntil(this.componentDestroyed))
               .subscribe(superNotification => {
                 this.navBarService.notifications.next(superNotification.count);
+
+                interval(2000 * 60).pipe(
+                  takeUntil(this.componentDestroyed))
+                  .subscribe(x => {
+                    this.notificationService.getSuperNotification(10, 0).pipe(
+                      takeUntil(this.componentDestroyed))
+                      .subscribe(superNotification => {
+                        this.navBarService.notifications.next(superNotification.count);
+                    });
+                });
             });
             this.navBarService.loggedIn.next(true);
             this.navBarService.areaVisible.next(true);

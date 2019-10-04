@@ -1,16 +1,10 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef, NgZone, ViewChild, DoCheck } from '@angular/core';
-import { MatSidenav, MatDialog, MatSnackBar } from '@angular/material';
-import { interval, Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef, ViewChild, DoCheck } from '@angular/core';
+import { MatSidenav, MatSnackBar } from '@angular/material';
+import { Subject } from 'rxjs';
 import { Router } from '@angular/router';
-import { LogoutDialogComponent } from '../_dialogs/logout.dialog.component';
 import { Area } from '../_models/area';
 import { CommentData } from '../_models/commentData';
-import { AreaService } from '../_services/area.service';
 import { AuthenticationService } from '../_services/authentication.service';
-import { NavBarService } from '../_services/navBar.service';
-import { NotificationService } from '../_services/notification.service';
-import { BootController } from '../../boot-control';
 
 @Component({
   selector: 'app-nav-bar',
@@ -50,38 +44,17 @@ export class NavBarComponent implements OnInit, OnDestroy, DoCheck {
 
   constructor(
     private cdRef: ChangeDetectorRef,
-    private dialog: MatDialog,
-    private ngZone: NgZone,
     private router: Router,
     public snackBar: MatSnackBar,
-    private areaService: AreaService,
     private authenticationService: AuthenticationService,
-    private notificationService: NotificationService,
-    private navBarService: NavBarService
   ) { }
 
   ngOnInit() {
-    this.setActiveIndex(this.router.url);
-
-    this.navBarService.loggedIn.pipe(
-      takeUntil(this.componentDestroyed))
-      .subscribe((loggedIn: boolean) => {
-        if (loggedIn === true) {
-          this.login();
-          this.styleMobile = '';
-          this.styleDesktop = '';
-        }
-        this.cdRef.detectChanges();
-    });
-
     if (this.authenticationService.token) {
-      this.login();
+      this.setActiveIndex(this.router.url);
       this.loggedIn = true;
     } else {
-      this.styleMobile = 'none';
-      this.styleDesktop = 'none';
-      this.navBarService.areaVisible.next(false);
-      this.cdRef.detectChanges();
+      this.activeLinkIndex = -1;
     }
   }
 
@@ -106,97 +79,6 @@ export class NavBarComponent implements OnInit, OnDestroy, DoCheck {
     } else {
       return nLength.toString();
     }
-  }
-
-  login() {
-    this.notificationService.getSuperNotification(10, 0).pipe(
-      takeUntil(this.componentDestroyed))
-      .subscribe(superNotification => {
-        this.navBarService.notifications.next(superNotification.count);
-        this.cdRef.detectChanges();
-    });
-
-    this.styleMobile = '';
-    this.styleDesktop = '';
-
-    this.navBarService.notifications.pipe(
-      takeUntil(this.componentDestroyed))
-      .subscribe(num => {
-        this.notificationLength = num;
-        this.cdRef.detectChanges();
-    });
-
-    interval(2000 * 60).pipe(
-      takeUntil(this.componentDestroyed))
-      .subscribe(x => {
-        this.notificationService.getSuperNotification(10, 0).pipe(
-          takeUntil(this.componentDestroyed))
-          .subscribe(superNotification => {
-            this.navBarService.notifications.next(superNotification.count);
-            this.cdRef.detectChanges();
-        });
-    });
-
-    this.areaService.getAreas().pipe(
-      takeUntil(this.componentDestroyed))
-      .subscribe(areas => {
-        this.areas = [];
-
-        for (let i = 0; i < areas.length; i++) {
-          this.areaService.getAreaRep(areas[i].name).pipe(
-            takeUntil(this.componentDestroyed))
-            .subscribe(result => {
-              let area;
-              area = new Area(
-                areas[i].name,
-                areas[i].displayname,
-                result.reputation,
-                result.spread
-              );
-
-              this.areas.push(area);
-
-              this.currentArea = this.areas[0];
-              this.areaService.currentAreaName = this.currentArea.name;
-              this.navBarService.currentArea.next(this.currentArea);
-              this.cdRef.detectChanges();
-          });
-        }
-      });
-      this.loggedIn = true;
-  }
-
-  onChange(area: Area) {
-    this.currentArea = area;
-    this.areaService.currentAreaName = this.currentArea.name;
-    this.navBarService.currentArea.next(this.currentArea);
-  }
-
-  openLogoutDialog() {
-    const dialogRef = this.dialog.open(LogoutDialogComponent);
-    dialogRef.afterClosed().pipe(
-      takeUntil(this.componentDestroyed))
-      .subscribe(result => {
-        if (result.bool) {
-          this.loggedIn = false;
-          this.authenticationService.logout();
-          // Triggers the reboot in main.ts
-          this.ngZone.runOutsideAngular(() => BootController.getbootControl().restart());
-          this.cdRef.detach();
-          this.componentDestroyed.next(true);
-          this.componentDestroyed.complete();
-
-          this.snackBar.open('You were logged out successfully', 'Close', {
-            duration: 3000
-          });
-          this.router.navigateByUrl('/login');
-        }
-      });
-  }
-
-  postComment() {
-    this.commentDisabled = true;
-    this.navBarService.comment.next(this.comment);
   }
 
   setActiveIndex(s: string) {
