@@ -1,7 +1,7 @@
 <!-- Post Content -->
 <div id="post" style="margin-bottom:25vh;">
   <div *ngIf="post.image" class="home-content-image">
-    <img src="{{post.image}}" />
+    <img style="max-height: 40vh;object-fit: contain;" src="{{post.image}}" />
   </div>
 
   <div style="background: transparent;padding-left: 2rem;padding-right: 2rem;margin-top: 10vh;" [innerHTML]="post.text | marked"></div>
@@ -11,11 +11,12 @@
 <div id="home">
   <div fxLayout="column" class="home-content-container">
     <div fxLayout="row" fxLayoutAlign="space-between center" style="width: 100%;height: 10vh;padding-left: 2rem;padding-right: 2rem;">
-      <!-- <i class="material-icons" style="font-size: 40px;">keyboard_arrow_left</i> -->
-      <div fxLayout="row" fxLayoutAlign="center center" (click)="switchRoute('home')" style="cursor: pointer;">
+      <div fxLayout="row" fxLayoutAlign="start center" (click)="switchRoute('home')" style="width: 100%;cursor: pointer;">
         <i class="material-icons" style="font-size: 40px;">keyboard_arrow_left</i>
-        <h2 *ngIf="currentArea" class="home-subtitle">{{currentArea.displayname}}</h2>
+        <h1 class="profile-title">Home</h1>
+        <h1 class="profile-title" fxFlexOffset="1rem" style="margin: 0;color: #A2A2A2"><ng-container *ngIf="currentArea">{{currentArea.displayname}}</ng-container></h1>
       </div>
+
       <div fxLayoutAlign="center center">
           <h2 fxLayout="row" class="home-subtitle" fxFlexOffset="1rem" (click)="info($event)" style="cursor: pointer;">Info</h2>
       </div>
@@ -27,8 +28,8 @@
     <!-- Post Identity -->
     <div fxLayout="row" fxLayoutAlign="space-between center" [className]="hasPostId ? 'hideEndorse' : ''" style="margin-top:65vh;border-top-left-radius: 30px;border-top-right-radius: 30px;height: 10vh;background: #ffffff;padding-left: 2rem;padding-right: 2rem;">
       <i *ngIf="post.id !== 0" class="material-icons" style="font-size: 40px;cursor: pointer;">outlined_flag</i>
-      <img style="cursor: pointer;width: 40px;height: 40px;border-radius: 20px;background: #d3d3d3;" (click)="gotoUser(post.author.user)" *ngIf="post.author.avatar" [src]="post.author.avatar" alt="Avatar of {{post.author.name}}"/>
-      <img style="cursor: pointer;width: 40px;height: 40px;border-radius: 20px;background: #d3d3d3;" (click)="gotoUser(post.author.user)" *ngIf="!post.author.avatar" src="/assets/logo.png" alt="Avatar of {{post.author.name}}"/>
+      <img class="icon-circle" (click)="gotoUser(post.author.user)" *ngIf="post.author.avatar" [src]="post.author.avatar" alt="Avatar of {{post.author.name}}"/>
+      <img class="icon-circle" (click)="gotoUser(post.author.user)" *ngIf="!post.author.avatar" src="/assets/logo.png" alt="Avatar of {{post.author.name}}"/>
       <div fxLayout="column" (click)="gotoUser(post.author.user)" style="cursor: pointer;">
         <h2 class="home-subtitle">{{post.author.name}}</h2>
         <div fxLayout="row" fxLayoutAlign="center center">
@@ -65,12 +66,15 @@
 
       <div style="margin-top: 5vh;margin-bottom: 5vh;">
         <div *ngFor="let comment of post?.comments" fxLayout="column" style="border-bottom: 1px solid #d3d3d3;">
-          <div fxLayout="row" fxFlexOffset="1rem" class="home-container">
-            <div fxLayout="column">
-              <div fxLayout="row" (click)="gotoUser(comment.author.user)">
-                <p>{{comment.author.name}} {{comment.created}}</p>
-              </div>
-
+          <div fxLayout="column" fxFlexOffset="1rem" class="home-container">
+            <div fxLayout="row" fxLayoutAlign="start center">
+              <img class="icon-circle" (click)="gotoUser(comment.author.user)" *ngIf="comment.author.avatar" [src]="comment.author.avatar" alt="Avatar of {{comment.author.name}}"/>
+              <img class="icon-circle" (click)="gotoUser(comment.author.user)" *ngIf="!comment.author.avatar" src="/assets/logo.png" alt="Avatar of {{comment.author.name}}"/>
+              <div style="margin-left: 20px;" fxLayout="row" fxLayoutAlign="center center" (click)="gotoUser(comment.author.user)">
+                  <p style="margin-bottom: 0;">{{comment.author.name}} {{comment.created}}</p>
+                </div>
+            </div>
+            <div style="margin-left: 40px;" fxLayout="row">
               <div innerHTML="{{comment.text | marked: post : comment}}"></div>
             </div>
           </div>

@@ -122,3 +122,21 @@ p {
 .hideEndorse {
   margin-top: 75vh !important;
 }
+
+.icon-circle {
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  border-radius: 20px;
+  background: #d3d3d3;
+}
+
+.profile {
+  &-title {
+    font-size: 3rem;
+    text-align: left;
+    font-family: "Mukta", sans-serif;
+    font-weight: 600;
+    max-width: 1000px;
+  }
+}

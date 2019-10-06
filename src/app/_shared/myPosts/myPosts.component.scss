@@ -56,7 +56,8 @@
     }
     &-card {
       width: 47.5%;
-      height: 250px;
+      cursor: pointer;
+      height: 100%;
       padding-left: 2%;
       padding-right: 2%;
       margin-bottom: 5%;
@@ -98,4 +99,8 @@
 
 span.markdown {
   color: #ffffff !important;
+}
+
+.profile-post-card div p {
+  margin-bottom: 0;
 }

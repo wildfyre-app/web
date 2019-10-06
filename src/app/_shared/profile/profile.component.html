@@ -1,5 +1,5 @@
 <!-- Profile Component -->
-<div id="profile" fxLayout="column" fxLayoutAlign="center center" style="height: 100%;padding-bottom: 10vh;">
+<div id="profile" fxLayout="column" fxLayoutAlign="center center" style="height: 100%;">
   <div class="profile-image">
     <img *ngIf="author?.avatar" [src]="author?.avatar" alt="Avatar of {{author?.name}}" style="object-fit: cover;" />
     <img *ngIf="!author?.avatar" src="/assets/logo.png" alt="Avatar of {{author?.name}}" style="object-fit: cover;" />
