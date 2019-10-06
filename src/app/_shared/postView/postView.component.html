@@ -1,16 +1,7 @@
-<!-- Post Content -->
-<div id="post" style="margin-bottom:25vh;">
-  <div *ngIf="post.image" class="home-content-image">
-    <img style="max-height: 40vh;object-fit: contain;" src="{{post.image}}" />
-  </div>
-
-  <div style="background: transparent;padding-left: 2rem;padding-right: 2rem;margin-top: 10vh;" [innerHTML]="post.text | marked"></div>
-</div>
-
 <!-- Home Component -->
 <div id="home">
   <div fxLayout="column" class="home-content-container">
-    <div fxLayout="row" fxLayoutAlign="space-between center" style="width: 100%;height: 10vh;padding-left: 2rem;padding-right: 2rem;">
+    <div fxLayout="row" fxLayoutAlign="space-between center" style="width: 100vw;height: 10vh;padding-left: 2rem;padding-right: 2rem;position: fixed;top: 0;left: 0;">
       <div fxLayout="row" fxLayoutAlign="start center" (click)="back()" style="width: 50%;cursor: pointer;">
         <i class="material-icons" style="font-size: 40px;">keyboard_arrow_left</i>
         <h1 class="profile-title">Home</h1>
@@ -22,35 +13,46 @@
       </div>
     </div>
 
+    <div *ngIf="post.image" class="home-content-image" style="margin-top:10vh;">
+      <img style="max-height: 40vh;object-fit: contain;" src="{{post.image}}" />
+    </div>
+
+    <div *ngIf="!post.image" class="home-content-image" style="margin-top:5vh;">
+    </div>
+
+    <div style="background: transparent;padding-left: 2rem;padding-right: 2rem;margin-top:5vh;" [innerHTML]="post.text | marked"></div>
+
     <!-- Gap -->
-    <div *ngIf="post.id === 0" style="margin-top:15vh;"></div>
+    <div *ngIf="post.id === 0"></div>
 
-    <!-- Post Identity -->
-    <div fxLayout="row" fxLayoutAlign="space-between center" [className]="hasPostId ? 'hideEndorse' : ''" style="margin-top:65vh;border-top-left-radius: 30px;border-top-right-radius: 30px;height: 10vh;background: #ffffff;padding-left: 2rem;padding-right: 2rem;">
-      <i *ngIf="post.id !== 0" class="material-icons" style="font-size: 40px;cursor: pointer;">outlined_flag</i>
-      <img class="icon-circle" (click)="gotoUser(post.author.user)" *ngIf="post.author.avatar" [src]="post.author.avatar" alt="Avatar of {{post.author.name}}"/>
-      <img class="icon-circle" (click)="gotoUser(post.author.user)" *ngIf="!post.author.avatar" src="/assets/logo.png" alt="Avatar of {{post.author.name}}"/>
-      <div fxLayout="column" (click)="gotoUser(post.author.user)" style="cursor: pointer;">
-        <h2 class="home-subtitle">{{post.author.name}}</h2>
-        <div fxLayout="row" fxLayoutAlign="center center">
-          <p>{{post.created}}</p>
+    <div style="position: fixed;bottom: 0;left: 0;width: 100vw;">
+      <!-- Post Identity -->
+      <div fxLayout="row" fxLayoutAlign="space-between center" [className]="hasPostId ? 'hideEndorse' : ''" style="border-top-left-radius: 30px;border-top-right-radius: 30px;height: 10vh;background: #ffffff;padding-left: 2rem;padding-right: 2rem;">
+        <i *ngIf="post.id !== 0" class="material-icons" style="font-size: 40px;cursor: pointer;">outlined_flag</i>
+        <img class="icon-circle" (click)="gotoUser(post.author.user)" *ngIf="post.author.avatar" [src]="post.author.avatar" alt="Avatar of {{post.author.name}}"/>
+        <img class="icon-circle" (click)="gotoUser(post.author.user)" *ngIf="!post.author.avatar" src="/assets/logo.png" alt="Avatar of {{post.author.name}}"/>
+        <div fxLayout="column" (click)="gotoUser(post.author.user)" style="cursor: pointer;">
+          <h2 class="home-subtitle">{{post.author.name}}</h2>
+          <div fxLayout="row" fxLayoutAlign="center center">
+            <p>{{post.created}}</p>
+          </div>
         </div>
+        <i class="material-icons" style="font-size: 40px;cursor: pointer;">info</i>
+        <i *ngIf="post.id !== 0 && !post?.subscribed" class="material-icons" (click)="subscribe(true)" style="font-size: 40px;cursor: pointer;">bookmark_border</i>
+        <i *ngIf="post.id !== 0 && post?.subscribed" class="material-icons" (click)="subscribe(false)" style="font-size: 40px;cursor: pointer;">bookmark</i>
       </div>
-      <i class="material-icons" style="font-size: 40px;cursor: pointer;">info</i>
-      <i *ngIf="post.id !== 0 && !post?.subscribed" class="material-icons" (click)="subscribe(true)" style="font-size: 40px;cursor: pointer;">bookmark_border</i>
-      <i *ngIf="post.id !== 0 && post?.subscribed" class="material-icons" (click)="subscribe(false)" style="font-size: 40px;cursor: pointer;">bookmark</i>
-    </div>
 
-    <!-- Post Options -->
-    <div *ngIf="post.id !== 0 && !hasPostId" fxLayout="row" fxLayoutAlign="space-around center" style="height: 10vh;background: #ffffff;">
-      <div fxLayoutAlign="center center" style="background-color: #1289c1;height: 100%;width: 100%;" (click)="spread(false)"><h2 style="color: #ffffff;" class="home-subtitle">Extinguish</h2></div>
-      <div fxLayoutAlign="center center" style="background-color: #ef6c00;height: 100%;width: 100%;" (click)="spread(true)"><h2 style="color: #ffffff;" class="home-subtitle">Ignite</h2></div>
-    </div>
+      <!-- Post Options -->
+      <div *ngIf="post.id !== 0 && !hasPostId" fxLayout="row" fxLayoutAlign="space-around center" style="height: 10vh;background: #ffffff;">
+        <div fxLayoutAlign="center center" style="background-color: #1289c1;height: 100%;width: 100%;" (click)="spread(false)"><h2 style="color: #ffffff;" class="home-subtitle">Extinguish</h2></div>
+        <div fxLayoutAlign="center center" style="background-color: #ef6c00;height: 100%;width: 100%;" (click)="spread(true)"><h2 style="color: #ffffff;" class="home-subtitle">Ignite</h2></div>
+      </div>
 
-    <!-- Comment CTA -->
-    <div *ngIf="post.id !== 0" (click)="switchView('comment')" fxLayout="row" fxLayoutAlign="space-between center" style="cursor: pointer;height: 5vh;background: #ffffff;padding-left: 2rem;padding-right: 2rem;box-shadow: 0px -1px 50px rgba(0, 0, 0, 0.25);">
-      <p style="margin: 0;">Comments: {{post.comments.length}}</p>
-      <i class="material-icons" style="font-size: 40px;">keyboard_arrow_up</i>
+      <!-- Comment CTA -->
+      <div *ngIf="post.id !== 0" (click)="switchView('comment')" fxLayout="row" fxLayoutAlign="space-between center" style="cursor: pointer;height: 5vh;background: #ffffff;padding-left: 2rem;padding-right: 2rem;box-shadow: 0px -1px 50px rgba(0, 0, 0, 0.25);">
+        <p style="margin: 0;">Comments: {{post.comments.length}}</p>
+        <i class="material-icons" style="font-size: 40px;">keyboard_arrow_up</i>
+      </div>
     </div>
   </div>
 </div>
