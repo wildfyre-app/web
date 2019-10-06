@@ -2,7 +2,7 @@
 <div id="image">
   <div fxLayout="column" class="imageUpload-container">
     <div fxLayout="row" fxFlexOffset="2rem" fxLayoutAlign="space-between start" style="width: 100%;">
-      <i class="material-icons" style="font-size: 40px;" (click)="back()">keyboard_arrow_left</i>
+      <i class="material-icons" style="font-size: 40px;cursor: pointer;" (click)="back()">keyboard_arrow_left</i>
     </div>
     <div class="imageUpload-image">
       <img *ngIf="author?.avatar" [src]="author?.avatar" alt="Avatar of {{author?.name}}" style="border-radius: 50%;background: #d3d3d3;" />
@@ -10,7 +10,7 @@
     </div>
     <div fxLayout="row" class="imageUpload-button" fxFlexOffset="2rem">
       <button mat-flat-button class="imageUpload-button" style="background: #EA6C40;color: #ffffff;" [disabled]="loading">Upload Image</button>
-      <input id="imageUpload-upload" type="file" accept="image/jpg, image/jpeg, image/png" (change)="uploadImage()" hidden/>
+      <input style="cursor: pointer;" id="imageUpload-upload" type="file" accept="image/jpg, image/jpeg, image/png" (change)="uploadImage()" hidden/>
     </div>
     <!-- <div *ngIf="editBio" fxLayout="row" class="imageUpload-button" fxFlexOffset="2rem">
       <button mat-flat-button class="imageUpload-button" style="background: #EA6C40;color: #ffffff;" [disabled]="loading" (click)="toggleBio()">Save</button>

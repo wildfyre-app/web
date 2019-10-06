@@ -204,6 +204,14 @@ export class PostViewComponent implements OnInit, OnDestroy {
     this.componentDestroyed.complete();
   }
 
+  back() {
+    if (this.routeService.routes.length === 0) {
+      this.router.navigateByUrl('');
+    } else {
+      this.router.navigateByUrl(this.routeService.getNextRoute());
+    }
+  }
+
   blockUser(id: number) {
     const dialogRef = this.dialog.open(ConfirmDeletionDialogComponent);
     dialogRef.afterClosed().pipe(

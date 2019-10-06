@@ -4,7 +4,12 @@ export class Author {
       obj.user,
       obj.name,
       obj.avatar,
-      obj.bio,
+      (() => {
+        if (obj.bio === '') {
+          return '*No Bio*';
+        }
+        return obj.bio;
+      })(), // Call method
       obj.banned
     );
   }

@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
@@ -20,6 +20,7 @@ export class ImageUploadComponent implements OnInit, OnDestroy {
   loading = true;
 
   constructor(
+    private cdRef: ChangeDetectorRef,
     public snackBar: MatSnackBar,
     private router: Router,
     private profileService: ProfileService,
@@ -31,9 +32,6 @@ export class ImageUploadComponent implements OnInit, OnDestroy {
     takeUntil(this.componentDestroyed))
     .subscribe((self: Author) => {
       this.author = self;
-      if (this.author.bio === '') {
-        this.author.bio = '*No Bio*';
-      }
       this.loading = false;
     });
   }
@@ -54,7 +52,7 @@ export class ImageUploadComponent implements OnInit, OnDestroy {
 
   uploadImage() {
     const self = this;
-    const file = (<HTMLInputElement>document.getElementById('image-upload')).files[0];
+    const file = (<HTMLInputElement>document.getElementById('imageUpload-upload')).files[0];
     const file2: any = new Compressor(file, {
       quality: 0.8,
       maxWidth: 500,
@@ -71,7 +69,8 @@ export class ImageUploadComponent implements OnInit, OnDestroy {
       takeUntil(this.componentDestroyed))
       .subscribe((result2: Author)  => {
         if (!result2.getError()) {
-          this.author.avatar = result2.avatar;
+          this.author.avatar = `${result2.avatar}`;
+          this.cdRef.detectChanges();
         } else {
           this.errors = result2.getError();
           this.loading = false;
