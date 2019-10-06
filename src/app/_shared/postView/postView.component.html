@@ -82,7 +82,7 @@
       </div>
 
       <div id="comment-box" fxLayout="row" fxLayoutAlign="space-between center">
-        <div fxLayout="column" fxLayoutAlign="start center" *ngIf="commentForm" [formGroup]="commentForm">
+        <div fxLayout="column" fxLayoutAlign="start center" *ngIf="commentForm" [formGroup]="commentForm" style="width: 90%;">
           <div *ngIf="errors && errors.non_field_errors" fxLayout="row" fxFlexOffset="2rem" class="alert alert-danger">
             <div *ngFor="let err of errors.non_field_errors">
               <p>{{err}}</p>
