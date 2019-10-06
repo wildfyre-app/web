@@ -42,6 +42,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   superPosts: { [area: string]: Post[]; } = {};
   totalCount = 0;
   url: string;
+  viewingSelf: boolean;
 
   constructor(
     private route: ActivatedRoute,
@@ -75,12 +76,17 @@ export class ProfileComponent implements OnInit, OnDestroy {
         if (r[1]) {
           this.self = false;
           this.accId = r[1].path;
-          console.log(this.accId)
+
           this.profileService.getUser(this.accId).pipe(
             takeUntil(this.componentDestroyed))
           .subscribe((self: Author) => {
-            console.log(self)
             this.author = self;
+            if (this.author.user === Number.parseInt(this.accId, 10)) {
+              this.viewingSelf = true;
+            } else {
+              this.viewingSelf = false;
+            }
+
             if (this.author.bio === '') {
               this.author.bio = '*No Bio*';
             }

@@ -5,16 +5,16 @@
     <img *ngIf="!author?.avatar" src="/assets/logo.png" alt="Avatar of {{author?.name}}" style="object-fit: cover;" />
   </div>
   <div fxLayout="column" class="profile-container">
-    <div fxLayout="row" fxFlexOffset="2rem" fxLayoutAlign="space-between start" (click)="goto('image')" style="width: 100%;height: 30vh;cursor: pointer;">
+    <div fxLayout="row" fxFlexOffset="2rem" fxLayoutAlign="space-between start" (click)="goto('image')" style="width: 100%;height: 30vh;">
       <!-- <i class="mate  rial-icons" style="font-size: 40px;">keyboard_arrow_left</i> -->
-      <div fxLayout="row" fxLayoutAlign="center center" (click)="backOrLogout($event)">
+      <div fxLayout="row" fxLayoutAlign="center center" (click)="backOrLogout($event)" style="cursor: pointer;">
         <i class="material-icons" style="font-size: 40px;">keyboard_arrow_left</i>
         <h2 class="home-title">Profile</h2>
       </div>
-      <div>
+      <div style="cursor: pointer;">
         <h2 *ngIf="self" class="profile-subtitle" (click)="goto('password')">Password</h2>
         <h2 *ngIf="self" fxLayout="row" class="profile-subtitle" fxFlexOffset="1rem" (click)="info($event)">Info</h2>
-        <h2 *ngIf="!self" fxLayout="row" class="profile-subtitle" fxFlexOffset="1rem" (click)="goto('report')">Report</h2>
+        <h2 *ngIf="!self && !viewingSelf" fxLayout="row" class="profile-subtitle" fxFlexOffset="1rem" (click)="goto('report')">Report</h2>
       </div>
     </div>
 
