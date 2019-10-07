@@ -9,7 +9,8 @@ import { RouteService } from '../../_services/route.service';
 
 enum View {
   home,
-  posts
+  posts,
+  archive
 }
 
 @Component({
@@ -36,16 +37,15 @@ export class AreaListComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    this.route.url
-      .subscribe(r => {
-        if (r[0]) {
-          if (r[0].path === 'posts') {
-            this.path = r[0].path;
-            this.title = 'My Posts';
-            this.currentView = View.posts;
-          }
-        }
-      });
+    if (this.router.url === '/posts') {
+      this.path = this.router.url;
+      this.title = 'My Posts';
+      this.currentView = View.posts;
+    } else if (this.router.url === '/notification/archive') {
+      this.path = this.router.url;
+      this.title = 'My Notification Archive';
+      this.currentView = View.archive;
+    }
 
     this.areaService.getAreas().pipe(
     takeUntil(this.componentDestroyed))
@@ -83,6 +83,8 @@ export class AreaListComponent implements OnInit, OnDestroy {
       this.router.navigateByUrl(`create/${a.name}`);
     } else if (this.currentView === View.home) {
       this.router.navigateByUrl(`/areas/${a.name}`);
+    } else if (this.currentView === View.archive) {
+      this.router.navigateByUrl(`${this.path}/${a.name}/1`);
     } else {
       this.router.navigateByUrl(`${this.path}/${a.name}`);
     }

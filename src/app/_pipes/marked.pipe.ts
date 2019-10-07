@@ -30,9 +30,9 @@ export class MarkedPipe implements PipeTransform {
   transform(value: string, post: Post, comment: Comment): string {
     md.use(markdownItRegex, {
       name: 'customImage',
-      regex: /(\[img: \d\])/gm,
+      regex: C.WF_IMAGE_REGEX,
       replace: (match: string) => {
-        const index = parseInt(this.getImageMatchesByGroup(2, match, /(\[img: (\d)\])/gm)[0], 10);
+        const index = parseInt(this.getImageMatchesByGroup(2, match, C.WF_IMAGE_REGEX)[0], 10);
 
         if (post) {
           if (!post.additional_images[index]) {

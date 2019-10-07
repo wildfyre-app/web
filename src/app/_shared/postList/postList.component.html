@@ -2,15 +2,16 @@
   <div fxLayout="column" style="margin-top: 2rem;" class="profile-container">
     <div fxLayout="row" fxLayoutAlign="start center" (click)="back()" style="width: 100%;cursor: pointer;">
       <i class="material-icons" style="font-size: 40px;">keyboard_arrow_left</i>
-      <h1 class="profile-title">My Posts</h1>
-      <h1 class="profile-title" fxFlexOffset="1rem" style="margin: 0;color: #A2A2A2"><ng-container *ngIf="currentArea">{{currentArea.displayname}}</ng-container></h1>
+      <h1 class="profile-title">{{ title }}</h1>
+      <h1 class="profile-title" fxFlexOffset="1rem" style="margin: 0;color: #A2A2A2"><ng-container *ngIf="currentArea">{{currentArea}}</ng-container></h1>
     </div>
     <div fxLayout="column" class="profile-post-group" fxFlexOffset="1rem">
-        <div style="margin-top: 5vh;" *ngIf="backupPosts[currentArea.name].length === 0" [innerHTML]="'No posts in this area, try posting in this area?' | marked"></div>
+        <div style="margin-top: 5vh;" *ngIf="backupPosts[currentArea].length === 0" [innerHTML]="'No posts in this area, try posting in this area?' | marked"></div>
       <div *ngIf="currentArea" fxLayout="row" class="profile-post-row">
-        <div class="profile-post-card" (click)="goto(post.id)" fxLayout="column" *ngFor="let post of backupPosts[currentArea.name] | paginate: { id: 'server', itemsPerPage: limit, currentPage: index, totalItems: totalCount }; let i = index">
+        <div class="profile-post-card" (click)="goto(post.id)" fxLayout="column" *ngFor="let post of backupPosts[currentArea] | paginate: { id: 'server', itemsPerPage: limit, currentPage: index, totalItems: totalCount }; let i = index">
+          <p class="marked" style="color: #ffffff;" innerHTML="{{post.text | marked: post}}"></p>
           <div fxLayout="row" fxLayoutAlign="start center">
-            <i class="material-icons" style="width: 24px;zoom: 0.7;color: #ffffff;margin-right: 1rem;" *ngIf="imageArray[currentArea.name][i] || post.image">image</i>
+            <i class="material-icons" style="width: 24px;zoom: 0.7;color: #ffffff;margin-right: 1rem;" *ngIf="imageArray[currentArea][i] || post.image">image</i>
             <i class="material-icons" style="width: 24px;zoom: 0.7;color: #ffffff;" *ngIf="post.active">hourglass_full</i>
             <i class="material-icons" style="width: 24px;zoom: 0.7;color: #ffffff;" *ngIf="!post.active">hourglass_empty</i>
             <i class="material-icons" style="width: 24px;zoom: 0.7;color: #ffffff;" fxFlexOffset="1rem" *ngIf="!post.anonym">visibility_on</i>
@@ -18,11 +19,10 @@
             <i class="material-icons" style="width: 24px;zoom: 0.7;color: #ffffff;" fxFlexOffset="1rem">filter_none</i>
             <h5 style="color: #ffffff" fxFlexOffset="0.5rem">{{post.comments.length}}</h5>
           </div>
-          <p class="marked" style="color: #ffffff;" innerHTML="{{post.text | marked: post}}"></p>
         </div>
       </div>
     </div>
-    <pagination-controls fxFlexOffset="1rem" *ngIf="totalCount !== 0 && !loading" (pageChange)="getPosts($event)" id="server"></pagination-controls>
+    <pagination-controls fxFlexOffset="1rem" *ngIf="totalCount > 10 && !loading" (pageChange)="getPosts($event)" id="server"></pagination-controls>
     <div *ngIf="loading" fxLayoutAlign="center center" fxFlexOffset="1rem">
       <mat-progress-spinner></mat-progress-spinner>
     </div>

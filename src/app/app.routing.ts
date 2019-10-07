@@ -5,7 +5,7 @@ import { CreatePostComponent } from './createPost/createPost.component';
 import { PostViewComponent } from './_shared/postView/postView.component';
 import { ImageUploadComponent } from './_shared/imageUpload/imageUpload.component';
 import { LoginComponent } from './login/login.component';
-import { MyPostsComponent } from './_shared/myPosts/myPosts.component';
+import { PostListComponent } from './_shared/postList/postList.component';
 import { NotificationsComponent } from './_shared/notifcations/notifications.component';
 import { PasswordComponent } from './_shared/password/password.component';
 import { ProfileComponent } from './_shared/profile/profile.component';
@@ -22,9 +22,10 @@ const appRoutes: Routes = [
   { path: 'notifications', redirectTo: 'notifications/1', pathMatch: 'full' },
   { path: 'notifications/1', component: NotificationsComponent, canActivate: [AuthGuard] },
   { path: 'notifications/:index', component: NotificationsComponent, canActivate: [AuthGuard] },
-  { path: 'notifications/archive/:index', component: NotificationsComponent, canActivate: [AuthGuard] },
+  { path: 'notification/archive', component: AreaListComponent, canActivate: [AuthGuard] },
+  { path: 'notification/archive/:aarea/:index', component: PostListComponent, canActivate: [AuthGuard] },
   { path: 'posts', component: AreaListComponent, canActivate: [AuthGuard] },
-  { path: 'posts/:area', component: MyPostsComponent, canActivate: [AuthGuard] },
+  { path: 'posts/:area', component: PostListComponent, canActivate: [AuthGuard] },
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
   { path: 'tools/image-upload', component: ImageUploadComponent, canActivate: [AuthGuard] },
   { path: 'tools/password', component: PasswordComponent, canActivate: [AuthGuard] },

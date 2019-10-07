@@ -5,21 +5,21 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Account } from '../../_models/account';
-import { Area } from '../../_models/area';
 import { Author } from '../../_models/author';
 import { Ban } from '../../_models/ban';
 import { Choice } from '../../_models/choice';
 import * as C from '../../_models/constants';
 import { Post } from '../../_models/post';
 import { AreaService } from '../../_services/area.service';
+import { NotificationService } from '../../_services/notification.service';
 import { PostService } from '../../_services/post.service';
 import { RouteService } from '../../_services/route.service';
 
 @Component({
-  templateUrl: 'myPosts.component.html',
-  styleUrls: ['./myPosts.component.scss']
+  templateUrl: 'postList.component.html',
+  styleUrls: ['./postList.component.scss']
 })
-export class MyPostsComponent implements OnInit, OnDestroy {
+export class PostListComponent implements OnInit, OnDestroy {
   account: Account;
   author: Author;
   backupPosts: { [area: string]: Post[]; } = {};
@@ -27,7 +27,7 @@ export class MyPostsComponent implements OnInit, OnDestroy {
   bioForm: FormGroup;
   choices: Choice[];
   componentDestroyed: Subject<boolean> = new Subject();
-  currentArea: Area;
+  currentArea: string;
   data: any;
   editBio = false;
   emailForm: FormGroup;
@@ -39,6 +39,7 @@ export class MyPostsComponent implements OnInit, OnDestroy {
   offset = 10;
   self: boolean;
   superPosts: { [area: string]: Post[]; } = {};
+  title = 'My Posts';
   totalCount = 0;
   url: string;
 
@@ -48,6 +49,7 @@ export class MyPostsComponent implements OnInit, OnDestroy {
     private router: Router,
     public snackBar: MatSnackBar,
     private areaService: AreaService,
+    private notificationService: NotificationService,
     private postService: PostService,
     private routeService: RouteService
   ) { }
@@ -123,19 +125,19 @@ export class MyPostsComponent implements OnInit, OnDestroy {
           .subscribe((areas) => {
             for (let i = 0; i <= areas.length - 1; i++) {
               if (areas[i].name === params['area']) {
-                this.currentArea = areas[i];
+                this.currentArea = params['area'];
               }
             }
 
-            if (!this.superPosts[this.currentArea.name]) {
-              this.superPosts[this.currentArea.name] = [];
+            if (!this.superPosts[this.currentArea]) {
+              this.superPosts[this.currentArea] = [];
             }
-            if (!this.backupPosts[this.currentArea.name]) {
-              this.backupPosts[this.currentArea.name] = [];
+            if (!this.backupPosts[this.currentArea]) {
+              this.backupPosts[this.currentArea] = [];
             }
             const posts: Post[] = [];
 
-            this.postService.getOwnPosts(this.currentArea.name, this.limit, 0).pipe(
+            this.postService.getOwnPosts(this.currentArea, this.limit, 0).pipe(
               takeUntil(this.componentDestroyed))
               .subscribe(superPost => {
                 superPost.results.forEach((obj: any) => {
@@ -143,16 +145,16 @@ export class MyPostsComponent implements OnInit, OnDestroy {
                 });
 
                 // Removes binding to original 'superPost' variable
-                this.superPosts[this.currentArea.name] = JSON.parse(JSON.stringify(posts));
-                this.backupPosts[this.currentArea.name] = posts;
+                this.superPosts[this.currentArea] = JSON.parse(JSON.stringify(posts));
+                this.backupPosts[this.currentArea] = posts;
                 this.totalCount = superPost.count;
 
-                this.imageInPosts(this.superPosts[this.currentArea.name], this.currentArea.name);
+                this.imageInPosts(this.superPosts[this.currentArea], this.currentArea);
 
-                for (let i = 0; i <= this.backupPosts[this.currentArea.name].length - 1; i++) {
-                  this.backupPosts[this.currentArea.name][i].text = this.removeMarkdown(this.backupPosts[this.currentArea.name][i].text);
-                  if (this.backupPosts[this.currentArea.name][i].text.length > 250) {
-                    this.backupPosts[this.currentArea.name][i].text = this.backupPosts[this.currentArea.name][i].text.slice(0, 250) + '...';
+                for (let i = 0; i <= this.backupPosts[this.currentArea].length - 1; i++) {
+                  this.backupPosts[this.currentArea][i].text = this.removeMarkdown(this.backupPosts[this.currentArea][i].text);
+                  if (this.backupPosts[this.currentArea][i].text.length > 250) {
+                    this.backupPosts[this.currentArea][i].text = this.backupPosts[this.currentArea][i].text.slice(0, 250) + '...';
                   }
                 }
 
@@ -160,6 +162,40 @@ export class MyPostsComponent implements OnInit, OnDestroy {
                 this.loading = false;
               });
 
+            this.loading = false;
+          });
+      } else if (params['index'] !== undefined) {
+        this.loading = true;
+        this.index = params['index'];
+        this.currentArea = params['aarea'];
+        this.title = 'Notification Archive';
+
+        if (!this.superPosts[this.currentArea]) {
+          this.superPosts[this.currentArea] = [];
+        }
+        if (!this.backupPosts[this.currentArea]) {
+          this.backupPosts[this.currentArea] = [];
+        }
+        const posts: Post[] = [];
+
+        this.notificationService.getArchive(this.currentArea, this.limit, 0).pipe(
+          takeUntil(this.componentDestroyed))
+          .subscribe(superPost => {
+            superPost.results.forEach((obj: any) => {
+              posts.push(Post.parse(obj));
+            });
+
+            // Removes binding to original 'superPost' variable
+            this.superPosts[this.currentArea] = JSON.parse(JSON.stringify(posts));
+            this.backupPosts[this.currentArea] = posts;
+            this.totalCount = superPost.count;
+
+            this.imageInPosts(this.superPosts[this.currentArea], this.currentArea);
+
+            for (let i = 0; i <= this.backupPosts[this.currentArea].length - 1; i++) {
+              this.backupPosts[this.currentArea][i].text = this.removeMarkdown(this.backupPosts[this.currentArea][i].text);
+            }
+            this.cdRef.detectChanges();
             this.loading = false;
           });
       }
@@ -171,7 +207,6 @@ export class MyPostsComponent implements OnInit, OnDestroy {
     this.componentDestroyed.next(true);
     this.componentDestroyed.complete();
   }
-
 
   back() {
     if (this.routeService.routes.length === 0) {
@@ -185,7 +220,7 @@ export class MyPostsComponent implements OnInit, OnDestroy {
     this.loading = true;
     const posts: Post[] = [];
 
-    this.postService.getOwnPosts(this.currentArea.name, this.limit, (this.offset * page) - this.limit).pipe(
+    this.postService.getOwnPosts(this.currentArea, this.limit, (this.offset * page) - this.limit).pipe(
       takeUntil(this.componentDestroyed))
       .subscribe(superPost => {
         superPost.results.forEach((obj: any) => {
@@ -193,15 +228,41 @@ export class MyPostsComponent implements OnInit, OnDestroy {
         });
 
         // Removes binding to original 'superPost' variable
-        this.superPosts[this.currentArea.name] = JSON.parse(JSON.stringify(posts));
-        this.backupPosts[this.currentArea.name] = posts;
-        this.imageInPosts(this.superPosts[this.currentArea.name], this.currentArea.name);
+        this.superPosts[this.currentArea] = JSON.parse(JSON.stringify(posts));
+        this.backupPosts[this.currentArea] = posts;
+        this.imageInPosts(this.superPosts[this.currentArea], this.currentArea);
 
-        for (let i = 0; i <= this.backupPosts[this.currentArea.name].length - 1; i++) {
-          this.backupPosts[this.currentArea.name][i].text = this.removeMarkdown(this.backupPosts[this.currentArea.name][i].text);
-          if (this.backupPosts[this.currentArea.name][i].text.length > 250) {
-            this.backupPosts[this.currentArea.name][i].text = this.backupPosts[this.currentArea.name][i].text.slice(0, 250) + '...';
+        for (let i = 0; i <= this.backupPosts[this.currentArea].length - 1; i++) {
+          this.backupPosts[this.currentArea][i].text = this.removeMarkdown(this.backupPosts[this.currentArea][i].text);
+          if (this.backupPosts[this.currentArea][i].text.length > 250) {
+            this.backupPosts[this.currentArea][i].text = this.backupPosts[this.currentArea][i].text.slice(0, 250) + '...';
           }
+        }
+        this.index = page;
+        this.totalCount = superPost.count;
+        this.cdRef.detectChanges();
+        this.loading = false;
+      });
+  }
+
+  getPostsN(page: number) {
+    this.loading = true;
+    const posts: Post[] = [];
+
+    this.notificationService.getArchive(this.currentArea, this.limit, (this.offset * page) - this.limit).pipe(
+      takeUntil(this.componentDestroyed))
+      .subscribe(superPost => {
+        superPost.results.forEach((obj: any) => {
+          posts.push(Post.parse(obj));
+        });
+
+        // Removes binding to original 'superPost' variable
+        this.superPosts[this.currentArea] = JSON.parse(JSON.stringify(posts));
+        this.backupPosts[this.currentArea] = posts;
+        this.imageInPosts(this.superPosts[this.currentArea], this.currentArea);
+
+        for (let i = 0; i <= this.backupPosts[this.currentArea].length - 1; i++) {
+          this.backupPosts[this.currentArea][i].text = this.removeMarkdown(this.backupPosts[this.currentArea][i].text);
         }
         this.index = page;
         this.totalCount = superPost.count;
@@ -212,6 +273,6 @@ export class MyPostsComponent implements OnInit, OnDestroy {
 
   goto(postID: string) {
     this.routeService.addNextRouteByIndex(this.index);
-    this.router.navigateByUrl('/areas/' + this.currentArea.name + '/' + postID);
+    this.router.navigateByUrl('/areas/' + this.currentArea + '/' + postID);
   }
 }

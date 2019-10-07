@@ -21,7 +21,7 @@ import { NavBarComponent } from './navBar/navBar.component';
 import { AreaListComponent } from './_shared/areaList/areaList.component';
 import { DraftsComponent } from './_shared/drafts/drafts.component';
 import { ImageUploadComponent } from './_shared/imageUpload/imageUpload.component';
-import { MyPostsComponent } from './_shared/myPosts/myPosts.component';
+import { PostListComponent } from './_shared/postList/postList.component';
 import { NotificationsComponent } from './_shared/notifcations/notifications.component';
 import { PasswordComponent } from './_shared/password/password.component';
 import { ProfileComponent } from './_shared/profile/profile.component';
@@ -119,7 +119,7 @@ import { ReCaptchaModule } from 'angular2-recaptcha';
     AreaListComponent,
     DraftsComponent,
     ImageUploadComponent,
-    MyPostsComponent,
+    PostListComponent,
     NotificationsComponent,
     PasswordComponent,
     PostViewComponent,

@@ -136,8 +136,9 @@ export class NotificationsComponent implements OnInit, OnDestroy {
   }
 
   loadArchive() {
+    console.log('s')
     this.routeService.addNextRoute(this.router.url);
-    this.router.navigateByUrl('/notifications/archive/1');
+    this.router.navigateByUrl('/notification/archive');
   }
 
   getNotifications(page: number) {
