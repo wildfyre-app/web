@@ -27,7 +27,7 @@
   }
   &-content {
     &-container {
-      width: 100vw;
+      width: 100%;
       position: fixed;
       top: 0;
       left: 0;
@@ -48,7 +48,7 @@
   &-container {
     padding-left: 2rem;
     padding-right: 2rem;
-    width: 100vw;
+    width: 100%;
     max-width: 1000px;
   }
   &-subtitle {
@@ -70,7 +70,7 @@
   }
   &-comment {
     &-container {
-      width: 100vw;
+      width: 100%;
       max-width: 1000px;
     }
   }

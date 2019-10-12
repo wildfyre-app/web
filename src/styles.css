@@ -10,7 +10,7 @@ a.mat-tab-link {
 
 body {
   background: transparent !important;
-  width: 100vw;
+  width: 100%;
   height: 100vh;
   max-width: 1000px;
   overflow-x: hidden;
@@ -126,7 +126,7 @@ hr {
 
 html {
   background: #ffffff;
-  width: 100vw;
+  width: 100%;
   height: 100vh;
   display: flex;
   justify-content: center;
