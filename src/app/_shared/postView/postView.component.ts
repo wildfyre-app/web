@@ -280,7 +280,6 @@ export class PostViewComponent implements OnInit, OnDestroy {
   }
 
   hideViews() {
-    document.getElementById('post').style.display = 'none';
     document.getElementById('home').style.display = 'none';
     document.getElementById('comment').style.display = 'none';
     document.getElementById('comment-box').style.display = 'none';
@@ -324,7 +323,12 @@ export class PostViewComponent implements OnInit, OnDestroy {
 
   postComment() {
     this.loading = true;
-    this.navBarService.comment.next(new CommentData(this.commentForm.controls.comment.value, this.commentForm.controls.image.value));
+    const com = this.commentForm.controls.comment.value;
+    const comImage = this.commentForm.controls.image.value;
+    this.commentForm.disable();
+    this.navBarService.comment.next(new CommentData(com, comImage));
+    this.commentForm.controls.comment.setValue('');
+    this.commentForm.enable();
     this.loading = false;
   }
 
@@ -391,6 +395,14 @@ export class PostViewComponent implements OnInit, OnDestroy {
       return false;
     }
     return true;
+  }
+
+  scrollToList() {
+    window.scrollTo({
+      top: document.getElementById('comment-list').offsetTop + 50,
+      left: 0,
+      behavior: 'smooth'
+    });
   }
 
   share(commentID: number) {
@@ -466,23 +478,6 @@ export class PostViewComponent implements OnInit, OnDestroy {
       this.router.navigateByUrl('/notifications');
     } else if (s === 'my-posts') {
       this.router.navigateByUrl('/posts');
-    }
-  }
-
-  switchView(s: string, a?: Area) {
-    if (s === 'home') {
-      this.hideViews();
-      document.getElementById('home').style.display = 'flex';
-      document.getElementById('post').style.display = 'block';
-    } else if (s === 'comment') {
-      this.hideViews();
-      document.getElementById('comment').style.display = 'flex';
-      document.getElementById('comment-box').style.display = 'flex';
-      document.getElementById('comment-tab').style.display = 'flex';
-    } else if (s === 'areaList') {
-      this.hideViews();
-      document.getElementById('areaList').style.display = 'flex';
-      document.getElementById('navBar').style.display = 'flex';
     }
   }
 }
