@@ -136,3 +136,11 @@ p {
     max-width: 1000px;
   }
 }
+
+#comment-box {
+  display: none;
+  flex-direction: row;
+  box-sizing: border-box;
+  place-content: center space-between;
+  align-items: center;
+}

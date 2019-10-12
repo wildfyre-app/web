@@ -38,6 +38,7 @@ export class PostViewComponent implements OnInit, OnDestroy {
   blockedUsers: string[];
   blanketText = `<span class="markdown fyre-blanket"><p>Fyre Blanket</p></span>`;
   areas = new Array<Area>(new Area('', '', 0, 0));
+  commentBoxOpen = false;
   commentCount = 0;
   commentForm: FormGroup;
   componentDestroyed: Subject<boolean> = new Subject();
@@ -397,12 +398,24 @@ export class PostViewComponent implements OnInit, OnDestroy {
     return true;
   }
 
-  scrollToList() {
-    window.scrollTo({
-      top: document.getElementById('comment-list').offsetTop + 50,
-      left: 0,
-      behavior: 'smooth'
-    });
+  commentView() {
+    if (this.commentBoxOpen) {
+      window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: 'smooth'
+      });
+      document.getElementById('comment-box').style.display = 'none';
+      this.commentBoxOpen = false;
+    } else {
+      window.scrollTo({
+        top: document.getElementById('comment-list').offsetTop + 50,
+        left: 0,
+        behavior: 'smooth'
+      });
+      document.getElementById('comment-box').style.display = 'flex';
+      this.commentBoxOpen = true;
+    }
   }
 
   share(commentID: number) {

@@ -25,8 +25,8 @@
     <!-- Comment Component -->
       <div id="comment-list" *ngIf="post.id !== 0 && post.comments.length !== 0" fxLayout="column" fxLayoutAlign="center center">
         <div fxLayout="column" class="home-comment-container">
-          <div style="margin-top: 5vh;margin-bottom: 5vh;">
-            <p><strong style="color: #000000;">Comments:</strong></p>
+          <div style="margin-top: 5vh;margin-bottom: 25vh;">
+            <p style="padding-left: 2rem;"><strong style="color: #000000;">Comments:</strong></p>
             <div *ngFor="let comment of post?.comments" fxLayout="column" style="border-bottom: 1px solid #d3d3d3;">
               <div fxLayout="column" fxFlexOffset="1rem" class="home-container">
                 <div fxLayout="row" fxLayoutAlign="start center">
@@ -48,7 +48,7 @@
     <!-- Gap -->
     <div *ngIf="post.id === 0"></div>
 
-    <div style="position: fixed;bottom: 0;left: 0;width: 100vw;">
+    <div style="position: fixed;bottom: 0;left: 0;width: 100%;">
       <!-- Post Identity -->
       <div fxLayout="row" fxLayoutAlign="space-between center" [className]="hasPostId ? 'hideEndorse' : ''" style="border-top-left-radius: 30px;border-top-right-radius: 30px;height: 10vh;background: #ffffff;padding-left: 2rem;padding-right: 2rem;">
         <i *ngIf="post.id !== 0" class="material-icons" style="font-size: 40px;cursor: pointer;">outlined_flag</i>
@@ -62,7 +62,7 @@
         </div>
         <i *ngIf="post.id !== 0 && !post?.subscribed" class="material-icons" (click)="subscribe(true)" style="font-size: 40px;cursor: pointer;">bookmark_border</i>
         <i *ngIf="post.id !== 0 && post?.subscribed" class="material-icons" (click)="subscribe(false)" style="font-size: 40px;cursor: pointer;">bookmark</i>
-        <div *ngIf="post.id !== 0" (click)="scrollToList()" fxLayout="row" fxLayoutAlign="center center">
+        <div *ngIf="post.id !== 0" (click)="commentView()" fxLayout="row" fxLayoutAlign="center center">
           <p *ngIf="post.comments.length !== 0">{{ getCommentLength(post.comments.length) }}</p>
           <i class="material-icons"style="font-size: 40px;cursor: pointer;">message</i>
         </div>
@@ -75,7 +75,7 @@
       </div>
 
       <!-- Comment Box -->
-      <div id="comment-box" fxLayout="row" fxLayoutAlign="space-between center">
+      <div id="comment-box">
         <div fxLayout="column" fxLayoutAlign="center start" *ngIf="commentForm" [formGroup]="commentForm" style="width: 90%;">
           <div *ngIf="errors && errors.non_field_errors" fxLayout="row" fxFlexOffset="2rem" class="alert alert-danger">
             <div *ngFor="let err of errors.non_field_errors">
