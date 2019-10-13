@@ -4,17 +4,17 @@ import { MatDialog, MatSnackBar } from '@angular/material';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { ConfirmDeletionDialogComponent } from '../_dialogs/confirmDeletion.dialog.component';
-import { PictureDialogComponent } from '../_dialogs/picture.dialog.component';
-import { PicturesDialogComponent } from '../_dialogs/pictures.dialog.component';
-import { YouTubeDialogComponent } from '../_dialogs/youtube.dialog.component';
-import { Area } from '../_models/area';
-import * as C from '../_models/constants';
-import { Image } from '../_models/image';
-import { Post, PostError } from '../_models/post';
-import { AreaService } from '../_services/area.service';
-import { PostService } from '../_services/post.service';
-import { RouteService } from '../_services/route.service';
+import { ConfirmDeletionDialogComponent } from '../../_dialogs/confirmDeletion.dialog.component';
+import { PictureDialogComponent } from '../../_dialogs/picture.dialog.component';
+import { PicturesDialogComponent } from '../../_dialogs/pictures.dialog.component';
+import { YouTubeDialogComponent } from '../../_dialogs/youtube.dialog.component';
+import { Area } from '../../_models/area';
+import * as C from '../../_models/constants';
+import { Image } from '../../_models/image';
+import { Post, PostError } from '../../_models/post';
+import { AreaService } from '../../_services/area.service';
+import { PostService } from '../../_services/post.service';
+import { RouteService } from '../../_services/route.service';
 
 @Component({
   templateUrl: 'createPost.component.html',

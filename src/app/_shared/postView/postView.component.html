@@ -11,32 +11,41 @@
       <div fxLayoutAlign="end center" style="width: 50%;cursor: pointer;">
         <h2 fxLayout="row" class="home-subtitle" (click)="info($event)">Info</h2>
         <i class="material-icons" style="font-size: 40px;padding-left: 1rem;" (click)="copylink()">link</i>
-        <i *ngIf="post.author.user === self.user" class="material-icons" style="font-size: 40px;padding-left: 1rem;" (click)="deletePost()">delete</i>
+        <ng-container *ngIf="post?.author !== undefined && selfObj !== undefined">
+          <i *ngIf="post?.author?.user === selfObj?.user" class="material-icons" style="font-size: 40px;padding-left: 1rem;" (click)="openPostDeleteDialog()">delete</i>
+        </ng-container>
       </div>
     </div>
 
     <div *ngIf="post.image" class="home-content-image" style="margin-top: 10vh;">
-      <img style="max-height: 40vh;object-fit: contain;" src="{{post.image}}" />
+      <a rel="noopener" target="_blank" href="{{post.image}}"><img style="max-height: 40vh;object-fit: contain;" src="{{post.image}}" /></a>
     </div>
 
     <div *ngIf="!post.image" class="home-content-image" style="margin-top:5vh;">
     </div>
 
-    <div style="background: transparent;padding-left: 2rem;padding-right: 2rem;margin-top: 5vh;border-bottom: 1px solid rgb(211, 211, 211);" [innerHTML]="post.text | marked: post"></div>
+    <div style="background: transparent;padding-left: 2rem;padding-right: 2rem;margin-top: 5vh;margin-bottom: 25vh;border-bottom: 1px solid rgb(211, 211, 211);" [innerHTML]="post.text | marked: post"></div>
 
     <!-- Comment Component -->
       <div id="comment-list" *ngIf="post.id !== 0 && post.comments.length !== 0" fxLayout="column" fxLayoutAlign="center center">
         <div fxLayout="column" class="home-comment-container">
           <div style="margin-top: 5vh;margin-bottom: 25vh;">
             <p style="padding-left: 2rem;"><strong style="color: #000000;">Comments:</strong></p>
-            <div *ngFor="let comment of post?.comments" fxLayout="column" style="border-bottom: 1px solid #d3d3d3;">
+            <div *ngFor="let comment of post?.comments" fxLayout="column" style="border-bottom: 1px solid #d3d3d3;" [matMenuTriggerFor]="appMenu" (click)="commentMenu()">
+              <mat-menu #appMenu="matMenu">
+                <button mat-menu-item (click)="copylink(comment)"><p><strong style="color: #000000;">Copy Link</strong></p></button>
+                <ng-container *ngIf="comment?.author !== undefined && selfObj !== undefined">
+                  <button (click)="openCommentDeleteDialog(comment)" *ngIf="comment?.author?.user === selfObj?.user" mat-menu-item><p><strong style="color: #000000;">Delete Comment</strong></p></button>
+                  <button *ngIf="comment?.author?.user !== selfObj?.user" mat-menu-item><p><strong style="color: #000000;">Report Comment</strong></p></button>
+                </ng-container>
+              </mat-menu>
               <div fxLayout="column" fxFlexOffset="1rem" class="home-container">
                 <div fxLayout="row" fxLayoutAlign="start center">
                   <img class="icon-circle" (click)="gotoUser(comment.author.user)" *ngIf="comment.author.avatar" [src]="comment.author.avatar" alt="Avatar of {{comment.author.name}}"/>
                   <img class="icon-circle" (click)="gotoUser(comment.author.user)" *ngIf="!comment.author.avatar" src="/assets/logo.png" alt="Avatar of {{comment.author.name}}"/>
-                  <div style="margin-left: 20px;" fxLayout="row" fxLayoutAlign="center center" (click)="gotoUser(comment.author.user)">
-                      <p style="margin-bottom: 0;"><strong style="color: #000000;">{{comment.author.name}}</strong> {{comment.created}}</p>
-                    </div>
+                  <div style="margin-left: 20px;cursor: pointer;" fxLayout="row" fxLayoutAlign="center center" (click)="gotoUser(comment.author.user)">
+                    <p style="margin-bottom: 0;"><strong style="color: #000000;">{{comment.author.name}}</strong> {{comment.created}}</p>
+                  </div>
                 </div>
                 <div style="margin-left: 40px;" fxLayout="row">
                   <div innerHTML="{{comment.text | marked: post : comment}}"></div>
@@ -50,9 +59,9 @@
     <!-- Gap -->
     <div *ngIf="post.id === 0"></div>
 
-    <div style="position: fixed;bottom: 0;left: 0;width: 100%;">
+    <div style="position: fixed;bottom: 0;left: 0;width: 100%;pointer-events: none;">
       <!-- Post Identity -->
-      <div fxLayout="row" fxLayoutAlign="space-between center" [className]="hasPostId ? 'hideEndorse' : ''" style="border-top-left-radius: 30px;border-top-right-radius: 30px;height: 10vh;background: #ffffff;padding-left: 2rem;padding-right: 2rem;">
+      <div fxLayout="row" fxLayoutAlign="space-between center" [className]="hasPostId ? 'hideEndorse' : ''" style="border-top-left-radius: 30px;border-top-right-radius: 30px;height: 10vh;background: #ffffff;padding-left: 2rem;padding-right: 2rem;pointer-events: all;">
         <i *ngIf="post.id !== 0" class="material-icons" style="font-size: 40px;cursor: pointer;">outlined_flag</i>
         <img class="icon-circle" (click)="gotoUser(post.author.user)" *ngIf="post.author.avatar" [src]="post.author.avatar" alt="Avatar of {{post.author.name}}"/>
         <img class="icon-circle" (click)="gotoUser(post.author.user)" *ngIf="!post.author.avatar" src="/assets/logo.png" alt="Avatar of {{post.author.name}}"/>
@@ -65,26 +74,27 @@
         <i *ngIf="post.id !== 0 && !post?.subscribed" class="material-icons" (click)="subscribe(true)" style="font-size: 40px;cursor: pointer;">bookmark_border</i>
         <i *ngIf="post.id !== 0 && post?.subscribed" class="material-icons" (click)="subscribe(false)" style="font-size: 40px;cursor: pointer;">bookmark</i>
         <div *ngIf="post.id !== 0" (click)="commentView()" fxLayout="row" fxLayoutAlign="center center">
-          <p *ngIf="post.comments.length !== 0">{{ getCommentLength(post.comments.length) }}</p>
+          <h2 *ngIf="post.comments.length !== 0" style="margin: 0;" class="home-subtitle">{{ getCommentLength(post.comments.length) }}</h2>
           <i class="material-icons"style="font-size: 40px;cursor: pointer;">message</i>
         </div>
       </div>
 
       <!-- Post Options -->
-      <div *ngIf="post.id !== 0 && !hasPostId" fxLayout="row" fxLayoutAlign="space-around center" style="height: 10vh;background: #ffffff;">
-        <div fxLayoutAlign="center center" style="background-color: #1289c1;height: 100%;width: 100%;" (click)="spread(false)"><h2 style="color: #ffffff;" class="home-subtitle">Extinguish</h2></div>
-        <div fxLayoutAlign="center center" style="background-color: #ef6c00;height: 100%;width: 100%;" (click)="spread(true)"><h2 style="color: #ffffff;" class="home-subtitle">Ignite</h2></div>
+      <div *ngIf="post.id !== 0 && !hasPostId" fxLayout="row" fxLayoutAlign="space-around center" style="height: 10vh;background: #ffffff;pointer-events: all;">
+        <div fxLayoutAlign="center center" style="background-color: #1289c1;height: 100%;width: 100%;cursor: pointer;" (click)="spread(false)"><h2 style="color: #ffffff;" class="home-subtitle">Extinguish</h2></div>
+        <div fxLayoutAlign="center center" style="background-color: #ef6c00;height: 100%;width: 100%;cursor: pointer;" (click)="spread(true)"><h2 style="color: #ffffff;" class="home-subtitle">Ignite</h2></div>
       </div>
 
       <!-- Comment Box -->
       <div id="comment-box">
-        <div fxLayout="column" fxLayoutAlign="center start" *ngIf="commentForm" [formGroup]="commentForm" style="width: 90%;">
+        <div fxLayout="column" fxLayoutAlign="center start" *ngIf="commentForm" [formGroup]="commentForm" style="width: 90%;pointer-events: all;">
           <div *ngIf="errors && errors.non_field_errors" fxLayout="row" fxFlexOffset="2rem" class="alert alert-danger">
             <div *ngFor="let err of errors.non_field_errors">
               <p>{{err}}</p>
             </div>
           </div>
           <div *ngIf="!loading" fxLayout="row" class="home-input">
+            <i class="material-icons" style="font-size: 40px;cursor: pointer;">add</i>
             <input matInput placeholder="What's on your mind?" class="home-input" type="text" formControlName="comment" required />
           </div>
           <div *ngIf="submitted && !commentForm.controls.comment.valid">
@@ -97,7 +107,7 @@
           </div>
         </div>
         <!-- <p style="margin: 0;" (click)="openComment()">What's on your mind?</p> -->
-        <p style="margin: 0;cursor: pointer;" (click)="postComment()">Send</p>
+        <p style="margin: 0;cursor: pointer;pointer-events: all;" (click)="postComment()">Send</p>
       </div>
     </div>
   </div>

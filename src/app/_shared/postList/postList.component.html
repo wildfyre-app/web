@@ -5,9 +5,9 @@
       <h1 class="profile-title">{{ title }}</h1>
       <h1 class="profile-title" fxFlexOffset="1rem" style="margin: 0;color: #A2A2A2"><ng-container *ngIf="currentArea">{{currentArea}}</ng-container></h1>
     </div>
-    <div fxLayout="column" class="profile-post-group" fxFlexOffset="1rem">
+    <div *ngIf="backupPosts[currentArea] !== undefined" fxLayout="column" class="profile-post-group" fxFlexOffset="1rem">
         <div style="margin-top: 5vh;" *ngIf="backupPosts[currentArea].length === 0" [innerHTML]="'No posts in this area, try posting in this area?' | marked"></div>
-      <div *ngIf="currentArea" fxLayout="row" class="profile-post-row">
+      <div *ngIf="currentArea" fxLayout="row" class="profile-post-row" sstyle="margin-bottom: 10vh;">
         <div class="profile-post-card" (click)="goto(post.id)" fxLayout="column" *ngFor="let post of backupPosts[currentArea] | paginate: { id: 'server', itemsPerPage: limit, currentPage: index, totalItems: totalCount }; let i = index">
           <p class="marked" style="color: #ffffff;" innerHTML="{{post.text | marked: post}}"></p>
           <div fxLayout="row" fxLayoutAlign="start center">

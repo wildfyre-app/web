@@ -1,7 +1,7 @@
 ﻿import { Routes, RouterModule } from '@angular/router';
 import { AreaListComponent } from './_shared/areaList/areaList.component';
 import { Component404Component } from './404component/404.component';
-import { CreatePostComponent } from './createPost/createPost.component';
+import { CreatePostComponent } from './_shared/createPost/createPost.component';
 import { PostViewComponent } from './_shared/postView/postView.component';
 import { ImageUploadComponent } from './_shared/imageUpload/imageUpload.component';
 import { LoginComponent } from './login/login.component';

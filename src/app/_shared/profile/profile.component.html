@@ -14,7 +14,7 @@
       <div style="cursor: pointer;">
         <h2 *ngIf="self" class="profile-subtitle" (click)="goto('password')">Password</h2>
         <h2 *ngIf="self" fxLayout="row" class="profile-subtitle" fxFlexOffset="1rem" (click)="info($event)">Info</h2>
-        <h2 *ngIf="!self && !viewingSelf" fxLayout="row" class="profile-subtitle" fxFlexOffset="1rem" (click)="goto('report')">Report</h2>
+        <i *ngIf="!self" class="material-icons" fxFlexOffset="1rem" style="font-size: 40px;cursor: pointer;" (click)="goto('report')">outlined_flag</i>
       </div>
     </div>
 

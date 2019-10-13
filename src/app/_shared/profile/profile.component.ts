@@ -22,7 +22,6 @@ declare const Compressor: any;
   styleUrls: ['./profile.component.scss']
 })
 export class ProfileComponent implements OnInit, OnDestroy {
-  accId = '-1';
   account: Account;
   author: Author;
   bans: Ban[] = [];
@@ -42,7 +41,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
   superPosts: { [area: string]: Post[]; } = {};
   totalCount = 0;
   url: string;
-  viewingSelf: boolean;
 
   constructor(
     private route: ActivatedRoute,
@@ -75,17 +73,11 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
         if (r[1]) {
           this.self = false;
-          this.accId = r[1].path;
 
-          this.profileService.getUser(this.accId).pipe(
+          this.profileService.getUser(r[1].path).pipe(
             takeUntil(this.componentDestroyed))
           .subscribe((self: Author) => {
             this.author = self;
-            if (this.author.user === Number.parseInt(this.accId, 10)) {
-              this.viewingSelf = true;
-            } else {
-              this.viewingSelf = false;
-            }
 
             if (this.author.bio === '') {
               this.author.bio = '*No Bio*';
@@ -177,7 +169,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     } else {
       if (s === 'report') {
         this.routeService.addNextRoute(this.path);
-        this.router.navigateByUrl(`/tools/report/${this.accId}`);
+        this.router.navigateByUrl(`/tools/report/${this.account.id}`);
       }
     }
   }

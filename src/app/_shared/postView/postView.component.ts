@@ -53,7 +53,7 @@ export class PostViewComponent implements OnInit, OnDestroy {
   parsedCommentArray: string[] = [];
   post: Post = this.fakePost;
   rep: Reputation;
-  self: Author;
+  selfObj: Author;
   wait = true;
 
   constructor(
@@ -152,7 +152,7 @@ export class PostViewComponent implements OnInit, OnDestroy {
     this.profileService.getSelf().pipe(
       takeUntil(this.componentDestroyed))
       .subscribe( (author: Author) => {
-        this.self = author;
+        this.selfObj = author;
         this.loggedIn = true;
     });
 
@@ -193,9 +193,6 @@ export class PostViewComponent implements OnInit, OnDestroy {
         }
     });
 
-
-
-
     this.cdRef.detectChanges();
   }
 
@@ -229,12 +226,19 @@ export class PostViewComponent implements OnInit, OnDestroy {
       });
   }
 
-  copylink() {
+  copylink(c?: Comment) {
     let extension = '';
     if (this.router.url.indexOf(String(this.post.id)) === -1 ) {
-      extension = `/${this.post.id}`;
+      extension += `/${this.post.id}`;
+    }
+
+    if (c !== undefined) {
+      extension += `/${c.id}`;
     }
     this.copyStringToClipboard(`https://client.wildfyre.net${this.router.url}${extension}`);
+    this.snackBar.open('Link copied successfully', 'Close', {
+      duration: 3000
+    });
   }
 
   copyStringToClipboard (str: string) {
@@ -334,6 +338,21 @@ export class PostViewComponent implements OnInit, OnDestroy {
       });
   }
 
+  openPostDeleteDialog() {
+    const dialogRef = this.dialog.open(ConfirmDeletionDialogComponent);
+    dialogRef.afterClosed().pipe(
+      takeUntil(this.componentDestroyed))
+      .subscribe(result => {
+        if (result.bool) {
+          this.postService.deletePost(this.currentArea.name, this.post.id, false);
+          this.snackBar.open('Post deleted successfully', 'Close', {
+            duration: 3000
+          });
+          this.back();
+        }
+      });
+  }
+
   openFlagDialog(comment: Comment, typeOfFlagReport: TypeOfReport) {
     this.flagService.currentComment = comment;
     this.flagService.currentPost = this.post;
@@ -424,6 +443,10 @@ export class PostViewComponent implements OnInit, OnDestroy {
     return true;
   }
 
+  commentMenu() {
+    console.log('a')
+  }
+
   commentView() {
     if (this.commentBoxOpen) {
       window.scrollTo({
@@ -435,13 +458,17 @@ export class PostViewComponent implements OnInit, OnDestroy {
       this.commentBoxOpen = false;
     } else {
       window.scrollTo({
-        top: document.getElementById('comment-list').offsetTop + 50,
+        top: document.getElementById('comment-list').offsetTop - 25,
         left: 0,
         behavior: 'smooth'
       });
       document.getElementById('comment-box').style.display = 'flex';
       this.commentBoxOpen = true;
     }
+  }
+
+  deletePost() {
+
   }
 
   share(commentID: number) {

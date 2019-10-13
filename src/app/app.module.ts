@@ -12,7 +12,7 @@ import { NgModule } from '@angular/core';
 // Core Components
 import { AppComponent } from './app.component';
 import { Component404Component } from './404component/404.component';
-import { CreatePostComponent } from './createPost/createPost.component';
+import { CreatePostComponent } from './_shared/createPost/createPost.component';
 import { PostViewComponent } from './_shared/postView/postView.component';
 import { LoginComponent } from './login/login.component';
 import { NavBarComponent } from './navBar/navBar.component';
