@@ -21,7 +21,7 @@ enum View {
 export class AreaListComponent implements OnInit, OnDestroy {
   @Input() public showAdd = true;
   allArea = new Area('_', 'All Posts', 0, 0);
-  areas = new Array<Area>(new Area('', '', 0, 0));
+  areas: Array<Area> = [];
   currentView: View = View.home;
   componentDestroyed: Subject<boolean> = new Subject();
   loading = true;
@@ -46,18 +46,13 @@ export class AreaListComponent implements OnInit, OnDestroy {
       this.title = 'My Notification Archive';
       this.currentView = View.archive;
     }
-
-    this.areaService.getAreas().pipe(
-    takeUntil(this.componentDestroyed))
-    .subscribe(areas => {
-      this.areas = [];
+      const areas = this.route.snapshot.data.areas;
 
       for (let i = 0; i < areas.length; i++) {
         this.areaService.getAreaRep(areas[i].name).pipe(
           takeUntil(this.componentDestroyed))
           .subscribe(result => {
-            let area;
-            area = new Area(
+            const area = new Area(
               areas[i].name,
               areas[i].displayname,
               result.reputation,
@@ -68,7 +63,6 @@ export class AreaListComponent implements OnInit, OnDestroy {
             this.loading = false;
         });
       }
-    });
   }
 
   ngOnDestroy() {

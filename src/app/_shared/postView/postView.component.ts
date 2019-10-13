@@ -183,6 +183,13 @@ export class PostViewComponent implements OnInit, OnDestroy {
                   this.parsedCommentArray.push(commentIDArray.slice(0, commentIDArray.indexOf('-')));
                   commentIDArray = commentIDArray.slice(commentIDArray.indexOf('-') + 1, commentIDArray.length);
                 }
+                setTimeout(() => {
+                  window.scrollTo({
+                    top: document.getElementById(String(this.parsedCommentArray[0])).offsetTop - 25,
+                    left: 0,
+                    behavior: 'smooth'
+                  });
+                }, 2000);
               }
             } else {
               this.refresh(true);
@@ -228,14 +235,12 @@ export class PostViewComponent implements OnInit, OnDestroy {
 
   copylink(c?: Comment) {
     let extension = '';
-    if (this.router.url.indexOf(String(this.post.id)) === -1 ) {
-      extension += `/${this.post.id}`;
-    }
 
     if (c !== undefined) {
       extension += `/${c.id}`;
     }
-    this.copyStringToClipboard(`https://client.wildfyre.net${this.router.url}${extension}`);
+
+    this.copyStringToClipboard(`https://client.wildfyre.net/areas/${this.currentArea}/${this.post.id}${extension}`);
     this.snackBar.open('Link copied successfully', 'Close', {
       duration: 3000
     });
@@ -275,6 +280,10 @@ export class PostViewComponent implements OnInit, OnDestroy {
           this.ngOnInit();
         }
       });
+  }
+
+  getCommentBackground(c: number) {
+    return this.parsedCommentArray.find(comment => comment === String(c)) !== undefined ? true : false;
   }
 
   getCommentLength(nLength: number) {
@@ -441,10 +450,6 @@ export class PostViewComponent implements OnInit, OnDestroy {
       return false;
     }
     return true;
-  }
-
-  commentMenu() {
-    console.log('a')
   }
 
   commentView() {

@@ -1,6 +1,8 @@
 ﻿import { Routes, RouterModule } from '@angular/router';
+import { AreaListResolver } from './_resolvers/areaList.resolver';
+import { ProfileResolver } from './_resolvers/profile.resolver';
 import { AreaListComponent } from './_shared/areaList/areaList.component';
-import { Component404Component } from './404component/404.component';
+import { Component404Component } from './_shared/404component/404.component';
 import { CreatePostComponent } from './_shared/createPost/createPost.component';
 import { PostViewComponent } from './_shared/postView/postView.component';
 import { ImageUploadComponent } from './_shared/imageUpload/imageUpload.component';
@@ -12,7 +14,7 @@ import { ProfileComponent } from './_shared/profile/profile.component';
 import { AuthGuard } from './_guards/auth.guard';
 
 const appRoutes: Routes = [
-  { path: '', component: AreaListComponent, canActivate: [AuthGuard] },
+  { path: '', component: AreaListComponent, canActivate: [AuthGuard], resolve: {areas: AreaListResolver}},
   { path: 'areas/:area', component: PostViewComponent, canActivate: [AuthGuard] },
   { path: 'areas/:area/:id', component: PostViewComponent },
   { path: 'areas/:area/:id/:comments', component: PostViewComponent },
@@ -29,7 +31,7 @@ const appRoutes: Routes = [
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
   { path: 'tools/image-upload', component: ImageUploadComponent, canActivate: [AuthGuard] },
   { path: 'tools/password', component: PasswordComponent, canActivate: [AuthGuard] },
-  { path: 'user/:id', component: ProfileComponent },
+  { path: 'user/:id', component: ProfileComponent, resolve: {author: ProfileResolver} },
 
   // otherwise redirect to 404
   { path: '**', component: Component404Component }

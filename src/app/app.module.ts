@@ -11,7 +11,7 @@ import { NgModule } from '@angular/core';
 
 // Core Components
 import { AppComponent } from './app.component';
-import { Component404Component } from './404component/404.component';
+import { Component404Component } from './_shared/404component/404.component';
 import { CreatePostComponent } from './_shared/createPost/createPost.component';
 import { PostViewComponent } from './_shared/postView/postView.component';
 import { LoginComponent } from './login/login.component';
@@ -40,6 +40,10 @@ import { ShareModule } from './_modules/ng2share/share.module';
 
 // Core Pipes
 import { MarkedPipe } from './_pipes/marked.pipe';
+
+// Core Resolvers
+import { AreaListResolver } from './_resolvers/areaList.resolver';
+import { ProfileResolver } from './_resolvers/profile.resolver';
 
 // Core Services
 import { AreaService } from './_services/area.service';
@@ -104,6 +108,8 @@ import { ReCaptchaModule } from 'angular2-recaptcha';
     ImageCropperModule,
     NgxPaginationModule,
     ReCaptchaModule,
+
+    // Core
     ShareModule
 
   ],
@@ -138,6 +144,11 @@ import { ReCaptchaModule } from 'angular2-recaptcha';
     MarkedPipe
   ],
   providers: [
+    // Resolvers
+    AreaListResolver,
+    ProfileResolver,
+
+    // Services
     AreaService,
     AuthGuard,
     AuthenticationService,

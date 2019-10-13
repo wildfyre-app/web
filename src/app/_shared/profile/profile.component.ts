@@ -65,59 +65,38 @@ export class ProfileComponent implements OnInit, OnDestroy {
       'bio': new FormControl(''),
     });
 
-    this.route.url
-      .subscribe(r => {
-        if (r[0]) {
-          this.path = r[0].path;
-        }
+    this.author = this.route.snapshot.data.author;
 
-        if (r[1]) {
-          this.self = false;
-
-          this.profileService.getUser(r[1].path).pipe(
-            takeUntil(this.componentDestroyed))
-          .subscribe((self: Author) => {
-            this.author = self;
-
-            if (this.author.bio === '') {
-              this.author.bio = '*No Bio*';
-            }
-            this.loading = false;
-            this.bioForm.controls.bio.setValue(this.author.bio);
-          });
-        } else {
-          this.self = true;
-          this.profileService.getSelf().pipe(
-            takeUntil(this.componentDestroyed))
-          .subscribe((self: Author) => {
-            this.author = self;
-            if (this.author.bio === '') {
-              this.author.bio = '*No Bio*';
-            }
-            this.loading = false;
-            this.bioForm.controls.bio.setValue(this.author.bio);
-          });
-
-          this.profileService.getAccount().pipe(
-            takeUntil(this.componentDestroyed))
-            .subscribe((self: Account) => {
-              this.account = self;
-              if (this.account.email === '') {
-                this.account.email = '*Please verify your email*';
-              }
-              this.emailForm.controls.email.setValue(this.account.email);
-            });
-
-          this.profileService.getBans(this.limit, (this.index * this.limit) - this.limit).pipe(
-            takeUntil(this.componentDestroyed))
-            .subscribe((superBan: SuperBan) => {
-              superBan.results.forEach((obj: any) => {
-                this.bans.push(Ban.parse(obj));
-              });
-              this.totalCount = superBan.count;
-            });
-        }
+    if (this.author === undefined) {
+      this.self = true;
+      this.profileService.getSelf().pipe(
+        takeUntil(this.componentDestroyed))
+      .subscribe((self: Author) => {
+        this.author = self;
+        this.loading = false;
+        this.bioForm.controls.bio.setValue(this.author.bio);
       });
+
+      this.profileService.getAccount().pipe(
+        takeUntil(this.componentDestroyed))
+        .subscribe((self: Account) => {
+          this.account = self;
+          this.emailForm.controls.email.setValue(this.account.email);
+        });
+
+      this.profileService.getBans(this.limit, (this.index * this.limit) - this.limit).pipe(
+        takeUntil(this.componentDestroyed))
+        .subscribe((superBan: SuperBan) => {
+          superBan.results.forEach((obj: any) => {
+            this.bans.push(Ban.parse(obj));
+          });
+          this.totalCount = superBan.count;
+        });
+    } else {
+      this.self = false;
+      this.loading = false;
+      this.bioForm.controls.bio.setValue(this.author.bio);
+    }
   }
 
   ngOnDestroy() {
@@ -160,15 +139,15 @@ export class ProfileComponent implements OnInit, OnDestroy {
   goto(s: string) {
     if (this.self) {
       if (s === 'password') {
-        this.routeService.addNextRoute(this.path);
+        this.routeService.addNextRoute(this.router.url);
         this.router.navigateByUrl('/tools/password');
       } else if (this.self) {
-        this.routeService.addNextRoute(this.path);
+        this.routeService.addNextRoute(this.router.url);
         this.router.navigateByUrl('/tools/image-upload');
       }
     } else {
       if (s === 'report') {
-        this.routeService.addNextRoute(this.path);
+        this.routeService.addNextRoute(this.router.url);
         this.router.navigateByUrl(`/tools/report/${this.account.id}`);
       }
     }

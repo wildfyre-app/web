@@ -31,7 +31,7 @@
         <div fxLayout="column" class="home-comment-container">
           <div style="margin-top: 5vh;margin-bottom: 25vh;">
             <p style="padding-left: 2rem;"><strong style="color: #000000;">Comments:</strong></p>
-            <div *ngFor="let comment of post?.comments" fxLayout="column" style="border-bottom: 1px solid #d3d3d3;" [matMenuTriggerFor]="appMenu" (click)="commentMenu()">
+            <div *ngFor="let comment of post?.comments" fxLayout="column" style="border-bottom: 1px solid #d3d3d3;" [matMenuTriggerFor]="appMenu">
               <mat-menu #appMenu="matMenu">
                 <button mat-menu-item (click)="copylink(comment)"><p><strong style="color: #000000;">Copy Link</strong></p></button>
                 <ng-container *ngIf="comment?.author !== undefined && selfObj !== undefined">
@@ -39,7 +39,7 @@
                   <button *ngIf="comment?.author?.user !== selfObj?.user" mat-menu-item><p><strong style="color: #000000;">Report Comment</strong></p></button>
                 </ng-container>
               </mat-menu>
-              <div fxLayout="column" fxFlexOffset="1rem" class="home-container">
+              <div [id]="comment.id" [ngStyle]="{'background-color': (getCommentBackground(comment.id) ? '#f1f1f1' : '#ffffff')}" fxLayout="column" style="padding-top: 1rem;" class="home-container">
                 <div fxLayout="row" fxLayoutAlign="start center">
                   <img class="icon-circle" (click)="gotoUser(comment.author.user)" *ngIf="comment.author.avatar" [src]="comment.author.avatar" alt="Avatar of {{comment.author.name}}"/>
                   <img class="icon-circle" (click)="gotoUser(comment.author.user)" *ngIf="!comment.author.avatar" src="/assets/logo.png" alt="Avatar of {{comment.author.name}}"/>

@@ -3,7 +3,12 @@ export class Account {
     return new Account(
       obj.id,
       obj.username,
-      obj.email
+      (() => {
+        if (obj.email === '') {
+          return '*Please verify your email*';
+        }
+        return obj.email;
+      })(), // Call method
     );
   }
 

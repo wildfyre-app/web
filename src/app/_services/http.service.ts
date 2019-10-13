@@ -95,10 +95,12 @@ export class HttpService {
       // 4xx Client errors
       case 401:
         message = 'Authentication required.';
+        action = 'Login';
 
-        // if (String(error.url).search(/\/users\//gm) === -1 && String(error.url).search(/\/areas\//gm) === -1) {
-        //   this.router.navigate(['/login']);
-        // }
+        const router = this.router;
+        onAction = function() {
+          router.navigate(['/login']);
+        };
         break;
       case 403:
         message = 'You are not allowed to do this!';
