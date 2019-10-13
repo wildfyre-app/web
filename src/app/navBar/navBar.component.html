@@ -9,7 +9,7 @@
     </div>
     <div fxLayout="column" fxLayoutAlign="center center" (click)="switchRoute('notifications');">
       <i class="material-icons" [style.color]="activeLinkIndex === 2 ? '#ffffff' : ''">notifications_none</i>
-      <p style="margin: 0;" [style.color]="activeLinkIndex === 2 ? '#ffffff' : ''">Notifications</p>
+      <p style="margin: 0;" [style.color]="activeLinkIndex === 2 ? '#ffffff' : ''"><ng-container *ngIf="notificationLength !== 0">{{ getNotificationLength(notificationLength) }}</ng-container> Notifications</p>
     </div>
     <div fxLayout="column" fxLayoutAlign="center center" (click)="switchRoute('my-posts');">
       <i class="material-icons" [style.color]="activeLinkIndex === 3 ? '#ffffff' : ''">content_copy</i>

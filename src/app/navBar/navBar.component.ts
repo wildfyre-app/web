@@ -1,10 +1,9 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef, ViewChild, DoCheck } from '@angular/core';
-import { MatSidenav, MatSnackBar } from '@angular/material';
-import { Subject } from 'rxjs';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef, DoCheck } from '@angular/core';
+import { Subject, interval } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { Router } from '@angular/router';
-import { Area } from '../_models/area';
-import { CommentData } from '../_models/commentData';
 import { AuthenticationService } from '../_services/authentication.service';
+import { NotificationService } from '../_services/notification.service';
 
 @Component({
   selector: 'app-nav-bar',
@@ -12,50 +11,36 @@ import { AuthenticationService } from '../_services/authentication.service';
   styleUrls: ['./navBar.component.scss']
 })
 export class NavBarComponent implements OnInit, OnDestroy, DoCheck {
-  @ViewChild('sidenav', {static: true}) sidenav: MatSidenav;
-
   activeLinkIndex = 1;
-  areas = new Array<Area>(new Area('', '', 0, 0));
-  areaReputation: { [area: string]: number; } = { };
-  areaSpread: { [area: string]: number; } = { };
-  areaVisible = true;
-  comment: CommentData = new CommentData('', null);
-  commentDisabled = false;
   componentDestroyed: Subject<boolean> = new Subject();
-  currentArea: Area = this.areas[0];
-  expanded = false;
-  hasPost = false;
-  heightText: string;
   loggedIn = false;
-  mobileRouteLinks: any[];
   notificationLength = 0;
-  routeLinks: any[];
-  rowsExapanded = 2;
-  styleBottomEditor: string;
-  styleBottomSend: string;
-  styleBottomTextarea: string;
-  styleDesktop: string;
-  styleHeightEditor: string;
-  styleHeightSend: string;
-  styleHeightTextarea: string;
-  styleMobile: string;
-  stylePage: boolean;
-  width: string;
 
   constructor(
     private cdRef: ChangeDetectorRef,
     private router: Router,
-    public snackBar: MatSnackBar,
     private authenticationService: AuthenticationService,
+    private notificationService: NotificationService
   ) { }
 
   ngOnInit() {
-    if (this.authenticationService.token) {
-      this.setActiveIndex(this.router.url);
-      this.loggedIn = true;
-    } else {
-      this.activeLinkIndex = -1;
-    }
+    interval(2000 * 60).pipe(
+      takeUntil(this.componentDestroyed))
+      .subscribe(() => {
+        if (this.authenticationService.token) {
+          this.setActiveIndex(this.router.url);
+          this.loggedIn = true;
+
+          this.notificationService.getSuperNotification(10, 0).pipe(
+          takeUntil(this.componentDestroyed))
+          .subscribe(superNotification => {
+            this.notificationLength = superNotification.count;
+            this.cdRef.detectChanges();
+        });
+        } else {
+          this.activeLinkIndex = -1;
+        }
+    });
   }
 
   ngDoCheck()	{
@@ -82,18 +67,14 @@ export class NavBarComponent implements OnInit, OnDestroy, DoCheck {
   }
 
   setActiveIndex(s: string) {
-    this.width = '100%';
     if (s === undefined) {
       s = '/';
     }
     if (s === '/profile') {
-      this.stylePage = false;
       this.activeLinkIndex = 4;
     } else if (s === '/notifications/archive') {
-      this.stylePage = false;
       this.activeLinkIndex = 2;
     } else if (s.lastIndexOf('/notifications/archive/') !== -1) {
-      this.stylePage = false;
       this.activeLinkIndex = 2;
     } else if (s === '/notifications') {
       this.activeLinkIndex = 2;
