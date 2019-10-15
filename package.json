@@ -33,7 +33,7 @@
     "compressorjs": "^1.0.5",
     "core-js": "^2.5.1",
     "hammerjs": "^2.0.8",
-    "markdown-it": "^8.4.1",
+    "markdown-it": "^10.0.0",
     "markdown-it-regex": "^0.2.0",
     "material-design-icons": "^3.0.1",
     "ngx-clipboard": "^12.2.1",

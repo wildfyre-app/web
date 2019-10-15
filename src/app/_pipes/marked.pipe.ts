@@ -30,29 +30,28 @@ export class MarkedPipe implements PipeTransform {
   transform(value: string, post: Post, comment: Comment): string {
     md.use(markdownItRegex, {
       name: 'customImage',
-      regex: C.WF_IMAGE_REGEX,
+      regex: C.WF_IMAGE_REGEX_NO_CAPTURE,
       replace: (match: string) => {
-        const index = parseInt(this.getImageMatchesByGroup(2, match, C.WF_IMAGE_REGEX)[0], 10);
-
-        if (post) {
-          if (!post.additional_images[index]) {
-            return '';
-          }
-        }
+        const i = parseInt(this.getImageMatchesByGroup(2, match, C.WF_IMAGE_REGEX)[0], 10);
 
         if (comment) {
           return comment.text;
         }
 
         if (post) {
-          return `<a target="_blank" rel="noopener" href="${post.additional_images[index].image}">
-          <img class="wfImages" alt="${post.additional_images[index].comment}" src="${post.additional_images[index].image}">
+          if (!post.additional_images[i]) {
+            return '';
+          }
+
+          return `<a target="_blank" rel="noopener" href="${post.additional_images[i].image}">
+          <img class="wfImages" alt="${post.additional_images[i].comment}" src="${post.additional_images[i].image}">
           </a>`;
         } else {
           return '';
         }
       }
     });
-    return '<span class="markdown">' + md.render(value || '') + '</span>';
+
+    return `<span class="markdown">${md.render(value || '', {})}</span>`;
   }
 }
