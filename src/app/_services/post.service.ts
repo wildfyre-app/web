@@ -161,6 +161,10 @@ export class PostService {
       }));
   }
 
+  getAllPosts(area: string): Observable<Post[]> {
+    return of(this.queuedPosts[area]);
+  }
+
   getNextPost(area: string): Observable<Post> {
     if (!this.used[area]) {
       this.used[area] = [];

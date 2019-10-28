@@ -24,6 +24,20 @@ export class NavBarComponent implements OnInit, OnDestroy, DoCheck {
   ) { }
 
   ngOnInit() {
+    if (this.authenticationService.token) {
+      this.setActiveIndex(this.router.url);
+      this.loggedIn = true;
+
+      this.notificationService.getSuperNotification(10, 0).pipe(
+      takeUntil(this.componentDestroyed))
+      .subscribe(superNotification => {
+        this.notificationLength = superNotification.count;
+        this.cdRef.detectChanges();
+    });
+    } else {
+      this.activeLinkIndex = -1;
+    }
+
     interval(2000 * 60).pipe(
       takeUntil(this.componentDestroyed))
       .subscribe(() => {

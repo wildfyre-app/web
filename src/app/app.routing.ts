@@ -14,7 +14,7 @@ import { ProfileComponent } from './_shared/profile/profile.component';
 import { AuthGuard } from './_guards/auth.guard';
 
 const appRoutes: Routes = [
-  { path: '', component: AreaListComponent, canActivate: [AuthGuard], resolve: {areas: AreaListResolver}},
+  { path: '', component: AreaListComponent, canActivate: [AuthGuard], resolve: {areas: AreaListResolver} },
   { path: 'areas/:area', component: PostViewComponent, canActivate: [AuthGuard] },
   { path: 'areas/:area/:id', component: PostViewComponent },
   { path: 'areas/:area/:id/:comments', component: PostViewComponent },
@@ -26,7 +26,7 @@ const appRoutes: Routes = [
   { path: 'notifications/:index', component: NotificationsComponent, canActivate: [AuthGuard] },
   { path: 'notification/archive', component: AreaListComponent, canActivate: [AuthGuard] },
   { path: 'notification/archive/:aarea/:index', component: PostListComponent, canActivate: [AuthGuard] },
-  { path: 'posts', component: AreaListComponent, canActivate: [AuthGuard] },
+  { path: 'posts', component: AreaListComponent, canActivate: [AuthGuard], resolve: {areas: AreaListResolver} },
   { path: 'posts/:area', component: PostListComponent, canActivate: [AuthGuard] },
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
   { path: 'tools/image-upload', component: ImageUploadComponent, canActivate: [AuthGuard] },

@@ -10,7 +10,7 @@
 
       <div fxLayoutAlign="end center" style="width: 50%;cursor: pointer;">
         <h2 fxLayout="row" class="home-subtitle" (click)="info($event)">Info</h2>
-        <i class="material-icons" style="font-size: 40px;padding-left: 1rem;" (click)="copylink()">link</i>
+        <i *ngIf="post.comments.length !== 0" class="material-icons" style="font-size: 40px;padding-left: 1rem;" (click)="copylink()">link</i>
         <ng-container *ngIf="post?.author !== undefined && selfObj !== undefined">
           <i *ngIf="post?.author?.user === selfObj?.user" class="material-icons" style="font-size: 40px;padding-left: 1rem;" (click)="openPostDeleteDialog()">delete</i>
         </ng-container>
@@ -75,7 +75,8 @@
         <i *ngIf="post.id !== 0 && post?.subscribed" class="material-icons" (click)="subscribe(false)" style="font-size: 40px;cursor: pointer;">bookmark</i>
         <div *ngIf="post.id !== 0" (click)="commentView()" fxLayout="row" fxLayoutAlign="center center">
           <h2 *ngIf="post.comments.length !== 0" style="margin: 0;" class="home-subtitle">{{ getCommentLength(post.comments.length) }}</h2>
-          <i class="material-icons"style="font-size: 40px;cursor: pointer;">message</i>
+          <i *ngIf="post.comments.length !== 0" class="material-icons"style="font-size: 40px;cursor: pointer;">message</i>
+          <i  *ngIf="post.comments.length === 0" class="material-icons" style="font-size: 40px;padding-left: 1rem;" (click)="copylink()">link</i>
         </div>
       </div>
 

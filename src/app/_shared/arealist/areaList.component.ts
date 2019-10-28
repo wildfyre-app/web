@@ -5,6 +5,7 @@ import { takeUntil } from 'rxjs/operators';
 import { Area } from '../../_models/area';
 import { AreaService } from '../../_services/area.service';
 import { NavBarService } from '../../_services/navBar.service';
+import { PostService } from '../../_services/post.service';
 import { RouteService } from '../../_services/route.service';
 
 enum View {
@@ -32,6 +33,7 @@ export class AreaListComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private areaService: AreaService,
+    private postService: PostService,
     private navBarService: NavBarService,
     private routeService: RouteService
   ) { }
@@ -60,9 +62,56 @@ export class AreaListComponent implements OnInit, OnDestroy {
             );
 
             this.areas.push(area);
+            this.findImages(area);
+
             this.loading = false;
         });
       }
+  }
+
+  findImages(area: Area) {
+    this.postService.getNextPost(area.name).pipe(
+      takeUntil(this.componentDestroyed)
+    ).subscribe(() => {
+      this.postService.getAllPosts(area.name).pipe(
+        takeUntil(this.componentDestroyed)
+      ).subscribe(results => {
+        if (document.getElementById(area.name) !== null) {
+          for (let j = 0; j < results.length; j++) {
+            if (results[j].image !== '') {
+              document.getElementById(area.name).style.background = `url(${results[j].image})`;
+              document.getElementById(area.name).style.backgroundPosition = 'center';
+              document.getElementById(area.name).style.backgroundRepeat = 'no-repeat';
+              document.getElementById(area.name).style.backgroundSize = 'cover';
+              (document.querySelectorAll(`#${area.name} div`)[0] as HTMLElement).style.width = '100%';
+              (document.querySelectorAll(`#${area.name} div`)[0] as HTMLElement).style.height = '100%';
+              (document.querySelectorAll(`#${area.name} div`)[0] as HTMLElement).style.display = 'flex';
+              (document.querySelectorAll(`#${area.name} div`)[0] as HTMLElement).style.justifyContent = 'center';
+              // (document.querySelectorAll(`#${area.name} div`)[0] as HTMLElement).style.placeContent = 'center';
+              (document.querySelectorAll(`#${area.name} div`)[0] as HTMLElement).style.alignItems = 'center';
+              (document.querySelectorAll(`#${area.name} div`)[0] as HTMLElement).style.backgroundColor
+                = 'rgba(0, 0, 0, 0.7)';
+              break;
+            }
+            if (results[j].additional_images.length !== 0) {
+              document.getElementById(area.name).style.background = `url(${results[j].additional_images[0].image})`;
+              document.getElementById(area.name).style.backgroundPosition = 'center';
+              document.getElementById(area.name).style.backgroundRepeat = 'no-repeat';
+              document.getElementById(area.name).style.backgroundSize = 'cover';
+              (document.querySelectorAll(`#${area.name} div`)[0] as HTMLElement).style.width = '100%';
+              (document.querySelectorAll(`#${area.name} div`)[0] as HTMLElement).style.height = '100%';
+              (document.querySelectorAll(`#${area.name} div`)[0] as HTMLElement).style.display = 'flex';
+              (document.querySelectorAll(`#${area.name} div`)[0] as HTMLElement).style.justifyContent = 'center';
+          //     (document.querySelectorAll(`#${area.name} div`)[0] as HTMLElement).style.placeContent = 'center';
+              (document.querySelectorAll(`#${area.name} div`)[0] as HTMLElement).style.alignItems = 'center';
+              (document.querySelectorAll(`#${area.name} div`)[0] as HTMLElement).style.backgroundColor
+                = 'rgba(0, 0, 0, 0.7)';
+              break;
+            }
+          }
+        }
+      });
+    });
   }
 
   ngOnDestroy() {

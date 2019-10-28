@@ -10,8 +10,10 @@
       </div> -->
       <div *ngFor="let area of areas">
         <div fxLayout="row">
-          <div class="home-area-card" (click)="goto(area)" fxLayoutAlign="center center">
-            <h4 style="color: #ffffff;">{{area.displayname}}</h4>
+          <div [id]="area.name" class="home-area-card" (click)="goto(area)" fxLayoutAlign="center center">
+            <div>
+              <h4 style="color: #ffffff;">{{area.displayname}}</h4>
+            </div>
           </div>
           <div *ngIf="currentView === view().home" (click)="goto(area, true)" class="home-area-card-add" fxLayoutAlign="center center">
             <i style="color: #ffffff;" class="material-icons">add</i>
