@@ -17,9 +17,9 @@ export class AuthenticationService {
     const currentUser = JSON.parse(localStorage.getItem('currentUser'));
     this.token = currentUser && currentUser.token;
     this.apiURL = 'https://api.wildfyre.net';
-    if (isDevMode()) {
-      this.apiURL = 'http://localhost:8000';
-    }
+    // if (isDevMode()) {
+    //   this.apiURL = 'http://localhost:8000';
+    // }
   }
 
   login(username: string, password: string): Observable<Auth> {

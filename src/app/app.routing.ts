@@ -30,6 +30,7 @@ const appRoutes: Routes = [
   { path: 'posts/:area', component: PostListComponent, canActivate: [AuthGuard] },
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
   { path: 'tools/image-upload', component: ImageUploadComponent, canActivate: [AuthGuard] },
+  { path: 'tools/comment-image-upload', component: ImageUploadComponent, canActivate: [AuthGuard] },
   { path: 'tools/password', component: PasswordComponent, canActivate: [AuthGuard] },
   { path: 'user/:id', component: ProfileComponent, resolve: {author: ProfileResolver} },
 

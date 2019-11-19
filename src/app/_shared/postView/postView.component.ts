@@ -99,7 +99,6 @@ export class PostViewComponent implements OnInit, OnDestroy {
                 .subscribe(result2 => {
                   if (!result2.getError()) {
                     this.post.comments.push(result2);
-                    this.navBarService.clearInputs.next(true);
                   } else {
                     this.snackBar.open('Your image file must be below 512KiB in size', 'Close', {
                       duration: 3000
@@ -110,7 +109,6 @@ export class PostViewComponent implements OnInit, OnDestroy {
               this.postService.comment(this.currentArea.name, this.post, comment.comment).pipe(
                 takeUntil(this.componentDestroyed))
                 .subscribe();
-                this.navBarService.clearInputs.next(true);
             }
             this.commentCount += 1;
             this.cdRef.detectChanges();
@@ -462,11 +460,13 @@ export class PostViewComponent implements OnInit, OnDestroy {
       document.getElementById('comment-box').style.display = 'none';
       this.commentBoxOpen = false;
     } else {
-      window.scrollTo({
-        top: document.getElementById('comment-list').offsetTop - 25,
-        left: 0,
-        behavior: 'smooth'
-      });
+      if (document.getElementById('comment-list') !== null) {
+        window.scrollTo({
+          top: document.getElementById('comment-list').offsetTop - 25,
+          left: 0,
+          behavior: 'smooth'
+        });
+      }
       document.getElementById('comment-box').style.display = 'flex';
       this.commentBoxOpen = true;
     }

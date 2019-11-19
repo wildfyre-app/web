@@ -44,7 +44,7 @@
       </div>
 
       <div *ngIf="editBio" fxLayout="row" fxFlexOffset="1rem" class="profile-input" [formGroup]="bioForm">
-        <textarea matInput placeholder="Bio" class="profile-input" style="font-size: 100%;height: 35vh;overflow-y: scroll;" type="text" formControlName="bio" required></textarea>
+        <textarea matInput placeholder="Bio" class="profile-input" style="font-size: 100%;height: 35vh;overflow-y: scroll;" type="text" formControlName="bio" autocomplete="false" required></textarea>
       </div>
       <div *ngIf="!editBio" fxLayout="column" fxFlexOffset="1rem" class="profile-input">
         <p [innerHTML]="author?.bio | marked" (click)="toggleBio()"></p>

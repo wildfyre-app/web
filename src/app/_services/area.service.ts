@@ -50,6 +50,7 @@ export class AreaService {
     if (s === '_') {
       return of(new Area('_', 'All Posts', 0, 0));
     }
+
     if (!this.areas) {
       return this.getAreas().pipe(
         map(areas => {

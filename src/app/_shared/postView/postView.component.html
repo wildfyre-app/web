@@ -10,7 +10,7 @@
 
       <div fxLayoutAlign="end center" style="width: 50%;cursor: pointer;">
         <h2 fxLayout="row" class="home-subtitle" (click)="info($event)">Info</h2>
-        <i *ngIf="post.comments.length !== 0" class="material-icons" style="font-size: 40px;padding-left: 1rem;" (click)="copylink()">link</i>
+        <i class="material-icons" style="font-size: 40px;padding-left: 1rem;" (click)="copylink()">link</i>
         <ng-container *ngIf="post?.author !== undefined && selfObj !== undefined">
           <i *ngIf="post?.author?.user === selfObj?.user" class="material-icons" style="font-size: 40px;padding-left: 1rem;" (click)="openPostDeleteDialog()">delete</i>
         </ng-container>
@@ -75,8 +75,7 @@
         <i *ngIf="post.id !== 0 && post?.subscribed" class="material-icons" (click)="subscribe(false)" style="font-size: 40px;cursor: pointer;">bookmark</i>
         <div *ngIf="post.id !== 0" (click)="commentView()" fxLayout="row" fxLayoutAlign="center center">
           <h2 *ngIf="post.comments.length !== 0" style="margin: 0;" class="home-subtitle">{{ getCommentLength(post.comments.length) }}</h2>
-          <i *ngIf="post.comments.length !== 0" class="material-icons"style="font-size: 40px;cursor: pointer;">message</i>
-          <i  *ngIf="post.comments.length === 0" class="material-icons" style="font-size: 40px;padding-left: 1rem;" (click)="copylink()">link</i>
+          <i class="material-icons"style="font-size: 40px;cursor: pointer;">message</i>
         </div>
       </div>
 
@@ -95,8 +94,8 @@
             </div>
           </div>
           <div *ngIf="!loading" fxLayout="row" class="home-input">
-            <i class="material-icons" style="font-size: 40px;cursor: pointer;">add</i>
-            <input matInput placeholder="What's on your mind?" class="home-input" type="text" formControlName="comment" required />
+            <i [routerLink]="['/tools/comment-image-upload']" class="material-icons" style="font-size: 40px;cursor: pointer;">add</i>
+            <input matInput placeholder="What's on your mind?" class="home-input" type="text" formControlName="comment" autocomplete="off" required />
           </div>
           <div *ngIf="submitted && !commentForm.controls.comment.valid">
             <p>Comment is required</p>
@@ -108,7 +107,7 @@
           </div>
         </div>
         <!-- <p style="margin: 0;" (click)="openComment()">What's on your mind?</p> -->
-        <p style="margin: 0;cursor: pointer;pointer-events: all;" (click)="postComment()">Send</p>
+        <p *ngIf="!loading" style="margin: 0;cursor: pointer;pointer-events: all;" (click)="postComment()">Send</p>
       </div>
     </div>
   </div>

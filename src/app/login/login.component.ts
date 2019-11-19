@@ -140,7 +140,6 @@ export class LoginComponent implements OnInit, OnDestroy {
                 });
             });
             this.navBarService.loggedIn.next(true);
-            this.navBarService.areaVisible.next(true);
             this.router.navigate(['/']);
             this.loading = false;
             this.submitted = true;

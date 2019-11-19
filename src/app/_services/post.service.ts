@@ -51,7 +51,6 @@ export class PostService {
         const comment = Comment.parse(response);
 
         post.comments.push(comment);
-        this.navBarService.clearInputs.next(true);
         return comment;
       })).pipe(
       catchError((error) => {
